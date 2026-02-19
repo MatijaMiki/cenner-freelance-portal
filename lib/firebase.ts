@@ -13,12 +13,13 @@ import {
 import { CRM_API } from './crm';
 
 const firebaseConfig = {
-  apiKey: "", 
-  authDomain: "", 
-  projectId: "", 
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyDxODMT6PFmtYUnmg9qi124cqpzmxti9LM",
+  authDomain: "cenner-main.firebaseapp.com",
+  projectId: "cenner-main",
+  storageBucket: "cenner-main.firebasestorage.app",
+  messagingSenderId: "613455746040",
+  appId: "1:613455746040:web:a4433cf96bf890b5757c0d",
+  measurementId: "G-SPN588RLQN"
 };
 
 const isConfigValid = firebaseConfig.apiKey && firebaseConfig.apiKey.length > 0;
