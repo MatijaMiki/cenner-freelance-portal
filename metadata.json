@@ -1,0 +1,8 @@
+{
+  "name": "Cenner Freelance Portal",
+  "description": "A high-end, sleek freelance marketplace for creators and professionals to showcase services and connect with clients, featuring neural net background animations and Firebase integration.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
