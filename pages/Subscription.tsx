@@ -197,7 +197,7 @@ const Subscription: React.FC = () => {
           {tiers.map((tier) => (
             <div
               key={tier.id}
-              className={`relative group bg-brand-grey/40 border transition-all duration-500 rounded-[3rem] p-10 flex flex-col shadow-2xl overflow-hidden ${
+              className={`relative group bg-brand-grey/70 border transition-all duration-500 rounded-[3rem] p-10 flex flex-col shadow-2xl overflow-hidden ${
                 tier.highlight
                   ? 'border-brand-green/50 ring-4 ring-brand-green/5 bg-brand-green/[0.02]'
                   : tier.special
@@ -266,7 +266,7 @@ const Subscription: React.FC = () => {
                     />
                     <div>
                       <p className="text-sm font-bold text-white leading-snug">{feature.name}</p>
-                      <p className="text-[11px] text-gray-600 mt-1 leading-relaxed">{feature.detail}</p>
+                      <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">{feature.detail}</p>
                     </div>
                   </div>
                 ))}
@@ -287,7 +287,7 @@ const Subscription: React.FC = () => {
               <div key={i} className="space-y-4">
                 <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 text-brand-green">{item.icon}</div>
                 <h4 className="text-xl font-bold text-white">{item.title}</h4>
-                <p className="text-gray-500 text-sm max-w-xs mx-auto leading-relaxed">{item.desc}</p>
+                <p className="text-gray-400 text-sm max-w-xs mx-auto leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>

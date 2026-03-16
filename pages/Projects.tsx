@@ -54,7 +54,7 @@ const Projects: React.FC = () => {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative bg-brand-grey/40 border border-white/5 rounded-[2.5rem] p-10 hover:border-white/10 transition-all duration-300 overflow-hidden flex flex-col"
+              className="group relative bg-brand-grey/70 border border-white/5 rounded-[2.5rem] p-10 hover:border-white/10 transition-all duration-300 overflow-hidden flex flex-col"
             >
               {/* Glow blob on hover */}
               <div
@@ -73,7 +73,7 @@ const Projects: React.FC = () => {
                 </div>
 
                 {/* Category */}
-                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-600 mb-2">
+                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 mb-2">
                   {project.category}
                 </span>
 
@@ -93,7 +93,7 @@ const Projects: React.FC = () => {
                     {project.tags.map(tag => (
                       <span
                         key={tag}
-                        className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-[10px] font-bold text-gray-500"
+                        className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-gray-300"
                       >
                         {tag}
                       </span>

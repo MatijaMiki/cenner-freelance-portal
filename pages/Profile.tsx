@@ -6,7 +6,7 @@ import {
   TrendingUp, Clock, CheckCircle, AlertCircle, MoreVertical,
   MoreHorizontal, Edit2, Pause, Trash2, ArrowUpRight, Search,
   Calendar, X, Send, Download, User as UserIcon, ShieldAlert, Rocket, Play, Image as ImageIcon, Smartphone, Mail, Crown, Zap, Globe,
-  Upload, Loader2, ExternalLink, ShieldCheck
+  Upload, Loader2, ExternalLink, ShieldCheck, MapPin
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';
@@ -30,6 +30,7 @@ const Profile: React.FC = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [editName, setEditName] = useState('');
   const [editBio, setEditBio] = useState('');
+  const [editLocation, setEditLocation] = useState('');
   const [isSavingProfile, setIsSavingProfile] = useState(false);
 
   // Phone verification modal state
@@ -72,6 +73,7 @@ const Profile: React.FC = () => {
       setSkills((currentUser as any).skills || []);
       setEditName(currentUser.name || '');
       setEditBio((currentUser as any).bio || '');
+      setEditLocation((currentUser as any).location || '');
     }
   }, [currentUser?.id]);
 
@@ -131,8 +133,8 @@ const Profile: React.FC = () => {
     if (!currentUser) return;
     setIsSavingProfile(true);
     try {
-      const updated = await API.updateProfile(currentUser.id, { name: editName, bio: editBio } as any);
-      updateUser({ name: editName, bio: editBio } as any);
+      const updated = await API.updateProfile(currentUser.id, { name: editName, bio: editBio, location: editLocation } as any);
+      updateUser({ name: editName, bio: editBio, location: editLocation } as any);
       setIsEditingProfile(false);
     } catch (err: any) {
       alert(err.message || 'Failed to save profile.');
@@ -859,6 +861,10 @@ const Profile: React.FC = () => {
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Professional Bio</label>
                   <textarea rows={4} value={editBio} onChange={e => setEditBio(e.target.value)} placeholder="Write a short bio to introduce yourself..." className="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white resize-none"></textarea>
                 </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Location</label>
+                  <input type="text" value={editLocation} onChange={e => setEditLocation(e.target.value)} placeholder="e.g. Zagreb, Croatia" className="w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white" />
+                </div>
                 <button onClick={handleSaveProfile} disabled={isSavingProfile} className="w-full py-4 bg-brand-green text-brand-black font-black rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50">{isSavingProfile ? 'Saving...' : 'Update Profile'}</button>
               </div>
            </div>
@@ -1025,44 +1031,6 @@ const Profile: React.FC = () => {
             </nav>
           </div>
 
-          <div className="p-8 bg-brand-black/40 border border-white/5 rounded-3xl">
-            <div className="flex items-center justify-between mb-4">
-              <h5 className="text-xs font-bold text-white uppercase tracking-widest">Active Skills</h5>
-              <button 
-                onClick={() => setShowSkillInput(true)}
-                className="text-brand-pink hover:text-white transition-colors"
-              >
-                <PlusCircle size={14} />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {skills.length === 0 && !showSkillInput && (
-                <p className="text-xs text-gray-600 italic">No skills added yet.</p>
-              )}
-              {skills.map(skill => (
-                <button 
-                  key={skill} 
-                  onClick={() => handleRemoveSkill(skill)}
-                  className="group relative px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] text-gray-400 font-bold hover:border-red-500/50 hover:text-red-500 transition-all cursor-pointer"
-                >
-                  <span className="group-hover:opacity-0 transition-opacity">{skill}</span>
-                  <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"><Trash2 size={10} /></span>
-                </button>
-              ))}
-              {showSkillInput && (
-                <input
-                  autoFocus
-                  type="text"
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  onKeyDown={handleAddSkill}
-                  onBlur={() => setShowSkillInput(false)}
-                  placeholder="Type & Enter..."
-                  className="bg-brand-black border border-brand-green/30 rounded-full text-[10px] text-white px-3 py-1 focus:outline-none focus:border-brand-green w-24"
-                />
-              )}
-            </div>
-          </div>
         </div>
 
         {/* Dynamic Content Area */}
@@ -1077,13 +1045,74 @@ const Profile: React.FC = () => {
             </div>
           </div>
 
-          {/* Bio Box */}
-          {(currentUser as any)?.bio && (
-            <div className="mb-8 bg-brand-grey/30 border border-white/5 rounded-2xl p-6">
-              <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">About</h3>
-              <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">{(currentUser as any).bio}</p>
-            </div>
-          )}
+          {/* About Box */}
+          <div className="mb-8 bg-brand-grey/30 border border-white/5 rounded-2xl p-6">
+            <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">About</h3>
+
+            {/* Bio */}
+            {(currentUser as any)?.bio ? (
+              <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap mb-4">{(currentUser as any).bio}</p>
+            ) : (
+              <p className="text-gray-600 text-sm italic mb-4">
+                No bio yet.{' '}
+                <button onClick={() => setIsEditingProfile(true)} className="text-brand-pink hover:underline font-bold not-italic">Add one</button>
+              </p>
+            )}
+
+            {/* Location */}
+            {(currentUser as any)?.location && (
+              <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+                <MapPin size={13} className="text-gray-600 shrink-0" />
+                <span>{(currentUser as any).location}</span>
+              </div>
+            )}
+
+            {/* Active Skills */}
+            {(skills.length > 0 || showSkillInput) && (
+              <div className="mt-2 pt-4 border-t border-white/5">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Skills</span>
+                  <button onClick={() => setShowSkillInput(true)} className="text-brand-pink hover:text-white transition-colors">
+                    <PlusCircle size={13} />
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {skills.map(skill => (
+                    <button
+                      key={skill}
+                      onClick={() => handleRemoveSkill(skill)}
+                      className="group relative px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] text-gray-400 font-bold hover:border-red-500/50 hover:text-red-500 transition-all cursor-pointer"
+                    >
+                      <span className="group-hover:opacity-0 transition-opacity">{skill}</span>
+                      <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"><Trash2 size={10} /></span>
+                    </button>
+                  ))}
+                  {showSkillInput && (
+                    <input
+                      autoFocus
+                      type="text"
+                      value={newSkill}
+                      onChange={(e) => setNewSkill(e.target.value)}
+                      onKeyDown={handleAddSkill}
+                      onBlur={() => setShowSkillInput(false)}
+                      placeholder="Type & Enter..."
+                      className="bg-brand-black border border-brand-green/30 rounded-full text-[10px] text-white px-3 py-1 focus:outline-none focus:border-brand-green w-24"
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Show skill input trigger when no skills yet */}
+            {skills.length === 0 && !showSkillInput && (
+              <button
+                onClick={() => setShowSkillInput(true)}
+                className="mt-2 flex items-center gap-1.5 text-[10px] text-gray-600 hover:text-brand-pink transition-colors font-bold uppercase tracking-widest"
+              >
+                <PlusCircle size={11} /> Add skills
+              </button>
+            )}
+          </div>
 
           {renderTabContent()}
 
