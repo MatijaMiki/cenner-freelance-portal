@@ -45,6 +45,9 @@ export const API = {
   resetPassword: (token: string, newPassword: string) =>
     request<{ success: boolean }>('/auth/reset-password', 'POST', { token, newPassword }),
 
+  changePassword: (currentPassword: string, newPassword: string) =>
+    request<{ success: boolean }>('/auth/change-password', 'POST', { currentPassword, newPassword }),
+
   verifyEmail: (token: string) =>
     request<{ success: boolean }>('/auth/verify-email', 'POST', { token }),
 

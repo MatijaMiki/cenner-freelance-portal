@@ -15,6 +15,222 @@ import { API } from '../lib/api';
 
 type ActiveTab = 'listings' | 'inbox' | 'earnings' | 'settings' | 'portfolio';
 
+// ─── Settings Tab ────────────────────────────────────────────────────────────
+const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; navigate: any }> = ({ currentUser, updateUser, navigate }) => {
+  const [section, setSection] = React.useState<'account' | 'security' | 'billing'>('account');
+
+  // Account fields
+  const [name, setName] = React.useState(currentUser?.name || '');
+  const [bio, setBio] = React.useState((currentUser as any)?.bio || '');
+  const [location, setLocation] = React.useState((currentUser as any)?.location || '');
+  const [savingAccount, setSavingAccount] = React.useState(false);
+  const [accountMsg, setAccountMsg] = React.useState('');
+
+  // Security fields
+  const [currentPwd, setCurrentPwd] = React.useState('');
+  const [newPwd, setNewPwd] = React.useState('');
+  const [confirmPwd, setConfirmPwd] = React.useState('');
+  const [savingPwd, setSavingPwd] = React.useState(false);
+  const [pwdMsg, setPwdMsg] = React.useState('');
+  const [pwdError, setPwdError] = React.useState('');
+
+  const handleSaveAccount = async () => {
+    if (!currentUser) return;
+    setSavingAccount(true);
+    setAccountMsg('');
+    try {
+      await API.updateProfile(currentUser.id, { name, bio, location } as any);
+      updateUser({ name, bio, location } as any);
+      setAccountMsg('Saved successfully.');
+    } catch { setAccountMsg('Failed to save.'); }
+    finally { setSavingAccount(false); }
+  };
+
+  const handleChangePassword = async () => {
+    setPwdError(''); setPwdMsg('');
+    if (newPwd !== confirmPwd) { setPwdError('Passwords do not match.'); return; }
+    if (newPwd.length < 8) { setPwdError('Password must be at least 8 characters.'); return; }
+    setSavingPwd(true);
+    try {
+      await API.changePassword(currentPwd, newPwd);
+      setPwdMsg('Password updated successfully.');
+      setCurrentPwd(''); setNewPwd(''); setConfirmPwd('');
+    } catch (e: any) { setPwdError(e.message || 'Failed to update password.'); }
+    finally { setSavingPwd(false); }
+  };
+
+  const sections = [
+    { id: 'account', label: 'Account' },
+    { id: 'security', label: 'Security' },
+    { id: 'billing', label: 'Billing' },
+  ] as const;
+
+  const inputClass = "w-full bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/50 transition-colors text-sm";
+  const labelClass = "text-[10px] font-black text-gray-500 uppercase tracking-widest";
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Section tabs */}
+      <div className="flex gap-1 p-1 bg-brand-grey/30 border border-white/5 rounded-2xl w-fit">
+        {sections.map(s => (
+          <button key={s.id} onClick={() => setSection(s.id)}
+            className={`px-5 py-2 rounded-xl text-sm font-bold transition-all ${section === s.id ? 'bg-brand-green text-brand-black' : 'text-gray-500 hover:text-white'}`}
+          >{s.label}</button>
+        ))}
+      </div>
+
+      {section === 'account' && (
+        <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8 space-y-6">
+          <h3 className="text-white font-bold text-lg">Account Information</h3>
+          <div className="grid md:grid-cols-2 gap-5">
+            <div className="space-y-1">
+              <label className={labelClass}>Display Name</label>
+              <input className={inputClass} value={name} onChange={e => setName(e.target.value)} placeholder="Your name" />
+            </div>
+            <div className="space-y-1">
+              <label className={labelClass}>Email</label>
+              <input className={`${inputClass} opacity-50 cursor-not-allowed`} value={currentUser?.email || ''} readOnly />
+              <p className="text-[10px] text-gray-600">Email cannot be changed here.</p>
+            </div>
+            <div className="space-y-1">
+              <label className={labelClass}>Location</label>
+              <input className={inputClass} value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Zagreb, Croatia" />
+            </div>
+            <div className="space-y-1 md:col-span-2">
+              <label className={labelClass}>Bio</label>
+              <textarea className={`${inputClass} resize-none`} rows={3} value={bio} onChange={e => setBio(e.target.value)} placeholder="Tell clients about yourself..." />
+            </div>
+          </div>
+          {accountMsg && <p className={`text-sm font-medium ${accountMsg.includes('Failed') ? 'text-brand-pink' : 'text-brand-green'}`}>{accountMsg}</p>}
+          <button onClick={handleSaveAccount} disabled={savingAccount}
+            className="flex items-center gap-2 px-6 py-3 bg-brand-green text-brand-black font-black rounded-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 text-sm"
+          >
+            {savingAccount ? <Loader2 size={15} className="animate-spin" /> : <CheckCircle size={15} />}
+            Save Changes
+          </button>
+        </div>
+      )}
+
+      {section === 'security' && (
+        <div className="space-y-6">
+          <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8 space-y-5">
+            <h3 className="text-white font-bold text-lg">Change Password</h3>
+            <div className="space-y-1">
+              <label className={labelClass}>Current Password</label>
+              <input type="password" className={inputClass} value={currentPwd} onChange={e => setCurrentPwd(e.target.value)} placeholder="••••••••" />
+            </div>
+            <div className="grid md:grid-cols-2 gap-5">
+              <div className="space-y-1">
+                <label className={labelClass}>New Password</label>
+                <input type="password" className={inputClass} value={newPwd} onChange={e => setNewPwd(e.target.value)} placeholder="Min. 8 characters" />
+              </div>
+              <div className="space-y-1">
+                <label className={labelClass}>Confirm New Password</label>
+                <input type="password" className={inputClass} value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)} placeholder="Repeat password" />
+              </div>
+            </div>
+            {pwdError && <p className="text-brand-pink text-sm font-medium">{pwdError}</p>}
+            {pwdMsg && <p className="text-brand-green text-sm font-medium">{pwdMsg}</p>}
+            <button onClick={handleChangePassword} disabled={savingPwd || !currentPwd || !newPwd || !confirmPwd}
+              className="flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-black rounded-xl transition-all disabled:opacity-50 text-sm"
+            >
+              {savingPwd ? <Loader2 size={15} className="animate-spin" /> : <ShieldCheck size={15} />}
+              Update Password
+            </button>
+          </div>
+
+          <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8 space-y-4">
+            <h3 className="text-white font-bold text-lg">Verification Status</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between py-3 border-b border-white/5">
+                <div className="flex items-center gap-3">
+                  <Mail size={16} className="text-gray-500" />
+                  <div>
+                    <p className="text-sm text-white font-medium">Email</p>
+                    <p className="text-xs text-gray-500">{currentUser?.email}</p>
+                  </div>
+                </div>
+                {currentUser?.emailVerified
+                  ? <span className="flex items-center gap-1 text-[10px] font-bold text-brand-green"><CheckCircle size={12} /> Verified</span>
+                  : <span className="text-[10px] font-bold text-brand-pink">Unverified</span>}
+              </div>
+              <div className="flex items-center justify-between py-3">
+                <div className="flex items-center gap-3">
+                  <Smartphone size={16} className="text-gray-500" />
+                  <div>
+                    <p className="text-sm text-white font-medium">Phone</p>
+                    <p className="text-xs text-gray-500">{(currentUser as any)?.mobile || 'Not set'}</p>
+                  </div>
+                </div>
+                {currentUser?.mobileVerified
+                  ? <span className="flex items-center gap-1 text-[10px] font-bold text-brand-green"><CheckCircle size={12} /> Verified</span>
+                  : <span className="text-[10px] font-bold text-brand-pink">Unverified</span>}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-red-950/30 border border-red-900/30 rounded-3xl p-8 space-y-4">
+            <h3 className="text-red-400 font-bold text-lg">Danger Zone</h3>
+            <p className="text-gray-500 text-sm">Permanently delete your account and all associated data. This action cannot be undone.</p>
+            <button className="px-6 py-3 border border-red-900/50 text-red-400 hover:bg-red-950/50 font-black rounded-xl transition-all text-sm">
+              Delete Account
+            </button>
+          </div>
+        </div>
+      )}
+
+      {section === 'billing' && (
+        <div className="space-y-6">
+          <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8">
+            <h3 className="text-white font-bold text-lg mb-6">Current Plan</h3>
+            <div className="flex items-center justify-between p-5 bg-brand-black/40 border border-white/10 rounded-2xl">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-brand-green/10 flex items-center justify-center">
+                  <Crown size={22} className="text-brand-green" />
+                </div>
+                <div>
+                  <p className="text-white font-bold capitalize">{currentUser?.tier?.toLowerCase() || 'free'} Plan</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {currentUser?.tier === 'FREE' && 'Basic access — upgrade to unlock all features'}
+                    {currentUser?.tier === 'STARTER' && '€9/mo — Essential features'}
+                    {currentUser?.tier === 'PRO' && '€19/mo — Full feature access'}
+                    {currentUser?.tier === 'ENTERPRISE' && '€99/mo — Unlimited everything'}
+                  </p>
+                </div>
+              </div>
+              <button onClick={() => navigate('/subscription')}
+                className="px-5 py-2.5 bg-brand-green text-brand-black font-black rounded-xl text-sm hover:scale-[1.02] active:scale-95 transition-all"
+              >
+                {currentUser?.tier === 'FREE' ? 'Upgrade' : 'Change Plan'}
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8">
+            <h3 className="text-white font-bold text-lg mb-2">Payment Methods</h3>
+            <p className="text-gray-500 text-sm mb-6">Manage cards and payment options used for subscriptions.</p>
+            <div className="p-6 border border-dashed border-white/10 rounded-2xl flex flex-col items-center text-center gap-3">
+              <CreditCard size={28} className="text-gray-600" />
+              <p className="text-gray-500 text-sm">No saved payment methods.</p>
+              <p className="text-gray-600 text-xs">Payment methods are managed through Stripe and PayPal at checkout.</p>
+            </div>
+          </div>
+
+          <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-white font-bold text-lg">Billing History</h3>
+              <button onClick={() => { /* switch to earnings tab */ }}
+                className="text-xs font-bold text-brand-green hover:underline"
+              >View all in Financials →</button>
+            </div>
+            <p className="text-gray-500 text-sm">Your full transaction history is available in the <button onClick={() => {}} className="text-brand-green underline">Financials</button> tab.</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Profile: React.FC = () => {
   const { listings, addListing } = useData();
   const [activeTab, setActiveTab] = useState<ActiveTab>('listings');
@@ -497,8 +713,8 @@ const Profile: React.FC = () => {
                   <TrendingUp size={18} />
                   <span className="text-xs font-bold uppercase tracking-widest">Total Income</span>
                 </div>
-                <h3 className="text-4xl font-black text-brand-green mb-2">€0<span className="text-gray-600">.00</span></h3>
-                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-4">New Account Milestone</p>
+                <h3 className="text-4xl font-black text-brand-green mb-2">€{(availableBalance + pendingClearance).toFixed(0)}<span className="text-gray-600">.00</span></h3>
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-4">{transactions.length} transaction{transactions.length !== 1 ? 's' : ''}</p>
               </div>
             </div>
 
@@ -515,10 +731,33 @@ const Profile: React.FC = () => {
                 </div>
               </div>
               {transactions.length === 0 ? (
-                <div className="p-20 text-center text-gray-600 italic text-sm">No transaction data available yet.</div>
+                <div className="p-20 text-center text-gray-600 italic text-sm">No transactions yet.</div>
               ) : (
-                <table className="w-full text-left">
-                  {/* Empty state handles this */}
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-white/5 text-[10px] text-gray-500 uppercase tracking-widest">
+                      <th className="px-6 py-3 font-bold">Date</th>
+                      <th className="px-6 py-3 font-bold">Plan</th>
+                      <th className="px-6 py-3 font-bold">Amount</th>
+                      <th className="px-6 py-3 font-bold">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {transactions.map(t => (
+                      <tr key={t.id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="px-6 py-4 text-gray-400">{new Date(t.createdAt).toLocaleDateString()}</td>
+                        <td className="px-6 py-4 text-white font-medium capitalize">{t.plan}</td>
+                        <td className="px-6 py-4 text-brand-green font-bold">€{t.amount.toFixed(2)}</td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
+                            t.status === 'SUCCESS' ? 'bg-brand-green/10 text-brand-green' :
+                            t.status === 'PENDING' ? 'bg-yellow-500/10 text-yellow-400' :
+                            'bg-red-500/10 text-red-400'
+                          }`}>{t.status}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               )}
             </div>
@@ -638,6 +877,8 @@ const Profile: React.FC = () => {
             )}
           </div>
         );
+      case 'settings':
+        return <SettingsTab currentUser={currentUser} updateUser={updateUser} navigate={navigate} />;
       default:
         return null;
     }
