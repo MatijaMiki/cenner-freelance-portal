@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, User as UserIcon, LogOut, ChevronDown, Briefcase, MessageSquare, Settings, CreditCard, UserCheck, Gift } from 'lucide-react';
+import { Menu, X, User as UserIcon, LogOut, ChevronDown, Briefcase, MessageSquare, Settings, CreditCard, UserCheck } from 'lucide-react';
 import PermissionModal from './PermissionModal';
 import ChatWidget from './ChatWidget';
 import Footer from './Footer';
@@ -150,12 +150,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
               {user ? (
                 <div className="flex items-center space-x-3">
-                  <Link to="/messages" className="p-2 text-gray-500 hover:text-brand-green transition-colors" title="Messages">
-                    <MessageSquare size={20} />
-                  </Link>
-                  <Link to="/orders" className="p-2 text-gray-500 hover:text-brand-green transition-colors" title="Orders">
-                    <Briefcase size={20} />
-                  </Link>
 
                   {/* Profile dropdown */}
                   <div ref={profileRef} className="relative">
@@ -190,9 +184,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                               <p className="text-[11px] text-gray-500 truncate">{user.email}</p>
                             </div>
                           </div>
-                          <button className="w-full py-2 px-3 bg-white/10 hover:bg-white/15 text-white text-xs font-bold rounded-xl transition-colors">
-                            Switch to Buying
-                          </button>
                         </div>
 
                         <div className="border-t border-white/10" />
@@ -203,9 +194,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             <UserCheck size={15} className="text-gray-500" />
                             Profile
                           </Link>
-                          <Link to="/refer" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                            <Gift size={15} className="text-gray-500" />
-                            Refer a friend
+                          <Link to="/messages" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+                            <MessageSquare size={15} className="text-gray-500" />
+                            Messages
+                          </Link>
+                          <Link to="/orders" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+                            <Briefcase size={15} className="text-gray-500" />
+                            Orders
                           </Link>
                           <Link to="/settings" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
                             <Settings size={15} className="text-gray-500" />
