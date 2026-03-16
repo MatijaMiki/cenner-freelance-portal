@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Settings, CreditCard, MessageSquare, Briefcase, PlusCircle,
   TrendingUp, Clock, CheckCircle, AlertCircle, MoreVertical,
@@ -16,8 +16,8 @@ import { API } from '../lib/api';
 type ActiveTab = 'listings' | 'inbox' | 'earnings' | 'settings' | 'portfolio';
 
 // ─── Settings Tab ────────────────────────────────────────────────────────────
-const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; navigate: any }> = ({ currentUser, updateUser, navigate }) => {
-  const [section, setSection] = React.useState<'account' | 'security' | 'billing'>('account');
+const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; navigate: any; initialSection?: string }> = ({ currentUser, updateUser, navigate, initialSection = 'account' }) => {
+  const [section, setSection] = React.useState<'account' | 'security' | 'billing'>(initialSection as any);
 
   // Account fields
   const [name, setName] = React.useState(currentUser?.name || '');
@@ -233,7 +233,9 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
 
 const Profile: React.FC = () => {
   const { listings, addListing } = useData();
-  const [activeTab, setActiveTab] = useState<ActiveTab>('listings');
+  const [searchParams] = useSearchParams();
+  const initialTab = (searchParams.get('tab') as ActiveTab) || 'listings';
+  const [activeTab, setActiveTab] = useState<ActiveTab>(initialTab);
   const [searchQuery, setSearchQuery] = useState('');
   
   // Local UI State
@@ -878,7 +880,7 @@ const Profile: React.FC = () => {
           </div>
         );
       case 'settings':
-        return <SettingsTab currentUser={currentUser} updateUser={updateUser} navigate={navigate} />;
+        return <SettingsTab currentUser={currentUser} updateUser={updateUser} navigate={navigate} initialSection={(searchParams.get('section') as any) || 'account'} />;
       default:
         return null;
     }
