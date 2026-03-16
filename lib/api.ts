@@ -127,4 +127,32 @@ export const API = {
   deletePortfolioItem: (itemId: string) =>
     request<{ success: boolean }>(`/portfolio/${itemId}`, 'DELETE'),
 
+  // ── Transactions ──────────────────────────────────────────────────────────
+  getTransactions: () => request<any[]>('/transactions'),
+
+  // ── Stripe confirm ────────────────────────────────────────────────────────
+  confirmStripePayment: (planId: string, paymentIntentId: string) =>
+    request<{ success: boolean }>('/stripe/confirm-payment', 'POST', { planId, paymentIntentId }),
+
+  // ── Notifications ─────────────────────────────────────────────────────────
+  getNotifications: () => request<any[]>('/notifications'),
+
+  markNotificationRead: (id: string) =>
+    request<{ success: boolean }>(`/notifications/${id}/read`, 'PATCH'),
+
+  markAllNotificationsRead: () =>
+    request<{ success: boolean }>('/notifications/read-all', 'PATCH'),
+
+  // ── Direct Messaging ──────────────────────────────────────────────────────
+  getConversations: () => request<any[]>('/conversations'),
+
+  getOrCreateConversation: (otherUserId: string) =>
+    request<{ id: string }>('/conversations', 'POST', { otherUserId }),
+
+  getMessages: (conversationId: string) =>
+    request<any[]>(`/conversations/${conversationId}/messages`),
+
+  sendMessage: (conversationId: string, content: string) =>
+    request<any>(`/conversations/${conversationId}/messages`, 'POST', { content }),
+
 };

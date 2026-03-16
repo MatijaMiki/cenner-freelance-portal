@@ -61,11 +61,17 @@ const Profile: React.FC = () => {
   const [isAddingPortfolio, setIsAddingPortfolio] = useState(false);
   const portfolioFileRef = useRef<HTMLInputElement>(null);
 
-  const availableBalance = 0;
-  const pendingClearance = 0;
-
   const navigate = useNavigate();
   const { user: currentUser, updateUser } = useAuth();
+
+  const [transactions, setTransactions] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    if (currentUser) {
+      API.getTransactions().then(setTransactions).catch(() => {});
+    }
+  }, [currentUser?.id]);
+  const availableBalance = transactions.filter(t => t.status === 'SUCCESS').reduce((s, t) => s + t.amount, 0);
+  const pendingClearance = transactions.filter(t => t.status === 'PENDING').reduce((s, t) => s + t.amount, 0);
 
   // Sync local state from user data on mount / user change
   React.useEffect(() => {
@@ -90,20 +96,22 @@ const Profile: React.FC = () => {
   const canCreateListings = kycVerified || creatorStatus === 'approved';
   const subscriptionTier = currentUser?.tier || 'free';
 
-  const [inboxMessages, setInboxMessages] = useState([
-    { 
-      id: 1, 
-      sender: "Cenner System", 
-      subject: "Protocol Initialization", 
-      snippet: "Welcome to the elite network. Your node is active...", 
-      time: "Now", 
-      unread: true, 
-      avatar: "", // Empty for default icon
-      messages: [{ from: 'them', text: 'Welcome. Your identity has been established on the blockchain. To begin trading services, verify your creator status or browse the marketplace.' }] 
+  const [inboxMessages, setInboxMessages] = useState<any[]>([]);
+  React.useEffect(() => {
+    if (currentUser) {
+      API.getConversations().then(convs => {
+        setInboxMessages(convs.map(c => ({
+          id: c.id,
+          sender: c.name,
+          avatar: c.avatar,
+          snippet: c.lastMessage || 'No messages yet',
+          time: c.lastMessageAt ? new Date(c.lastMessageAt).toLocaleDateString() : '',
+          unread: c.unread > 0,
+          conversationId: c.id,
+        })));
+      }).catch(() => {});
     }
-  ]);
-
-  const transactions: any[] = [];
+  }, [currentUser?.id, activeTab]);
 
   const saveSkills = async (updated: string[]) => {
     if (!currentUser) return;
