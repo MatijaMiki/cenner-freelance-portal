@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, MapPin, Mail, Phone, MessageSquare, CheckCircle, AlertCircle, Loader2, ShieldCheck } from 'lucide-react';
 import { API } from '../lib/api';
+import SEO from '../components/SEO';
 
 // Extend window for grecaptcha
 declare global {
@@ -82,6 +83,11 @@ const Contact: React.FC = () => {
 
   return (
     <div className="pt-16 pb-24 max-w-7xl mx-auto px-4">
+      <SEO
+        title="Contact"
+        canonical="/contact"
+        description="Get in touch with the Cenner team. We're here to help you find elite freelance talent or answer any questions about the platform."
+      />
       <div className="text-center max-w-3xl mx-auto mb-16">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">Get in Touch</h1>
         <p className="text-gray-500 text-lg">Have questions? We're here to help you navigate the Cenner ecosystem.</p>

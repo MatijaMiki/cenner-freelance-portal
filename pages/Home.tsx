@@ -1,18 +1,46 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  ArrowRight, Star, Shield, Zap, Globe, ChevronRight, 
-  Layers, Users, Search, Code, Palette, 
+import {
+  ArrowRight, Star, Shield, Zap, Globe, ChevronRight,
+  Layers, Users, Search, Code, Palette,
   Terminal, BarChart3, Rocket, Activity, Server,
   ShieldCheck, Cpu, Briefcase, Globe2, Clock, CheckCircle, Lock
 } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
 import { MOCK_LISTINGS } from '../constants';
+import SEO from '../components/SEO';
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Cenner',
+  url: 'https://cenner.hr',
+  logo: 'https://cenner.hr/favicon.svg',
+  description: 'Elite freelance talent network connecting businesses with the top 1% of creators using AI-powered matching.',
+  sameAs: [],
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Cenner',
+  url: 'https://cenner.hr',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://cenner.hr/marketplace?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
 
 const Home: React.FC = () => {
   return (
     <div className="relative min-h-screen">
+      <SEO
+        canonical="/"
+        description="Cenner connects businesses with the top 1% of freelance talent. AI-powered matching, verified creators, and premium collaboration tools for high-end projects."
+        jsonLd={[organizationJsonLd, websiteJsonLd] as any}
+      />
       <NeuralBackground parallax={true} />
 
       {/* Hero Section */}

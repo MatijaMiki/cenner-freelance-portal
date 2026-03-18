@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, User, Github, ArrowRight, Phone, AlertCircle, ChevronDown, Facebook } from 'lucide-react';
+import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
 
 const COUNTRY_CODES = [
@@ -115,6 +116,7 @@ const Auth: React.FC = () => {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
+      <SEO title="Login / Sign Up" canonical="/auth" description="Sign in or create your Cenner account to access elite freelance talent and premium collaboration tools." />
       <div className="w-full max-w-lg">
         <div className="bg-brand-grey/50 border border-white/10 rounded-[2.5rem] p-8 md:p-12 backdrop-blur-2xl shadow-2xl">
           <div className="text-center mb-10">

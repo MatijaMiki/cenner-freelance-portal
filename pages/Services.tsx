@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 import {
   Code, Palette, Globe, Cpu, ArrowRight,
   CheckCircle, Sparkles, Zap, Layers, Server
@@ -133,6 +134,11 @@ const serviceCategories: Service[] = [
 const Services: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-brand-black">
+      <SEO
+        title="Services"
+        canonical="/services"
+        description="Explore Cenner's premium freelance services — web development, design, AI, marketing, video production and more from elite verified creators."
+      />
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-32">
 
         {/* Header */}

@@ -1,6 +1,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 import { 
   Search, Filter, Star, Clock, Tag, ChevronDown, 
   X, SlidersHorizontal, ArrowUpDown, Briefcase, 
@@ -148,6 +149,11 @@ const Marketplace: React.FC = () => {
 
   return (
     <div className="pt-12 pb-24 px-4 max-w-7xl mx-auto">
+      <SEO
+        title="Marketplace"
+        canonical="/marketplace"
+        description="Browse the top 1% of freelance talent on Cenner. Find verified creators for design, development, marketing, and more."
+      />
       {/* Mobile Filter Drawer */}
       {isFilterDrawerOpen && (
         <div className="fixed inset-0 z-[200] lg:hidden animate-in fade-in duration-300">

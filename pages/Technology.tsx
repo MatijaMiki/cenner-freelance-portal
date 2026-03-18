@@ -2,6 +2,7 @@
 import React from 'react';
 import { Code2, Code, Atom, Zap, Globe, Workflow, Server, Palette, Brain, GraduationCap, Cpu } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
+import SEO from '../components/SEO';
 
 type Tech = {
   icon: React.ReactNode;
@@ -45,6 +46,11 @@ const CATEGORIES: { label: string; techs: Tech[] }[] = [
 const Technology: React.FC = () => {
   return (
     <div className="relative min-h-screen pt-16 pb-24 overflow-hidden">
+      <SEO
+        title="Technology"
+        canonical="/technology"
+        description="Discover the technology stack powering Cenner — AI matching, real-time collaboration, and secure infrastructure built for elite freelance work."
+      />
       <NeuralBackground parallax={false} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4">

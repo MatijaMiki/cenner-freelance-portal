@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+Disallow: /profile
+Disallow: /dashboard
+Disallow: /orders
+Disallow: /messages
+Disallow: /projects
+Disallow: /checkout/
+Disallow: /checkout-subscription/
+Disallow: /creator-onboarding
+
+Sitemap: https://cenner.hr/sitemap.xml

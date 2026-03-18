@@ -1,6 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 import { 
   ArrowUp, ArrowDown, MessageSquare, Share2, 
   ChevronDown, Search, MoreHorizontal, User, 
@@ -134,6 +135,11 @@ const Blog: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-brand-black pt-12 pb-24">
+      <SEO
+        title="Blog"
+        canonical="/blog"
+        description="Insights, tips, and stories from the Cenner community. Stay up to date with freelancing trends, platform updates, and creator spotlights."
+      />
       {/* Create Post Modal */}
       {isCreatingPost && (
         <div className="fixed inset-0 z-[150] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">

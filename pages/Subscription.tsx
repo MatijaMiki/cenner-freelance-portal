@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, Zap, Globe, Cpu, Crown, Star, Rocket, Sparkles } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
+import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
 
 type Feature = {
@@ -174,6 +175,11 @@ const Subscription: React.FC = () => {
 
   return (
     <div className="relative min-h-screen">
+      <SEO
+        title="Pricing & Plans"
+        canonical="/subscription"
+        description="Choose the Cenner plan that fits your needs. From Starter to Enterprise — unlock elite freelance talent, AI matching, and premium collaboration tools."
+      />
       <NeuralBackground parallax={true} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-24 lg:py-32">

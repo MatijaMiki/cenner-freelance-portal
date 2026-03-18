@@ -5,6 +5,7 @@ import { Star, Clock, CheckCircle, MessageSquare, ShieldCheck, Share2, Heart, Ar
 import PermissionModal from '../components/PermissionModal';
 import ChatInterface from '../components/ChatInterface';
 import { useData } from '../contexts/DataContext';
+import SEO from '../components/SEO';
 
 const ServiceDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,8 +38,37 @@ const ServiceDetails: React.FC = () => {
     navigate(`/checkout/${listing.id}`);
   };
 
+  const serviceJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: listing.title,
+    description: listing.description,
+    provider: {
+      '@type': 'Person',
+      name: listing.freelancerName,
+      image: listing.freelancerAvatar,
+    },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'EUR',
+      price: listing.price,
+      availability: 'https://schema.org/InStock',
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: listing.rating,
+      reviewCount: listing.reviewsCount,
+    },
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      <SEO
+        title={listing.title}
+        canonical={`/service/${listing.id}`}
+        description={`${listing.description.slice(0, 150)}... Delivered by ${listing.freelancerName} — rated ${listing.rating}/5.`}
+        jsonLd={serviceJsonLd}
+      />
       <PermissionModal isOpen={isPermissionModalOpen} onClose={() => setIsPermissionModalOpen(false)} />
       
       <ChatInterface 
