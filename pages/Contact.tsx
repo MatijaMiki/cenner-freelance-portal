@@ -104,8 +104,8 @@ const Contact: React.FC = () => {
               </div>
               <div>
                 <h4 className="text-white font-bold mb-1">{t('Email Us')}</h4>
-                <p className="text-gray-500 text-sm">support@cenner.io</p>
-                <p className="text-gray-500 text-sm">partners@cenner.io</p>
+                <p className="text-gray-500 text-sm">info@cenner.hr</p>
+                <p className="text-gray-500 text-sm">support@cenner.hr</p>
               </div>
             </div>
 
@@ -115,8 +115,8 @@ const Contact: React.FC = () => {
               </div>
               <div>
                 <h4 className="text-white font-bold mb-1">{t('Headquarters')}</h4>
-                <p className="text-gray-500 text-sm">123 Innovation Drive</p>
-                <p className="text-gray-500 text-sm">Tech District, SF 94103</p>
+                <p className="text-gray-500 text-sm">Cenner d.o.o.</p>
+                <p className="text-gray-500 text-sm">Zagreb, Croatia</p>
               </div>
             </div>
 
@@ -126,7 +126,7 @@ const Contact: React.FC = () => {
               </div>
               <div>
                 <h4 className="text-white font-bold mb-1">{t('Call Support')}</h4>
-                <p className="text-gray-500 text-sm">+1 (555) 000-CENNER</p>
+                <p className="text-gray-500 text-sm">+385 99 352 5500</p>
               </div>
             </div>
           </div>
