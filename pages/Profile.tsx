@@ -424,8 +424,8 @@ const Profile: React.FC = () => {
       API.getConversations().then(convs => {
         setInboxMessages(convs.map(c => ({
           id: c.id,
-          sender: c.name,
-          avatar: c.avatar,
+          sender: c.other?.name ?? 'Unknown',
+          avatar: c.other?.avatar,
           snippet: c.lastMessage || 'No messages yet',
           time: c.lastMessageAt ? new Date(c.lastMessageAt).toLocaleDateString() : '',
           unread: c.unread > 0,
@@ -537,8 +537,7 @@ const Profile: React.FC = () => {
   };
 
   const handleOpenMessage = (msg: any) => {
-    setSelectedMessage(msg);
-    setInboxMessages(prev => prev.map(m => m.id === msg.id ? { ...m, unread: false } : m));
+    navigate(`/messages/${msg.conversationId}`);
   };
 
   const handlePortfolioUpload = async (e: React.FormEvent) => {
