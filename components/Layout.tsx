@@ -214,13 +214,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     onClick={() => setIsProfileOpen(v => !v)}
                     className="flex items-center gap-2 group/profile"
                   >
-                    {user.avatar ? (
-                      <img src={user.avatar} alt="" className="w-9 h-9 rounded-full border-2 border-brand-green p-0.5 group-hover/profile:scale-110 transition-transform" />
-                    ) : (
-                      <div className="w-9 h-9 rounded-full bg-brand-grey border-2 border-brand-green flex items-center justify-center text-brand-green group-hover/profile:scale-110 transition-transform">
-                        <UserIcon size={18} />
-                      </div>
-                    )}
+                    <div className="relative">
+                      {user.avatar ? (
+                        <img src={user.avatar} alt="" className="w-9 h-9 rounded-full border-2 border-brand-green p-0.5 group-hover/profile:scale-110 transition-transform" />
+                      ) : (
+                        <div className="w-9 h-9 rounded-full bg-brand-grey border-2 border-brand-green flex items-center justify-center text-brand-green group-hover/profile:scale-110 transition-transform">
+                          <UserIcon size={18} />
+                        </div>
+                      )}
+                      {unread > 0 && (
+                        <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-0.5 bg-brand-green rounded-full flex items-center justify-center text-brand-black text-[9px] font-black border border-brand-black">
+                          {unread > 9 ? '9+' : unread}
+                        </div>
+                      )}
+                    </div>
                     <ChevronDown size={12} className={`text-gray-500 transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} />
                   </button>
 
