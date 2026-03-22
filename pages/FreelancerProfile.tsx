@@ -4,7 +4,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Star, MapPin, Briefcase, ShieldCheck, MessageSquare,
   Clock, ArrowRight, User, ExternalLink, AlertCircle, Loader2,
-  FileText, Plus, Trash2, X, ChevronRight,
+  FileText, Plus, Trash2, X, ChevronRight, BadgeCheck,
 } from 'lucide-react';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
@@ -332,8 +332,8 @@ const FreelancerProfile: React.FC = () => {
                 </div>
               )}
               {isVerified && (
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-brand-green rounded-full flex items-center justify-center shadow-lg" title="Verified">
-                  <ShieldCheck size={16} className="text-brand-black" />
+                <div className="absolute -bottom-2 -right-2 w-9 h-9 flex items-center justify-center" title="Identity Verified">
+                  <BadgeCheck size={36} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]" fill="#1a1a1a" strokeWidth={1.5} />
                 </div>
               )}
             </div>

@@ -6,7 +6,7 @@ import {
   TrendingUp, Clock, CheckCircle, AlertCircle, MoreVertical,
   MoreHorizontal, Edit2, Pause, Trash2, ArrowUpRight, Search,
   Calendar, X, Download, User as UserIcon, ShieldAlert, Rocket, Play, Image as ImageIcon, Smartphone, Mail, Crown, Zap, Globe,
-  Upload, Loader2, ExternalLink, ShieldCheck, MapPin, Banknote
+  Upload, Loader2, ExternalLink, ShieldCheck, MapPin, Banknote, BadgeCheck
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';
@@ -1253,9 +1253,11 @@ const Profile: React.FC = () => {
                     <UserIcon size={64} className="text-brand-green"/>
                 </div>
               )}
-              <div className="absolute bottom-1 right-1 w-7 h-7 bg-brand-green rounded-full border-4 border-brand-black flex items-center justify-center">
-                <CheckCircle size={14} className="text-brand-black" />
-              </div>
+              {canCreateListings && (
+                <div className="absolute bottom-1 right-1 w-8 h-8 flex items-center justify-center drop-shadow-lg">
+                  <BadgeCheck size={32} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]" fill="#1a1a1a" strokeWidth={1.5} />
+                </div>
+              )}
             </div>
             <h2 className="text-2xl font-bold text-white mb-1">{currentUser?.name || "New Member"}</h2>
             <div className="flex flex-col items-center">
