@@ -1,20 +1,21 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
-import { 
-  Search, Filter, Star, Clock, Tag, ChevronDown, 
-  X, SlidersHorizontal, ArrowUpDown, Briefcase, 
-  Zap, Users, FileText, TrendingUp, AlertCircle 
+import {
+  Search, Filter, Star, Clock, Tag, ChevronDown,
+  X, SlidersHorizontal, ArrowUpDown, Briefcase,
+  Zap, Users, FileText, TrendingUp, AlertCircle, Loader2
 } from 'lucide-react';
 import { CATEGORIES } from '../constants';
 import { useData } from '../contexts/DataContext';
+import { API } from '../lib/api';
 import { useT } from '../i18n';
 
 type MarketplaceMode = 'freelancers' | 'clients';
 
 const Marketplace: React.FC = () => {
-  const { listings, jobs } = useData();
+  const { listings: allListings, jobs } = useData();
   const t = useT();
   const [mode, setMode] = useState<MarketplaceMode>('freelancers');
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,6 +23,24 @@ const Marketplace: React.FC = () => {
   const [priceRange, setPriceRange] = useState<number>(3000);
   const [sortBy, setSortBy] = useState<'newest' | 'price-asc' | 'price-desc' | 'rating'>('newest');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<typeof allListings | null>(null);
+  const [searching, setSearching] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Server-side search with 350ms debounce
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!searchTerm.trim()) { setSearchResults(null); return; }
+    setSearching(true);
+    debounceRef.current = setTimeout(() => {
+      const cat = selectedCategory !== 'All' ? selectedCategory : undefined;
+      API.getListings(cat, searchTerm.trim())
+        .then(r => setSearchResults(r))
+        .catch(() => setSearchResults([]))
+        .finally(() => setSearching(false));
+    }, 350);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [searchTerm, selectedCategory]);
 
   // Body scroll lock for mobile menu
   useEffect(() => {
@@ -35,22 +54,23 @@ const Marketplace: React.FC = () => {
     };
   }, [isFilterDrawerOpen]);
 
+  // When no search term, use the DataContext listings (already sorted by rating/recency from backend)
+  const listings = searchResults !== null ? searchResults : allListings;
+
   const filteredServices = useMemo(() => {
     let result = listings.filter((item) => {
-      const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                           item.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
       const matchesPrice = item.price <= priceRange;
-      return matchesSearch && matchesCategory && matchesPrice;
+      return matchesCategory && matchesPrice;
     });
 
     switch (sortBy) {
       case 'price-asc': return result.sort((a, b) => a.price - b.price);
       case 'price-desc': return result.sort((a, b) => b.price - a.price);
-      case 'rating': return result.sort((a, b) => b.rating - a.rating);
-      default: return result.sort((a, b) => b.id.localeCompare(a.id));
+      case 'rating': return result.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      default: return result; // backend already sorted by relevance or rating/recency
     }
-  }, [listings, searchTerm, selectedCategory, priceRange, sortBy]);
+  }, [listings, selectedCategory, priceRange, sortBy]);
 
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
@@ -215,7 +235,11 @@ const Marketplace: React.FC = () => {
       {/* Search & Mobile Filter Trigger */}
       <div className="flex flex-col sm:flex-row gap-4 mb-12">
         <div className="relative flex-grow">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+          {searching ? (
+            <Loader2 className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-green animate-spin" size={18} />
+          ) : (
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+          )}
           <input
             type="text"
             placeholder={mode === 'freelancers' ? t('Search for services (UI/UX, Dev, AI...)') : t('Search for project requests...')}

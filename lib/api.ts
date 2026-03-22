@@ -64,8 +64,13 @@ export const API = {
     request<any>(`/profile/${id}`, 'PUT', data),
 
   // ── Listings ──────────────────────────────────────────────────────────
-  getListings: (category?: string) =>
-    request<any[]>(`/listings${category ? `?category=${encodeURIComponent(category)}` : ''}`),
+  getListings: (category?: string, search?: string) => {
+    const params = new URLSearchParams();
+    if (category) params.set('category', category);
+    if (search) params.set('search', search);
+    const qs = params.toString();
+    return request<any[]>(`/listings${qs ? `?${qs}` : ''}`);
+  },
 
   createListing: (data: any) => request<any>('/listings', 'POST', data),
 
