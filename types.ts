@@ -43,6 +43,7 @@ export interface ServiceListing {
   reviewsCount: number;
   imageUrl: string;
   createdAt?: string;
+  freelancerTier?: string;
 }
 
 export interface JobPosting {

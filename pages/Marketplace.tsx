@@ -276,7 +276,13 @@ const Marketplace: React.FC = () => {
                         />
                         <div className="flex-grow min-w-0">
                           <p className="text-white text-sm font-bold truncate">{listing.freelancerName}</p>
-                          <p className="text-brand-pink text-[10px] font-black uppercase tracking-tighter">{t('Verified Specialist')}</p>
+                          {listing.freelancerTier === 'ultra' || listing.freelancerTier === 'enterprise' ? (
+                            <p className="text-brand-pink text-[10px] font-black uppercase tracking-tighter">Ultra</p>
+                          ) : listing.freelancerTier === 'pro' ? (
+                            <p className="text-brand-green text-[10px] font-black uppercase tracking-tighter">Pro</p>
+                          ) : (
+                            <p className="text-gray-600 text-[10px] font-black uppercase tracking-tighter">Free</p>
+                          )}
                         </div>
                         <div className="flex items-center space-x-1.5 text-yellow-400">
                           <Star size={14} fill="currentColor" />
