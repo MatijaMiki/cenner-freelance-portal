@@ -166,7 +166,7 @@ const MessagingHub: React.FC = () => {
     return new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  const filtered = conversations.filter(c => c.other.name.toLowerCase().includes(search.toLowerCase()));
+  const filtered = conversations.filter(c => c.other?.name?.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="flex h-[calc(100vh-80px)] bg-brand-black overflow-hidden">
@@ -216,7 +216,7 @@ const MessagingHub: React.FC = () => {
               <p className="text-gray-500 text-xs">{search ? 'No results' : 'No conversations yet'}</p>
             </div>
           ) : (
-            filtered.map(conv => {
+            filtered.filter(c => c.other).map(conv => {
               const isActive = conv.id === activeConvId;
               return (
                 <button
@@ -233,7 +233,7 @@ const MessagingHub: React.FC = () => {
                       <img src={conv.other.avatar} alt={conv.other.name} className="w-10 h-10 rounded-xl object-cover" />
                     ) : (
                       <div className="w-10 h-10 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green font-black text-sm">
-                        {conv.other.name[0]?.toUpperCase()}
+                        {conv.other.name?.[0]?.toUpperCase() ?? '?'}
                       </div>
                     )}
                     {conv.unread > 0 && (
@@ -245,7 +245,7 @@ const MessagingHub: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <span className={`text-xs font-bold truncate ${conv.unread > 0 ? 'text-white' : 'text-gray-300'}`}>
-                        {conv.other.name}
+                        {conv.other.name ?? 'Unknown'}
                       </span>
                       <span className="text-gray-600 text-[10px] shrink-0 ml-1">{timeAgo(conv.lastMessageAt)}</span>
                     </div>
