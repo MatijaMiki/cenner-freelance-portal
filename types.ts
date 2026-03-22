@@ -35,9 +35,14 @@ export interface ServiceListing {
   freelancerId: string;
   freelancerName: string;
   freelancerAvatar: string;
+  freelancerLocation?: string;
+  freelancerBio?: string;
+  freelancerCreatedAt?: string;
+  includes: string[];
   rating: number;
   reviewsCount: number;
   imageUrl: string;
+  createdAt?: string;
 }
 
 export interface JobPosting {

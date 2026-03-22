@@ -69,7 +69,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => clearInterval(interval);
   }, [user]);
 
-  const handleLogout = async () => { setIsProfileOpen(false); logout(); navigate('/'); };
+  const handleLogout = async () => {
+    setIsProfileOpen(false);
+    setIsMenuOpen(false);
+    import('../hooks/useSocket').then(({ disconnectSocket }) => disconnectSocket());
+    logout();
+    navigate('/');
+  };
   const handleLangSelect = (code: string) => {
     setLang(code);
     setIsLangOpen(false);
@@ -361,7 +367,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </nav>
 
       <main className="flex-grow">{children}</main>
-      <Footer />
+      {!location.pathname.startsWith('/messages') && <Footer />}
     </div>
   );
 };

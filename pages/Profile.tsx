@@ -368,8 +368,10 @@ const Profile: React.FC = () => {
     category: CATEGORIES[0],
     price: '',
     deliveryTime: '3 Days',
-    description: ''
+    description: '',
+    includesInput: '',
   });
+  const [includesList, setIncludesList] = useState<string[]>([]);
 
   // Portfolio state
   const [portfolioItems, setPortfolioItems] = useState<any[]>([]);
@@ -591,18 +593,21 @@ const Profile: React.FC = () => {
         freelancerId: currentUser.id,
         freelancerName: currentUser.name,
         freelancerAvatar: currentUser.avatar || '',
+        includes: includesList,
         rating: 0,
         reviewsCount: 0,
         imageUrl,
       });
 
       setIsCreatingListing(false);
+      setIncludesList([]);
       setNewListing({
         title: '',
         category: CATEGORIES[0],
         price: '',
         deliveryTime: '3 Days',
         description: '',
+        includesInput: '',
       });
     } catch (err: any) {
       alert(err.message || 'Failed to create listing.');
@@ -1166,6 +1171,52 @@ const Profile: React.FC = () => {
                   ></textarea>
                 </div>
 
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">What's Included</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="e.g. Source Files, 2 Revisions…"
+                      className="flex-1 bg-brand-black border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-brand-green text-sm"
+                      value={newListing.includesInput}
+                      onChange={e => setNewListing({...newListing, includesInput: e.target.value})}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          const val = newListing.includesInput.trim();
+                          if (val && includesList.length < 10) {
+                            setIncludesList(prev => [...prev, val]);
+                            setNewListing(prev => ({...prev, includesInput: ''}));
+                          }
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const val = newListing.includesInput.trim();
+                        if (val && includesList.length < 10) {
+                          setIncludesList(prev => [...prev, val]);
+                          setNewListing(prev => ({...prev, includesInput: ''}));
+                        }
+                      }}
+                      className="px-4 py-3 bg-brand-green text-brand-black font-bold rounded-xl text-sm hover:scale-105 transition-transform"
+                    >
+                      Add
+                    </button>
+                  </div>
+                  {includesList.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {includesList.map((item, i) => (
+                        <span key={i} className="flex items-center gap-1.5 bg-brand-green/10 border border-brand-green/20 text-brand-green text-xs px-3 py-1.5 rounded-lg">
+                          {item}
+                          <button type="button" onClick={() => setIncludesList(prev => prev.filter((_, j) => j !== i))} className="text-brand-green/60 hover:text-brand-green">×</button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <div className="p-4 bg-brand-black/50 rounded-xl border border-white/10 flex items-center space-x-4">
                   <div className="p-3 bg-white/5 rounded-lg text-brand-green">
                     <ImageIcon size={20} />
@@ -1246,6 +1297,8 @@ const Profile: React.FC = () => {
                 <img
                     src={currentUser.avatar}
                     alt="Profile"
+                    loading="eager"
+                    onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     className="w-32 h-32 rounded-full border-4 border-brand-green p-1 group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (

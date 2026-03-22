@@ -57,12 +57,12 @@ const tiers: Tier[] = [
         detail: 'See how many times your profile was viewed and how many proposals you have sent. Simple but useful to track activity.',
       },
       {
-        name: 'Secure escrow payments',
-        detail: 'Every payment is held in escrow and released only when you and the client approve a milestone. Your earnings are always protected.',
+        name: 'Secure milestone payments',
+        detail: 'Payments are processed securely through Cenner. Your earnings are always protected.',
       },
       {
         name: '15% platform fee',
-        detail: 'Cenner retains 15% of each transaction to cover infrastructure, escrow, and support. You keep 85% of every invoice.',
+        detail: 'Cenner retains 15% of each transaction to cover infrastructure and support. You keep 85% of every invoice.',
       },
     ],
   },
@@ -288,7 +288,7 @@ const Subscription: React.FC = () => {
           <h2 className="text-3xl font-black text-white mb-16 tracking-tighter">{t('Why upgrade?')}</h2>
           <div className="grid md:grid-cols-3 gap-12">
             {[
-              { icon: <Star />, title: t('Protected Payments'), desc: 'Every transaction runs through escrow. Money is only released when both sides agree the work is done.' },
+              { icon: <Star />, title: t('Protected Payments'), desc: 'Every transaction is processed securely through Cenner. Your payments and earnings are always protected.' },
               { icon: <Rocket />, title: t('More Visibility'), desc: 'Higher tiers rank you above free users. Clients searching for your skills will see you before the competition.' },
               { icon: <Sparkles />, title: t('Lower Fees'), desc: 'Going from Free to Ultra cuts your platform fee from 15% down to 3–5%. On €5,000 a month that is €500 extra in your pocket.' },
             ].map((item, i) => (

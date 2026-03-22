@@ -116,7 +116,7 @@ const Home: React.FC = () => {
                 val: "100%",
                 icon: <Lock size={16} />,
                 color: "text-brand-pink",
-                desc: t("Encrypted escrow protection")
+                desc: t("Secure payment protection")
               },
             ].map((stat, i) => (
               <div key={i} className="bg-brand-black/60 backdrop-blur-xl border border-white/5 p-8 rounded-[2.5rem] flex flex-col justify-between group hover:border-brand-green/30 hover:bg-brand-black/80 transition-all cursor-default">

@@ -321,7 +321,7 @@ const MessagingHub: React.FC = () => {
                         {msg.flagged && (
                           <div className="flex items-center gap-1 text-yellow-500/70 text-[10px] px-1">
                             <AlertTriangle size={9} />
-                            Keep communication on Cenner for escrow protection
+                            Keep communication on Cenner for payment protection
                           </div>
                         )}
                         <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${

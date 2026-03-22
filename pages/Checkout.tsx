@@ -44,7 +44,7 @@ const Checkout: React.FC = () => {
         </div>
         <h1 className="text-5xl font-extrabold text-white mb-4 tracking-tight">Order Confirmed!</h1>
         <p className="text-gray-400 text-lg mb-12">
-          Your payment of <span className="text-brand-pink font-bold">€{totalAmount}</span> has been secured in escrow. 
+          Your payment of <span className="text-brand-pink font-bold">€{totalAmount}</span> has been processed securely.
           <span className="text-brand-green font-bold"> {listing.freelancerName}</span> has been notified and will start working on your project immediately.
         </p>
         
@@ -175,9 +175,9 @@ const Checkout: React.FC = () => {
                   <div className="bg-brand-green/5 border border-brand-green/10 rounded-2xl p-6 flex items-start space-x-4 mb-8">
                     <ShieldCheck className="text-brand-green shrink-0 mt-1" size={24} />
                     <div>
-                      <h4 className="text-brand-green font-bold text-sm">Military-Grade Escrow Security</h4>
+                      <h4 className="text-brand-green font-bold text-sm">Secure Payment Protection</h4>
                       <p className="text-gray-500 text-xs leading-relaxed mt-1">
-                        Your funds are held safely in our secure escrow. Payment will only be released to <span className="text-white font-bold">{listing.freelancerName}</span> once you've reviewed and approved the final project files.
+                        Your payment is processed securely. <span className="text-white font-bold">{listing.freelancerName}</span> has been notified and will start working on your project.
                       </p>
                     </div>
                   </div>
@@ -228,7 +228,7 @@ const Checkout: React.FC = () => {
                   <span className="text-white font-black text-lg uppercase tracking-tighter">Total Amount</span>
                   <span className="text-brand-pink font-black text-2xl">€{totalAmount}</span>
                 </div>
-                <p className="text-[10px] text-gray-500 mt-2 uppercase tracking-widest font-black">Includes local taxes & escrow fees</p>
+                <p className="text-[10px] text-gray-500 mt-2 uppercase tracking-widest font-black">Includes local taxes & platform fees</p>
               </div>
 
               <div className="space-y-3">

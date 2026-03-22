@@ -188,7 +188,7 @@ const Chat: React.FC = () => {
           </button>
         </div>
         <p className="text-[10px] text-gray-700 text-center mt-2">
-          Keep conversations on Cenner to maintain escrow protection
+          Keep conversations on Cenner to maintain payment protection
         </p>
       </div>
     </div>
