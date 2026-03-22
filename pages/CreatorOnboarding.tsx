@@ -31,6 +31,8 @@ const CreatorOnboarding: React.FC = () => {
 
     const poll = async () => {
       if (attempts >= maxAttempts) {
+        // Timed out — mark as pending so the user sees "under review"
+        updateUser({ creatorStatus: 'pending' } as any);
         setVerifying(false);
         return;
       }
@@ -74,10 +76,17 @@ const CreatorOnboarding: React.FC = () => {
           setError(stripeError.message || 'Verification failed. Please try again.');
         }
       } else {
-        // Stripe modal closed — start polling for webhook result
+        // Stripe modal closed successfully — mark pending in DB, then poll
+        try { await API.submitKycSession(); } catch { /* ignore */ }
+        updateUser({ creatorStatus: 'pending' } as any);
         setVerifying(true);
       }
     } catch (err: any) {
+      // If Stripe Identity isn't available, fall back to manual review queue
+      try {
+        await API.markKycPending();
+        updateUser({ creatorStatus: 'pending' } as any);
+      } catch { /* ignore */ }
       setError(err.message || 'Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
@@ -115,10 +124,10 @@ const CreatorOnboarding: React.FC = () => {
           <div className="w-20 h-20 bg-brand-green/10 rounded-full flex items-center justify-center text-brand-green mx-auto mb-8 animate-pulse">
             <Clock size={40} />
           </div>
-          <h1 className="text-4xl font-black text-white mb-4 tracking-tighter">Verification In Progress</h1>
+          <h1 className="text-4xl font-black text-white mb-4 tracking-tighter">Verification Under Review</h1>
           <p className="text-gray-400 mb-10 leading-relaxed font-medium">
-            Your identity is being reviewed. This usually completes within a few minutes.
-            {verifying && ' Checking status...'}
+            Your documents have been submitted and are being reviewed by Stripe. This typically takes a few minutes but can take up to 24 hours.
+            {verifying && ' Checking for updates...'}
           </p>
           <button
             onClick={() => navigate('/profile')}

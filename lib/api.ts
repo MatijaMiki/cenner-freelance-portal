@@ -109,6 +109,11 @@ export const API = {
   getKycStatus: () =>
     request<{ kycVerified: boolean; creatorStatus: string; sessionId: string | null }>('/kyc/status'),
 
+  submitKycSession: () =>
+    request<{ success: boolean }>('/kyc/submitted', 'POST'),
+  markKycPending: () =>
+    request<{ success: boolean; creatorStatus: string }>('/kyc/mark-pending', 'POST'),
+
   // ── Portfolio ─────────────────────────────────────────────────────────────
   getPortfolio: (userId: string) =>
     request<any[]>(`/portfolio/${userId}`),
@@ -158,8 +163,8 @@ export const API = {
   sendMessage: (conversationId: string, content: string) =>
     request<any>(`/conversations/${conversationId}/messages`, 'POST', { content }),
 
-  startConversation: (userId: string) =>
-    request<any>('/portal/conversations', { method: 'POST', body: JSON.stringify({ userId }) } as any),
+  startConversation: (otherUserId: string) =>
+    request<{ id: string }>('/conversations', 'POST', { otherUserId }),
 
   getUnreadCount: () =>
     request<{ count: number }>('/conversations/unread-count'),

@@ -636,13 +636,15 @@ const Profile: React.FC = () => {
             )}
 
             {creatorStatus === 'pending' && !kycVerified && (
-              <div className="p-8 bg-brand-green/5 border border-brand-green/10 rounded-[2rem] flex items-center space-x-4 mb-8">
-                <div className="p-3 bg-brand-green/10 rounded-2xl text-brand-green animate-pulse">
-                  <Clock size={24} />
-                </div>
-                <div>
-                  <h4 className="text-white font-bold text-lg">{t('Verification In Progress')}</h4>
-                  <p className="text-gray-400 text-sm font-medium">{t('Your identity is being reviewed. Listings will unlock once verified.')}</p>
+              <div className="p-8 bg-yellow-500/5 border border-yellow-500/20 rounded-[2rem] flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                <div className="flex items-start space-x-4">
+                  <div className="p-3 bg-yellow-500/10 rounded-2xl text-yellow-400 animate-pulse">
+                    <Clock size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold text-lg">{t('Verification Under Review')}</h4>
+                    <p className="text-gray-400 text-sm font-medium">{t('Your documents have been submitted and are being reviewed. This can take up to 24 hours. Listings will unlock once approved.')}</p>
+                  </div>
                 </div>
               </div>
             )}
@@ -1270,9 +1272,9 @@ const Profile: React.FC = () => {
                   <span>Identity Verified</span>
                 </span>
               ) : creatorStatus === 'pending' ? (
-                <span className="inline-flex items-center space-x-1 px-3 py-1 bg-brand-green/10 text-brand-green text-[9px] font-black uppercase tracking-widest rounded-full mb-6 animate-pulse">
-                  <ShieldAlert size={10} />
-                  <span>Verification Pending</span>
+                <span className="inline-flex items-center space-x-1 px-3 py-1 bg-yellow-500/10 text-yellow-400 text-[9px] font-black uppercase tracking-widest rounded-full mb-6 animate-pulse">
+                  <Clock size={10} />
+                  <span>Under Review</span>
                 </span>
               ) : (
                 <span className="inline-flex items-center space-x-1 px-3 py-1 bg-brand-pink/10 text-brand-pink text-[9px] font-black uppercase tracking-widest rounded-full mb-6">
