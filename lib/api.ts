@@ -169,6 +169,15 @@ export const API = {
   getUnreadCount: () =>
     request<{ count: number }>('/conversations/unread-count'),
 
+  getUserReviews: (userId: string) =>
+    request<any[]>(`/users/${userId}/reviews`),
+
+  getCompletedContracts: (userId: string) =>
+    request<any[]>(`/users/${userId}/completed-contracts`),
+
+  submitReview: (contractId: string, rating: number, comment: string) =>
+    request<any>('/reviews', 'POST', { contractId, rating, comment }),
+
   // ── Stripe Connect ────────────────────────────────────────────────────────
   connectOnboard: () =>
     request<{ url: string }>('/connect/onboard', 'POST'),
