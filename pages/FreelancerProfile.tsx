@@ -422,7 +422,7 @@ const FreelancerProfile: React.FC = () => {
                       <div className="p-5">
                         <h3 className="text-white font-bold text-sm mb-1">{item.title}</h3>
                         {item.description && <p className="text-gray-500 text-xs">{item.description}</p>}
-                        {item.fileUrl && (
+                        {item.fileUrl && /^https?:\/\//i.test(item.fileUrl) && (
                           <a
                             href={item.fileUrl}
                             target="_blank"

@@ -53,6 +53,7 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
     setConnectError('');
     try {
       const { url } = await API.connectOnboard();
+      if (!url || !/^https:\/\//i.test(url)) throw new Error('Invalid redirect URL');
       window.location.href = url;
     } catch (e: any) {
       setConnectError(e.message || 'Failed to start payout setup');
