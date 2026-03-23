@@ -11,7 +11,7 @@ import SEO from '../components/SEO';
 
 interface Conversation {
   id: string;
-  other: { id: string; name: string; avatar?: string };
+  other: { id: string; name: string; avatar?: string } | null;
   lastMessage?: string;
   lastMessageAt?: string;
   unread: number;
@@ -87,8 +87,8 @@ const MessagingHub: React.FC = () => {
   useEffect(() => {
     if (!user) { navigate('/auth'); return; }
     API.getConversations()
-      .then(setConversations)
-      .catch(console.error)
+      .then(data => setConversations(Array.isArray(data) ? data : []))
+      .catch(() => {})
       .finally(() => setConvsLoading(false));
   }, [user]);
 
@@ -106,9 +106,9 @@ const MessagingHub: React.FC = () => {
         const other = msgs.find(m => m.senderId !== user.id)?.sender;
         if (other) {
           setOtherProfile(prev => prev ?? { id: other.id, name: other.name, avatar: other.avatar });
-          API.getProfile(other.id).then(p => setOtherProfile(p)).catch(() => {});
-          API.getUserReviews(other.id).then(setReviews).catch(() => {});
-          API.getCompletedContracts(other.id).then(setCompletedContracts).catch(() => {});
+          API.getProfile(other.id).then(p => { if (p) setOtherProfile(p); }).catch(() => {});
+          API.getUserReviews(other.id).then(d => setReviews(Array.isArray(d) ? d : [])).catch(() => {});
+          API.getCompletedContracts(other.id).then(d => setCompletedContracts(Array.isArray(d) ? d : [])).catch(() => {});
         }
       })
       .catch(console.error)
@@ -118,9 +118,9 @@ const MessagingHub: React.FC = () => {
     const conv = conversations.find(c => c.id === activeConvId);
     if (conv?.other) {
       setOtherProfile(prev => prev ?? { id: conv.other.id, name: conv.other.name, avatar: conv.other.avatar });
-      API.getProfile(conv.other.id).then(p => setOtherProfile(p)).catch(() => {});
-      API.getUserReviews(conv.other.id).then(setReviews).catch(() => {});
-      API.getCompletedContracts(conv.other.id).then(setCompletedContracts).catch(() => {});
+      API.getProfile(conv.other.id).then(p => { if (p) setOtherProfile(p); }).catch(() => {});
+      API.getUserReviews(conv.other.id).then(d => setReviews(Array.isArray(d) ? d : [])).catch(() => {});
+      API.getCompletedContracts(conv.other.id).then(d => setCompletedContracts(Array.isArray(d) ? d : [])).catch(() => {});
     }
 
     const socket = connectSocket(token);
@@ -225,8 +225,8 @@ const MessagingHub: React.FC = () => {
     return new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  const filtered = conversations.filter(c =>
-    !search || (c.other?.name ?? '').toLowerCase().includes(search.toLowerCase())
+  const filtered = (conversations ?? []).filter(c =>
+    c.other != null && (!search || c.other.name.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
@@ -240,9 +240,9 @@ const MessagingHub: React.FC = () => {
           <div className="flex items-center gap-2 mb-3">
             <MessageCircle className="text-brand-green" size={18} />
             <span className="text-white font-black text-base tracking-tight">Messages</span>
-            {conversations.reduce((s, c) => s + c.unread, 0) > 0 && (
+            {(conversations ?? []).reduce((s, c) => s + (c.unread ?? 0), 0) > 0 && (
               <span className="ml-auto min-w-[20px] h-5 px-1.5 bg-brand-green rounded-full text-brand-black text-[10px] font-black flex items-center justify-center">
-                {conversations.reduce((s, c) => s + c.unread, 0)}
+                {(conversations ?? []).reduce((s, c) => s + (c.unread ?? 0), 0)}
               </span>
             )}
           </div>
