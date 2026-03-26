@@ -205,10 +205,11 @@ const Contact: React.FC = () => {
             {/* Google reCAPTCHA v2 */}
             {RECAPTCHA_SITE_KEY ? (
               <div className="space-y-2">
-                <div
-                  ref={recaptchaContainer}
-                  className="rounded-xl overflow-hidden"
-                />
+                <div className="flex justify-center">
+                  <div
+                    ref={recaptchaContainer}
+                  />
+                </div>
                 {recaptchaError && (
                   <p className="text-red-400 text-xs font-medium flex items-center gap-1.5">
                     <AlertCircle size={12} /> Please complete the reCAPTCHA verification.

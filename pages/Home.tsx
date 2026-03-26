@@ -57,7 +57,7 @@ const Home: React.FC = () => {
           </div>
           
           <h1 className="text-6xl md:text-8xl font-extrabold text-white mb-8 tracking-tight leading-[0.9]">
-            {t('Elite Talent')} <br />
+            {t('Top Talent')} <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
               {t('Talent Network')}
             </span>
@@ -210,7 +210,7 @@ const Home: React.FC = () => {
             
             <div className="relative z-10">
               <Rocket size={64} className="mx-auto mb-8 text-brand-green animate-bounce" />
-              <h2 className="text-5xl md:text-6xl font-black text-white mb-8 tracking-tighter">{t('Ready to join the elite?')}</h2>
+              <h2 className="text-5xl md:text-6xl font-black text-white mb-8 tracking-tighter">{t('Ready to get started?')}</h2>
               <p className="text-gray-300 max-w-2xl mx-auto mb-12 text-xl leading-relaxed font-medium">
                 {t("Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.")}
               </p>

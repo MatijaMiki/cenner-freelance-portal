@@ -161,9 +161,9 @@ const Marketplace: React.FC = () => {
       <div className="p-8 rounded-[2rem] bg-gradient-to-br from-brand-pink/20 to-brand-green/20 border border-white/10 backdrop-blur-md hidden lg:block">
         <Tag size={24} className="text-white mb-4" />
         <h4 className="text-white font-black text-lg mb-2">{t('Priority Matching')}</h4>
-        <p className="text-gray-400 text-xs leading-relaxed mb-6 font-medium">{t('Bypass the queue and get matched with certified Elite Pros within 2 hours.')}</p>
+        <p className="text-gray-400 text-xs leading-relaxed mb-6 font-medium">{t('Skip the search and get matched with a verified freelancer within 2 hours.')}</p>
         <button className="w-full py-3.5 bg-white text-brand-black rounded-xl text-xs font-black hover:scale-105 transition-all uppercase tracking-widest">
-          {t('Activate Elite')}
+          {t('Find a Match')}
         </button>
       </div>
     </div>

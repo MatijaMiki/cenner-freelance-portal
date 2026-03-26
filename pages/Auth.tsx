@@ -134,8 +134,8 @@ const Auth: React.FC = () => {
             </h2>
             <p className="text-gray-500 font-medium">
               {isLogin
-                ? t('The elite network is waiting for your return.')
-                : t("Join the world's most exclusive freelance ecosystem.")}
+                ? t('Welcome back. Good to have you.')
+                : t("Join thousands of freelancers and clients on Cenner.")}
             </p>
           </div>
 

@@ -24,7 +24,7 @@ const SEO: React.FC<SEOProps> = ({
   noIndex = false,
   jsonLd,
 }) => {
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Elite Freelance Talent Network`;
+  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Freelance Talent Network`;
   const fullCanonical = canonical ? `${BASE_URL}${canonical}` : undefined;
 
   return (

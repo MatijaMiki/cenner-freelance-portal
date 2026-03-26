@@ -21,7 +21,7 @@ const About: React.FC = () => {
           <span className="text-brand-pink">Freelance {t('The High-Fidelity Freelance Standard.').split('Freelance')[1]}</span>
         </h1>
         <p className="text-xl md:text-2xl text-gray-400 leading-relaxed max-w-3xl">
-          Cenner was founded on a singular premise: talent is abundant, but truly elite infrastructure is rare. We've built the world's most sophisticated gateway for creators who operate at the bleeding edge of their craft.
+          Cenner was founded on a simple idea: finding great talent should be easy. We've built a platform where skilled creators and ambitious clients can connect, work together, and get things done.
         </p>
       </div>
 
@@ -67,7 +67,7 @@ const About: React.FC = () => {
             </div>
             <h3 className="text-3xl font-black text-white mb-6 tracking-tight uppercase">{t('Our Mission')}</h3>
             <p className="text-gray-400 text-lg leading-relaxed font-medium">
-              To dismantle the barriers between global elite talent and visionary projects. We aim to provide a frictionless, high-fidelity environment where technical excellence is the only currency that matters.
+              To remove the barriers between talented people and great projects. We aim to make it simple for the right freelancer and the right client to find each other and do their best work.
             </p>
           </div>
         </div>
@@ -124,7 +124,7 @@ const About: React.FC = () => {
       <section className="bg-gradient-to-br from-brand-grey to-brand-black border border-white/10 rounded-[4rem] p-12 md:p-24 text-center relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-green/10 rounded-full blur-[120px]"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-pink/10 rounded-full blur-[120px]"></div>
-        <h2 className="text-5xl md:text-6xl font-black text-white mb-8 tracking-tighter">{t('Ready to join the elite?')}</h2>
+        <h2 className="text-5xl md:text-6xl font-black text-white mb-8 tracking-tighter">{t('Ready to get started?')}</h2>
         <p className="text-gray-400 max-w-2xl mx-auto mb-16 text-xl leading-relaxed">
           {t("Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.")}
         </p>

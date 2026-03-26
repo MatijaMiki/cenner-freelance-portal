@@ -362,7 +362,7 @@ const SubscriptionCheckout: React.FC = () => {
               <div className={`p-4 bg-white/5 rounded-xl ${plan.color}`}>{plan.icon}</div>
               <div>
                 <h4 className="text-white font-black text-lg">{plan.title}</h4>
-                <p className="text-gray-500 text-sm">Elite high-fidelity infrastructure subscription.</p>
+                <p className="text-gray-500 text-sm">Monthly subscription, cancel anytime.</p>
               </div>
             </div>
           </section>

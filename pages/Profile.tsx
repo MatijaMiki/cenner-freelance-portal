@@ -1358,7 +1358,7 @@ const Profile: React.FC = () => {
                   subscriptionTier === 'ultra' ? 'text-brand-pink' :
                   subscriptionTier === 'pro' ? 'text-brand-green' : 'text-gray-500'
               }`}>
-                  {subscriptionTier} Node
+                  {subscriptionTier} Plan
               </p>
 
               {canCreateListings ? (
@@ -1485,7 +1485,6 @@ const Profile: React.FC = () => {
               <p className="text-gray-500 mt-1">Real-time performance metrics and operations.</p>
             </div>
             <div className="hidden sm:flex items-center space-x-4 text-xs font-bold text-gray-500">
-              <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-brand-green mr-2 animate-pulse"></span> {t('System Online')}</span>
             </div>
           </div>
 

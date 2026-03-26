@@ -321,7 +321,7 @@ const Blog: React.FC = () => {
                   ) : (
                     <div className="bg-brand-pink/5 border border-brand-pink/10 rounded-[2rem] p-10 text-center">
                       <AlertCircle className="mx-auto text-brand-pink mb-4" size={32} />
-                      <p className="text-gray-400 text-base font-medium mb-4">Access restricted. Only verified <span className="text-brand-pink font-bold">Elite Creators</span> are permitted to synchronize comments.</p>
+                      <p className="text-gray-400 text-base font-medium mb-4">Only <span className="text-brand-pink font-bold">Verified Creators</span> can post comments.</p>
                       <button 
                         onClick={() => navigate('/creator-onboarding')}
                         className="text-[10px] font-black uppercase tracking-widest text-brand-pink hover:text-white transition-colors underline decoration-2 underline-offset-4"
@@ -413,7 +413,7 @@ const Blog: React.FC = () => {
                   {[
                     { id: 1, title: 'Be respectful and courteous', content: 'Keep it professional at all times. Disruptive users will be removed.' },
                     { id: 2, title: 'No Spam or Self-Promo', content: 'Only relevant industry discussion allowed here.' },
-                    { id: 3, title: 'Keep it Elite', content: 'Focus on high-quality outputs, advanced workflows, and collaborative growth.' }
+                    { id: 3, title: 'Keep the quality high', content: 'Focus on high-quality work and collaborative growth.' }
                   ].map(rule => (
                     <div key={rule.id} className="group">
                       <div className="flex items-start space-x-4">
