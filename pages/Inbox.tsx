@@ -56,7 +56,7 @@ interface CompletedContract {
 
 const MessagingHub: React.FC = () => {
   const { id: activeConvId } = useParams<{ id: string }>();
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   // Conversations
@@ -94,7 +94,7 @@ const MessagingHub: React.FC = () => {
 
   // Load messages + socket for active conversation
   useEffect(() => {
-    if (!activeConvId || !user || !token) return;
+    if (!activeConvId || !user) return;
 
     setMessages([]);
     setMessagesLoading(true);
@@ -123,7 +123,7 @@ const MessagingHub: React.FC = () => {
       API.getCompletedContracts(conv.other.id).then(d => setCompletedContracts(Array.isArray(d) ? d : [])).catch(() => {});
     }
 
-    const socket = connectSocket(token);
+    const socket = connectSocket();
     socket.emit('join_conversation', activeConvId);
     socket.emit('mark_read', { conversationId: activeConvId });
 
@@ -149,7 +149,7 @@ const MessagingHub: React.FC = () => {
     socket.on('new_message', onNewMessage);
     socket.on('user_typing', onTyping);
     return () => { socket.off('new_message', onNewMessage); socket.off('user_typing', onTyping); };
-  }, [activeConvId, token, user]);
+  }, [activeConvId, user]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });

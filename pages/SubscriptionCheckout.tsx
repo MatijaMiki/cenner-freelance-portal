@@ -83,10 +83,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ planId, plan, onSuccess }) 
     setIsProcessing(true);
     setError(null);
     try {
-      const token = localStorage.getItem('cenner_token');
       const res = await fetch(`${API_BASE}/api/v1/portal/stripe/create-payment-intent`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ planId }),
       });
       const { clientSecret, error: backendError } = await res.json();
@@ -112,10 +112,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ planId, plan, onSuccess }) 
 
   // ── PayPal callbacks ─────────────────────────────────────────────────────
   const createPayPalOrder = async () => {
-    const token = localStorage.getItem('cenner_token');
     const res = await fetch(`${API_BASE}/api/v1/portal/paypal/create-order`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ planId }),
     });
     const { orderId, error: err } = await res.json();
@@ -127,10 +127,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ planId, plan, onSuccess }) 
     setIsProcessing(true);
     setError(null);
     try {
-      const token = localStorage.getItem('cenner_token');
       const res = await fetch(`${API_BASE}/api/v1/portal/paypal/capture-order`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ orderId: data.orderID, planId }),
       });
       const result = await res.json();

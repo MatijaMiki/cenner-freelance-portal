@@ -20,7 +20,6 @@ export interface AuthUser {
 
 interface AuthContextType {
   user: AuthUser | null;
-  token: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (data: { email: string; password: string; name: string; mobile?: string }) => Promise<void>;
@@ -31,7 +30,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const TOKEN_KEY = 'cenner_token';
 const USER_KEY = 'cenner_user';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -44,44 +42,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   });
 
-  const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem(TOKEN_KEY),
-  );
-
   const [loading, setLoading] = useState(false);
 
-  // On startup: if a token exists, silently fetch fresh user data from the DB
-  // so CRM changes (tier, verification status, avatar) are reflected immediately
+  // On startup: call /auth/me — cookie is sent automatically, no token needed.
+  // Syncs fresh user data (tier, verification status, avatar) from DB.
   useEffect(() => {
-    const savedToken = localStorage.getItem(TOKEN_KEY);
-    if (!savedToken) return;
-
     API.me()
       .then((freshUser: AuthUser) => {
         localStorage.setItem(USER_KEY, JSON.stringify(freshUser));
         setUser(freshUser);
       })
       .catch(() => {
-        // Token expired or invalid — clear the stale session
-        localStorage.removeItem(TOKEN_KEY);
+        // Cookie invalid/expired — clear stale user data
         localStorage.removeItem(USER_KEY);
-        setToken(null);
         setUser(null);
       });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const persistSession = (newToken: string, newUser: AuthUser) => {
-    localStorage.setItem(TOKEN_KEY, newToken);
+  const persistSession = (newUser: AuthUser) => {
     localStorage.setItem(USER_KEY, JSON.stringify(newUser));
-    setToken(newToken);
     setUser(newUser);
   };
 
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const { token: newToken, user: newUser } = await API.login(email, password);
-      persistSession(newToken, newUser);
+      const { user: newUser } = await API.login(email, password);
+      persistSession(newUser);
     } finally {
       setLoading(false);
     }
@@ -90,8 +77,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (data: Parameters<typeof API.register>[0]) => {
     setLoading(true);
     try {
-      const { token: newToken, user: newUser } = await API.register(data);
-      persistSession(newToken, newUser);
+      const { user: newUser } = await API.register(data);
+      persistSession(newUser);
     } finally {
       setLoading(false);
     }
@@ -105,23 +92,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await fetch(`${CRM_BASE}/api/v1/portal/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ idToken }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: res.statusText }));
         throw new Error(err.error || 'Google sign-in failed');
       }
-      const { token: newToken, user: newUser } = await res.json();
-      persistSession(newToken, newUser);
+      const { user: newUser } = await res.json();
+      persistSession(newUser);
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY);
+  const logout = useCallback(async () => {
+    try { await API.logout(); } catch { /* ignore */ }
     localStorage.removeItem(USER_KEY);
-    setToken(null);
     setUser(null);
   }, []);
 
@@ -135,7 +122,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, loginWithGoogle, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, login, register, loginWithGoogle, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

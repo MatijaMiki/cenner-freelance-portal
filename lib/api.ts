@@ -2,22 +2,17 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://api.cenner.hr/api/v1/portal';
 const CRM_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 
-function getToken(): string | null {
-  return localStorage.getItem('cenner_token');
-}
-
 async function request<T>(
   endpoint: string,
   method: string = 'GET',
   body?: unknown,
 ): Promise<T> {
   const headers: HeadersInit = { 'Content-Type': 'application/json' };
-  const token = getToken();
-  if (token) headers['Authorization'] = `Bearer ${token}`;
 
   const res = await fetch(`${API_BASE}${endpoint}`, {
     method,
     headers,
+    credentials: 'include',
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
@@ -31,10 +26,13 @@ async function request<T>(
 export const API = {
   // ── Auth ──────────────────────────────────────────────────────────────
   register: (data: { email: string; password: string; name: string; mobile?: string }) =>
-    request<{ token: string; user: any }>('/auth/register', 'POST', data),
+    request<{ user: any }>('/auth/register', 'POST', data),
 
   login: (email: string, password: string) =>
-    request<{ token: string; user: any }>('/auth/login', 'POST', { email, password }),
+    request<{ user: any }>('/auth/login', 'POST', { email, password }),
+
+  logout: () =>
+    request<{ success: boolean }>('/auth/logout', 'POST'),
 
   // Returns fresh user data from DB (used on startup to sync stale localStorage)
   me: () => request<any>('/auth/me', 'GET'),
@@ -124,10 +122,7 @@ export const API = {
     request<any[]>(`/portfolio/${userId}`),
 
   addPortfolioItem: (formData: FormData): Promise<any> => {
-    const token = getToken();
-    const headers: HeadersInit = {};
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    return fetch(`${API_BASE}/portfolio`, { method: 'POST', headers, body: formData })
+    return fetch(`${API_BASE}/portfolio`, { method: 'POST', credentials: 'include', body: formData })
       .then(async res => {
         if (!res.ok) {
           const err = await res.json().catch(() => ({ error: res.statusText }));
@@ -146,6 +141,10 @@ export const API = {
   // ── Stripe confirm ────────────────────────────────────────────────────────
   confirmStripePayment: (planId: string, paymentIntentId: string) =>
     request<{ success: boolean }>('/stripe/confirm-payment', 'POST', { planId, paymentIntentId }),
+
+  // ── Marketplace listing purchase ──────────────────────────────────────────
+  createListingPaymentIntent: (listingId: string) =>
+    request<{ clientSecret: string; totalAmount: number; platformFee: number }>(`/listings/${listingId}/create-payment-intent`, 'POST'),
 
   // ── Notifications ─────────────────────────────────────────────────────────
   getNotifications: () => request<any[]>('/notifications'),

@@ -69,17 +69,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     const interval = setInterval(fetchUnread, 30000);
 
     // Real-time: bump count immediately when a new message arrives
-    const token = localStorage.getItem('cenner_token');
-    if (token) {
-      const socket = connectSocket(token);
-      const onNew = () => fetchUnread();
-      socket.on('new_message', onNew);
-      return () => {
-        clearInterval(interval);
-        socket.off('new_message', onNew);
-      };
-    }
-    return () => clearInterval(interval);
+    const socket = connectSocket();
+    const onNew = () => fetchUnread();
+    socket.on('new_message', onNew);
+    return () => {
+      clearInterval(interval);
+      socket.off('new_message', onNew);
+    };
   }, [user]);
 
   const handleLogout = () => {

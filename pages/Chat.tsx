@@ -17,7 +17,7 @@ interface Message {
 
 const Chat: React.FC = () => {
   const { id: convId } = useParams<{ id: string }>();
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -29,7 +29,7 @@ const Chat: React.FC = () => {
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!user || !token || !convId) { navigate('/auth'); return; }
+    if (!user || !convId) { navigate('/auth'); return; }
 
     // Load messages
     API.getMessages(convId)
@@ -43,7 +43,7 @@ const Chat: React.FC = () => {
       .finally(() => setLoading(false));
 
     // Socket
-    const socket = connectSocket(token);
+    const socket = connectSocket();
     socket.emit('join_conversation', convId);
     socket.emit('mark_read', { conversationId: convId });
 
@@ -72,7 +72,7 @@ const Chat: React.FC = () => {
       socket.off('new_message', onNewMessage);
       socket.off('user_typing', onTyping);
     };
-  }, [convId, token, user, navigate]);
+  }, [convId, user, navigate]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });

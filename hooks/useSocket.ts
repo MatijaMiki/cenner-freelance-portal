@@ -9,10 +9,10 @@ export function getSocket(): Socket | null {
   return socket;
 }
 
-export function connectSocket(token: string): Socket {
+export function connectSocket(): Socket {
   if (socket?.connected) return socket;
   socket = io(API_BASE, {
-    auth: { token },
+    withCredentials: true,
     transports: ['websocket', 'polling'],
     reconnectionAttempts: 5,
     reconnectionDelay: 2000,
@@ -25,16 +25,16 @@ export function disconnectSocket() {
   socket = null;
 }
 
-export function useSocket(token: string | null) {
+export function useSocket(active: boolean) {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!token) return;
-    socketRef.current = connectSocket(token);
+    if (!active) return;
+    socketRef.current = connectSocket();
     return () => {
       // Don't disconnect on unmount — socket is shared globally
     };
-  }, [token]);
+  }, [active]);
 
   return socketRef.current;
 }
