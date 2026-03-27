@@ -1,13 +1,15 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight, Star, Shield, Zap, Globe, ChevronRight,
   Layers, Users, Search, Code, Palette,
   Terminal, BarChart3, Rocket, Activity, Server,
-  ShieldCheck, Cpu, Briefcase, Globe2, Clock, CheckCircle, Lock
+  ShieldCheck, Cpu, Briefcase, Globe2, Clock, CheckCircle, Lock,
+  Link2, Scissors, Store
 } from 'lucide-react';
-import NeuralBackground from '../components/NeuralBackground';
+
+const ROTATING_TAGS = ['#Links', '#Shorten', '#Freelancer Marketplace'];
 import { MOCK_LISTINGS } from '../constants';
 import SEO from '../components/SEO';
 import { useT } from '../i18n';
@@ -36,6 +38,15 @@ const websiteJsonLd = {
 
 const Home: React.FC = () => {
   const t = useT();
+  const [activeTag, setActiveTag] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTag((prev) => (prev + 1) % ROTATING_TAGS.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="relative min-h-screen">
       <SEO
@@ -43,44 +54,88 @@ const Home: React.FC = () => {
         description="Cenner connects businesses with the top 1% of freelance talent. AI-powered matching, verified creators, and premium collaboration tools for high-end projects."
         jsonLd={[organizationJsonLd, websiteJsonLd] as any}
       />
-      <NeuralBackground parallax={true} />
+      {/* Hero Section — Dark purple-to-black gradient */}
+      <section className="relative pt-32 pb-24 px-4 z-10 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 30%, #2d1854 60%, #3b1d6e 100%)' }}>
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
+          {/* Left side — Cenner branding + rotating tags */}
+          <div className="flex-1 space-y-8">
+            {/* Cenner + rotating product name */}
+            <div className="flex items-center gap-4 md:gap-6">
+              <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-none flex-shrink-0">
+                Cenner
+              </h1>
+              <div className="h-[1.1em] text-5xl md:text-7xl font-extrabold overflow-hidden relative">
+                <div
+                  className="transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateY(-${activeTag * 100}%)` }}
+                >
+                  {ROTATING_TAGS.map((tag, i) => (
+                    <div key={i} className="h-[1.1em] flex items-center text-purple-400 whitespace-nowrap">
+                      {tag}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
-      {/* Hero Section */}
-      <section className="relative pt-40 pb-32 px-4 z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-8 text-xs font-medium text-brand-green animate-pulse">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
-            </span>
-            <span>{t('New: Gemini Live Voice-First Integration')}</span>
+            <p className="text-lg md:text-xl text-purple-200/70 max-w-lg leading-relaxed font-medium">
+              {t('The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.')}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4">
+              <Link
+                to="/marketplace"
+                className="px-8 py-4 bg-white text-purple-900 font-black rounded-2xl flex items-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(124,58,237,0.3)]"
+              >
+                <span>{t('Explore Marketplace')}</span>
+                <ArrowRight size={18} />
+              </Link>
+              <Link
+                to="/services"
+                className="px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
+              >
+                {t('Cenner Services')}
+              </Link>
+            </div>
           </div>
-          
-          <h1 className="text-6xl md:text-8xl font-extrabold text-white mb-8 tracking-tight leading-[0.9]">
-            {t('Top Talent')} <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
-              {t('Talent Network')}
-            </span>
-          </h1>
 
-          <p className="text-xl md:text-2xl text-gray-100 mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
-            {t('The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.')}
-          </p>
+          {/* Right side — Scrollable grid with grid overlay effect */}
+          <div className="flex-1 w-full lg:max-w-md relative">
+            {/* Grid overlay effect */}
+            <div
+              className="absolute inset-0 z-0 pointer-events-none opacity-[0.07]"
+              style={{
+                backgroundImage: 'linear-gradient(rgba(139,92,246,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.5) 1px, transparent 1px)',
+                backgroundSize: '40px 40px',
+              }}
+            />
+            {/* Top/bottom fade masks */}
+            <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-[#1a0a2e] to-transparent z-10 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#2d1854] to-transparent z-10 pointer-events-none" />
 
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <Link
-              to="/marketplace"
-              className="w-full sm:w-auto px-10 py-5 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
-            >
-              <span>{t('Explore Marketplace')}</span>
-              <ArrowRight size={20} />
-            </Link>
-            <Link
-              to="/services"
-              className="w-full sm:w-auto px-10 py-5 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
-            >
-              {t('Cenner Services')}
-            </Link>
+            <div className="h-[420px] overflow-y-auto pr-2 space-y-4 relative z-[1]" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(139,92,246,0.4) transparent' }}>
+              {[
+                { title: 'Web Development', desc: 'Full-stack apps & sites', icon: <Code size={20} />, accent: 'from-violet-500 to-purple-600' },
+                { title: 'Brand Design', desc: 'Logos, identity & visuals', icon: <Palette size={20} />, accent: 'from-fuchsia-500 to-purple-600' },
+                { title: 'AI & Machine Learning', desc: 'Models, pipelines & automation', icon: <Cpu size={20} />, accent: 'from-purple-500 to-indigo-600' },
+                { title: 'Data Science', desc: 'Analytics & insights', icon: <BarChart3 size={20} />, accent: 'from-indigo-500 to-violet-600' },
+                { title: 'Mobile Apps', desc: 'iOS, Android & cross-platform', icon: <Terminal size={20} />, accent: 'from-violet-500 to-fuchsia-600' },
+                { title: 'SEO & Marketing', desc: 'Growth & visibility', icon: <Search size={20} />, accent: 'from-purple-500 to-violet-600' },
+                { title: 'Video & Animation', desc: 'Motion graphics & editing', icon: <Activity size={20} />, accent: 'from-fuchsia-500 to-indigo-600' },
+                { title: 'Cloud & DevOps', desc: 'Infrastructure & deployment', icon: <Server size={20} />, accent: 'from-indigo-500 to-purple-600' },
+              ].map((item, i) => (
+                <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex items-center gap-4 hover:bg-white/10 hover:border-purple-500/30 transition-all cursor-pointer group">
+                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.accent} flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-sm">{item.title}</h3>
+                    <p className="text-purple-300/50 text-xs font-medium">{item.desc}</p>
+                  </div>
+                  <ChevronRight size={16} className="text-purple-400/30 ml-auto group-hover:text-white transition-colors" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
