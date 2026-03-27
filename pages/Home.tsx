@@ -57,7 +57,7 @@ const Home: React.FC = () => {
       {/* Hero Section — Dark purple-to-black gradient */}
       <section className="relative pt-32 pb-24 px-4 z-10 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 30%, #2d1854 60%, #3b1d6e 100%)' }}>
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
-          {/* Left side — Cenner branding + rotating tags */}
+          {/* Left side — Cenner branding + rotating tags + buttons */}
           <div className="flex-1 space-y-8">
             {/* Cenner + rotating product name */}
             <div className="flex items-center gap-4 md:gap-6">
@@ -78,10 +78,6 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            <p className="text-lg md:text-xl text-purple-200/70 max-w-lg leading-relaxed font-medium">
-              {t('The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.')}
-            </p>
-
             <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4">
               <Link
                 to="/marketplace"
@@ -99,16 +95,59 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Right side — Scrollable grid with grid overlay effect */}
+          {/* Right side — Scrollable cards with layered grid background */}
           <div className="flex-1 w-full lg:max-w-md relative">
-            {/* Grid overlay effect */}
-            <div
-              className="absolute inset-0 z-0 pointer-events-none opacity-[0.07]"
-              style={{
-                backgroundImage: 'linear-gradient(rgba(139,92,246,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.5) 1px, transparent 1px)',
-                backgroundSize: '40px 40px',
-              }}
-            />
+            {/* Layered grid pattern — multiple overlapping grids */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden rounded-2xl">
+              {/* Base fine grid */}
+              <div
+                className="absolute inset-0 opacity-[0.04]"
+                style={{
+                  backgroundImage: 'linear-gradient(rgba(168,85,247,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.8) 1px, transparent 1px)',
+                  backgroundSize: '20px 20px',
+                }}
+              />
+              {/* Medium grid */}
+              <div
+                className="absolute inset-0 opacity-[0.06]"
+                style={{
+                  backgroundImage: 'linear-gradient(rgba(139,92,246,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.6) 1px, transparent 1px)',
+                  backgroundSize: '60px 60px',
+                }}
+              />
+              {/* Large grid */}
+              <div
+                className="absolute inset-0 opacity-[0.08]"
+                style={{
+                  backgroundImage: 'linear-gradient(rgba(124,58,237,0.5) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(124,58,237,0.5) 1.5px, transparent 1.5px)',
+                  backgroundSize: '120px 120px',
+                }}
+              />
+              {/* Offset grid block — top right */}
+              <div
+                className="absolute -top-2 -right-2 w-[60%] h-[45%] opacity-[0.05]"
+                style={{
+                  backgroundImage: 'linear-gradient(rgba(192,132,252,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(192,132,252,0.7) 1px, transparent 1px)',
+                  backgroundSize: '30px 25px',
+                }}
+              />
+              {/* Offset grid block — bottom left */}
+              <div
+                className="absolute -bottom-2 -left-2 w-[55%] h-[40%] opacity-[0.05]"
+                style={{
+                  backgroundImage: 'linear-gradient(rgba(167,139,250,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.7) 1px, transparent 1px)',
+                  backgroundSize: '35px 30px',
+                }}
+              />
+              {/* Dense grid block — center */}
+              <div
+                className="absolute top-[25%] left-[20%] w-[50%] h-[35%] opacity-[0.06]"
+                style={{
+                  backgroundImage: 'linear-gradient(rgba(139,92,246,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.8) 1px, transparent 1px)',
+                  backgroundSize: '15px 15px',
+                }}
+              />
+            </div>
             {/* Top/bottom fade masks */}
             <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-[#1a0a2e] to-transparent z-10 pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#2d1854] to-transparent z-10 pointer-events-none" />
