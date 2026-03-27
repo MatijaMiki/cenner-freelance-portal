@@ -55,7 +55,7 @@ const Home: React.FC = () => {
         jsonLd={[organizationJsonLd, websiteJsonLd] as any}
       />
       {/* Hero Section — Full viewport, dark purple-to-black gradient */}
-      <section className="relative min-h-screen flex items-center px-4 z-10 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 30%, #2d1854 60%, #3b1d6e 100%)' }}>
+      <section className="relative pt-40 pb-24 px-4 z-10 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 30%, #2d1854 60%, #3b1d6e 100%)' }}>
         {/* Layered grid pattern across entire hero */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           {/* Base fine grid */}
