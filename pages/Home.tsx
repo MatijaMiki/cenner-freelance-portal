@@ -9,7 +9,7 @@ import {
   Link2, Scissors, Store
 } from 'lucide-react';
 
-const ROTATING_TAGS = ['#Links', '#Shorten', '#Freelancer Marketplace'];
+const ROTATING_TAGS = ['#Links', '#Shorten', '#Freelance', '#Gigs', '#Marketplace', '#SaaS', '#CRM'];
 import { MOCK_LISTINGS } from '../constants';
 import SEO from '../components/SEO';
 import { useT } from '../i18n';
@@ -54,12 +54,63 @@ const Home: React.FC = () => {
         description="Cenner connects businesses with the top 1% of freelance talent. AI-powered matching, verified creators, and premium collaboration tools for high-end projects."
         jsonLd={[organizationJsonLd, websiteJsonLd] as any}
       />
-      {/* Hero Section — Dark purple-to-black gradient */}
-      <section className="relative pt-32 pb-24 px-4 z-10 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 30%, #2d1854 60%, #3b1d6e 100%)' }}>
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-12 lg:gap-16">
-          {/* Left side — Cenner branding + rotating tags + buttons */}
+      {/* Hero Section — Full viewport, dark purple-to-black gradient */}
+      <section className="relative min-h-screen flex items-center px-4 z-10 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 30%, #2d1854 60%, #3b1d6e 100%)' }}>
+        {/* Layered grid pattern across entire hero */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          {/* Base fine grid */}
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(168,85,247,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.8) 1px, transparent 1px)',
+              backgroundSize: '20px 20px',
+            }}
+          />
+          {/* Medium grid */}
+          <div
+            className="absolute inset-0 opacity-[0.05]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(139,92,246,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.6) 1px, transparent 1px)',
+              backgroundSize: '60px 60px',
+            }}
+          />
+          {/* Large grid */}
+          <div
+            className="absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(124,58,237,0.5) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(124,58,237,0.5) 1.5px, transparent 1.5px)',
+              backgroundSize: '120px 120px',
+            }}
+          />
+          {/* Offset grid block — top right */}
+          <div
+            className="absolute top-0 right-0 w-[50%] h-[40%] opacity-[0.04]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(192,132,252,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(192,132,252,0.7) 1px, transparent 1px)',
+              backgroundSize: '30px 25px',
+            }}
+          />
+          {/* Offset grid block — bottom left */}
+          <div
+            className="absolute bottom-0 left-0 w-[45%] h-[35%] opacity-[0.04]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(167,139,250,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.7) 1px, transparent 1px)',
+              backgroundSize: '35px 30px',
+            }}
+          />
+          {/* Dense grid block — center right */}
+          <div
+            className="absolute top-[30%] right-[10%] w-[35%] h-[30%] opacity-[0.05]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(139,92,246,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.8) 1px, transparent 1px)',
+              backgroundSize: '15px 15px',
+            }}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-20 relative z-[1]">
+          {/* Left side — Cenner + rotating tags + buttons */}
           <div className="flex-1 space-y-8">
-            {/* Cenner + rotating product name */}
             <div className="flex items-center gap-4 md:gap-6">
               <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-none flex-shrink-0">
                 Cenner
@@ -95,86 +146,11 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Right side — Scrollable cards with layered grid background */}
-          <div className="flex-1 w-full lg:max-w-md relative">
-            {/* Layered grid pattern — multiple overlapping grids */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden rounded-2xl">
-              {/* Base fine grid */}
-              <div
-                className="absolute inset-0 opacity-[0.04]"
-                style={{
-                  backgroundImage: 'linear-gradient(rgba(168,85,247,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.8) 1px, transparent 1px)',
-                  backgroundSize: '20px 20px',
-                }}
-              />
-              {/* Medium grid */}
-              <div
-                className="absolute inset-0 opacity-[0.06]"
-                style={{
-                  backgroundImage: 'linear-gradient(rgba(139,92,246,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.6) 1px, transparent 1px)',
-                  backgroundSize: '60px 60px',
-                }}
-              />
-              {/* Large grid */}
-              <div
-                className="absolute inset-0 opacity-[0.08]"
-                style={{
-                  backgroundImage: 'linear-gradient(rgba(124,58,237,0.5) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(124,58,237,0.5) 1.5px, transparent 1.5px)',
-                  backgroundSize: '120px 120px',
-                }}
-              />
-              {/* Offset grid block — top right */}
-              <div
-                className="absolute -top-2 -right-2 w-[60%] h-[45%] opacity-[0.05]"
-                style={{
-                  backgroundImage: 'linear-gradient(rgba(192,132,252,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(192,132,252,0.7) 1px, transparent 1px)',
-                  backgroundSize: '30px 25px',
-                }}
-              />
-              {/* Offset grid block — bottom left */}
-              <div
-                className="absolute -bottom-2 -left-2 w-[55%] h-[40%] opacity-[0.05]"
-                style={{
-                  backgroundImage: 'linear-gradient(rgba(167,139,250,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.7) 1px, transparent 1px)',
-                  backgroundSize: '35px 30px',
-                }}
-              />
-              {/* Dense grid block — center */}
-              <div
-                className="absolute top-[25%] left-[20%] w-[50%] h-[35%] opacity-[0.06]"
-                style={{
-                  backgroundImage: 'linear-gradient(rgba(139,92,246,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.8) 1px, transparent 1px)',
-                  backgroundSize: '15px 15px',
-                }}
-              />
-            </div>
-            {/* Top/bottom fade masks */}
-            <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-[#1a0a2e] to-transparent z-10 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#2d1854] to-transparent z-10 pointer-events-none" />
-
-            <div className="h-[420px] overflow-y-auto pr-2 space-y-4 relative z-[1]" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(139,92,246,0.4) transparent' }}>
-              {[
-                { title: 'Web Development', desc: 'Full-stack apps & sites', icon: <Code size={20} />, accent: 'from-violet-500 to-purple-600' },
-                { title: 'Brand Design', desc: 'Logos, identity & visuals', icon: <Palette size={20} />, accent: 'from-fuchsia-500 to-purple-600' },
-                { title: 'AI & Machine Learning', desc: 'Models, pipelines & automation', icon: <Cpu size={20} />, accent: 'from-purple-500 to-indigo-600' },
-                { title: 'Data Science', desc: 'Analytics & insights', icon: <BarChart3 size={20} />, accent: 'from-indigo-500 to-violet-600' },
-                { title: 'Mobile Apps', desc: 'iOS, Android & cross-platform', icon: <Terminal size={20} />, accent: 'from-violet-500 to-fuchsia-600' },
-                { title: 'SEO & Marketing', desc: 'Growth & visibility', icon: <Search size={20} />, accent: 'from-purple-500 to-violet-600' },
-                { title: 'Video & Animation', desc: 'Motion graphics & editing', icon: <Activity size={20} />, accent: 'from-fuchsia-500 to-indigo-600' },
-                { title: 'Cloud & DevOps', desc: 'Infrastructure & deployment', icon: <Server size={20} />, accent: 'from-indigo-500 to-purple-600' },
-              ].map((item, i) => (
-                <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 flex items-center gap-4 hover:bg-white/10 hover:border-purple-500/30 transition-all cursor-pointer group">
-                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.accent} flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-white font-bold text-sm">{item.title}</h3>
-                    <p className="text-purple-300/50 text-xs font-medium">{item.desc}</p>
-                  </div>
-                  <ChevronRight size={16} className="text-purple-400/30 ml-auto group-hover:text-white transition-colors" />
-                </div>
-              ))}
-            </div>
+          {/* Right side — Description text */}
+          <div className="flex-1 max-w-lg">
+            <p className="text-lg md:text-xl text-purple-200/70 leading-relaxed font-medium">
+              {t('The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.')}
+            </p>
           </div>
         </div>
       </section>
