@@ -712,7 +712,8 @@ const Profile: React.FC = () => {
                   )}
                 </div>
               ) : listings.filter(l => l.freelancerId === currentUser?.id && l.title.toLowerCase().includes(searchQuery.toLowerCase())).map((listing) => (
-                <div key={listing.id} className={`group bg-brand-grey/30 border border-white/5 rounded-3xl p-6 transition-all hover:border-brand-green/30`}>
+                <div key={listing.id} className={`group bg-brand-grey/30 border border-white/5 rounded-3xl p-6 transition-all hover:border-brand-green/30 cursor-pointer`}
+                  onClick={(e) => { if ((e.target as HTMLElement).closest('button')) return; navigate(`/service/${listing.id}`); }}>
                   <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                     <img src={listing.imageUrl} className="w-24 h-24 rounded-2xl object-cover border border-white/10" alt="" />
                     <div className="flex-grow">
@@ -1329,7 +1330,7 @@ const Profile: React.FC = () => {
 
       <div className="grid lg:grid-cols-4 gap-12">
         {/* Navigation & Micro-management Sidebar */}
-        <div className="lg:col-span-1 space-y-8">
+        <div className="lg:col-span-1 space-y-4 lg:sticky lg:top-24 lg:self-start">
           <div className="bg-brand-grey/50 border border-white/10 rounded-[2.5rem] p-8 text-center relative overflow-hidden group">
             <div className="absolute -top-12 -left-12 w-32 h-32 bg-brand-green/10 rounded-full blur-3xl"></div>
             <div className="relative inline-block mb-6">
@@ -1414,59 +1415,13 @@ const Profile: React.FC = () => {
             )}
           </div>
 
-          {/* CRM Data Section - Visualized */}
           <div className="bg-brand-grey/50 border border-white/10 rounded-[2rem] overflow-hidden">
-            <div className="p-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
-              <h4 className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Verification Status</h4>
-              <div className="w-2 h-2 bg-brand-green rounded-full animate-pulse"></div>
-            </div>
-            <div className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3 text-sm text-gray-400">
-                        <Mail size={16} />
-                        <span>Email</span>
-                    </div>
-                    {currentUser?.emailVerified ? (
-                        <CheckCircle size={16} className="text-brand-green" />
-                    ) : (
-                        <button onClick={() => handleVerifyContact('email')} className="text-[10px] font-bold text-brand-pink hover:underline">Verify</button>
-                    )}
-                </div>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3 text-sm text-gray-400">
-                        <Smartphone size={16} />
-                        <span>Phone</span>
-                    </div>
-                    {currentUser?.mobileVerified ? (
-                        <CheckCircle size={16} className="text-brand-green" />
-                    ) : (
-                        <button onClick={() => handleVerifyContact('mobile')} className="text-[10px] font-bold text-brand-pink hover:underline">Verify</button>
-                    )}
-                </div>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3 text-sm text-gray-400">
-                        <ShieldCheck size={16} />
-                        <span>KYC</span>
-                    </div>
-                    {canCreateListings ? (
-                        <CheckCircle size={16} className="text-brand-green" />
-                    ) : (
-                        <button onClick={() => navigate('/creator-onboarding')} className="text-[10px] font-bold text-brand-pink hover:underline">Verify</button>
-                    )}
-                </div>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3 text-sm text-gray-400">
-                        <Crown size={16} />
-                        <span>Sub Level</span>
-                    </div>
-                    <span className="text-[10px] font-bold text-white uppercase bg-white/10 px-2 py-0.5 rounded">{subscriptionTier}</span>
-                </div>
-            </div>
-          </div>
-
-          <div className="bg-brand-grey/50 border border-white/10 rounded-[2rem] overflow-hidden">
-            <div className="p-6 border-b border-white/5 bg-white/[0.02]">
-              <h4 className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Workspace</h4>
+            <div className="p-5 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+              <h4 className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Navigation</h4>
+              <div className="flex items-center gap-2 text-[10px] text-gray-600 font-bold">
+                {!currentUser?.emailVerified && <button onClick={() => handleVerifyContact('email')} className="text-brand-pink hover:underline">Verify email</button>}
+                {!currentUser?.mobileVerified && <button onClick={() => handleVerifyContact('mobile')} className="text-brand-pink hover:underline">Verify phone</button>}
+              </div>
             </div>
             <nav className="flex flex-col">
               {[
@@ -1516,13 +1471,10 @@ const Profile: React.FC = () => {
 
         {/* Dynamic Content Area */}
         <div className="lg:col-span-3">
-          <div className="mb-10 flex items-center justify-between">
-            <div>
-              <h2 className="text-4xl font-extrabold text-white tracking-tight capitalize">{activeTab.replace('-', ' ')}</h2>
-              <p className="text-gray-500 mt-1">Real-time performance metrics and operations.</p>
-            </div>
-            <div className="hidden sm:flex items-center space-x-4 text-xs font-bold text-gray-500">
-            </div>
+          <div className="mb-10">
+            <h2 className="text-4xl font-extrabold text-white tracking-tight capitalize">
+              {{ listings: 'Listings', inbox: 'Messages', earnings: 'Earnings', portfolio: 'Portfolio', settings: 'Settings' }[activeTab] || activeTab}
+            </h2>
           </div>
 
           {renderTabContent()}
