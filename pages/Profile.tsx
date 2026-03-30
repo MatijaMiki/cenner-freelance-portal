@@ -1527,13 +1527,13 @@ const Profile: React.FC = () => {
           {/* Horizontal tab nav */}
           <div className="flex gap-1 overflow-x-auto mb-8 bg-brand-grey/40 border border-white/5 rounded-2xl p-1">
             {([
-              { id: 'earnings',  label: t('Earnings') },
               { id: 'listings',  label: t('Listings') },
+              { id: 'earnings',  label: t('Earnings') },
               { id: 'inbox',     label: t('Messages'), badge: inboxMessages.filter(m => m.unread).length },
-              { id: 'portfolio', label: t('Portfolio') },
-              { id: 'settings',  label: t('Settings') },
               { id: 'saved',     label: t('Saved') },
               { id: 'orders',    label: t('Orders') },
+              { id: 'portfolio', label: t('Portfolio') },
+              { id: 'settings',  label: t('Settings') },
             ] as { id: ActiveTab; label: string; badge?: number }[]).map(item => (
               <button key={item.id}
                 onClick={() => { setActiveTab(item.id); setSelectedMessage(null); }}
