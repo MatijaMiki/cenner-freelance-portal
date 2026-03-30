@@ -14,7 +14,7 @@ import { CATEGORIES } from '../constants';
 import { API } from '../lib/api';
 import { useT } from '../i18n';
 
-type ActiveTab = 'listings' | 'inbox' | 'earnings' | 'settings' | 'portfolio';
+type ActiveTab = 'listings' | 'inbox' | 'earnings' | 'settings' | 'portfolio' | 'saved' | 'orders';
 
 // ─── Settings Tab ────────────────────────────────────────────────────────────
 const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; navigate: any; initialSection?: string }> = ({ currentUser, updateUser, navigate, initialSection = 'account' }) => {
@@ -326,6 +326,107 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
             </div>
             <p className="text-gray-500 text-sm">Your full transaction history is available in the <button onClick={() => {}} className="text-brand-green underline">Financials</button> tab.</p>
           </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const SavedTab: React.FC = () => {
+  const t = useT();
+  const navigate = useNavigate();
+  const [items, setItems] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    API.getSavedListings().then(setItems).catch(() => setItems([])).finally(() => setLoading(false));
+  }, []);
+  const handleUnsave = async (listingId: string) => {
+    await API.unsaveListing(listingId).catch(() => {});
+    setItems(prev => prev.filter(i => i.listing?.id !== listingId));
+  };
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="animate-spin text-gray-500" size={28} /></div>;
+  if (items.length === 0) return (
+    <div className="text-center py-20 bg-brand-grey/20 border-2 border-dashed border-white/5 rounded-[2.5rem]">
+      <Heart size={36} className="text-gray-700 mx-auto mb-4" />
+      <p className="text-gray-500 font-bold mb-4">{t('No saved listings yet.')}</p>
+      <button onClick={() => navigate('/marketplace')} className="text-brand-green font-black hover:underline">{t('Browse Marketplace')}</button>
+    </div>
+  );
+  return (
+    <div className="space-y-3 animate-in fade-in duration-500">
+      {items.map(item => (
+        <div key={item.id} className="bg-brand-grey/30 border border-white/5 rounded-2xl p-5 flex items-center justify-between gap-4 hover:border-white/10 transition-colors cursor-pointer"
+          onClick={(e) => { if ((e.target as HTMLElement).closest('button')) return; navigate(`/service/${item.listing?.id}`); }}>
+          <div className="flex items-center gap-4 min-w-0">
+            <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center text-brand-green shrink-0"><Heart size={18} /></div>
+            <div className="min-w-0">
+              <p className="text-white font-bold text-sm truncate">{item.listing?.title}</p>
+              <p className="text-gray-500 text-xs mt-0.5">{item.listing?.user?.name || 'Unknown'}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 shrink-0">
+            <span className="text-white font-black">&euro;{item.listing?.price?.toFixed(2)}</span>
+            <button onClick={() => handleUnsave(item.listing?.id)} className="p-2 text-gray-500 hover:text-red-400 transition-colors"><Trash2 size={15} /></button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const OrdersTab: React.FC = () => {
+  const t = useT();
+  const navigate = useNavigate();
+  const [orders, setOrders] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [role, setRole] = React.useState<'buyer' | 'seller'>('buyer');
+  React.useEffect(() => {
+    setLoading(true);
+    API.getOrders(role).then(setOrders).catch(() => setOrders([])).finally(() => setLoading(false));
+  }, [role]);
+  const STATUS_COLOR: Record<string, string> = {
+    PENDING: 'text-yellow-400 bg-yellow-500/10', PAID: 'text-blue-400 bg-blue-500/10',
+    IN_PROGRESS: 'text-brand-green bg-brand-green/10', DELIVERED: 'text-purple-400 bg-purple-500/10',
+    COMPLETED: 'text-gray-400 bg-white/5', CANCELLED: 'text-red-400 bg-red-500/10', REFUNDED: 'text-orange-400 bg-orange-500/10',
+  };
+  return (
+    <div className="space-y-4 animate-in fade-in duration-500">
+      <div className="flex gap-2">
+        {(['buyer', 'seller'] as const).map(r => (
+          <button key={r} onClick={() => setRole(r)}
+            className={`px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${role === r ? 'bg-brand-green text-brand-black' : 'bg-brand-grey/40 border border-white/10 text-gray-500 hover:text-white'}`}>
+            {r === 'buyer' ? t('Purchases') : t('Sales')}
+          </button>
+        ))}
+      </div>
+      {loading ? <div className="flex justify-center py-16"><Loader2 className="animate-spin text-gray-500" size={28} /></div>
+      : orders.length === 0 ? (
+        <div className="text-center py-20 bg-brand-grey/20 border-2 border-dashed border-white/5 rounded-[2.5rem]">
+          <Briefcase size={36} className="text-gray-700 mx-auto mb-4" />
+          <p className="text-gray-500 font-bold mb-4">{role === 'seller' ? t('No sales yet.') : t('No purchases yet.')}</p>
+          <button onClick={() => navigate('/marketplace')} className="text-brand-green font-black hover:underline">{t('Browse Marketplace')}</button>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {orders.map(order => {
+            const color = STATUS_COLOR[order.status] || STATUS_COLOR.PENDING;
+            const counterparty = role === 'buyer' ? order.seller?.name : order.buyer?.name;
+            return (
+              <div key={order.id} className="bg-brand-grey/30 border border-white/5 rounded-2xl p-5 flex items-center justify-between gap-4 hover:border-white/10 transition-colors">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center text-brand-green shrink-0"><Briefcase size={18} /></div>
+                  <div className="min-w-0">
+                    <p className="text-white font-bold text-sm truncate">{order.listing?.title || 'Order'}</p>
+                    <p className="text-gray-500 text-xs">{counterparty}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className="text-white font-black">&euro;{(order.totalAmount / 100).toFixed(2)}</span>
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${color}`}>{order.status}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
@@ -1031,6 +1132,10 @@ const Profile: React.FC = () => {
         );
       case 'settings':
         return <SettingsTab currentUser={currentUser} updateUser={updateUser} navigate={navigate} initialSection={(searchParams.get('section') as any) || (connectResult ? 'billing' : 'account')} />;
+      case 'saved':
+        return <SavedTab />;
+      case 'orders':
+        return <OrdersTab />;
       default:
         return null;
     }
@@ -1421,35 +1526,26 @@ const Profile: React.FC = () => {
         <div className="lg:col-span-3">
           {/* Horizontal tab nav */}
           <div className="flex gap-1 overflow-x-auto mb-8 bg-brand-grey/40 border border-white/5 rounded-2xl p-1">
-            {[
-              { id: 'earnings', label: t('Earnings') },
-              { id: 'listings', label: t('Listings') },
-              { id: 'inbox',    label: t('Messages'), badge: inboxMessages.filter(m => m.unread).length },
-              { id: 'portfolio',label: t('Portfolio') },
-              { id: 'settings', label: t('Settings') },
-            ].map(item => (
+            {([
+              { id: 'earnings',  label: t('Earnings') },
+              { id: 'listings',  label: t('Listings') },
+              { id: 'inbox',     label: t('Messages'), badge: inboxMessages.filter(m => m.unread).length },
+              { id: 'portfolio', label: t('Portfolio') },
+              { id: 'settings',  label: t('Settings') },
+              { id: 'saved',     label: t('Saved') },
+              { id: 'orders',    label: t('Orders') },
+            ] as { id: ActiveTab; label: string; badge?: number }[]).map(item => (
               <button key={item.id}
-                onClick={() => { setActiveTab(item.id as ActiveTab); setSelectedMessage(null); }}
+                onClick={() => { setActiveTab(item.id); setSelectedMessage(null); }}
                 className={`relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                   activeTab === item.id ? 'bg-brand-green text-brand-black shadow-lg' : 'text-gray-500 hover:text-white'
                 }`}>
                 {item.label}
-                {(item as any).badge > 0 && (
+                {(item.badge ?? 0) > 0 && (
                   <span className={`w-4 h-4 rounded-full text-[9px] flex items-center justify-center font-black ${activeTab === item.id ? 'bg-brand-black/20 text-brand-black' : 'bg-brand-pink text-white'}`}>
-                    {(item as any).badge}
+                    {item.badge}
                   </span>
                 )}
-              </button>
-            ))}
-            <div className="w-px bg-white/10 mx-1 my-1" />
-            {[
-              { path: '/saved',  label: t('Saved') },
-              { path: '/orders', label: t('Orders') },
-            ].map(item => (
-              <button key={item.path}
-                onClick={() => navigate(item.path)}
-                className="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest whitespace-nowrap text-gray-500 hover:text-white transition-all">
-                {item.label}
               </button>
             ))}
           </div>
