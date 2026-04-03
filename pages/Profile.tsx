@@ -498,6 +498,9 @@ const Profile: React.FC = () => {
   const [editForm, setEditForm] = useState({ title: '', category: CATEGORIES[0], price: '', deliveryTime: '', description: '', includesInput: '' });
   const [editIncludesList, setEditIncludesList] = useState<string[]>([]);
   const [savingListing, setSavingListing] = useState(false);
+  const [editListingImageFile, setEditListingImageFile] = useState<File | null>(null);
+  const [editListingImagePreview, setEditListingImagePreview] = useState<string | null>(null);
+  const editListingImageRef = useRef<HTMLInputElement>(null);
 
   // Portfolio state
   const [portfolioItems, setPortfolioItems] = useState<any[]>([]);
@@ -755,6 +758,8 @@ const Profile: React.FC = () => {
       includesInput: '',
     });
     setEditIncludesList(listing.includes || []);
+    setEditListingImageFile(null);
+    setEditListingImagePreview(null);
   };
 
   const handleSaveListing = async (e: React.FormEvent) => {
@@ -762,6 +767,9 @@ const Profile: React.FC = () => {
     if (!editingListing) return;
     setSavingListing(true);
     try {
+      if (editListingImageFile) {
+        await API.uploadListingImage(editingListing.id, editListingImageFile);
+      }
       await updateListing(editingListing.id, {
         title: editForm.title,
         category: editForm.category,
@@ -1466,16 +1474,55 @@ const Profile: React.FC = () => {
       {editingListing && (
         <div className="fixed inset-0 z-[150] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
           <div className="w-full max-w-2xl bg-brand-grey border border-white/10 rounded-[3rem] p-10 relative overflow-y-auto max-h-[90vh] custom-scrollbar">
-            <button onClick={() => setEditingListing(null)} className="absolute top-10 right-10 text-gray-500 hover:text-white"><X size={24} /></button>
+            <button onClick={() => { setEditingListing(null); setEditListingImageFile(null); setEditListingImagePreview(null); }} className="absolute top-10 right-10 text-gray-500 hover:text-white"><X size={24} /></button>
             <h2 className="text-4xl font-black text-white mb-2 tracking-tighter">{t('Edit Listing')}</h2>
-            <p className="text-gray-500 mb-8">Update your service details. Cover image cannot be changed.</p>
+            <p className="text-gray-500 mb-8">Update your service details.</p>
 
-            <div className="flex items-center gap-4 mb-8 p-4 bg-brand-black/40 rounded-2xl border border-white/5">
-              <img src={editingListing.imageUrl} alt="" className="w-16 h-16 rounded-xl object-cover border border-white/10" />
-              <div>
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mb-1">Current cover image</p>
-                <p className="text-[11px] text-gray-600">Cover images are generated automatically and cannot be changed.</p>
+            <div className="mb-8">
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest block mb-3">Cover Image</label>
+              <div className="flex items-center gap-4">
+                <div className="relative w-24 h-24 flex-shrink-0">
+                  <img
+                    src={editListingImagePreview || editingListing.imageUrl}
+                    alt=""
+                    className="w-24 h-24 rounded-2xl object-cover border border-white/10"
+                  />
+                  {editListingImagePreview && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-brand-green text-brand-black text-[9px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-wide">New</span>
+                  )}
+                </div>
+                <div className="flex-grow">
+                  <button
+                    type="button"
+                    onClick={() => editListingImageRef.current?.click()}
+                    className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 hover:border-brand-green/50 text-white rounded-xl text-xs font-bold transition-all"
+                  >
+                    <Upload size={14} />
+                    {editListingImagePreview ? 'Change Image' : 'Upload New Image'}
+                  </button>
+                  <p className="text-[10px] text-gray-600 mt-1.5">JPG, PNG or WebP · max 5MB</p>
+                  {editListingImagePreview && (
+                    <button
+                      type="button"
+                      onClick={() => { setEditListingImageFile(null); setEditListingImagePreview(null); if (editListingImageRef.current) editListingImageRef.current.value = ''; }}
+                      className="text-[10px] text-brand-pink hover:underline mt-1 block"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
               </div>
+              <input
+                ref={editListingImageRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={e => {
+                  const file = e.target.files?.[0] || null;
+                  setEditListingImageFile(file);
+                  setEditListingImagePreview(file ? URL.createObjectURL(file) : null);
+                }}
+              />
             </div>
 
             <form onSubmit={handleSaveListing} className="space-y-6">
