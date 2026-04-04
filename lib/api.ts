@@ -75,6 +75,22 @@ export const API = {
   updateListing: (id: string, data: any) =>
     request<any>(`/listings/${id}`, 'PUT', data),
 
+  uploadListingImage: (id: string, file: File): Promise<any> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return fetch(`${API_BASE}/listings/${id}/image`, {
+      method: 'PATCH',
+      credentials: 'include',
+      body: formData,
+    }).then(async res => {
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return res.json();
+    });
+  },
+
   deleteListing: (id: string) =>
     request<{ success: boolean }>(`/listings/${id}`, 'DELETE'),
 
