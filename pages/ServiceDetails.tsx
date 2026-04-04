@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Star, Clock, CheckCircle, MessageSquare, ShieldCheck, Share2, Heart, ArrowLeft, Edit2, Save, X, Loader2, Upload } from 'lucide-react';
+import { Star, Clock, CheckCircle, MessageSquare, ShieldCheck, Share2, Heart, ArrowLeft, Edit2, Save, X, Loader2, Upload, ChevronLeft, ChevronRight } from 'lucide-react';
 import PermissionModal from '../components/PermissionModal';
 import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -271,19 +271,51 @@ const ServiceDetails: React.FC = () => {
                   ? [listing.imageUrl, ...(listing.galleryImages || []).filter((u: string) => u !== listing.imageUrl)]
                   : (listing.galleryImages || []);
                 const current = allImages[activeImage] || listing.imageUrl;
+                const hasPrev = activeImage > 0;
+                const hasNext = activeImage < allImages.length - 1;
                 return (
                   <div className="mb-8">
-                    <div className="rounded-3xl overflow-hidden border border-white/10 aspect-video bg-brand-black shadow-2xl">
-                      <img src={current} alt={listing.title} className="w-full h-full object-cover" />
+                    {/* Main image with arrow navigation */}
+                    <div className="relative rounded-3xl overflow-hidden border border-white/10 aspect-video bg-brand-black shadow-2xl group">
+                      <img
+                        src={current}
+                        alt={listing.title}
+                        className="w-full h-full object-cover transition-opacity duration-300"
+                      />
+                      {allImages.length > 1 && (
+                        <>
+                          <button
+                            onClick={() => setActiveImage(i => Math.max(0, i - 1))}
+                            disabled={!hasPrev}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-brand-green flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 disabled:opacity-0 hover:scale-110 active:scale-95"
+                          >
+                            <ChevronLeft size={22} className="text-brand-black" strokeWidth={2.5} />
+                          </button>
+                          <button
+                            onClick={() => setActiveImage(i => Math.min(allImages.length - 1, i + 1))}
+                            disabled={!hasNext}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-brand-green flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 disabled:opacity-0 hover:scale-110 active:scale-95"
+                          >
+                            <ChevronRight size={22} className="text-brand-black" strokeWidth={2.5} />
+                          </button>
+                          {/* Image counter pill */}
+                          <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
+                            {activeImage + 1} / {allImages.length}
+                          </div>
+                        </>
+                      )}
                     </div>
+                    {/* Thumbnails */}
                     {allImages.length > 1 && (
                       <div className="flex gap-2 mt-3">
                         {allImages.map((url: string, i: number) => (
                           <button
                             key={i}
                             onClick={() => setActiveImage(i)}
-                            className={`w-16 h-12 rounded-xl overflow-hidden border-2 transition-colors flex-shrink-0 ${
-                              i === activeImage ? 'border-brand-green' : 'border-white/10 hover:border-white/30'
+                            className={`w-16 h-12 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                              i === activeImage
+                                ? 'border-brand-green scale-105 shadow-[0_0_12px_rgba(74,222,128,0.4)]'
+                                : 'border-white/10 hover:border-white/30 opacity-60 hover:opacity-100'
                             }`}
                           >
                             <img src={url} alt="" className="w-full h-full object-cover" />
