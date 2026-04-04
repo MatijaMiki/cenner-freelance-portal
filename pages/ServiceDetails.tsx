@@ -12,7 +12,7 @@ import { useNotify } from '../contexts/NotifyContext';
 
 const ServiceDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { getListingById, updateListing, refreshListings } = useData();
+  const { getListingById, updateListing, deleteListing, refreshListings } = useData();
   const { user } = useAuth();
   const navigate = useNavigate();
   const notify = useNotify();
@@ -103,7 +103,7 @@ const ServiceDetails: React.FC = () => {
     if (!ok) return;
     setDeleting(true);
     try {
-      await API.deleteListing(listing.id);
+      await deleteListing(listing.id);
       navigate('/profile');
     } catch (err: any) {
       notify.toast(err.message || 'Failed to delete listing.', 'error');
