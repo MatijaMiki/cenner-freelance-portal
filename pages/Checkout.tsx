@@ -153,14 +153,15 @@ const Checkout: React.FC = () => {
   const platformFee = listing ? Math.round(listing.price * 0.05) : 0;
   const totalAmount = listing ? listing.price + platformFee : 0;
 
-  // Fetch active Stripe publishable key from server (respects live/test mode set in CRM)
+  // Fetch active Stripe publishable key from server (respects live/test mode set in CRM).
+  // Falls back to VITE_STRIPE_PUBLISHABLE_KEY if server returns null or the request fails.
   useEffect(() => {
     API.getStripeConfig()
       .then(({ publishableKey }) => {
-        if (publishableKey) setStripePromise(loadStripe(publishableKey));
+        const key = publishableKey || import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+        if (key) setStripePromise(loadStripe(key));
       })
       .catch(() => {
-        // Fall back to env var if config endpoint fails
         const fallback = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
         if (fallback) setStripePromise(loadStripe(fallback));
       });
