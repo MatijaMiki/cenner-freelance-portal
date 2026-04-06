@@ -196,9 +196,6 @@ export const API = {
   // ── Direct Messaging ──────────────────────────────────────────────────────
   getConversations: () => request<any[]>('/conversations'),
 
-  getOrCreateConversation: (otherUserId: string) =>
-    request<{ id: string }>('/conversations', 'POST', { userId: otherUserId }),
-
   getMessages: (conversationId: string, before?: string) =>
     request<any[]>(`/conversations/${conversationId}/messages${before ? `?before=${before}` : ''}`),
 
@@ -222,7 +219,7 @@ export const API = {
     request<{ url: string }>('/connect/onboard', 'POST'),
 
   getConnectStatus: () =>
-    request<{ ready: boolean; accountId?: string }>('/connect/status'),
+    request<{ connected: boolean; ready: boolean; accountId?: string }>('/connect/status'),
 
   // ── Contracts ─────────────────────────────────────────────────────────────
   getContracts: () =>
