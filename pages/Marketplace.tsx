@@ -1,14 +1,15 @@
 
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import {
   Search, Filter, Star, Clock, Tag, ChevronDown,
   X, SlidersHorizontal, ArrowUpDown, Briefcase,
-  Zap, Users, FileText, TrendingUp, AlertCircle, Loader2
+  Zap, Users, FileText, TrendingUp, AlertCircle, Loader2, Plus
 } from 'lucide-react';
 import { CATEGORIES } from '../constants';
 import { useData } from '../contexts/DataContext';
+import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import { useT } from '../i18n';
 
@@ -16,6 +17,8 @@ type MarketplaceMode = 'freelancers' | 'clients';
 
 const Marketplace: React.FC = () => {
   const { listings: allListings, jobs } = useData();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const t = useT();
   const [mode, setMode] = useState<MarketplaceMode>('freelancers');
   const [searchTerm, setSearchTerm] = useState('');
@@ -206,6 +209,17 @@ const Marketplace: React.FC = () => {
           <p className="text-gray-500 font-medium">{t("The world's most advanced hub for digital synchronization.")}</p>
         </div>
 
+        <div className="flex items-center gap-4">
+        {user && (
+          <button
+            onClick={() => navigate('/profile?tab=listings&create=1')}
+            className="px-6 py-3.5 bg-brand-pink text-white rounded-2xl text-xs font-black uppercase tracking-widest flex items-center space-x-2 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-pink/20"
+          >
+            <Plus size={16} />
+            <span>{t('Post a Service')}</span>
+          </button>
+        )}
+
         {/* High-Fidelity Mode Toggle */}
         <div className="bg-brand-grey/50 border border-white/10 p-1.5 rounded-2xl flex items-center shadow-inner">
           <button 
@@ -230,6 +244,7 @@ const Marketplace: React.FC = () => {
             <Briefcase size={16} />
             <span>{t('Open Requests')}</span>
           </button>
+        </div>
         </div>
       </div>
 

@@ -485,8 +485,8 @@ const Profile: React.FC = () => {
     }
   };
 
-  // Creating Listing State
-  const [isCreatingListing, setIsCreatingListing] = useState(false);
+  // Creating Listing State — auto-open when navigated from Marketplace with ?create=1
+  const [isCreatingListing, setIsCreatingListing] = useState(searchParams.get('create') === '1');
   const [newListing, setNewListing] = useState({
     title: '',
     category: CATEGORIES[0],
