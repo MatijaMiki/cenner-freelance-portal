@@ -7,7 +7,7 @@ import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStri
 import { useData } from '../contexts/DataContext';
 import { API } from '../lib/api';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
+// stripePromise is resolved dynamically after fetching the active publishable key from the server
 
 const CARD_ELEMENT_OPTIONS = {
   style: {
@@ -144,11 +144,25 @@ const Checkout: React.FC = () => {
   const [loadingIntent, setLoadingIntent] = useState(true);
   const [intentError, setIntentError] = useState<string | null>(null);
   const [confirmedPaymentId, setConfirmedPaymentId] = useState<string | null>(null);
+  const [stripePromise, setStripePromise] = useState<ReturnType<typeof loadStripe> | null>(null);
 
   const listing = id ? getListingById(id) : undefined;
 
   const platformFee = listing ? Math.round(listing.price * 0.05) : 0;
   const totalAmount = listing ? listing.price + platformFee : 0;
+
+  // Fetch active Stripe publishable key from server (respects live/test mode set in CRM)
+  useEffect(() => {
+    API.getStripeConfig()
+      .then(({ publishableKey }) => {
+        if (publishableKey) setStripePromise(loadStripe(publishableKey));
+      })
+      .catch(() => {
+        // Fall back to env var if config endpoint fails
+        const fallback = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+        if (fallback) setStripePromise(loadStripe(fallback));
+      });
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -256,7 +270,7 @@ const Checkout: React.FC = () => {
                   Go back
                 </button>
               </div>
-            ) : clientSecret ? (
+            ) : clientSecret && stripePromise ? (
               <Elements stripe={stripePromise} options={{ clientSecret }}>
                 <PaymentForm
                   listing={listing}

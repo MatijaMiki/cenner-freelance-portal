@@ -197,7 +197,7 @@ export const API = {
   getConversations: () => request<any[]>('/conversations'),
 
   getOrCreateConversation: (otherUserId: string) =>
-    request<{ id: string }>('/conversations', 'POST', { otherUserId }),
+    request<{ id: string }>('/conversations', 'POST', { userId: otherUserId }),
 
   getMessages: (conversationId: string, before?: string) =>
     request<any[]>(`/conversations/${conversationId}/messages${before ? `?before=${before}` : ''}`),
@@ -206,7 +206,7 @@ export const API = {
     request<any>(`/conversations/${conversationId}/messages`, 'POST', { content }),
 
   startConversation: (otherUserId: string) =>
-    request<{ id: string }>('/conversations', 'POST', { otherUserId }),
+    request<{ id: string }>('/conversations', 'POST', { userId: otherUserId }),
 
   getUnreadCount: () =>
     request<{ count: number }>('/conversations/unread-count'),
@@ -236,6 +236,9 @@ export const API = {
 
   acceptContract: (id: string) =>
     request<any>(`/contracts/${id}/accept`, 'PATCH'),
+
+  declineContract: (id: string) =>
+    request<{ success: boolean }>(`/contracts/${id}/decline`, 'PATCH'),
 
   cancelContract: (id: string) =>
     request<any>(`/contracts/${id}/cancel`, 'PATCH'),
@@ -332,4 +335,8 @@ export const API = {
   // ── Blog Votes ──────────────────────────────────────────────────────────
   votePost: (postId: string, direction: 'up' | 'down') =>
     request<{ votes: number }>(`/posts/${postId}/vote`, 'POST', { direction }),
+
+  // ── Stripe Config ────────────────────────────────────────────────────────
+  getStripeConfig: () =>
+    request<{ mode: string; publishableKey: string | null }>('/stripe/config'),
 };

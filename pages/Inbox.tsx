@@ -67,14 +67,27 @@ const MessagingHub: React.FC = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Load conversations
+  // Load conversations — when done, resolve otherProfile if not yet set
   useEffect(() => {
     if (!user) { navigate('/auth'); return; }
     API.getConversations()
-      .then(data => setConversations(Array.isArray(data) ? data : []))
+      .then(data => {
+        const list = Array.isArray(data) ? data : [];
+        setConversations(list);
+        // If a conversation is active but profile not yet resolved, load it now
+        if (activeConvId) {
+          const conv = list.find(c => c.id === activeConvId);
+          if (conv?.other) {
+            setOtherProfile(prev => prev ?? { id: conv.other.id, name: conv.other.name, avatar: conv.other.avatar });
+            API.getProfile(conv.other.id).then(p => { if (p) setOtherProfile(p); }).catch(() => {});
+            API.getUserReviews(conv.other.id).then(d => setReviews(Array.isArray(d) ? d : [])).catch(() => {});
+            API.getCompletedContracts(conv.other.id).then(d => setCompletedContracts(Array.isArray(d) ? d : [])).catch(() => {});
+          }
+        }
+      })
       .catch(() => {})
       .finally(() => setConvsLoading(false));
-  }, [user]);
+  }, [user, activeConvId]);
 
   // Load messages + socket for active conversation
   useEffect(() => {
@@ -84,9 +97,19 @@ const MessagingHub: React.FC = () => {
     setMessagesLoading(true);
     setOtherProfile(null);
 
+    // Try to resolve the other user from the already-loaded conversation list first
+    const conv = conversations.find(c => c.id === activeConvId);
+    if (conv?.other) {
+      setOtherProfile({ id: conv.other.id, name: conv.other.name, avatar: conv.other.avatar });
+      API.getProfile(conv.other.id).then(p => { if (p) setOtherProfile(p); }).catch(() => {});
+      API.getUserReviews(conv.other.id).then(d => setReviews(Array.isArray(d) ? d : [])).catch(() => {});
+      API.getCompletedContracts(conv.other.id).then(d => setCompletedContracts(Array.isArray(d) ? d : [])).catch(() => {});
+    }
+
     API.getMessages(activeConvId)
       .then((msgs: DMMessage[]) => {
         setMessages(msgs);
+        // Only derive other user from messages if we didn't already get it from conversations
         const other = msgs.find(m => m.senderId !== user.id)?.sender;
         if (other) {
           setOtherProfile(prev => prev ?? { id: other.id, name: other.name, avatar: other.avatar });
@@ -97,15 +120,6 @@ const MessagingHub: React.FC = () => {
       })
       .catch(console.error)
       .finally(() => setMessagesLoading(false));
-
-    // Also get other user from conversation list
-    const conv = conversations.find(c => c.id === activeConvId);
-    if (conv?.other) {
-      setOtherProfile(prev => prev ?? { id: conv.other.id, name: conv.other.name, avatar: conv.other.avatar });
-      API.getProfile(conv.other.id).then(p => { if (p) setOtherProfile(p); }).catch(() => {});
-      API.getUserReviews(conv.other.id).then(d => setReviews(Array.isArray(d) ? d : [])).catch(() => {});
-      API.getCompletedContracts(conv.other.id).then(d => setCompletedContracts(Array.isArray(d) ? d : [])).catch(() => {});
-    }
 
     const socket = connectSocket();
     socket.emit('join_conversation', activeConvId);
@@ -218,7 +232,8 @@ const MessagingHub: React.FC = () => {
       <SEO title="Messages" canonical="/messages" description="Your messages on Cenner" />
 
       {/* ── LEFT: Conversation list ───────────────────────────────── */}
-      <div className="w-72 flex-shrink-0 border-r border-white/5 flex flex-col">
+      {/* On mobile: hidden when a conversation is active */}
+      <div className={`w-72 flex-shrink-0 border-r border-white/5 flex flex-col ${activeConvId ? 'hidden md:flex' : 'flex'}`}>
         {/* Header */}
         <div className="px-4 pt-5 pb-3 border-b border-white/5 flex-shrink-0">
           <div className="flex items-center gap-2 mb-3">
@@ -318,22 +333,30 @@ const MessagingHub: React.FC = () => {
         ) : (
           <>
             {/* Chat header */}
-            <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/5 bg-brand-grey/40 flex-shrink-0">
+            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/5 bg-brand-grey/40 flex-shrink-0">
+              {/* Back to list — mobile only */}
+              <button
+                onClick={() => navigate('/messages')}
+                className="md:hidden flex-shrink-0 w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                aria-label="Back to conversations"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+              </button>
               {otherProfile?.avatar ? (
-                <img src={otherProfile.avatar} alt={otherProfile.name} className="w-8 h-8 rounded-xl object-cover" />
+                <img src={otherProfile.avatar} alt={otherProfile.name} className="w-8 h-8 rounded-xl object-cover flex-shrink-0" />
               ) : (
-                <div className="w-8 h-8 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green font-black text-sm">
+                <div className="w-8 h-8 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green font-black text-sm flex-shrink-0">
                   {otherProfile?.name?.[0]?.toUpperCase() ?? '?'}
                 </div>
               )}
-              <div>
-                <span className="font-bold text-white text-sm">{otherProfile?.name}</span>
+              <div className="min-w-0">
+                <span className="font-bold text-white text-sm truncate block">{otherProfile?.name}</span>
                 {typingUsers.size > 0 && (
                   <p className="text-[11px] text-brand-green animate-pulse">typing…</p>
                 )}
               </div>
-              <div className="ml-auto">
-                <div className="flex items-center gap-1 text-[10px] text-gray-600 bg-white/3 border border-white/5 rounded-lg px-2.5 py-1.5">
+              <div className="ml-auto flex-shrink-0">
+                <div className="hidden sm:flex items-center gap-1 text-[10px] text-gray-600 bg-white/3 border border-white/5 rounded-lg px-2.5 py-1.5">
                   <ShieldCheck size={10} className="text-brand-green" />
                   Keep payments on Cenner
                 </div>
@@ -448,7 +471,7 @@ const MessagingHub: React.FC = () => {
       </div>
 
       {/* ── RIGHT: Profile + Reviews ──────────────────────────────── */}
-      <div className="w-64 flex-shrink-0 border-l border-white/5 flex flex-col overflow-y-auto">
+      <div className="hidden lg:flex w-64 flex-shrink-0 border-l border-white/5 flex-col overflow-y-auto">
         {otherProfile ? (
           <div className="p-5 space-y-5">
 

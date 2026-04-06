@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, CheckCircle2, Clock, AlertTriangle, Star,
-  DollarSign, Send, ShieldCheck, MessageCircle
+  DollarSign, Send, ShieldCheck, MessageCircle, Timer, XCircle
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
@@ -13,6 +13,7 @@ import SEO from '../components/SEO';
 interface Milestone {
   id: string; title: string; description?: string;
   amount: number; dueDate?: string; order: number; status: string;
+  submittedAt?: string; autoReleaseAt?: string;
 }
 interface Review {
   id: string; rating: number; comment?: string;
@@ -21,6 +22,7 @@ interface Review {
 interface Contract {
   id: string; title: string; description?: string; status: string; totalAmount: number;
   clientId: string; freelancerId: string;
+  initiatedBy?: string; expiresAt?: string;
   client: { id: string; name: string; avatar?: string; avgRating?: number; reviewCount: number };
   freelancer: { id: string; name: string; avatar?: string; avgRating?: number; reviewCount: number; stripeConnectReady: boolean };
   milestones: Milestone[];
@@ -54,6 +56,33 @@ function StarRating({ rating, max = 5 }: { rating: number; max?: number }) {
   );
 }
 
+// Live countdown: shows "Xh Xm" remaining, refreshes every minute
+function Countdown({ targetDate }: { targetDate: string }) {
+  const [remaining, setRemaining] = useState('');
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  function calc() {
+    const diff = new Date(targetDate).getTime() - Date.now();
+    if (diff <= 0) { setRemaining('Releasing now…'); return; }
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    if (h >= 24) {
+      const d = Math.floor(h / 24);
+      setRemaining(`${d}d ${h % 24}h`);
+    } else {
+      setRemaining(`${h}h ${m}m`);
+    }
+  }
+
+  useEffect(() => {
+    calc();
+    timerRef.current = setInterval(calc, 60 * 1000);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [targetDate]);
+
+  return <span>{remaining}</span>;
+}
+
 const ContractDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -82,6 +111,13 @@ const ContractDetail: React.FC = () => {
 
   const isClient = contract?.clientId === user?.id;
   const isFreelancer = contract?.freelancerId === user?.id;
+
+  // Is the current user the recipient of this offer (not the one who sent it)?
+  const isOfferRecipient = contract?.status === 'DRAFT' && (
+    (contract.initiatedBy === 'CLIENT' && isFreelancer) ||
+    (contract.initiatedBy === 'FREELANCER' && isClient) ||
+    (!contract.initiatedBy && isFreelancer) // legacy
+  );
 
   async function doAction(fn: () => Promise<any>, key: string) {
     setActionLoading(key);
@@ -112,6 +148,11 @@ const ContractDetail: React.FC = () => {
   if (!contract) return <div className="min-h-screen bg-brand-black flex items-center justify-center text-gray-500">{error || 'Not found'}</div>;
 
   const other = isClient ? contract.freelancer : contract.client;
+
+  // Offer expiry days remaining
+  const offerExpiryDays = contract.expiresAt
+    ? Math.ceil((new Date(contract.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    : null;
 
   return (
     <div className="relative min-h-screen">
@@ -164,20 +205,55 @@ const ContractDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Contract actions */}
-        {contract.status === 'DRAFT' && isFreelancer && (
-          <div className="bg-yellow-400/5 border border-yellow-400/20 rounded-2xl p-4 mb-4 flex items-center justify-between">
-            <div>
-              <p className="text-yellow-400 font-bold text-sm">Contract pending your acceptance</p>
-              <p className="text-gray-500 text-xs mt-0.5">Review the milestones below, then accept to begin.</p>
+        {/* Incoming offer banner — accept or decline */}
+        {isOfferRecipient && (
+          <div className="bg-yellow-400/5 border border-yellow-400/20 rounded-2xl p-5 mb-4">
+            <div className="flex items-start justify-between mb-3">
+              <div>
+                <p className="text-yellow-400 font-bold text-sm">Contract offer pending your response</p>
+                <p className="text-gray-500 text-xs mt-0.5">Review the milestones below, then accept or decline.</p>
+                {offerExpiryDays !== null && (
+                  <p className={`text-xs mt-1 font-bold ${offerExpiryDays <= 1 ? 'text-red-400' : 'text-yellow-500'}`}>
+                    {offerExpiryDays <= 0 ? 'Expires today' : `Expires in ${offerExpiryDays} day${offerExpiryDays !== 1 ? 's' : ''}`}
+                  </p>
+                )}
+              </div>
             </div>
-            <button
-              onClick={() => doAction(() => API.acceptContract(contract.id), 'accept')}
-              disabled={!!actionLoading}
-              className="px-4 py-2 bg-brand-green text-brand-black font-black rounded-xl text-sm hover:scale-105 transition-all disabled:opacity-50"
-            >
-              {actionLoading === 'accept' ? 'Accepting…' : 'Accept contract'}
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => doAction(() => API.acceptContract(contract.id), 'accept')}
+                disabled={!!actionLoading}
+                className="flex-1 px-4 py-2.5 bg-brand-green text-brand-black font-black rounded-xl text-sm hover:scale-105 transition-all disabled:opacity-50"
+              >
+                {actionLoading === 'accept' ? 'Accepting…' : 'Accept contract'}
+              </button>
+              <button
+                onClick={async () => {
+                  const ok = await notify.confirm('Decline this contract offer? This cannot be undone.', {
+                    title: 'Decline offer?',
+                    confirmLabel: 'Yes, decline',
+                    cancelLabel: 'Keep reviewing',
+                    variant: 'danger',
+                  });
+                  if (ok) doAction(() => API.declineContract(contract.id), 'decline');
+                }}
+                disabled={!!actionLoading}
+                className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 text-gray-300 font-bold rounded-xl text-sm hover:bg-white/10 transition-colors disabled:opacity-50"
+              >
+                {actionLoading === 'decline' ? 'Declining…' : 'Decline'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Sent offer banner — waiting for other party */}
+        {contract.status === 'DRAFT' && !isOfferRecipient && (
+          <div className="bg-blue-400/5 border border-blue-400/20 rounded-2xl p-4 mb-4">
+            <p className="text-blue-400 font-bold text-sm">Offer sent — awaiting response</p>
+            <p className="text-gray-500 text-xs mt-0.5">
+              Waiting for {other.name} to accept or decline.
+              {offerExpiryDays !== null && ` Offer expires in ${Math.max(0, offerExpiryDays)} day${offerExpiryDays !== 1 ? 's' : ''}.`}
+            </p>
           </div>
         )}
 
@@ -200,6 +276,18 @@ const ContractDetail: React.FC = () => {
                     <MilestoneStatusBadge status={m.status} />
                   </div>
                 </div>
+
+                {/* Auto-release countdown for submitted milestones */}
+                {m.status === 'SUBMITTED' && m.autoReleaseAt && (
+                  <div className="flex items-center gap-1.5 mt-2 mb-1 text-yellow-400/80 text-xs">
+                    <Timer size={12} />
+                    <span>
+                      Auto-releases in <strong><Countdown targetDate={m.autoReleaseAt} /></strong>
+                      {isClient && ' — approve or dispute to override'}
+                    </span>
+                  </div>
+                )}
+
                 {/* Milestone actions */}
                 <div className="flex gap-2 mt-3 flex-wrap">
                   {isClient && m.status === 'PENDING' && contract.status === 'ACTIVE' && (
@@ -280,7 +368,7 @@ const ContractDetail: React.FC = () => {
 
         {/* Existing reviews */}
         {contract.reviews.length > 0 && (
-          <div className="bg-brand-grey/70 border border-white/5 rounded-2xl p-6">
+          <div className="bg-brand-grey/70 border border-white/5 rounded-2xl p-6 mb-4">
             <h2 className="text-white font-black mb-4">Reviews</h2>
             <div className="space-y-3">
               {contract.reviews.map(r => (
@@ -315,9 +403,9 @@ const ContractDetail: React.FC = () => {
                 if (ok) doAction(() => API.cancelContract(contract.id), 'cancel');
               }}
               disabled={!!actionLoading}
-              className="text-gray-600 hover:text-red-400 text-xs transition-colors"
+              className="flex items-center gap-1.5 mx-auto text-gray-600 hover:text-red-400 text-xs transition-colors"
             >
-              Cancel contract
+              <XCircle size={13} /> Cancel contract
             </button>
           </div>
         )}
