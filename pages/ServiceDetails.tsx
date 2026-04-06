@@ -37,11 +37,17 @@ const ServiceDetails: React.FC = () => {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
   const wasEditingRef = useRef(false);
+  const mainImgRef = useRef<HTMLImageElement>(null);
 
-  // Reset load state whenever the active image changes
+  // Reset load state whenever the active image changes.
+  // Also check img.complete immediately — iOS Safari skips onLoad for cached images.
   useEffect(() => {
     setImgLoaded(false);
     setImgError(false);
+    const img = mainImgRef.current;
+    if (img?.complete && img.naturalWidth > 0) {
+      setImgLoaded(true);
+    }
   }, [activeImage]);
 
   // Reset load state when exiting edit mode so the gallery image reloads cleanly
@@ -351,6 +357,7 @@ const ServiceDetails: React.FC = () => {
                       )}
                       <img
                         key={current}
+                        ref={mainImgRef}
                         src={current}
                         alt={listing.title}
                         onLoad={() => setImgLoaded(true)}

@@ -5,6 +5,7 @@ import { ShieldCheck, ArrowLeft, CreditCard, Lock, CheckCircle2, ShoppingBag, In
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useData } from '../contexts/DataContext';
+import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 
 // stripePromise is resolved dynamically after fetching the active publishable key from the server
@@ -135,6 +136,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, platfor
 const Checkout: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { getListingById } = useData();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [step, setStep] = useState<1 | 2>(1);
@@ -176,6 +178,18 @@ const Checkout: React.FC = () => {
       .catch(err => setIntentError(err.message || 'Could not initialise payment'))
       .finally(() => setLoadingIntent(false));
   }, [id]);
+
+  if (!user) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-4">
+        <h2 className="text-3xl font-bold text-white mb-4">Sign in to complete your purchase</h2>
+        <p className="text-gray-400 mb-6">You need to be logged in to buy this service.</p>
+        <Link to="/auth" className="px-8 py-3 bg-brand-green text-brand-black font-black rounded-xl">
+          Log In / Register
+        </Link>
+      </div>
+    );
+  }
 
   if (!listing) {
     return (
