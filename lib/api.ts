@@ -336,4 +336,12 @@ export const API = {
   // ── Stripe Config ────────────────────────────────────────────────────────
   getStripeConfig: () =>
     request<{ mode: string; publishableKey: string | null }>('/stripe/config'),
+
+  // ── Listing view tracking (fire-and-forget) ───────────────────────────────
+  trackListingView: (id: string) =>
+    request<{ success: boolean }>(`/listings/${id}/view`, 'POST'),
+
+  // ── Stripe receipt URL ────────────────────────────────────────────────────
+  getPaymentReceipt: (paymentIntentId: string) =>
+    request<{ receiptUrl: string | null }>(`/payments/${paymentIntentId}/receipt`),
 };

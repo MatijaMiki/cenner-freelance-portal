@@ -62,6 +62,13 @@ const ServiceDetails: React.FC = () => {
   const listing = id ? getListingById(id) : undefined;
   const isOwner = !!(user && listing && user.id === listing.freelancerId);
 
+  // Track view — fire-and-forget, don't count owner's own views
+  useEffect(() => {
+    if (id && !isOwner) {
+      API.trackListingView(id).catch(() => {});
+    }
+  }, [id, isOwner]);
+
   const startEdit = () => {
     if (!listing) return;
     setEditTitle(listing.title);

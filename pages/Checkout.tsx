@@ -146,6 +146,7 @@ const Checkout: React.FC = () => {
   const [loadingIntent, setLoadingIntent] = useState(true);
   const [intentError, setIntentError] = useState<string | null>(null);
   const [confirmedPaymentId, setConfirmedPaymentId] = useState<string | null>(null);
+  const [receiptUrl, setReceiptUrl] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<ReturnType<typeof loadStripe> | null>(null);
 
   const listing = id ? getListingById(id) : undefined;
@@ -225,11 +226,27 @@ const Checkout: React.FC = () => {
             <span className="text-gray-500 text-sm">Project</span>
             <span className="text-white font-bold text-sm">{listing.title}</span>
           </div>
+          <div className="flex justify-between items-center py-3 border-b border-white/5">
+            <span className="text-gray-500 text-sm">Amount Paid</span>
+            <span className="text-brand-pink font-black text-sm">€{serverTotal ?? totalAmount}</span>
+          </div>
           <div className="flex justify-between items-center py-3">
             <span className="text-gray-500 text-sm">Estimated Delivery</span>
             <span className="text-brand-pink font-bold text-sm">{listing.deliveryTime}</span>
           </div>
         </div>
+
+        {receiptUrl && (
+          <a
+            href={receiptUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center space-x-2 text-brand-green font-bold text-sm mb-8 hover:underline"
+          >
+            <ArrowLeft size={14} className="rotate-[-90deg]" />
+            <span>Download Stripe Receipt</span>
+          </a>
+        )}
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link to="/profile" className="px-10 py-4 bg-brand-green text-brand-black font-black rounded-xl hover:scale-105 transition-all shadow-lg shadow-brand-green/20">
@@ -292,7 +309,13 @@ const Checkout: React.FC = () => {
                   totalAmount={serverTotal ?? totalAmount}
                   platformFee={serverFee ?? platformFee}
                   clientSecret={clientSecret}
-                  onSuccess={(id) => { setConfirmedPaymentId(id); setStep(2); }}
+                  onSuccess={(paymentId) => {
+                    setConfirmedPaymentId(paymentId);
+                    setStep(2);
+                    API.getPaymentReceipt(paymentId)
+                      .then(({ receiptUrl: url }) => { if (url) setReceiptUrl(url); })
+                      .catch(() => {});
+                  }}
                 />
               </Elements>
             ) : null}
