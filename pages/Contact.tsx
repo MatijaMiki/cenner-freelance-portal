@@ -115,7 +115,7 @@ const Contact: React.FC = () => {
               </div>
               <div>
                 <h4 className="text-white font-bold mb-1">{t('Headquarters')}</h4>
-                <p className="text-gray-500 text-sm">Cenner d.o.o.</p>
+                <p className="text-gray-500 text-sm">Cenner j.d.o.o.</p>
                 <p className="text-gray-500 text-sm">Zagreb, Croatia</p>
               </div>
             </div>
