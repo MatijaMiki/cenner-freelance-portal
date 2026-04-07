@@ -9,12 +9,12 @@ type OrderStatus = 'PENDING' | 'PAID' | 'IN_PROGRESS' | 'DELIVERED' | 'COMPLETED
 
 interface Order {
   id: string;
-  listing: { title: string; category?: string };
+  listing: { title: string; category?: string; freelancer?: { name: string } };
   buyer: { name: string };
-  seller: { name: string };
-  totalAmount: number;
+  amount: number;
   status: OrderStatus;
   createdAt: string;
+  deliveryDueAt?: string;
 }
 
 const STATUS_CONFIG: Record<OrderStatus, { label: string; color: string; icon: React.ReactNode }> = {
@@ -82,7 +82,7 @@ const Orders: React.FC = () => {
         <div className="space-y-3">
           {orders.map(order => {
             const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.PENDING;
-            const counterparty = role === 'buyer' ? order.seller?.name : order.buyer?.name;
+            const counterparty = role === 'buyer' ? order.listing?.freelancer?.name : order.buyer?.name;
             return (
               <div key={order.id} className="bg-zinc-900/80 border border-white/10 rounded-2xl p-6 flex items-center justify-between gap-4 hover:border-white/20 transition-colors">
                 <div className="flex items-center gap-4 min-w-0">
@@ -91,11 +91,16 @@ const Orders: React.FC = () => {
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-white font-bold text-sm truncate">{order.listing?.title || 'Order'}</h3>
-                    <p className="text-gray-500 text-xs mt-0.5">{counterparty || 'Unknown'} · {formatDate(order.createdAt)}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">
+                      {counterparty || 'Unknown'} · {formatDate(order.createdAt)}
+                      {order.deliveryDueAt && order.status !== 'COMPLETED' && order.status !== 'CANCELLED' && (
+                        <span className="ml-2 text-brand-pink">· Due {formatDate(order.deliveryDueAt)}</span>
+                      )}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 shrink-0">
-                  <span className="text-white font-black">&euro;{(order.totalAmount / 100).toFixed(2)}</span>
+                  <span className="text-white font-black">&euro;{Number(order.amount).toFixed(2)}</span>
                   <span className={`flex items-center gap-1.5 px-3 py-1 border rounded-full text-[10px] font-black uppercase tracking-widest ${cfg.color}`}>
                     {cfg.icon} {cfg.label}
                   </span>

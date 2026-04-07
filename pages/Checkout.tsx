@@ -312,6 +312,9 @@ const Checkout: React.FC = () => {
                   onSuccess={(paymentId) => {
                     setConfirmedPaymentId(paymentId);
                     setStep(2);
+                    // Create order record in DB so it appears in buyer/seller Orders tab
+                    API.createOrder(listing.id, paymentId).catch(() => {});
+                    // Fetch Stripe hosted receipt URL for download link
                     API.getPaymentReceipt(paymentId)
                       .then(({ receiptUrl: url }) => { if (url) setReceiptUrl(url); })
                       .catch(() => {});
