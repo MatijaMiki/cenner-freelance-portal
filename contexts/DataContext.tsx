@@ -2,6 +2,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ServiceListing, JobPosting, BlogPost } from '../types';
 import { API } from '../lib/api';
+import { io } from 'socket.io-client';
+
+const BACKEND = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 
 interface DataContextType {
   listings: ServiceListing[];
@@ -36,6 +39,18 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       })
       .catch(console.error)
       .finally(() => setLoading(false));
+  }, []);
+
+  // Live listing updates via socket — no auth needed, public channel
+  useEffect(() => {
+    const socket = io(BACKEND, { transports: ['websocket', 'polling'], withCredentials: true });
+    socket.on('listing_created', (newListing: ServiceListing) => {
+      setListings(prev => {
+        if (prev.some(l => l.id === newListing.id)) return prev;
+        return [newListing, ...prev];
+      });
+    });
+    return () => { socket.disconnect(); };
   }, []);
 
   const addListing = async (data: Omit<ServiceListing, 'id'>): Promise<ServiceListing> => {

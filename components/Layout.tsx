@@ -6,6 +6,7 @@ import NotificationBell from './NotificationBell';
 import PermissionModal from './PermissionModal';
 import ChatWidget from './ChatWidget';
 import Footer from './Footer';
+import CookieBanner from './CookieBanner';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage, useT } from '../i18n';
 import { API } from '../lib/api';
@@ -383,6 +384,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       <main className="flex-grow">{children}</main>
       {!location.pathname.startsWith('/messages') && <Footer />}
+      <CookieBanner />
     </div>
   );
 };

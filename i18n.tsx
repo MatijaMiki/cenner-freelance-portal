@@ -708,7 +708,10 @@ const LanguageContext = createContext<LanguageContextValue>({
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [lang, setLangState] = useState<LangCode>(() => {
     const stored = localStorage.getItem('cenner_lang');
-    return (stored && stored !== 'EN') ? stored : 'HR';
+    if (stored) return stored;
+    // Auto-detect from browser language — default HR only for Croatian browsers
+    const browserLang = navigator.language?.split('-')[0]?.toUpperCase();
+    return (browserLang && dicts[browserLang]) ? browserLang : 'EN';
   });
 
   const setLang = (code: LangCode) => {
