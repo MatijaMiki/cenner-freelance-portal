@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Briefcase, Clock, CheckCircle2, XCircle, ArrowRight, Package, Loader2, Truck, RefreshCw } from 'lucide-react';
+import { Briefcase, Clock, CheckCircle2, XCircle, ArrowRight, Package, Loader2, Truck, RefreshCw, FileText } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import SEO from '../components/SEO';
@@ -99,11 +99,20 @@ const Orders: React.FC = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 shrink-0">
+                <div className="flex items-center gap-3 shrink-0">
                   <span className="text-white font-black">&euro;{Number(order.amount).toFixed(2)}</span>
                   <span className={`flex items-center gap-1.5 px-3 py-1 border rounded-full text-[10px] font-black uppercase tracking-widest ${cfg.color}`}>
                     {cfg.icon} {cfg.label}
                   </span>
+                  <a
+                    href={`${import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr'}/api/v1/portal/orders/${order.id}/invoice`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Download R1 invoice"
+                    className="p-2 rounded-xl border border-white/10 text-gray-500 hover:text-brand-green hover:border-brand-green/30 transition-colors"
+                  >
+                    <FileText size={14} />
+                  </a>
                 </div>
               </div>
             );
