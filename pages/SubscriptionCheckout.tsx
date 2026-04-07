@@ -100,8 +100,14 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ planId, plan, onSuccess }) 
       });
       if (result.error) throw new Error(result.error.message);
 
-      await API.updateProfile(currentUser.id, { tier: planId } as any);
-      updateUser({ tier: planId } as any);
+      await fetch(`${API_BASE}/api/v1/portal/stripe/confirm-payment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ planId, paymentIntentId: result.paymentIntent?.id }),
+      });
+      const meRes = await fetch(`${API_BASE}/api/v1/portal/auth/me`, { credentials: 'include' });
+      if (meRes.ok) { const me = await meRes.json(); updateUser(me); }
       onSuccess();
     } catch (err: any) {
       setError(err.message || 'Payment failed.');
@@ -136,8 +142,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ planId, plan, onSuccess }) 
       const result = await res.json();
       if (result.error) throw new Error(result.error);
 
-      await API.updateProfile(currentUser!.id, { tier: planId } as any);
-      updateUser({ tier: planId } as any);
+      const meRes = await fetch(`${API_BASE}/api/v1/portal/auth/me`, { credentials: 'include' });
+      if (meRes.ok) { const me = await meRes.json(); updateUser(me); }
       onSuccess();
     } catch (err: any) {
       setError(err.message || 'PayPal payment failed.');
