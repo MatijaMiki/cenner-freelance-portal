@@ -548,16 +548,14 @@ const ServiceDetails: React.FC = () => {
                         <Edit2 size={16} /> Edit Listing
                       </button>
                     )}
-                    {!isEditing && (
-                      <button
-                        onClick={handleDelete}
-                        disabled={deleting}
-                        className="w-full py-3 border border-brand-pink/20 text-brand-pink/60 font-bold rounded-2xl hover:border-brand-pink/60 hover:text-brand-pink transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-40"
-                      >
-                        {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                        {deleting ? 'Deleting…' : 'Delete Listing'}
-                      </button>
-                    )}
+                    <button
+                      onClick={handleDelete}
+                      disabled={deleting}
+                      className="w-full py-3 border border-brand-pink/20 text-brand-pink/60 font-bold rounded-2xl hover:border-brand-pink/60 hover:text-brand-pink transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-40"
+                    >
+                      {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                      {deleting ? 'Deleting…' : 'Delete Listing'}
+                    </button>
                   </div>
                 ) : (
                   <>
