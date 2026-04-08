@@ -5,7 +5,7 @@ import {
   Settings, CreditCard, MessageSquare, Briefcase, PlusCircle,
   TrendingUp, Clock, CheckCircle, AlertCircle, MoreVertical,
   MoreHorizontal, Edit2, Pause, Trash2, ArrowUpRight, Search,
-  Calendar, X, Download, User as UserIcon, ShieldAlert, Rocket, Play, Image as ImageIcon, Smartphone, Mail, Crown, Zap, Globe,
+  Calendar, X, Download, User as UserIcon, ShieldAlert, Rocket, Play, Image as ImageIcon, Mail, Crown, Zap, Globe,
   Upload, Loader2, ExternalLink, ShieldCheck, MapPin, Banknote, BadgeCheck, Heart, Package
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -179,18 +179,6 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
                   </div>
                 </div>
                 {currentUser?.emailVerified
-                  ? <span className="flex items-center gap-1 text-[10px] font-bold text-brand-green"><CheckCircle size={12} /> {t('Verified')}</span>
-                  : <span className="text-[10px] font-bold text-brand-pink">{t('Unverified')}</span>}
-              </div>
-              <div className="flex items-center justify-between py-3">
-                <div className="flex items-center gap-3">
-                  <Smartphone size={16} className="text-gray-500" />
-                  <div>
-                    <p className="text-sm text-white font-medium">{t('Phone')}</p>
-                    <p className="text-xs text-gray-500">{(currentUser as any)?.mobile || t('Not set')}</p>
-                  </div>
-                </div>
-                {currentUser?.mobileVerified
                   ? <span className="flex items-center gap-1 text-[10px] font-bold text-brand-green"><CheckCircle size={12} /> {t('Verified')}</span>
                   : <span className="text-[10px] font-bold text-brand-pink">{t('Unverified')}</span>}
               </div>
@@ -411,7 +399,7 @@ const OrdersTab: React.FC = () => {
         <div className="space-y-3">
           {orders.map(order => {
             const color = STATUS_COLOR[order.status] || STATUS_COLOR.PENDING;
-            const counterparty = role === 'buyer' ? order.seller?.name : order.buyer?.name;
+            const counterparty = role === 'buyer' ? order.listing?.freelancer?.name : order.buyer?.name;
             return (
               <div key={order.id} className="bg-brand-grey/30 border border-white/5 rounded-2xl p-5 flex items-center justify-between gap-4 hover:border-white/10 transition-colors">
                 <div className="flex items-center gap-4 min-w-0">
@@ -422,7 +410,7 @@ const OrdersTab: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-white font-black">&euro;{(order.totalAmount / 100).toFixed(2)}</span>
+                  <span className="text-white font-black">&euro;{Number(order.amount).toFixed(2)}</span>
                   <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${color}`}>{order.status}</span>
                 </div>
               </div>
@@ -460,13 +448,6 @@ const Profile: React.FC = () => {
   const avatarFileRef = useRef<HTMLInputElement>(null);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
 
-  // Phone verification modal state
-  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
-  const [phoneStep, setPhoneStep] = useState<'enter_phone' | 'enter_code'>('enter_phone');
-  const [phoneInput, setPhoneInput] = useState('');
-  const [otpInput, setOtpInput] = useState('');
-  const [phoneLoading, setPhoneLoading] = useState(false);
-  const [phoneError, setPhoneError] = useState('');
 
   const handleBoost = async (listingId: string) => {
     if (myCredits === 0) {
@@ -631,48 +612,6 @@ const Profile: React.FC = () => {
       // Trigger re-send of verification email via backend
       await API.requestPasswordReset(currentUser.email).catch(() => {});
       notify.toast('Verification email sent. Check your inbox.', 'success');
-    } else {
-      // Open phone verification modal
-      setPhoneInput((currentUser as any).mobile || '');
-      setOtpInput('');
-      setPhoneError('');
-      setPhoneStep('enter_phone');
-      setIsPhoneModalOpen(true);
-    }
-  };
-
-  const handleSendOtp = async () => {
-    if (!phoneInput.trim()) {
-      setPhoneError('Please enter a valid phone number.');
-      return;
-    }
-    setPhoneLoading(true);
-    setPhoneError('');
-    try {
-      await API.sendPhoneOtp(phoneInput.trim());
-      setPhoneStep('enter_code');
-    } catch (err: any) {
-      setPhoneError(err.message || 'Failed to send verification code.');
-    } finally {
-      setPhoneLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    if (!otpInput.trim()) {
-      setPhoneError('Please enter the 6-digit code.');
-      return;
-    }
-    setPhoneLoading(true);
-    setPhoneError('');
-    try {
-      await API.verifyPhoneOtp(phoneInput.trim(), otpInput.trim());
-      updateUser({ mobileVerified: true } as any);
-      setIsPhoneModalOpen(false);
-    } catch (err: any) {
-      setPhoneError(err.message || 'Invalid or expired code. Please try again.');
-    } finally {
-      setPhoneLoading(false);
     }
   };
 
@@ -1249,108 +1188,6 @@ const Profile: React.FC = () => {
       )}
 
       {/* Phone Verification Modal */}
-      {isPhoneModalOpen && (
-        <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
-          <div className="w-full max-w-md bg-brand-grey border border-white/10 rounded-[3rem] p-10 relative">
-            <button
-              onClick={() => setIsPhoneModalOpen(false)}
-              className="absolute top-8 right-8 text-gray-500 hover:text-white transition-colors"
-            >
-              <X size={22} />
-            </button>
-
-            {phoneStep === 'enter_phone' ? (
-              <>
-                <div className="mb-8">
-                  <div className="inline-flex p-3 bg-brand-green/10 rounded-2xl text-brand-green mb-4">
-                    <Smartphone size={28} />
-                  </div>
-                  <h2 className="text-3xl font-black text-white tracking-tighter">{t('Verify Mobile')}</h2>
-                  <p className="text-gray-400 text-sm mt-2">
-                    Enter your phone number in international format. We'll send a 6-digit code.
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
-                      {t('Phone Number')}
-                    </label>
-                    <input
-                      type="tel"
-                      value={phoneInput}
-                      onChange={e => setPhoneInput(e.target.value)}
-                      placeholder="+385993525500"
-                      className="w-full bg-brand-black border border-white/10 rounded-xl py-4 px-5 text-white text-lg tracking-wider focus:outline-none focus:border-brand-green transition-colors"
-                    />
-                    <p className="text-[10px] text-gray-600">Include country code, e.g. +1 for US, +385 for Croatia</p>
-                  </div>
-
-                  {phoneError && (
-                    <p className="text-brand-pink text-sm font-medium">{phoneError}</p>
-                  )}
-
-                  <button
-                    onClick={handleSendOtp}
-                    disabled={phoneLoading || !phoneInput.trim()}
-                    className="w-full py-4 bg-brand-green text-brand-black font-black rounded-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:scale-100"
-                  >
-                    {phoneLoading ? 'Sending…' : t('Send Verification Code')}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="mb-8">
-                  <div className="inline-flex p-3 bg-brand-green/10 rounded-2xl text-brand-green mb-4">
-                    <CheckCircle size={28} />
-                  </div>
-                  <h2 className="text-3xl font-black text-white tracking-tighter">{t('Enter Code')}</h2>
-                  <p className="text-gray-400 text-sm mt-2">
-                    A 6-digit code was sent to <span className="text-white font-bold">{phoneInput}</span>.
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
-                      Verification Code
-                    </label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={6}
-                      value={otpInput}
-                      onChange={e => setOtpInput(e.target.value.replace(/\D/g, ''))}
-                      placeholder="_ _ _ _ _ _"
-                      className="w-full bg-brand-black border border-white/10 rounded-xl py-4 px-5 text-white text-2xl tracking-[0.5em] text-center font-black focus:outline-none focus:border-brand-green transition-colors"
-                    />
-                  </div>
-
-                  {phoneError && (
-                    <p className="text-brand-pink text-sm font-medium">{phoneError}</p>
-                  )}
-
-                  <button
-                    onClick={handleVerifyOtp}
-                    disabled={phoneLoading || otpInput.length < 6}
-                    className="w-full py-4 bg-brand-green text-brand-black font-black rounded-xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:scale-100"
-                  >
-                    {phoneLoading ? 'Verifying…' : t('Verify Number')}
-                  </button>
-
-                  <button
-                    onClick={() => { setPhoneStep('enter_phone'); setPhoneError(''); setOtpInput(''); }}
-                    className="w-full py-3 text-gray-500 hover:text-white text-sm font-bold transition-colors"
-                  >
-                    ← Change number / Resend code
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Create Listing Modal */}
       {isCreatingListing && (

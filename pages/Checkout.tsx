@@ -1,42 +1,24 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ShieldCheck, ArrowLeft, CreditCard, Lock, CheckCircle2, ShoppingBag, Info, Loader2 } from 'lucide-react';
+import { ShieldCheck, ArrowLeft, Lock, CheckCircle2, ShoppingBag, Info, Loader2 } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 
-// stripePromise is resolved dynamically after fetching the active publishable key from the server
-
-const CARD_ELEMENT_OPTIONS = {
-  style: {
-    base: {
-      color: '#ffffff',
-      fontFamily: '"Inter", sans-serif',
-      fontSize: '16px',
-      fontSmoothing: 'antialiased',
-      '::placeholder': { color: '#6b7280' },
-    },
-    invalid: { color: '#f43f5e', iconColor: '#f43f5e' },
-  },
-};
-
 interface PaymentFormProps {
   listing: any;
   totalAmount: number;
-  platformFee: number;
-  clientSecret: string;
   onSuccess: (paymentIntentId: string) => void;
 }
 
-const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, platformFee, clientSecret, onSuccess }) => {
+const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, onSuccess }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [cardholderName, setCardholderName] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,13 +27,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, platfor
     setIsProcessing(true);
     setError(null);
 
-    const cardElement = elements.getElement(CardNumberElement);
-    if (!cardElement) { setIsProcessing(false); return; }
-
-    const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement,
-        billing_details: { name: cardholderName },
+    const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      redirect: 'if_required',
+      confirmParams: {
+        return_url: `${window.location.origin}/orders`,
       },
     });
 
@@ -65,39 +45,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, platfor
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-6 animate-in fade-in duration-300">
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Cardholder Name</label>
-          <input
-            required
-            type="text"
-            value={cardholderName}
-            onChange={e => setCardholderName(e.target.value)}
-            placeholder="ALEX RIVERA"
-            className="w-full bg-brand-black border border-white/10 rounded-xl py-4 px-5 text-white focus:outline-none focus:border-brand-green transition-all"
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Card Number</label>
-          <div className="w-full bg-brand-black border border-white/10 rounded-xl py-4 px-5 focus-within:border-brand-green transition-all">
-            <CardNumberElement options={CARD_ELEMENT_OPTIONS} />
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">Expiry Date</label>
-            <div className="w-full bg-brand-black border border-white/10 rounded-xl py-4 px-5 focus-within:border-brand-green transition-all">
-              <CardExpiryElement options={CARD_ELEMENT_OPTIONS} />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">CVV</label>
-            <div className="w-full bg-brand-black border border-white/10 rounded-xl py-4 px-5 focus-within:border-brand-green transition-all">
-              <CardCvcElement options={CARD_ELEMENT_OPTIONS} />
-            </div>
-          </div>
-        </div>
-      </div>
+      <PaymentElement
+        options={{
+          layout: 'tabs',
+          wallets: { applePay: 'auto', googlePay: 'auto' },
+        }}
+      />
 
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm">
@@ -105,20 +58,20 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, platfor
         </div>
       )}
 
-      <div className="pt-6 border-t border-white/5">
-        <div className="bg-brand-green/5 border border-brand-green/10 rounded-2xl p-6 flex items-start space-x-4 mb-8">
-          <ShieldCheck className="text-brand-green shrink-0 mt-1" size={24} />
+      <div className="pt-4 border-t border-white/5">
+        <div className="bg-brand-green/5 border border-brand-green/10 rounded-2xl p-5 flex items-start space-x-4 mb-6">
+          <ShieldCheck className="text-brand-green shrink-0 mt-0.5" size={20} />
           <div>
             <h4 className="text-brand-green font-bold text-sm">Secure Payment Protection</h4>
             <p className="text-gray-500 text-xs leading-relaxed mt-1">
-              Payments are processed securely by Stripe. Cenner never stores your card details.
+              Processed securely by Stripe. Cenner never stores your card details.
               <span className="text-white font-bold"> {listing.freelancerName}</span> will be notified immediately.
             </p>
           </div>
         </div>
 
         <button
-          disabled={isProcessing || !stripe}
+          disabled={isProcessing || !stripe || !elements}
           type="submit"
           className="w-full py-5 bg-brand-green text-brand-black font-black text-lg rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-brand-green/20 flex items-center justify-center space-x-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
@@ -154,8 +107,6 @@ const Checkout: React.FC = () => {
   const platformFee = listing ? Math.round(listing.price * 0.05) : 0;
   const totalAmount = listing ? listing.price + platformFee : 0;
 
-  // Fetch active Stripe publishable key from server (respects live/test mode set in CRM).
-  // Falls back to VITE_STRIPE_PUBLISHABLE_KEY if server returns null or the request fails.
   useEffect(() => {
     API.getStripeConfig()
       .then(({ publishableKey }) => {
@@ -260,6 +211,30 @@ const Checkout: React.FC = () => {
     );
   }
 
+  const elementsOptions = {
+    clientSecret: clientSecret!,
+    appearance: {
+      theme: 'night' as const,
+      variables: {
+        colorPrimary: '#4ade80',
+        colorBackground: '#111111',
+        colorText: '#ffffff',
+        colorTextSecondary: '#9ca3af',
+        colorDanger: '#f43f5e',
+        fontFamily: '"Inter", sans-serif',
+        borderRadius: '12px',
+        spacingUnit: '4px',
+      },
+      rules: {
+        '.Input': { border: '1px solid rgba(255,255,255,0.1)', padding: '14px 18px' },
+        '.Input:focus': { border: '1px solid #4ade80', boxShadow: 'none' },
+        '.Tab': { border: '1px solid rgba(255,255,255,0.1)' },
+        '.Tab--selected': { border: '1px solid #4ade80', color: '#4ade80' },
+        '.Label': { fontWeight: '700', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase' },
+      },
+    },
+  };
+
   return (
     <div className="pt-12 pb-32 max-w-6xl mx-auto px-4">
       <button
@@ -280,9 +255,7 @@ const Checkout: React.FC = () => {
         <div className="lg:col-span-2">
           <section className="bg-brand-grey/90 border border-white/10 rounded-[2.5rem] p-8 shadow-xl">
             <div className="flex items-center space-x-3 mb-6">
-              <CreditCard className="text-brand-green" size={20} />
-              <h3 className="text-xl font-bold text-white">Card Details</h3>
-              <Lock size={14} className="text-gray-500 ml-auto" />
+              <Lock size={14} className="text-gray-500" />
               <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Powered by Stripe</span>
             </div>
 
@@ -295,26 +268,19 @@ const Checkout: React.FC = () => {
               <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-6 text-red-400 text-sm text-center">
                 <p className="font-bold mb-2">Could not load payment</p>
                 <p className="text-xs text-gray-500">{intentError}</p>
-                <button
-                  onClick={() => navigate(-1)}
-                  className="mt-4 text-xs text-brand-green underline"
-                >
+                <button onClick={() => navigate(-1)} className="mt-4 text-xs text-brand-green underline">
                   Go back
                 </button>
               </div>
             ) : clientSecret && stripePromise ? (
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <Elements stripe={stripePromise} options={elementsOptions}>
                 <PaymentForm
                   listing={listing}
                   totalAmount={serverTotal ?? totalAmount}
-                  platformFee={serverFee ?? platformFee}
-                  clientSecret={clientSecret}
                   onSuccess={(paymentId) => {
                     setConfirmedPaymentId(paymentId);
                     setStep(2);
-                    // Create order record in DB so it appears in buyer/seller Orders tab
                     API.createOrder(id!, paymentId).catch(err => console.error('[createOrder failed]', err));
-                    // Fetch Stripe hosted receipt URL for download link
                     API.getPaymentReceipt(paymentId)
                       .then(({ receiptUrl: url }) => { if (url) setReceiptUrl(url); })
                       .catch(() => {});
