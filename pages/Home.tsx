@@ -36,6 +36,33 @@ const organizationJsonLd = {
   sameAs: ['https://twitter.com/cennerhr'],
 };
 
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Cenner',
+  description: 'Vodeća freelance platforma u Hrvatskoj i EU. Cenner povezuje tvrtke s provjerenim freelancerima.',
+  url: 'https://cenner.hr',
+  logo: 'https://cenner.hr/favicon.svg',
+  image: 'https://cenner.hr/og-image.png',
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'HR',
+    addressRegion: 'Croatia',
+  },
+  areaServed: [
+    { '@type': 'Country', name: 'Croatia' },
+    { '@type': 'Country', name: 'European Union' },
+  ],
+  priceRange: '€€',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    url: 'https://cenner.hr/contact',
+    availableLanguage: ['Croatian', 'English'],
+  },
+  sameAs: ['https://twitter.com/cennerhr'],
+};
+
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -163,7 +190,7 @@ const Home: React.FC = () => {
         canonical="/"
         description="Cenner — vodeća freelance platforma u Hrvatskoj i EU. Pronađi provjerene freelancere za web razvoj, dizajn i marketing. Honorarni posao brzo i sigurno."
         keywords="freelance hrvatska, honorarni posao, slobodni radnik hrvatska, freelance platforma hrvatska, online posao hrvatska, najam freelancera hrvatska"
-        jsonLd={[organizationJsonLd, websiteJsonLd, faqJsonLd]}
+        jsonLd={[organizationJsonLd, localBusinessJsonLd, websiteJsonLd, faqJsonLd]}
       />
       <NeuralBackground parallax={true} />
 

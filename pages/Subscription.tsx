@@ -181,6 +181,13 @@ const Subscription: React.FC = () => {
         title="Pricing & Plans"
         canonical="/subscription"
         description="Choose the Cenner plan that fits your needs. From Starter to Enterprise — unlock elite freelance talent, AI matching, and premium collaboration tools."
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: 'Cenner Planovi — Pretplata za Freelancere i Klijente',
+          description: 'Odaberi plan koji odgovara tvojim potrebama. Besplatni i premium planovi za freelancere i klijente na Cenner platformi.',
+          url: 'https://cenner.hr/subscription',
+        }}
       />
       <NeuralBackground parallax={true} />
 

@@ -50,6 +50,13 @@ const Technology: React.FC = () => {
         title="Technology"
         canonical="/technology"
         description="Discover the technology stack powering Cenner — AI matching, real-time collaboration, and secure infrastructure built for elite freelance work."
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: 'Cenner Tehnologija — Kako Funkcionira Platforma',
+          description: 'Saznaj kako Cenner koristi modernu tehnologiju za sigurno i brzo povezivanje freelancera i klijenata u Hrvatskoj i EU.',
+          url: 'https://cenner.hr/technology',
+        }}
       />
       <NeuralBackground parallax={false} />
 

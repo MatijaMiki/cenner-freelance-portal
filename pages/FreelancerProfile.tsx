@@ -306,9 +306,38 @@ const FreelancerProfile: React.FC = () => {
   const isSelf = user?.id === id;
   const isLoggedIn = !!user;
 
+  const freelancerJsonLd = profile ? {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: profile.name,
+    description: profile.bio || undefined,
+    url: `https://cenner.hr/freelancer/${id}`,
+    image: profile.avatar || undefined,
+    jobTitle: 'Freelancer',
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Cenner',
+      url: 'https://cenner.hr',
+    },
+    knowsAbout: Array.isArray(profile.skills) ? profile.skills : undefined,
+    ...(profile.avgRating && profile.reviewCount > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: profile.avgRating,
+        bestRating: 5,
+        ratingCount: profile.reviewCount,
+      },
+    } : {}),
+  } : undefined;
+
   return (
     <div className="relative min-h-screen pt-12 pb-24 px-4 overflow-hidden">
-      <SEO title={profile?.name || 'Freelancer'} canonical={`/freelancer/${id}`} description={profile?.bio || 'View freelancer profile on Cenner.'} />
+      <SEO
+        title={`${profile.name} — Freelance ${profile.skills?.[0] || 'Usluge'} | Cenner`}
+        canonical={`/freelancer/${id}`}
+        description={profile.bio || `Pogledaj profil freelancera ${profile.name} na Cenner platformi.`}
+        jsonLd={freelancerJsonLd}
+      />
       <NeuralBackground parallax={false} />
 
       {showContractModal && id && (

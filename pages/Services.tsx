@@ -141,6 +141,13 @@ const Services: React.FC = () => {
         canonical="/services"
         description="Freelance usluge u Hrvatskoj i EU: web razvoj, grafički dizajn, digitalni marketing, AI razvoj, video produkcija. Verificirani freelanceri, sigurno plaćanje, zajamčena kvaliteta."
         keywords="web razvoj hrvatska freelance, grafički dizajn freelancer hrvatska, digitalni marketing freelancer, AI razvoj hrvatska, video produkcija freelancer, freelance usluge eu"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Freelance Usluge — Kategorije | Cenner',
+          description: 'Pregledaj sve kategorije freelance usluga na Cenner platformi. Web razvoj, dizajn, marketing, pisanje i više.',
+          url: 'https://cenner.hr/services',
+        }}
       />
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-32">
 

@@ -77,7 +77,20 @@ const Match: React.FC = () => {
 
   return (
     <div className="relative min-h-screen pt-16 pb-24 overflow-hidden">
-      <SEO title="Match" canonical="/match" description="Find your perfect freelancer-client match on Cenner. AI-powered matching connects talent with the right projects." />
+      <SEO
+        title="Match"
+        canonical="/match"
+        description="Find your perfect freelancer-client match on Cenner. AI-powered matching connects talent with the right projects."
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'WebApplication',
+          name: 'Cenner AI Match — Pronađi Savršenog Freelancera',
+          description: 'AI-powered matching za pronalazak idealnog freelancera u Hrvatskoj i EU. Opišite projekt i dobijte personaliziranu listu kandidata.',
+          url: 'https://cenner.hr/match',
+          applicationCategory: 'BusinessApplication',
+          operatingSystem: 'Web',
+        }}
+      />
       <NeuralBackground parallax={false} />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4">

@@ -40,3 +40,4 @@ User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://cenner.hr/sitemap.xml
+Sitemap: https://api.cenner.hr/sitemap-dynamic.xml

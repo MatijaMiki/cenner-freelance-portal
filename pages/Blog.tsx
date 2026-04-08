@@ -306,6 +306,23 @@ const Blog: React.FC = () => {
         canonical="/blog"
         description="Savjeti, trendovi i priče iz Cenner zajednice. Sve o freelancingu u Hrvatskoj i EU — honorarni rad, cijene, ugovori, alati i karijera slobodnog radnika."
         keywords="freelance blog hrvatska, honorarni rad savjeti, slobodni radnik blog, freelancing hrvatska vijesti, online posao hrvatska savjeti"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Blog',
+          name: 'Cenner Blog — Freelance Savjeti i Vijesti',
+          description: 'Savjeti za freelancere i klijente u Hrvatskoj i EU. Vijesti s freelance tržišta, vodiči za honorarni rad i više.',
+          url: 'https://cenner.hr/blog',
+          inLanguage: ['hr', 'en'],
+          publisher: {
+            '@type': 'Organization',
+            name: 'Cenner',
+            url: 'https://cenner.hr',
+            logo: {
+              '@type': 'ImageObject',
+              url: 'https://cenner.hr/favicon.svg',
+            },
+          },
+        }}
       />
 
       {/* Custom confirm */}
