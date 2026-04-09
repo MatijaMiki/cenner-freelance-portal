@@ -112,6 +112,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isFlagged, setIsFlagged] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize textarea as content grows
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }, [inputText]);
 
   // Auto-scroll on new messages
   useEffect(() => {
@@ -319,27 +328,34 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <form onSubmit={handleSend} className="relative group">
             <div className="absolute inset-0 bg-brand-green/5 rounded-3xl blur-lg opacity-0 group-focus-within:opacity-100 transition-opacity" />
             <div className="relative">
-              <input
-                type="text"
+              <textarea
+                ref={textareaRef}
+                rows={1}
                 value={inputText}
                 onChange={e => setInputText(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (inputText.trim() && !isTyping && !isFlagged) handleSend(e as any);
+                  }
+                }}
                 disabled={isTyping || isFlagged}
                 placeholder={
                   isFlagged
-                    ? 'Session locked. Contact support@cenner.app'
+                    ? 'Session locked. Contact support@cenner.hr'
                     : isTyping
                     ? 'Support is typing...'
                     : 'Ask us anything...'
                 }
-                className="w-full bg-brand-black/60 border border-white/10 rounded-2xl py-6 pl-14 pr-16 text-white text-base placeholder:text-gray-600 focus:outline-none focus:border-brand-green/50 focus:ring-4 focus:ring-brand-green/5 transition-all disabled:opacity-50"
+                className="w-full resize-none overflow-hidden bg-brand-black/60 border border-white/10 rounded-2xl py-5 pl-14 pr-16 text-white text-base placeholder:text-gray-600 focus:outline-none focus:border-brand-green/50 focus:ring-4 focus:ring-brand-green/5 transition-all disabled:opacity-50 leading-relaxed max-h-40"
               />
-              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within:text-brand-green transition-colors">
+              <div className="absolute left-5 top-5 text-gray-600 group-focus-within:text-brand-green transition-colors">
                 <Smile size={24} />
               </div>
               <button
                 type="submit"
                 disabled={!inputText.trim() || isTyping || isFlagged}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 bg-brand-pink text-white rounded-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-pink/20 disabled:opacity-0 disabled:scale-90"
+                className="absolute right-3 top-3 w-12 h-12 bg-brand-pink text-white rounded-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-pink/20 disabled:opacity-0 disabled:scale-90"
               >
                 <Send size={20} />
               </button>
