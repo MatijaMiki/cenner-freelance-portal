@@ -217,8 +217,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   // -------------------------------------------------------------------------
 
   return (
-    <div className="fixed bottom-6 right-6 z-[110] w-full max-w-md animate-in slide-in-from-bottom-8 fade-in duration-500">
-      <div className="bg-brand-grey border border-white/10 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] flex flex-col h-[650px] overflow-hidden backdrop-blur-3xl ring-1 ring-white/5">
+    <div className="fixed inset-x-0 bottom-0 z-[110] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-full sm:max-w-md animate-in slide-in-from-bottom-8 fade-in duration-500">
+      <div className="bg-brand-grey border border-white/10 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] flex flex-col h-[90dvh] sm:h-[650px] overflow-hidden backdrop-blur-3xl ring-1 ring-white/5">
 
         {/* Header */}
         <div className="p-6 bg-white/[0.03] border-b border-white/5 flex items-center justify-between">
