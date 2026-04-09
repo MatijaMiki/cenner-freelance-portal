@@ -267,12 +267,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {/* Message Area */}
         <div
           ref={scrollRef}
-          className="flex-grow p-6 overflow-y-auto space-y-6 custom-scrollbar bg-gradient-to-b from-brand-black/10 to-brand-black/40"
+          className="flex-grow p-4 overflow-y-auto space-y-3 custom-scrollbar bg-gradient-to-b from-brand-black/10 to-brand-black/40"
         >
           {messages.map(msg => (
             <div key={msg.id} className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
               <div
-                className={`relative group max-w-[88%] p-5 rounded-[1.75rem] text-sm leading-[1.6] shadow-xl transition-all ${
+                className={`relative group max-w-[85%] px-4 py-3 rounded-2xl text-[13px] leading-[1.55] shadow-lg transition-all ${
                   msg.sender === 'user'
                     ? 'bg-brand-green text-brand-black font-semibold rounded-tr-none shadow-brand-green/5'
                     : 'bg-white/[0.04] text-gray-300 rounded-tl-none border border-white/5'
@@ -302,7 +302,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 )}
               </div>
               <span
-                className={`text-[9px] mt-2 font-black uppercase tracking-[0.15em] opacity-40 ${
+                className={`text-[9px] mt-1 font-black uppercase tracking-[0.15em] opacity-40 ${
                   msg.sender === 'user' ? 'text-brand-green' : 'text-gray-500'
                 }`}
               >
@@ -324,7 +324,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </div>
 
         {/* Input Footer */}
-        <div className="p-6 pt-2 bg-white/[0.02] border-t border-white/5">
+        <div className="p-4 pt-2 bg-white/[0.02] border-t border-white/5">
           <form onSubmit={handleSend} className="relative group">
             <div className="absolute inset-0 bg-brand-green/5 rounded-3xl blur-lg opacity-0 group-focus-within:opacity-100 transition-opacity" />
             <div className="relative">
