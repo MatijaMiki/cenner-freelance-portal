@@ -209,7 +209,8 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
                   <p className="text-xs text-gray-500 mt-0.5">
                     {currentUser?.tier === 'FREE' && 'Basic access — upgrade to unlock all features'}
                     {currentUser?.tier === 'STARTER' && '€9/mo — Essential features'}
-                    {currentUser?.tier === 'PRO' && '€19/mo — Full feature access'}
+                    {currentUser?.tier === 'PRO' && '€19/mo — Full feature access, 8% fee'}
+                    {currentUser?.tier === 'ULTRA' && '€59/mo — Top placement, 5% fee, 10 boosts/mo'}
                     {currentUser?.tier === 'ENTERPRISE' && '€99/mo — Unlimited everything'}
                   </p>
                 </div>
@@ -447,6 +448,118 @@ const Profile: React.FC = () => {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const avatarFileRef = useRef<HTMLInputElement>(null);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
+
+  // Image crop state
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
+  const cropCanvasRef = useRef<HTMLCanvasElement>(null);
+  const cropImageRef = useRef<HTMLImageElement | null>(null);
+  const [cropDrag, setCropDrag] = useState<{ x: number; y: number; startX: number; startY: number; dragging: boolean }>({ x: 0, y: 0, startX: 0, startY: 0, dragging: false });
+  const [cropSize, setCropSize] = useState(200);
+  const [cropOffset, setCropOffset] = useState({ x: 0, y: 0 });
+
+  const drawCrop = React.useCallback(() => {
+    const canvas = cropCanvasRef.current;
+    const img = cropImageRef.current;
+    if (!canvas || !img) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(img, 0, 0, W, H);
+    // Darken overlay
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.fillRect(0, 0, W, H);
+    // Clip circle
+    const cx = cropOffset.x + cropSize / 2;
+    const cy = cropOffset.y + cropSize / 2;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, cropSize / 2, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(img, 0, 0, W, H);
+    ctx.restore();
+    // Circle border
+    ctx.strokeStyle = '#22c55e';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, cropSize / 2, 0, Math.PI * 2);
+    ctx.stroke();
+  }, [cropOffset, cropSize]);
+
+  React.useEffect(() => {
+    if (!cropSrc || !cropImageRef.current || !cropCanvasRef.current) return;
+    const img = cropImageRef.current;
+    const canvas = cropCanvasRef.current;
+    const aspect = img.naturalWidth / img.naturalHeight;
+    const maxW = 360;
+    canvas.width = aspect >= 1 ? maxW : Math.round(maxW * aspect);
+    canvas.height = aspect >= 1 ? Math.round(maxW / aspect) : maxW;
+    drawCrop();
+  }, [cropSrc, drawCrop]);
+
+  React.useEffect(() => { drawCrop(); }, [drawCrop]);
+
+  const handleCropMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const rect = cropCanvasRef.current!.getBoundingClientRect();
+    const scaleX = cropCanvasRef.current!.width / rect.width;
+    const scaleY = cropCanvasRef.current!.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    const cx = cropOffset.x + cropSize / 2;
+    const cy = cropOffset.y + cropSize / 2;
+    if (Math.hypot(mx - cx, my - cy) <= cropSize / 2) {
+      setCropDrag({ x: cropOffset.x, y: cropOffset.y, startX: mx, startY: my, dragging: true });
+    }
+  };
+
+  const handleCropMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!cropDrag.dragging) return;
+    const canvas = cropCanvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    const nx = Math.max(0, Math.min(canvas.width - cropSize, cropDrag.x + mx - cropDrag.startX));
+    const ny = Math.max(0, Math.min(canvas.height - cropSize, cropDrag.y + my - cropDrag.startY));
+    setCropOffset({ x: nx, y: ny });
+  };
+
+  const handleCropMouseUp = () => setCropDrag(d => ({ ...d, dragging: false }));
+
+  const applyCrop = async () => {
+    const img = cropImageRef.current;
+    if (!img || !cropCanvasRef.current) return;
+    const canvas = cropCanvasRef.current;
+    const scaleX = img.naturalWidth / canvas.width;
+    const scaleY = img.naturalHeight / canvas.height;
+    const out = document.createElement('canvas');
+    out.width = 512; out.height = 512;
+    const ctx = out.getContext('2d')!;
+    ctx.beginPath();
+    ctx.arc(256, 256, 256, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(img,
+      cropOffset.x * scaleX, cropOffset.y * scaleY,
+      cropSize * scaleX, cropSize * scaleY,
+      0, 0, 512, 512
+    );
+    out.toBlob(async (blob) => {
+      if (!blob) return;
+      const file = new File([blob], 'avatar.png', { type: 'image/png' });
+      setCropSrc(null);
+      setUploadingAvatar(true);
+      try {
+        const url = await API.uploadProfileAvatar(file);
+        updateUser({ avatar: url } as any);
+      } catch (err: any) {
+        notify.toast(err.message || 'Failed to upload avatar', 'error');
+      } finally {
+        setUploadingAvatar(false);
+        if (avatarFileRef.current) avatarFileRef.current.value = '';
+      }
+    }, 'image/png');
+  };
 
 
   const handleBoost = async (listingId: string) => {
@@ -1510,19 +1623,27 @@ const Profile: React.FC = () => {
                       type="file"
                       accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
                       className="hidden"
-                      onChange={async (e) => {
+                      onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (!file) return;
-                        setUploadingAvatar(true);
-                        try {
-                          const url = await API.uploadProfileAvatar(file);
-                          updateUser({ avatar: url } as any);
-                        } catch (err: any) {
-                          notify.toast(err.message || 'Failed to upload avatar', 'error');
-                        } finally {
-                          setUploadingAvatar(false);
-                          if (avatarFileRef.current) avatarFileRef.current.value = '';
-                        }
+                        const reader = new FileReader();
+                        reader.onload = (ev) => {
+                          const src = ev.target?.result as string;
+                          const img = new Image();
+                          img.onload = () => {
+                            cropImageRef.current = img;
+                            const displaySize = 360;
+                            const aspect = img.naturalWidth / img.naturalHeight;
+                            const canvasW = aspect >= 1 ? displaySize : Math.round(displaySize * aspect);
+                            const canvasH = aspect >= 1 ? Math.round(displaySize / aspect) : displaySize;
+                            const sz = Math.min(canvasW, canvasH, 200);
+                            setCropSize(sz);
+                            setCropOffset({ x: Math.max(0, (canvasW - sz) / 2), y: Math.max(0, (canvasH - sz) / 2) });
+                            setCropSrc(src);
+                          };
+                          img.src = src;
+                        };
+                        reader.readAsDataURL(file);
                       }}
                     />
                     {currentUser?.avatar ? (
@@ -1559,6 +1680,57 @@ const Profile: React.FC = () => {
                 <button onClick={handleSaveProfile} disabled={isSavingProfile} className="w-full py-4 bg-brand-green text-brand-black font-black rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50">{isSavingProfile ? 'Saving...' : t('Update Profile')}</button>
               </div>
            </div>
+        </div>
+      )}
+
+      {/* Image Crop Modal */}
+      {cropSrc && cropImageRef.current && (
+        <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-brand-grey border border-white/10 rounded-[2rem] p-8 flex flex-col items-center gap-6 max-w-sm w-full">
+            <h3 className="text-lg font-black text-white tracking-tighter self-start">Crop Image</h3>
+            <p className="text-xs text-gray-500 self-start -mt-4">Drag the circle to position. Use the slider to resize.</p>
+            <canvas
+              ref={cropCanvasRef}
+              style={{ width: '100%', borderRadius: '1rem', cursor: 'move', touchAction: 'none' }}
+              onMouseDown={handleCropMouseDown}
+              onMouseMove={handleCropMouseMove}
+              onMouseUp={handleCropMouseUp}
+              onMouseLeave={handleCropMouseUp}
+            />
+            <div className="w-full flex items-center gap-3">
+              <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Size</span>
+              <input
+                type="range"
+                min={60}
+                max={cropCanvasRef.current ? Math.min(cropCanvasRef.current.width, cropCanvasRef.current.height) : 300}
+                value={cropSize}
+                onChange={e => {
+                  const sz = Number(e.target.value);
+                  const canvas = cropCanvasRef.current;
+                  if (!canvas) return;
+                  const nx = Math.min(cropOffset.x, canvas.width - sz);
+                  const ny = Math.min(cropOffset.y, canvas.height - sz);
+                  setCropSize(sz);
+                  setCropOffset({ x: Math.max(0, nx), y: Math.max(0, ny) });
+                }}
+                className="flex-1 accent-brand-green"
+              />
+            </div>
+            <div className="flex gap-3 w-full">
+              <button
+                onClick={() => { setCropSrc(null); if (avatarFileRef.current) avatarFileRef.current.value = ''; }}
+                className="flex-1 py-3 border border-white/10 text-gray-400 hover:text-white font-black rounded-xl text-sm transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={applyCrop}
+                className="flex-1 py-3 bg-brand-green text-brand-black font-black rounded-xl text-sm hover:scale-[1.02] transition-all"
+              >
+                {uploadingAvatar ? 'Uploading...' : 'Apply & Upload'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

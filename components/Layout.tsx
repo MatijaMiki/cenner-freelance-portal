@@ -185,15 +185,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
               <div className="h-6 w-px bg-white/10 mx-2" />
 
-              {/* Language switcher — always visible */}
+              {/* Language + Currency pill — always visible */}
               <div ref={langRefDesktop} className="relative">
                 <button
                   onClick={() => setIsLangOpen(v => !v)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 hover:border-white/20 transition-colors text-gray-400 hover:text-white text-[10px] font-black uppercase tracking-widest"
+                  className="flex items-center gap-0 rounded-xl border border-white/10 hover:border-white/20 transition-colors text-gray-400 hover:text-white text-[10px] font-black uppercase tracking-widest overflow-hidden"
                 >
-                  <span className="text-[13px] leading-none">{currentLang.flag}</span>
-                  <span>{currentLang.code}</span>
-                  <ChevronDown size={10} className={`transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`} />
+                  <span className="flex items-center gap-1.5 px-3 py-2">
+                    <span className="text-[13px] leading-none">{currentLang.flag}</span>
+                    <span>{currentLang.code}</span>
+                    <ChevronDown size={10} className={`transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`} />
+                  </span>
+                  <span className="w-px h-5 bg-white/10" />
+                  <span className="flex items-center gap-1 px-3 py-2 text-gray-500">
+                    <span>€</span>
+                    <span>EUR</span>
+                  </span>
                 </button>
                 {isLangOpen && (
                   <div className="absolute top-full right-0 mt-3 w-40 bg-brand-grey border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-200">
@@ -209,12 +216,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     ))}
                   </div>
                 )}
-              </div>
-
-              {/* Currency — always visible */}
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 text-gray-400 text-[10px] font-black uppercase tracking-widest">
-                <span>€</span>
-                <span>EUR</span>
               </div>
 
               {/* Conditional: profile avatar or login button */}

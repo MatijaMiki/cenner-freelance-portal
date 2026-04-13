@@ -214,6 +214,15 @@ const Blog: React.FC = () => {
 
   const isPostAuthor = !!(selectedPost && currentUser && selectedPost.authorId === currentUser.id);
 
+  const handleShare = async (title: string, url?: string) => {
+    const shareUrl = url || window.location.href;
+    if (navigator.share) {
+      navigator.share({ title, url: shareUrl }).catch(() => {});
+    } else {
+      await navigator.clipboard.writeText(shareUrl).catch(() => {});
+    }
+  };
+
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser) return;
@@ -494,7 +503,7 @@ const Blog: React.FC = () => {
                         <span className="flex items-center space-x-2 text-gray-500 text-xs font-black uppercase tracking-widest">
                           <MessageSquare size={18} /><span>{selectedPost.commentCount} Comments</span>
                         </span>
-                        <button className="flex items-center space-x-2 text-gray-500 hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
+                        <button onClick={() => handleShare(selectedPost.title)} className="flex items-center space-x-2 text-gray-500 hover:text-white transition-colors text-xs font-black uppercase tracking-widest">
                           <Share2 size={18} /><span>Share</span>
                         </button>
                       </div>
@@ -597,9 +606,9 @@ const Blog: React.FC = () => {
                         <span className="flex items-center space-x-2 group-hover:text-white transition-colors">
                           <MessageSquare size={12} /><span>{post.commentCount} Comments</span>
                         </span>
-                        <span className="hover:text-white transition-colors flex items-center space-x-2">
+                        <button onClick={(e) => { e.stopPropagation(); handleShare(post.title); }} className="hover:text-white transition-colors flex items-center space-x-2">
                           <Share2 size={12} /><span>Share</span>
-                        </span>
+                        </button>
                       </div>
                     </div>
                   </button>

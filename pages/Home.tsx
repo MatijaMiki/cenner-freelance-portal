@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Star, Shield, Zap, Globe, ChevronRight,
   Layers, Users, Search, Code, Palette,
@@ -11,6 +11,7 @@ import NeuralBackground from '../components/NeuralBackground';
 import { MOCK_LISTINGS } from '../constants';
 import SEO from '../components/SEO';
 import { useT } from '../i18n';
+import { useAuth } from '../contexts/AuthContext';
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -184,6 +185,8 @@ const FAQ: React.FC = () => {
 
 const Home: React.FC = () => {
   const t = useT();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   return (
     <div className="relative min-h-screen">
       <SEO
@@ -367,12 +370,18 @@ const Home: React.FC = () => {
                 {t("Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.")}
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-6">
-                <Link to="/marketplace" className="px-12 py-5 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl">
+                <button
+                  onClick={() => user ? navigate('/profile?create=1') : navigate('/marketplace')}
+                  className="px-12 py-5 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl"
+                >
                   {t('Start a Project')}
-                </Link>
-                <Link to="/auth" className="px-12 py-5 bg-white/5 text-white border border-white/10 font-black rounded-2xl hover:bg-white/10 transition-all">
+                </button>
+                <button
+                  onClick={() => user ? navigate('/profile') : navigate('/auth')}
+                  className="px-12 py-5 bg-white/5 text-white border border-white/10 font-black rounded-2xl hover:bg-white/10 transition-all"
+                >
                   {t('Join the Network')}
-                </Link>
+                </button>
               </div>
             </div>
           </div>

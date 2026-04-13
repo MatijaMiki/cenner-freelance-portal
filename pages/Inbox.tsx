@@ -59,6 +59,7 @@ const MessagingHub: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [completedContracts, setCompletedContracts] = useState<CompletedContract[]>([]);
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showPaymentSafetyPopout, setShowPaymentSafetyPopout] = useState(false);
   const [reviewContractId, setReviewContractId] = useState('');
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewComment, setReviewComment] = useState('');
@@ -355,11 +356,28 @@ const MessagingHub: React.FC = () => {
                   <p className="text-[11px] text-brand-green animate-pulse">typing…</p>
                 )}
               </div>
-              <div className="ml-auto flex-shrink-0">
-                <div className="hidden sm:flex items-center gap-1 text-[10px] text-gray-600 bg-white/3 border border-white/5 rounded-lg px-2.5 py-1.5">
+              <div className="ml-auto flex-shrink-0 relative">
+                <button
+                  onClick={() => setShowPaymentSafetyPopout(v => !v)}
+                  className="hidden sm:flex items-center gap-1 text-[10px] text-gray-500 hover:text-gray-300 bg-white/3 border border-white/5 hover:border-white/10 rounded-lg px-2.5 py-1.5 transition-colors"
+                >
                   <ShieldCheck size={10} className="text-brand-green" />
                   Keep payments on Cenner
-                </div>
+                </button>
+                {showPaymentSafetyPopout && (
+                  <div className="absolute top-full right-0 mt-2 w-72 bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <div className="flex items-center gap-2 mb-3">
+                      <ShieldCheck size={16} className="text-brand-green flex-shrink-0" />
+                      <p className="text-sm font-bold text-white">Why keep payments on Cenner?</p>
+                    </div>
+                    <ul className="space-y-2 text-[11px] text-gray-400 leading-relaxed">
+                      <li className="flex gap-2"><span className="text-brand-green mt-0.5">✓</span><span>Payments are held in escrow and only released when work is delivered and approved.</span></li>
+                      <li className="flex gap-2"><span className="text-brand-green mt-0.5">✓</span><span>Dispute resolution is available for all platform payments — off-platform transactions are not covered.</span></li>
+                      <li className="flex gap-2"><span className="text-brand-green mt-0.5">✓</span><span>Paying outside Cenner violates our Terms of Service and removes all buyer and seller protections.</span></li>
+                    </ul>
+                    <button onClick={() => setShowPaymentSafetyPopout(false)} className="mt-3 w-full text-[10px] font-black text-gray-600 hover:text-white transition-colors uppercase tracking-widest">Got it</button>
+                  </div>
+                )}
               </div>
             </div>
 
