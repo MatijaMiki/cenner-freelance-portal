@@ -365,17 +365,17 @@ const MessagingHub: React.FC = () => {
                   Keep payments on Cenner
                 </button>
                 {showPaymentSafetyPopout && (
-                  <div className="absolute top-full right-0 mt-2 w-72 bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
-                    <div className="flex items-center gap-2 mb-3">
-                      <ShieldCheck size={16} className="text-brand-green flex-shrink-0" />
-                      <p className="text-sm font-bold text-white">Why keep payments on Cenner?</p>
+                  <div className="absolute top-full right-0 mt-2 w-96 bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl p-6 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <div className="flex items-center gap-3 mb-4">
+                      <ShieldCheck size={20} className="text-brand-green flex-shrink-0" />
+                      <p className="text-base font-bold text-white">Why keep payments on Cenner?</p>
                     </div>
-                    <ul className="space-y-2 text-[11px] text-gray-400 leading-relaxed">
-                      <li className="flex gap-2"><span className="text-brand-green mt-0.5">✓</span><span>Payments are held in escrow and only released when work is delivered and approved.</span></li>
-                      <li className="flex gap-2"><span className="text-brand-green mt-0.5">✓</span><span>Dispute resolution is available for all platform payments — off-platform transactions are not covered.</span></li>
-                      <li className="flex gap-2"><span className="text-brand-green mt-0.5">✓</span><span>Paying outside Cenner violates our Terms of Service and removes all buyer and seller protections.</span></li>
+                    <ul className="space-y-4 text-sm text-gray-400 leading-relaxed">
+                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Payments are processed through Cenner's milestone system — funds are only released to the freelancer once you approve the delivered work.</span></li>
+                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Dispute resolution is available for all platform payments — off-platform transactions are not covered.</span></li>
+                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Paying outside Cenner violates our Terms of Service and removes all buyer and seller protections.</span></li>
                     </ul>
-                    <button onClick={() => setShowPaymentSafetyPopout(false)} className="mt-3 w-full text-[10px] font-black text-gray-600 hover:text-white transition-colors uppercase tracking-widest">Got it</button>
+                    <button onClick={() => setShowPaymentSafetyPopout(false)} className="mt-5 w-full text-xs font-black text-gray-600 hover:text-white transition-colors uppercase tracking-widest">Got it</button>
                   </div>
                 )}
               </div>
