@@ -12,6 +12,7 @@ import { BlogComment, BlogPost } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import { CATEGORIES } from '../constants';
+import AvatarImg from '../components/Avatar';
 
 // ─── Confirm Dialog ───────────────────────────────────────────────────────────
 const ConfirmDialog: React.FC<{
@@ -96,10 +97,7 @@ const CommentNode: React.FC<CommentNodeProps> = ({
 
       <div className="flex space-x-3">
         <div className="flex flex-col items-center shrink-0">
-          <img
-            src={comment.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.author)}&background=333&color=fff`}
-            alt="" className="w-8 h-8 rounded-full border border-white/10"
-          />
+          <AvatarImg src={comment.authorAvatar} name={comment.author} size={24} className="rounded-full border border-white/10" />
           {((comment.replies && comment.replies.length > 0) || isReplying) && (
             <div className="flex-grow w-px bg-white/10 my-2 min-h-[16px]" />
           )}
@@ -480,7 +478,7 @@ const Blog: React.FC = () => {
                     </div>
                     <div className="flex-grow p-6 md:p-10">
                       <div className="flex items-center flex-wrap gap-2 mb-4">
-                        <img src={selectedPost.authorAvatar || "https://ui-avatars.com/api/?name=User&background=333&color=fff"} alt="" className="w-6 h-6 rounded-full border border-white/10" />
+                        <AvatarImg src={selectedPost.authorAvatar} name={selectedPost.author} size={24} className="rounded-full border border-white/10" />
                         <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest text-gray-500">
                           <span className="text-brand-pink">c/{selectedPost.category.replace(/\s/g, '')}</span>
                           <span>•</span>

@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import NeuralBackground from '../components/NeuralBackground';
 import { useT } from '../i18n';
+import AvatarImg from '../components/Avatar';
 import type { DMConversation, DMMessage } from '../types';
 
 const Messages: React.FC = () => {
@@ -126,13 +127,7 @@ const Messages: React.FC = () => {
                   className={`w-full flex items-center gap-4 p-4 border-b border-white/5 hover:bg-white/5 transition-colors text-left ${selected?.id === conv.id ? 'bg-white/5' : ''}`}
                 >
                   <div className="relative shrink-0">
-                    {conv.avatar ? (
-                      <img src={conv.avatar} alt={conv.name} className="w-11 h-11 rounded-full" />
-                    ) : (
-                      <div className="w-11 h-11 rounded-full bg-brand-grey border border-white/10 flex items-center justify-center text-gray-500">
-                        <User size={18} />
-                      </div>
-                    )}
+                    <AvatarImg src={conv.avatar} name={conv.name} size={44} className="rounded-full" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center">
@@ -168,13 +163,7 @@ const Messages: React.FC = () => {
                 <button onClick={() => setSelected(null)} className="md:hidden p-2 text-gray-500 hover:text-white transition-colors">
                   <ArrowLeft size={20} />
                 </button>
-                <div className="w-10 h-10 rounded-full bg-brand-grey flex items-center justify-center text-gray-500">
-                  {selected.avatar ? (
-                    <img src={selected.avatar} alt={selected.name} className="w-10 h-10 rounded-full" />
-                  ) : (
-                    <User size={16} />
-                  )}
-                </div>
+                <AvatarImg src={selected.avatar} name={selected.name} size={40} className="rounded-full" />
                 <p className="text-white font-bold text-sm">{selected.name}</p>
               </div>
 

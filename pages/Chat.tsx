@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import { connectSocket, getSocket } from '../hooks/useSocket';
 import SEO from '../components/SEO';
+import AvatarImg from '../components/Avatar';
 import type { DMMessage } from '../types';
 
 const Chat: React.FC = () => {
@@ -110,13 +111,7 @@ const Chat: React.FC = () => {
         </button>
         {otherUser && (
           <>
-            {otherUser.avatar ? (
-              <img src={otherUser.avatar} alt={otherUser.name} className="w-8 h-8 rounded-full object-cover" />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green font-black text-sm">
-                {otherUser.name[0]}
-              </div>
-            )}
+            <AvatarImg src={otherUser.avatar} name={otherUser.name} size={32} className="rounded-full" />
             <span className="font-bold text-white text-sm">{otherUser.name}</span>
           </>
         )}

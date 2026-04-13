@@ -12,6 +12,7 @@ import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import { useT } from '../i18n';
+import AvatarImg from '../components/Avatar';
 
 type MarketplaceMode = 'freelancers' | 'clients';
 
@@ -339,11 +340,7 @@ const Marketplace: React.FC = () => {
                     
                     <div className="p-8 flex flex-col flex-grow bg-brand-black/20">
                       <div className="flex items-center space-x-3 mb-6">
-                        <img
-                          src={listing.freelancerAvatar}
-                          alt={listing.freelancerName}
-                          className="w-10 h-10 rounded-full border-2 border-brand-green"
-                        />
+                        <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="rounded-full border-2 border-brand-green" />
                         <div className="flex-grow min-w-0">
                           <p className="text-white text-sm font-bold truncate">{listing.freelancerName}</p>
                           {listing.freelancerTier === 'ultra' || listing.freelancerTier === 'enterprise' ? (
@@ -415,7 +412,7 @@ const Marketplace: React.FC = () => {
                       
                       <div className="flex flex-wrap items-center gap-6">
                         <div className="flex items-center space-x-3">
-                          <img src={job.clientAvatar} className="w-8 h-8 rounded-full border border-white/10" alt="" />
+                          <AvatarImg src={job.clientAvatar} name={job.clientName} size={32} className="rounded-full border border-white/10" />
                           <span className="text-xs font-bold text-gray-300">{job.clientName}</span>
                         </div>
                         <div className="flex items-center space-x-2 text-xs font-black uppercase tracking-widest text-gray-500">

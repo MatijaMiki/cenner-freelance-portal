@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import NeuralBackground from '../components/NeuralBackground';
 import SEO from '../components/SEO';
+import AvatarImg from '../components/Avatar';
 
 interface Contract {
   id: string;
@@ -99,13 +100,7 @@ const Contracts: React.FC = () => {
         className="w-full flex items-center gap-4 p-5 bg-brand-grey/70 border border-white/5 rounded-2xl hover:border-brand-green/30 transition-all text-left"
       >
         <div className="flex-shrink-0">
-          {other.avatar ? (
-            <img src={other.avatar} alt={other.name} className="w-11 h-11 rounded-full object-cover" />
-          ) : (
-            <div className="w-11 h-11 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green font-black">
-              {other.name[0]}
-            </div>
-          )}
+          <AvatarImg src={other.avatar} name={other.name} size={44} className="rounded-full" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -169,13 +164,7 @@ const Contracts: React.FC = () => {
                           onClick={() => navigate(`/contracts/${contract.id}`)}
                         >
                           <div className="flex-shrink-0">
-                            {other.avatar ? (
-                              <img src={other.avatar} alt={other.name} className="w-11 h-11 rounded-full object-cover" />
-                            ) : (
-                              <div className="w-11 h-11 rounded-full bg-yellow-400/10 flex items-center justify-center text-yellow-400 font-black">
-                                {other.name[0]}
-                              </div>
-                            )}
+                            <AvatarImg src={other.avatar} name={other.name} size={44} className="rounded-full" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-bold text-white text-sm">{contract.title}</p>

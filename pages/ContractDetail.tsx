@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import { useNotify } from '../contexts/NotifyContext';
 import NeuralBackground from '../components/NeuralBackground';
+import AvatarImg from '../components/Avatar';
 import SEO from '../components/SEO';
 
 interface Milestone {
@@ -180,13 +181,7 @@ const ContractDetail: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            {other.avatar ? (
-              <img src={other.avatar} alt={other.name} className="w-10 h-10 rounded-full object-cover" />
-            ) : (
-              <div className="w-10 h-10 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green font-black">
-                {other.name[0]}
-              </div>
-            )}
+            <AvatarImg src={other.avatar} name={other.name} size={40} className="rounded-full" />
             <div>
               <p className="text-white font-bold text-sm">{other.name}</p>
               {other.avgRating != null && (
@@ -374,11 +369,7 @@ const ContractDetail: React.FC = () => {
               {contract.reviews.map(r => (
                 <div key={r.id} className="border border-white/5 rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    {r.reviewer.avatar ? (
-                      <img src={r.reviewer.avatar} alt={r.reviewer.name} className="w-7 h-7 rounded-full object-cover" />
-                    ) : (
-                      <div className="w-7 h-7 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green font-black text-xs">{r.reviewer.name[0]}</div>
-                    )}
+                    <AvatarImg src={r.reviewer.avatar} name={r.reviewer.name} size={28} className="rounded-full" />
                     <span className="text-white font-bold text-sm">{r.reviewer.name}</span>
                     <StarRating rating={r.rating} />
                   </div>

@@ -1050,11 +1050,7 @@ const Profile: React.FC = () => {
              <div className="p-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <button onClick={() => setSelectedMessage(null)} className="p-2 text-gray-500 hover:text-white"><X size={20} /></button>
-                  {selectedMessage.avatar ? (
-                    <img src={selectedMessage.avatar} className="w-10 h-10 rounded-full border border-white/10" alt="" />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-brand-black border border-white/10 flex items-center justify-center"><UserIcon size={16} className="text-gray-500"/></div>
-                  )}
+                  <AvatarImg src={selectedMessage.avatar} name={selectedMessage.name} size={40} className="rounded-full border border-white/10" />
                   <div>
                     <h4 className="text-white font-bold text-sm">{selectedMessage.sender}</h4>
                     <p className="text-gray-500 text-xs">{selectedMessage.subject}</p>
@@ -1091,11 +1087,7 @@ const Profile: React.FC = () => {
               {inboxMessages.filter(m => inboxFilter === 'all' || m.unread).map((msg) => (
                 <button key={msg.id} onClick={() => handleOpenMessage(msg)} className="w-full text-left p-6 hover:bg-white/[0.03] transition-colors flex items-center gap-6 group">
                   <div className="relative flex-shrink-0">
-                    {msg.avatar ? (
-                        <img src={msg.avatar} className="w-12 h-12 rounded-full border border-white/10" alt="" />
-                    ) : (
-                        <div className="w-12 h-12 rounded-full bg-brand-black border border-white/10 flex items-center justify-center"><UserIcon size={24} className="text-gray-500"/></div>
-                    )}
+                    <AvatarImg src={msg.avatar} name={msg.senderName} size={48} className="rounded-full border border-white/10" />
                     {msg.unread && <div className="absolute -top-1 -right-1 w-4 h-4 bg-brand-pink rounded-full border-4 border-brand-grey"></div>}
                   </div>
                   <div className="flex-grow min-w-0">

@@ -9,6 +9,7 @@ import { API } from '../lib/api';
 import SEO from '../components/SEO';
 import { CATEGORIES } from '../constants';
 import { useNotify } from '../contexts/NotifyContext';
+import AvatarImg from '../components/Avatar';
 
 const ServiceDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -238,11 +239,7 @@ const ServiceDetails: React.FC = () => {
         <div className="lg:col-span-2 space-y-12">
           <section>
             <div className="flex items-center space-x-4 mb-8">
-              <img
-                src={listing.freelancerAvatar}
-                alt={listing.freelancerName}
-                className="w-12 h-12 rounded-full border-2 border-brand-green"
-              />
+              <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="w-10 h-10 rounded-full border-2 border-brand-green/50" />
               <div>
                 <div className="flex items-center space-x-2 flex-wrap gap-y-1">
                   <span className="text-white font-bold">{listing.freelancerName}</span>
@@ -449,11 +446,7 @@ const ServiceDetails: React.FC = () => {
           <section>
             <h3 className="text-xl font-bold text-white mb-8">About the Freelancer</h3>
             <div className="p-8 bg-brand-grey/50 border border-white/10 rounded-3xl flex flex-col md:flex-row gap-8 backdrop-blur-md">
-              <img
-                src={listing.freelancerAvatar}
-                alt={listing.freelancerName}
-                className="w-24 h-24 rounded-2xl border border-white/10 mx-auto md:mx-0"
-              />
+              <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="w-10 h-10 rounded-full border-2 border-brand-green/50" />
               <div className="flex-grow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                   <div>

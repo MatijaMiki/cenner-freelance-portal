@@ -6,6 +6,7 @@ import NeuralBackground from '../components/NeuralBackground';
 import { useData } from '../contexts/DataContext';
 import { CATEGORIES } from '../constants';
 import SEO from '../components/SEO';
+import AvatarImg from '../components/Avatar';
 
 const URGENCY_LABEL: Record<string, string> = {
   high: 'Urgent',
@@ -220,13 +221,7 @@ const Match: React.FC = () => {
                     {/* Header row */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        {job.clientAvatar ? (
-                          <img src={job.clientAvatar} alt="" className="w-9 h-9 rounded-full border border-white/10 shrink-0" />
-                        ) : (
-                          <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 shrink-0">
-                            <Briefcase size={14} />
-                          </div>
-                        )}
+                        <AvatarImg src={job.clientAvatar} name={job.clientName} size={36} className="rounded-full border border-white/10 shrink-0" />
                         <span className="text-[11px] text-gray-500 font-bold truncate">{job.clientName}</span>
                       </div>
                       <span className={`shrink-0 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${URGENCY_COLOR[job.urgency]}`}>
