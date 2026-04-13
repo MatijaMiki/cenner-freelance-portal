@@ -17,6 +17,46 @@ import { useNotify } from '../contexts/NotifyContext';
 
 type ActiveTab = 'listings' | 'inbox' | 'earnings' | 'settings' | 'portfolio' | 'saved' | 'orders' | 'stats';
 
+// ─── Manage Subscription Card ────────────────────────────────────────────────
+const ManageSubscriptionCard: React.FC = () => {
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
+
+  const openPortal = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const { url } = await API.getSubscriptionPortal();
+      if (!url || !/^https:\/\//i.test(url)) throw new Error('Invalid portal URL');
+      window.location.href = url;
+    } catch (e: any) {
+      setError(e.message || 'Failed to open billing portal');
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8">
+      <div className="flex items-center gap-3 mb-2">
+        <CreditCard size={20} className="text-brand-green" />
+        <h3 className="text-white font-bold text-lg">Manage Subscription</h3>
+      </div>
+      <p className="text-gray-500 text-sm mb-6">
+        Upgrade, downgrade, or cancel your plan. Changes take effect at the end of your current billing period.
+      </p>
+      {error && <p className="text-brand-pink text-sm mb-4">{error}</p>}
+      <button
+        onClick={openPortal}
+        disabled={loading}
+        className="flex items-center gap-2 px-6 py-3 border border-white/10 hover:border-white/20 text-white font-black rounded-xl text-sm transition-all hover:bg-white/5 disabled:opacity-50"
+      >
+        {loading ? <Loader2 size={15} className="animate-spin" /> : <ExternalLink size={15} />}
+        {loading ? 'Opening…' : 'Open Billing Portal'}
+      </button>
+    </div>
+  );
+};
+
 // ─── Settings Tab ────────────────────────────────────────────────────────────
 const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; navigate: any; initialSection?: string }> = ({ currentUser, updateUser, navigate, initialSection = 'account' }) => {
   const t = useT();
@@ -222,6 +262,11 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
               </button>
             </div>
           </div>
+
+          {/* Stripe Customer Portal — manage/downgrade/cancel */}
+          {currentUser?.tier !== 'FREE' && (
+            <ManageSubscriptionCard />
+          )}
 
           {/* Payout Setup (freelancers only) */}
           <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8">
