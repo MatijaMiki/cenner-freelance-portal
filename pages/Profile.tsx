@@ -494,13 +494,20 @@ const Profile: React.FC = () => {
   const avatarFileRef = useRef<HTMLInputElement>(null);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
 
-  // Image crop state
+  // Image crop state — fixed circle, movable/zoomable image
+  const CROP_SIZE = 360;   // canvas px (square)
+  const CROP_R    = 160;   // circle radius
+  const CROP_CX   = 180;   // circle center x
+  const CROP_CY   = 180;   // circle center y
+
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const cropCanvasRef = useRef<HTMLCanvasElement>(null);
   const cropImageRef = useRef<HTMLImageElement | null>(null);
-  const [cropDrag, setCropDrag] = useState<{ x: number; y: number; startX: number; startY: number; dragging: boolean }>({ x: 0, y: 0, startX: 0, startY: 0, dragging: false });
-  const [cropSize, setCropSize] = useState(200);
-  const [cropOffset, setCropOffset] = useState({ x: 0, y: 0 });
+  const [imgPan, setImgPan] = useState({ x: 0, y: 0 });
+  const [imgZoom, setImgZoom] = useState(1);
+  const [imgBaseScale, setImgBaseScale] = useState(1);
+  const [cropDragging, setCropDragging] = useState(false);
+  const cropDragRef = useRef({ startMx: 0, startMy: 0, startPanX: 0, startPanY: 0 });
 
   const drawCrop = React.useCallback(() => {
     const canvas = cropCanvasRef.current;
@@ -508,94 +515,96 @@ const Profile: React.FC = () => {
     if (!canvas || !img) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const W = canvas.width, H = canvas.height;
-    ctx.clearRect(0, 0, W, H);
-    ctx.drawImage(img, 0, 0, W, H);
-    // Darken overlay
-    ctx.fillStyle = 'rgba(0,0,0,0.55)';
-    ctx.fillRect(0, 0, W, H);
-    // Clip circle
-    const cx = cropOffset.x + cropSize / 2;
-    const cy = cropOffset.y + cropSize / 2;
+    const totalScale = imgBaseScale * imgZoom;
+    const iW = img.naturalWidth  * totalScale;
+    const iH = img.naturalHeight * totalScale;
+    const iX = CROP_CX - iW / 2 + imgPan.x;
+    const iY = CROP_CY - iH / 2 + imgPan.y;
+    ctx.clearRect(0, 0, CROP_SIZE, CROP_SIZE);
+    ctx.drawImage(img, iX, iY, iW, iH);
+    // Darken outside circle
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(0, 0, CROP_SIZE, CROP_SIZE);
+    // Reveal image inside circle
     ctx.save();
     ctx.beginPath();
-    ctx.arc(cx, cy, cropSize / 2, 0, Math.PI * 2);
+    ctx.arc(CROP_CX, CROP_CY, CROP_R, 0, Math.PI * 2);
     ctx.clip();
-    ctx.drawImage(img, 0, 0, W, H);
+    ctx.drawImage(img, iX, iY, iW, iH);
     ctx.restore();
     // Circle border
     ctx.strokeStyle = '#22c55e';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(cx, cy, cropSize / 2, 0, Math.PI * 2);
+    ctx.arc(CROP_CX, CROP_CY, CROP_R, 0, Math.PI * 2);
     ctx.stroke();
-  }, [cropOffset, cropSize]);
+  }, [imgPan, imgZoom, imgBaseScale]);
 
   React.useEffect(() => {
     if (!cropSrc || !cropImageRef.current || !cropCanvasRef.current) return;
-    const img = cropImageRef.current;
     const canvas = cropCanvasRef.current;
-    const aspect = img.naturalWidth / img.naturalHeight;
-    const maxW = 360;
-    canvas.width = aspect >= 1 ? maxW : Math.round(maxW * aspect);
-    canvas.height = aspect >= 1 ? Math.round(maxW / aspect) : maxW;
-    drawCrop();
-  }, [cropSrc, drawCrop]);
+    canvas.width  = CROP_SIZE;
+    canvas.height = CROP_SIZE;
+    const img = cropImageRef.current;
+    // Base scale: short side fills circle diameter
+    setImgBaseScale((CROP_R * 2) / Math.min(img.naturalWidth, img.naturalHeight));
+    setImgZoom(1);
+    setImgPan({ x: 0, y: 0 });
+  }, [cropSrc]);
 
   React.useEffect(() => { drawCrop(); }, [drawCrop]);
 
   const handleCropMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const rect = cropCanvasRef.current!.getBoundingClientRect();
-    const scaleX = cropCanvasRef.current!.width / rect.width;
-    const scaleY = cropCanvasRef.current!.height / rect.height;
-    const mx = (e.clientX - rect.left) * scaleX;
-    const my = (e.clientY - rect.top) * scaleY;
-    const cx = cropOffset.x + cropSize / 2;
-    const cy = cropOffset.y + cropSize / 2;
-    if (Math.hypot(mx - cx, my - cy) <= cropSize / 2) {
-      setCropDrag({ x: cropOffset.x, y: cropOffset.y, startX: mx, startY: my, dragging: true });
-    }
+    const sx = CROP_SIZE / rect.width;
+    const sy = CROP_SIZE / rect.height;
+    cropDragRef.current = {
+      startMx:  (e.clientX - rect.left) * sx,
+      startMy:  (e.clientY - rect.top)  * sy,
+      startPanX: imgPan.x,
+      startPanY: imgPan.y,
+    };
+    setCropDragging(true);
   };
 
   const handleCropMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!cropDrag.dragging) return;
-    const canvas = cropCanvasRef.current!;
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const mx = (e.clientX - rect.left) * scaleX;
-    const my = (e.clientY - rect.top) * scaleY;
-    const nx = Math.max(0, Math.min(canvas.width - cropSize, cropDrag.x + mx - cropDrag.startX));
-    const ny = Math.max(0, Math.min(canvas.height - cropSize, cropDrag.y + my - cropDrag.startY));
-    setCropOffset({ x: nx, y: ny });
+    if (!cropDragging) return;
+    const rect = cropCanvasRef.current!.getBoundingClientRect();
+    const sx = CROP_SIZE / rect.width;
+    const sy = CROP_SIZE / rect.height;
+    const mx = (e.clientX - rect.left) * sx;
+    const my = (e.clientY - rect.top)  * sy;
+    const { startMx, startMy, startPanX, startPanY } = cropDragRef.current;
+    setImgPan({ x: startPanX + mx - startMx, y: startPanY + my - startMy });
   };
 
-  const handleCropMouseUp = () => setCropDrag(d => ({ ...d, dragging: false }));
+  const handleCropMouseUp = () => setCropDragging(false);
 
   const applyCrop = async () => {
     const img = cropImageRef.current;
-    if (!img || !cropCanvasRef.current) return;
-    const canvas = cropCanvasRef.current;
-    const scaleX = img.naturalWidth / canvas.width;
-    const scaleY = img.naturalHeight / canvas.height;
+    if (!img) return;
+    const totalScale = imgBaseScale * imgZoom;
+    const iW = img.naturalWidth  * totalScale;
+    const iH = img.naturalHeight * totalScale;
+    const iX = CROP_CX - iW / 2 + imgPan.x;
+    const iY = CROP_CY - iH / 2 + imgPan.y;
+    // Map circle bounds back to source image coords
+    const srcX    = (CROP_CX - CROP_R - iX) / totalScale;
+    const srcY    = (CROP_CY - CROP_R - iY) / totalScale;
+    const srcSize = (CROP_R * 2)            / totalScale;
     const out = document.createElement('canvas');
     out.width = 512; out.height = 512;
     const ctx = out.getContext('2d')!;
     ctx.beginPath();
     ctx.arc(256, 256, 256, 0, Math.PI * 2);
     ctx.clip();
-    ctx.drawImage(img,
-      cropOffset.x * scaleX, cropOffset.y * scaleY,
-      cropSize * scaleX, cropSize * scaleY,
-      0, 0, 512, 512
-    );
+    ctx.drawImage(img, srcX, srcY, srcSize, srcSize, 0, 0, 512, 512);
     out.toBlob(async (blob) => {
       if (!blob) return;
-      const file = new File([blob], 'avatar.png', { type: 'image/png' });
       setCropSrc(null);
       setUploadingAvatar(true);
       try {
-        const url = await API.uploadProfileAvatar(file);
+        const url = await API.uploadProfileAvatar(new File([blob], 'avatar.png', { type: 'image/png' }));
         updateUser({ avatar: url } as any);
       } catch (err: any) {
         notify.toast(err.message || 'Failed to upload avatar', 'error');
@@ -1675,17 +1684,7 @@ const Profile: React.FC = () => {
                         reader.onload = (ev) => {
                           const src = ev.target?.result as string;
                           const img = new Image();
-                          img.onload = () => {
-                            cropImageRef.current = img;
-                            const displaySize = 360;
-                            const aspect = img.naturalWidth / img.naturalHeight;
-                            const canvasW = aspect >= 1 ? displaySize : Math.round(displaySize * aspect);
-                            const canvasH = aspect >= 1 ? Math.round(displaySize / aspect) : displaySize;
-                            const sz = Math.min(canvasW, canvasH, 200);
-                            setCropSize(sz);
-                            setCropOffset({ x: Math.max(0, (canvasW - sz) / 2), y: Math.max(0, (canvasH - sz) / 2) });
-                            setCropSrc(src);
-                          };
+                          img.onload = () => { cropImageRef.current = img; setCropSrc(src); };
                           img.src = src;
                         };
                         reader.readAsDataURL(file);
@@ -1736,28 +1735,20 @@ const Profile: React.FC = () => {
             <p className="text-xs text-gray-500 self-start -mt-4">Drag the circle to position. Use the slider to resize.</p>
             <canvas
               ref={cropCanvasRef}
-              style={{ width: '100%', borderRadius: '1rem', cursor: 'move', touchAction: 'none' }}
+              style={{ width: '100%', borderRadius: '1rem', cursor: cropDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
               onMouseDown={handleCropMouseDown}
               onMouseMove={handleCropMouseMove}
               onMouseUp={handleCropMouseUp}
               onMouseLeave={handleCropMouseUp}
             />
             <div className="w-full flex items-center gap-3">
-              <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Size</span>
+              <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Zoom</span>
               <input
                 type="range"
-                min={60}
-                max={cropCanvasRef.current ? Math.min(cropCanvasRef.current.width, cropCanvasRef.current.height) : 300}
-                value={cropSize}
-                onChange={e => {
-                  const sz = Number(e.target.value);
-                  const canvas = cropCanvasRef.current;
-                  if (!canvas) return;
-                  const nx = Math.min(cropOffset.x, canvas.width - sz);
-                  const ny = Math.min(cropOffset.y, canvas.height - sz);
-                  setCropSize(sz);
-                  setCropOffset({ x: Math.max(0, nx), y: Math.max(0, ny) });
-                }}
+                min={100}
+                max={300}
+                value={Math.round(imgZoom * 100)}
+                onChange={e => setImgZoom(Number(e.target.value) / 100)}
                 className="flex-1 accent-brand-green"
               />
             </div>
