@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, User as UserIcon, LogOut, ChevronDown, MessageSquare, UserCheck, FileText } from 'lucide-react';
+import AvatarImg from './Avatar';
 import NotificationBell from './NotificationBell';
 import PermissionModal from './PermissionModal';
 import ChatWidget from './ChatWidget';
@@ -228,13 +229,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     className="flex items-center gap-2 group/profile"
                   >
                     <div className="relative">
-                      {user.avatar ? (
-                        <img src={user.avatar} alt="" className="w-9 h-9 rounded-full border-2 border-brand-green p-0.5 group-hover/profile:scale-110 transition-transform" />
-                      ) : (
-                        <div className="w-9 h-9 rounded-full bg-brand-grey border-2 border-brand-green flex items-center justify-center text-brand-green group-hover/profile:scale-110 transition-transform">
-                          <UserIcon size={18} />
-                        </div>
-                      )}
+                      <AvatarImg src={user.avatar} name={user.name} size={36} className="rounded-full border-2 border-brand-green p-0.5 group-hover/profile:scale-110 transition-transform" />
                       {unread > 0 && (
                         <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-0.5 bg-brand-green rounded-full flex items-center justify-center text-brand-black text-[9px] font-black border border-brand-black">
                           {unread > 9 ? '9+' : unread}
@@ -249,13 +244,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       {/* User info */}
                       <div className="px-4 pt-4 pb-3">
                         <div className="flex items-center gap-3 mb-3">
-                          {user.avatar ? (
-                            <img src={user.avatar} alt="" className="w-10 h-10 rounded-full border-2 border-brand-green p-0.5" />
-                          ) : (
-                            <div className="w-10 h-10 rounded-full bg-brand-grey border-2 border-brand-green flex items-center justify-center text-brand-green">
-                              <UserIcon size={18} />
-                            </div>
-                          )}
+                          <AvatarImg src={user.avatar} name={user.name} size={40} className="rounded-full border-2 border-brand-green p-0.5" />
                           <div className="min-w-0">
                             <p className="text-sm font-bold text-white truncate">{user.name || 'Freelancer'}</p>
                             <p className="text-[11px] text-gray-500 truncate">{user.email}</p>

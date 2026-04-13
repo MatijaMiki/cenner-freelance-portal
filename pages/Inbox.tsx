@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
+import AvatarImg from '../components/Avatar';
 import { connectSocket, getSocket } from '../hooks/useSocket';
 import SEO from '../components/SEO';
 import type { DMConversation, DMMessage } from '../types';
@@ -290,13 +291,7 @@ const MessagingHub: React.FC = () => {
                   }`}
                 >
                   <div className="relative shrink-0">
-                    {conv.other?.avatar ? (
-                      <img src={conv.other.avatar} alt={conv.other.name} className="w-10 h-10 rounded-xl object-cover" />
-                    ) : (
-                      <div className="w-10 h-10 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green font-black text-sm">
-                        {conv.other?.name?.[0]?.toUpperCase() ?? '?'}
-                      </div>
-                    )}
+                    <AvatarImg src={conv.other?.avatar} name={conv.other?.name} size={40} className="rounded-xl" />
                     {conv.unread > 0 && (
                       <div className="absolute -top-1 -right-1 w-4 h-4 bg-brand-green rounded-full flex items-center justify-center text-brand-black text-[9px] font-black">
                         {conv.unread > 9 ? '9+' : conv.unread}
@@ -343,13 +338,7 @@ const MessagingHub: React.FC = () => {
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
               </button>
-              {otherProfile?.avatar ? (
-                <img src={otherProfile.avatar} alt={otherProfile.name} className="w-8 h-8 rounded-xl object-cover flex-shrink-0" />
-              ) : (
-                <div className="w-8 h-8 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green font-black text-sm flex-shrink-0">
-                  {otherProfile?.name?.[0]?.toUpperCase() ?? '?'}
-                </div>
-              )}
+              <AvatarImg src={otherProfile?.avatar} name={otherProfile?.name} size={32} className="rounded-xl flex-shrink-0" />
               <div className="min-w-0">
                 <span className="font-bold text-white text-sm truncate block">{otherProfile?.name}</span>
                 {typingUsers.size > 0 && (
@@ -423,13 +412,7 @@ const MessagingHub: React.FC = () => {
                   return (
                     <div key={msg.id} className={`flex items-end gap-2.5 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
                       {!isMe && (
-                        msg.sender?.avatar ? (
-                          <img src={msg.sender.avatar} alt={msg.sender.name} className="w-7 h-7 rounded-xl object-cover shrink-0 mb-4" />
-                        ) : (
-                          <div className="w-7 h-7 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green text-[10px] font-black shrink-0 mb-4">
-                            {msg.sender?.name?.[0] ?? '?'}
-                          </div>
-                        )
+                        <AvatarImg src={msg.sender?.avatar} name={msg.sender?.name} size={28} className="rounded-xl shrink-0 mb-4" />
                       )}
                       <div className={`flex flex-col gap-1 max-w-[65%] ${isMe ? 'items-end' : 'items-start'}`}>
                         {msg.flagged && (
@@ -448,13 +431,7 @@ const MessagingHub: React.FC = () => {
                         <span className="text-[10px] text-gray-600 px-1">{formatTime(msg.createdAt)}</span>
                       </div>
                       {isMe && (
-                        user?.avatar ? (
-                          <img src={user.avatar} alt="You" className="w-7 h-7 rounded-xl object-cover shrink-0 mb-4" />
-                        ) : (
-                          <div className="w-7 h-7 rounded-xl bg-brand-green/10 flex items-center justify-center text-brand-green text-[10px] font-black shrink-0 mb-4">
-                            {user?.name?.[0]}
-                          </div>
-                        )
+                        <AvatarImg src={user?.avatar} name={user?.name} size={28} className="rounded-xl shrink-0 mb-4" />
                       )}
                     </div>
                   );
@@ -496,13 +473,7 @@ const MessagingHub: React.FC = () => {
             {/* ── Profile summary ── */}
             <div className="flex flex-col items-center text-center pt-2">
               <div className="relative mb-3">
-                {otherProfile.avatar ? (
-                  <img src={otherProfile.avatar} alt={otherProfile.name} className="w-20 h-20 rounded-2xl object-cover border-2 border-brand-green/20" />
-                ) : (
-                  <div className="w-20 h-20 rounded-2xl bg-brand-green/10 border-2 border-brand-green/20 flex items-center justify-center text-brand-green font-black text-2xl">
-                    {otherProfile.name?.[0]?.toUpperCase()}
-                  </div>
-                )}
+                <AvatarImg src={otherProfile.avatar} name={otherProfile.name} size={80} className="rounded-2xl border-2 border-brand-green/20" />
                 {otherProfile.kycVerified && (
                   <div className="absolute -bottom-2 -right-2">
                     <BadgeCheck size={22} className="text-amber-400 drop-shadow-[0_0_4px_rgba(251,191,36,0.8)]" fill="#1a1a1a" strokeWidth={1.5} />
@@ -571,13 +542,7 @@ const MessagingHub: React.FC = () => {
                       {reviews.map(r => (
                         <div key={r.id} className="bg-white/3 border border-white/5 rounded-xl p-3">
                           <div className="flex items-center gap-2 mb-1.5">
-                            {r.reviewer.avatar ? (
-                              <img src={r.reviewer.avatar} alt={r.reviewer.name} className="w-6 h-6 rounded-lg object-cover" />
-                            ) : (
-                              <div className="w-6 h-6 rounded-lg bg-brand-green/10 flex items-center justify-center text-brand-green text-[9px] font-black">
-                                {r.reviewer.name?.[0]}
-                              </div>
-                            )}
+                            <AvatarImg src={r.reviewer.avatar} name={r.reviewer.name} size={24} className="rounded-lg" />
                             <span className="text-white text-[11px] font-bold truncate flex-1">{r.reviewer.name}</span>
                             <div className="flex gap-0.5 shrink-0">
                               {[1,2,3,4,5].map(s => (

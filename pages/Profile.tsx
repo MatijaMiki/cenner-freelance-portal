@@ -14,6 +14,7 @@ import { CATEGORIES } from '../constants';
 import { API } from '../lib/api';
 import { useT } from '../i18n';
 import { useNotify } from '../contexts/NotifyContext';
+import AvatarImg from '../components/Avatar';
 
 type ActiveTab = 'listings' | 'inbox' | 'earnings' | 'settings' | 'portfolio' | 'saved' | 'orders' | 'stats';
 
@@ -1690,13 +1691,12 @@ const Profile: React.FC = () => {
                         reader.readAsDataURL(file);
                       }}
                     />
-                    {currentUser?.avatar ? (
-                        <img src={currentUser?.avatar} className="w-24 h-24 rounded-full border-4 border-brand-green" alt="" />
-                    ) : (
-                        <div className="w-24 h-24 rounded-full border-4 border-brand-green bg-brand-black flex items-center justify-center">
-                            <UserIcon size={40} className="text-brand-green"/>
-                        </div>
-                    )}
+                    <AvatarImg
+                      src={currentUser?.avatar}
+                      name={currentUser?.name}
+                      size={96}
+                      className="rounded-full border-4 border-brand-green"
+                    />
                     <button
                       type="button"
                       disabled={uploadingAvatar}
@@ -1776,19 +1776,12 @@ const Profile: React.FC = () => {
           <div className="bg-brand-grey/50 border border-white/10 rounded-[2.5rem] p-8 text-center relative overflow-hidden group">
             <div className="absolute -top-12 -left-12 w-32 h-32 bg-brand-green/10 rounded-full blur-3xl"></div>
             <div className="relative inline-block mb-6">
-              {currentUser?.avatar ? (
-                <img
-                    src={currentUser.avatar}
-                    alt="Profile"
-                    loading="eager"
-                    onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                    className="w-32 h-32 rounded-full border-4 border-brand-green p-1 group-hover:scale-105 transition-transform duration-500"
-                />
-              ) : (
-                <div className="w-32 h-32 rounded-full border-4 border-brand-green p-1 group-hover:scale-105 transition-transform duration-500 bg-brand-black flex items-center justify-center">
-                    <UserIcon size={64} className="text-brand-green"/>
-                </div>
-              )}
+              <AvatarImg
+                src={currentUser?.avatar}
+                name={currentUser?.name}
+                size={128}
+                className="rounded-full border-4 border-brand-green p-1 group-hover:scale-105 transition-transform duration-500"
+              />
               {canCreateListings && (
                 <div className="absolute bottom-1 right-1 w-8 h-8 flex items-center justify-center drop-shadow-lg">
                   <BadgeCheck size={32} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]" fill="#1a1a1a" strokeWidth={1.5} />

@@ -6,6 +6,7 @@ import {
   Clock, ArrowRight, User, ExternalLink, AlertCircle, Loader2,
   FileText, Plus, Trash2, X, ChevronRight, BadgeCheck,
 } from 'lucide-react';
+import AvatarImg from '../components/Avatar';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 import NeuralBackground from '../components/NeuralBackground';
@@ -355,13 +356,7 @@ const FreelancerProfile: React.FC = () => {
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Avatar */}
             <div className="relative shrink-0">
-              {profile.avatar ? (
-                <img src={profile.avatar} alt={profile.name} className="w-28 h-28 rounded-3xl border-2 border-brand-green/30 object-cover" />
-              ) : (
-                <div className="w-28 h-28 rounded-3xl bg-brand-grey border-2 border-brand-green/30 flex items-center justify-center text-brand-green">
-                  <User size={40} />
-                </div>
-              )}
+              <AvatarImg src={profile.avatar} name={profile.name} size={112} className="rounded-3xl border-2 border-brand-green/30" />
               {isVerified && (
                 <div className="absolute -bottom-2 -right-2 w-9 h-9 flex items-center justify-center" title="Identity Verified">
                   <BadgeCheck size={36} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]" fill="#1a1a1a" strokeWidth={1.5} />
@@ -485,13 +480,7 @@ const FreelancerProfile: React.FC = () => {
                   {reviews.map((rev: any) => (
                     <div key={rev.id} className="bg-brand-grey/40 border border-white/5 rounded-2xl p-5">
                       <div className="flex items-start gap-4">
-                        {rev.reviewer?.avatar ? (
-                          <img src={rev.reviewer.avatar} alt={rev.reviewer.name} className="w-9 h-9 rounded-xl object-cover shrink-0" />
-                        ) : (
-                          <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                            <User size={16} className="text-gray-500" />
-                          </div>
-                        )}
+                        <AvatarImg src={rev.reviewer?.avatar} name={rev.reviewer?.name} size={36} className="rounded-xl shrink-0" />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-1">
                             <span className="text-white font-bold text-sm">{rev.reviewer?.name || 'Anonymous'}</span>
