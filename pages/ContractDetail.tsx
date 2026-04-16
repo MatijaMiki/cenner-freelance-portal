@@ -99,7 +99,7 @@ const ContractDetail: React.FC = () => {
 
   const reload = () => {
     if (!id) return;
-    API.getContract(id).then(setContract).catch(console.error);
+    API.getContract(id).then(setContract).catch(() => {});
   };
 
   useEffect(() => {

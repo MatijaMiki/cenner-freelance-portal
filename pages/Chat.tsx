@@ -32,7 +32,7 @@ const Chat: React.FC = () => {
         const other = msgs.find(m => m.senderId !== user.id)?.sender;
         if (other) setOtherUser(other);
       })
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
 
     // Socket

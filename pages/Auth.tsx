@@ -101,7 +101,6 @@ const Auth: React.FC = () => {
       }
       navigate(from, { replace: true });
     } catch (err: any) {
-      console.error(err);
       setError(err.message || 'An authentication error occurred.');
     } finally {
       setLoading(false);
@@ -116,7 +115,6 @@ const Auth: React.FC = () => {
       await loginWithGoogle();
       navigate(from, { replace: true });
     } catch (err: any) {
-      console.error(err);
       setError(err.message || 'Google authentication failed.');
     } finally {
       setLoading(false);

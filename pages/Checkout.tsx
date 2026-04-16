@@ -280,7 +280,7 @@ const Checkout: React.FC = () => {
                   onSuccess={(paymentId) => {
                     setConfirmedPaymentId(paymentId);
                     setStep(2);
-                    API.createOrder(id!, paymentId).catch(err => console.error('[createOrder failed]', err));
+                    API.createOrder(id!, paymentId).catch(() => {});
                     API.getPaymentReceipt(paymentId)
                       .then(({ receiptUrl: url }) => { if (url) setReceiptUrl(url); })
                       .catch(() => {});

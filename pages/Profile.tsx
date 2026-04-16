@@ -2,11 +2,11 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
-  Settings, CreditCard, MessageSquare, Briefcase, PlusCircle,
+  Settings, CreditCard, Briefcase, PlusCircle,
   TrendingUp, Clock, CheckCircle, AlertCircle, MoreVertical,
-  MoreHorizontal, Edit2, Pause, Trash2, ArrowUpRight, Search,
-  Calendar, X, Download, User as UserIcon, ShieldAlert, Rocket, Play, Image as ImageIcon, Mail, Crown, Zap, Globe,
-  Upload, Loader2, ExternalLink, ShieldCheck, MapPin, Banknote, BadgeCheck, Heart, Package
+  MoreHorizontal, Edit2, Trash2, ArrowUpRight, Search,
+  X, Download, ShieldAlert, Image as ImageIcon, Mail, Crown, Zap,
+  Upload, Loader2, ExternalLink, ShieldCheck, MapPin, Banknote, BadgeCheck, Heart
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';

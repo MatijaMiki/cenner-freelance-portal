@@ -27,7 +27,7 @@ const Earnings: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    API.getEarnings().then(setData).catch(console.error).finally(() => setLoading(false));
+    API.getEarnings().then(setData).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   if (loading) return (

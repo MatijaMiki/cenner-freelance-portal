@@ -45,7 +45,7 @@ const Contracts: React.FC = () => {
   const load = () => {
     API.getContracts()
       .then(setContracts)
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   };
 

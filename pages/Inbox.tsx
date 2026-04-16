@@ -120,7 +120,7 @@ const MessagingHub: React.FC = () => {
           API.getCompletedContracts(other.id).then(d => setCompletedContracts(Array.isArray(d) ? d : [])).catch(() => {});
         }
       })
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setMessagesLoading(false));
 
     const socket = connectSocket();

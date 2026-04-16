@@ -37,7 +37,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setJobs(j);
         setBlogPosts(p);
       })
-      .catch(console.error)
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 

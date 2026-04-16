@@ -204,7 +204,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         ];
       }
     } catch (error) {
-      console.error('[CHAT ERROR]', error);
       setMessages(prev =>
         prev.map(msg =>
           msg.id === botMessageId
