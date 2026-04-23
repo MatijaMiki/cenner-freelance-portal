@@ -80,9 +80,63 @@ const en: Record<string, string> = {
   '24/7': '24/7',
   'Active Collaboration': 'Active Collaboration',
   'Ready to join the elite?': 'Ready to join the elite?',
+  'Ready to get started?': 'Ready to get started?',
   "Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.": "Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.",
   'Start a Project': 'Start a Project',
   'Join the Network': 'Join the Network',
+
+  // Home — Trust pillars (replaces stats bar)
+  'In-House Team': 'In-House Team',
+  'No Outsourcing': 'No Outsourcing',
+  'Direct communication': 'Direct communication',
+  'Fixed Pricing': 'Fixed Pricing',
+  'No Surprises': 'No Surprises',
+  'Quoted upfront, always': 'Quoted upfront, always',
+  'KYC Verified': 'KYC Verified',
+  'Identity Checked': 'Identity Checked',
+  'Every freelancer vetted': 'Every freelancer vetted',
+  'Stripe Escrow': 'Stripe Escrow',
+  'Protected Payments': 'Protected Payments',
+  'Funds held until delivery': 'Funds held until delivery',
+
+  // Home — What You Can Build (replaces Top Specializations)
+  'What You Can Build': 'What You Can Build',
+  'Outcomes we deliver end-to-end.': 'Outcomes we deliver end-to-end.',
+  'See all services': 'See all services',
+  'Landing Pages': 'Landing Pages',
+  'Fast, custom-built sites': 'Fast, custom-built sites',
+  'E-commerce': 'E-commerce',
+  'WooCommerce & checkout flows': 'WooCommerce & checkout flows',
+  'Automations': 'Automations',
+  'n8n & AI integrations': 'n8n & AI integrations',
+  'Brand Identity': 'Brand Identity',
+  'Logos, assets & print-ready files': 'Logos, assets & print-ready files',
+
+  // Home — In-house team section (replaces Global Network)
+  'One': 'One',
+  'in-house': 'in-house',
+  'team. Start to finish.': 'team. Start to finish.',
+  'We work with clients across the EU. Every project is handled in-house — no outsourcing, no middlemen. Straightforward communication, fixed pricing, and clean handover from start to finish.': 'We work with clients across the EU. Every project is handled in-house — no outsourcing, no middlemen. Straightforward communication, fixed pricing, and clean handover from start to finish.',
+  '100%': '100%',
+  'In-House Delivery': 'In-House Delivery',
+  'Direct Support': 'Direct Support',
+
+  // FAQ
+  'Frequently Asked Questions': 'Frequently Asked Questions',
+  'Everything about freelancing in Croatia and the EU in one place.': 'Everything about freelancing in Croatia and the EU in one place.',
+  'faq.q1': 'What is Cenner and how does the freelance platform work?',
+  'faq.a1': 'Cenner is a leading freelance platform in Croatia and the EU that connects companies and entrepreneurs with verified freelancers. Clients browse services or post projects, freelancers apply or offer ready packages, and payment is handled securely through the platform with escrow protection.',
+  'faq.q2': 'How do I find a freelancer in Croatia for contract work?',
+  'faq.a2': 'On the Cenner platform you can browse verified freelancers from Croatia and the EU. Filter by category (web development, design, marketing, writing), budget and delivery time. Every freelancer goes through KYC verification which guarantees professionalism and safe collaboration.',
+  'faq.q3': 'Is Cenner available for freelancers from across the EU?',
+  'faq.a3': 'Yes, Cenner is available for freelancers and clients from across the European Union. The platform supports euro payments and complies with EU regulations. Freelancers from Croatia, Austria, Germany, Italy and other EU countries can register and start offering services immediately.',
+  'faq.q4': 'What is contract work and how is it different from full employment?',
+  'faq.a4': 'Contract work (freelancing) means working on projects without a permanent employment contract. As a freelancer, you choose your own projects, hours and rates. Cenner provides secure contracts, escrow payment and protection for both sides — ideal for beginners and experienced freelancers alike.',
+  'faq.q5': 'What types of services do freelancers offer on the Cenner platform?',
+  'faq.a5': 'Cenner freelancers offer services in: web development and programming, graphic design and UI/UX, digital marketing and SEO, content writing, video production, and music and audio production. All services are available to clients in Croatia and across the EU.',
+
+  // Services
+  'Custom Quote': 'Custom Quote',
 
   // Auth
   'Welcome Back': 'Welcome Back',
@@ -424,9 +478,63 @@ const hr: Record<string, string> = {
   '24/7': '24/7',
   'Active Collaboration': 'Aktivna suradnja',
   'Ready to join the elite?': 'Spremi za pristup eliti?',
+  'Ready to get started?': 'Spremi za početak?',
   "Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.": 'Bilo da ste vizionarski osnivač ili tehnički majstor, Cenner je dom za vaše najambicioznije projekte.',
   'Start a Project': 'Pokreni projekt',
   'Join the Network': 'Pridruži se mreži',
+
+  // Home — Trust pillars
+  'In-House Team': 'Interni tim',
+  'No Outsourcing': 'Bez outsourcinga',
+  'Direct communication': 'Izravna komunikacija',
+  'Fixed Pricing': 'Fiksna cijena',
+  'No Surprises': 'Bez iznenađenja',
+  'Quoted upfront, always': 'Uvijek unaprijed dogovorena cijena',
+  'KYC Verified': 'KYC provjereno',
+  'Identity Checked': 'Provjeren identitet',
+  'Every freelancer vetted': 'Svaki freelancer je provjeren',
+  'Stripe Escrow': 'Stripe Escrow',
+  'Protected Payments': 'Zaštićena plaćanja',
+  'Funds held until delivery': 'Sredstva se zadržavaju do isporuke',
+
+  // Home — What You Can Build
+  'What You Can Build': 'Što možete izgraditi',
+  'Outcomes we deliver end-to-end.': 'Rezultati koje isporučujemo od početka do kraja.',
+  'See all services': 'Pogledaj sve usluge',
+  'Landing Pages': 'Landing stranice',
+  'Fast, custom-built sites': 'Brze, prilagođene stranice',
+  'E-commerce': 'E-commerce',
+  'WooCommerce & checkout flows': 'WooCommerce i checkout',
+  'Automations': 'Automatizacije',
+  'n8n & AI integrations': 'n8n i AI integracije',
+  'Brand Identity': 'Brend identitet',
+  'Logos, assets & print-ready files': 'Logotipi, materijali i datoteke spremne za tisak',
+
+  // Home — In-house team section
+  'One': 'Jedan',
+  'in-house': 'interni',
+  'team. Start to finish.': 'tim. Od početka do kraja.',
+  'We work with clients across the EU. Every project is handled in-house — no outsourcing, no middlemen. Straightforward communication, fixed pricing, and clean handover from start to finish.': 'Radimo s klijentima diljem EU. Svaki projekt se obrađuje interno — bez outsourcinga, bez posrednika. Jasna komunikacija, fiksna cijena i uredna primopredaja od početka do kraja.',
+  '100%': '100%',
+  'In-House Delivery': 'Interna isporuka',
+  'Direct Support': 'Izravna podrška',
+
+  // FAQ
+  'Frequently Asked Questions': 'Često postavljana pitanja',
+  'Everything about freelancing in Croatia and the EU in one place.': 'Sve o freelancingu u Hrvatskoj i EU na jednom mjestu.',
+  'faq.q1': 'Što je Cenner i kako funkcionira freelance platforma?',
+  'faq.a1': 'Cenner je vodeća freelance platforma u Hrvatskoj i EU koja povezuje tvrtke i poduzetnike s provjerenim freelancerima. Klijenti pretražuju usluge ili objavljuju projekte, freelanceri apliciraju ili nude gotove pakete, a plaćanje se odvija sigurno kroz platformu s escrow zaštitom.',
+  'faq.q2': 'Kako pronaći freelancera u Hrvatskoj za honorarni posao?',
+  'faq.a2': 'Na Cenner platformi možeš pregledati verificirane freelancere iz Hrvatske i EU. Filtriraj po kategoriji (web razvoj, dizajn, marketing, pisanje), proračunu i roku isporuke. Svaki freelancer prolazi KYC verifikaciju što garantira profesionalnost i sigurnost suradnje.',
+  'faq.q3': 'Je li Cenner dostupan za freelancere iz cijele EU?',
+  'faq.a3': 'Da, Cenner je dostupan za freelancere i klijente iz cijele Europske unije. Platforma podržava plaćanje u eurima i usklađena je s EU propisima. Freelanceri iz Hrvatske, Austrije, Njemačke, Italije i ostalih EU država mogu se odmah registrirati i početi nuditi usluge.',
+  'faq.q4': 'Što je honorarni posao i kako se razlikuje od stalnog zaposlenja?',
+  'faq.a4': 'Honorarni posao (freelancing) znači rad na projektima bez stalnog ugovora o radu. Kao slobodni radnik sam odabireš projekte, radne sate i cijene. Cenner osigurava sigurne ugovore, escrow plaćanje i zaštitu obje strane — idealno za početnike i iskusne freelancere.',
+  'faq.q5': 'Koje vrste usluga nude freelanceri na Cenner platformi?',
+  'faq.a5': 'Cenner freelanceri nude usluge u kategorijama: web razvoj i programiranje, grafički dizajn i UI/UX, digitalni marketing i SEO, pisanje sadržaja, video produkcija te glazba i audio produkcija. Sve usluge dostupne su klijentima iz Hrvatske i cijele EU.',
+
+  // Services
+  'Custom Quote': 'Ponuda po dogovoru',
 
   // Auth
   'Welcome Back': 'Dobrodošli natrag',

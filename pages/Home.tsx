@@ -124,55 +124,41 @@ const faqJsonLd = {
   ],
 };
 
-const FAQ_ITEMS = [
-  {
-    q: 'Što je Cenner i kako funkcionira freelance platforma?',
-    a: 'Cenner je vodeća freelance platforma u Hrvatskoj i EU koja povezuje tvrtke i poduzetnike s provjerenim freelancerima. Klijenti pretražuju usluge ili objavljuju projekte, freelanceri apliciraju ili nude gotove pakete, a plaćanje se odvija sigurno kroz platformu s escrow zaštitom.',
-  },
-  {
-    q: 'Kako pronaći freelancera u Hrvatskoj za honorarni posao?',
-    a: 'Na Cenner platformi možeš pregledati stotine verificiranih freelancera iz Hrvatske i EU. Filtriraj po kategoriji (web razvoj, dizajn, marketing, pisanje), proračunu i roku isporuke. Svaki freelancer prolazi KYC verifikaciju što garantira profesionalnost i sigurnost suradnje.',
-  },
-  {
-    q: 'Je li Cenner dostupan za freelancere iz cijele EU?',
-    a: 'Da, Cenner je dostupan za freelancere i klijente iz cijele Europske unije. Platforma podržava plaćanje u eurima i usklađena je s EU propisima. Freelanceri iz Hrvatske, Austrije, Njemačke, Italije i ostalih EU država mogu se odmah registrirati i početi nuditi usluge.',
-  },
-  {
-    q: 'Što je honorarni posao i kako se razlikuje od stalnog zaposlenja?',
-    a: 'Honorarni posao (freelancing) znači rad na projektima bez stalnog ugovora o radu. Kao slobodni radnik sam odabireš projekte, radne sate i cijene. Cenner osigurava sigurne ugovore, escrow plaćanje i zaštitu obje strane — idealano za početnike i iskusne freelancere.',
-  },
-  {
-    q: 'Koje vrste usluga nude freelanceri na Cenner platformi?',
-    a: 'Cenner freelanceri nude usluge u kategorijama: web razvoj i programiranje, grafički dizajn i UI/UX, digitalni marketing i SEO, pisanje sadržaja, video produkcija te glazba i audio produkcija. Sve usluge dostupne su klijentima iz Hrvatske i cijele EU.',
-  },
+const FAQ_KEYS = [
+  { q: 'faq.q1', a: 'faq.a1' },
+  { q: 'faq.q2', a: 'faq.a2' },
+  { q: 'faq.q3', a: 'faq.a3' },
+  { q: 'faq.q4', a: 'faq.a4' },
+  { q: 'faq.q5', a: 'faq.a5' },
 ];
 
 const FAQ: React.FC = () => {
+  const t = useT();
   const [open, setOpen] = React.useState<number | null>(null);
   return (
     <section className="relative py-24 z-10">
       <div className="max-w-3xl mx-auto px-4">
         <div className="text-center mb-14">
           <p className="text-[10px] font-black text-brand-green uppercase tracking-[0.2em] mb-3">FAQ</p>
-          <h2 className="text-4xl font-extrabold text-white tracking-tight">Često postavljana pitanja</h2>
-          <p className="text-gray-400 mt-3 text-base">Sve o freelancingu u Hrvatskoj i EU na jednom mjestu.</p>
+          <h2 className="text-4xl font-extrabold text-white tracking-tight">{t('Frequently Asked Questions')}</h2>
+          <p className="text-gray-400 mt-3 text-base">{t('Everything about freelancing in Croatia and the EU in one place.')}</p>
         </div>
         <div className="space-y-3">
-          {FAQ_ITEMS.map((item, i) => (
+          {FAQ_KEYS.map((item, i) => (
             <div key={i} className="border border-white/10 rounded-2xl overflow-hidden bg-brand-grey/40 backdrop-blur-sm">
               <button
                 className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
                 onClick={() => setOpen(open === i ? null : i)}
                 aria-expanded={open === i}
               >
-                <span className="text-white font-bold text-sm leading-snug">{item.q}</span>
+                <span className="text-white font-bold text-sm leading-snug">{t(item.q)}</span>
                 {open === i
                   ? <Minus size={16} className="text-brand-green flex-shrink-0" />
                   : <Plus size={16} className="text-gray-500 flex-shrink-0" />}
               </button>
               {open === i && (
                 <div className="px-6 pb-5">
-                  <p className="text-gray-400 text-sm leading-relaxed">{item.a}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">{t(item.a)}</p>
                 </div>
               )}
             </div>
@@ -237,38 +223,38 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Ecosystem Vitals - Refined for clarity and business relevance */}
+      {/* Why Cenner — trust pillars */}
       <section className="relative z-10 py-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
               {
-                label: t("Avg. Response"),
-                val: t("< 2 Hours"),
-                icon: <Clock size={16} />,
+                label: t("In-House Team"),
+                val: t("No Outsourcing"),
+                icon: <Users size={16} />,
                 color: "text-brand-green",
-                desc: t("Expert connection time")
+                desc: t("Direct communication")
               },
               {
-                label: t("Selection Rate"),
-                val: t("Top 1%"),
+                label: t("Fixed Pricing"),
+                val: t("No Surprises"),
                 icon: <Shield size={16} />,
                 color: "text-brand-pink",
-                desc: t("Strict technical vetting")
+                desc: t("Quoted upfront, always")
               },
               {
-                label: t("Project Success"),
-                val: "99.4%",
+                label: t("KYC Verified"),
+                val: t("Identity Checked"),
                 icon: <CheckCircle size={16} />,
                 color: "text-brand-green",
-                desc: t("Milestone delivery record")
+                desc: t("Every freelancer vetted")
               },
               {
-                label: t("Capital Security"),
-                val: "100%",
+                label: t("Stripe Escrow"),
+                val: t("Protected Payments"),
                 icon: <Lock size={16} />,
                 color: "text-brand-pink",
-                desc: t("Secure payment protection")
+                desc: t("Funds held until delivery")
               },
             ].map((stat, i) => (
               <div key={i} className="bg-brand-black/60 backdrop-blur-xl border border-white/5 p-8 rounded-[2.5rem] flex flex-col justify-between group hover:border-brand-green/30 hover:bg-brand-black/80 transition-all cursor-default">
@@ -279,7 +265,7 @@ const Home: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <p className={`text-4xl font-black mb-1 ${stat.color} tracking-tighter`}>{stat.val}</p>
+                  <p className={`text-2xl font-black mb-1 ${stat.color} tracking-tight`}>{stat.val}</p>
                   <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">{stat.desc}</p>
                 </div>
               </div>
@@ -288,58 +274,58 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Specializations */}
+      {/* What You Can Build */}
       <section className="relative py-24 z-10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16">
             <div className="max-w-2xl">
-              <h2 className="text-4xl font-black text-white mb-4 tracking-tighter">{t('Top Specializations')}</h2>
-              <p className="text-gray-400 font-medium">{t('Browse our most popular categories.')}</p>
+              <h2 className="text-4xl font-black text-white mb-4 tracking-tighter">{t('What You Can Build')}</h2>
+              <p className="text-gray-400 font-medium">{t('Outcomes we deliver end-to-end.')}</p>
             </div>
-            <Link to="/marketplace" className="hidden md:flex items-center space-x-2 text-brand-green font-bold hover:translate-x-1 transition-transform">
-              <span>{t('View all categories')}</span>
+            <Link to="/services" className="hidden md:flex items-center space-x-2 text-brand-green font-bold hover:translate-x-1 transition-transform">
+              <span>{t('See all services')}</span>
               <ArrowRight size={18} />
             </Link>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Code />, name: t("Development"), color: "bg-blue-500/10 text-blue-400" },
-              { icon: <Palette />, name: t("Creative Design"), color: "bg-brand-pink/10 text-brand-pink" },
-              { icon: <Terminal />, name: t("AI & ML"), color: "bg-brand-green/10 text-brand-green" },
-              { icon: <BarChart3 />, name: t("Data Science"), color: "bg-purple-500/10 text-purple-400" },
+              { icon: <Code />, name: t("Landing Pages"), desc: t("Fast, custom-built sites"), color: "bg-blue-500/10 text-blue-400" },
+              { icon: <Briefcase />, name: t("E-commerce"), desc: t("WooCommerce & checkout flows"), color: "bg-brand-pink/10 text-brand-pink" },
+              { icon: <Terminal />, name: t("Automations"), desc: t("n8n & AI integrations"), color: "bg-brand-green/10 text-brand-green" },
+              { icon: <Palette />, name: t("Brand Identity"), desc: t("Logos, assets & print-ready files"), color: "bg-purple-500/10 text-purple-400" },
             ].map((spec, i) => (
-              <Link key={i} to="/marketplace" className="group p-8 bg-brand-grey/95 border border-white/5 rounded-[2.5rem] hover:border-white/20 transition-all text-center">
+              <Link key={i} to="/services" className="group p-8 bg-brand-grey/95 border border-white/5 rounded-[2.5rem] hover:border-white/20 transition-all text-center">
                 <div className={`w-14 h-14 mx-auto mb-6 rounded-2xl flex items-center justify-center ${spec.color} group-hover:scale-110 transition-transform`}>
                   {spec.icon}
                 </div>
                 <h3 className="text-white font-bold text-lg">{spec.name}</h3>
-                <p className="text-gray-500 text-xs mt-2 font-bold uppercase tracking-widest">{t('1.2k+ Experts')}</p>
+                <p className="text-gray-500 text-xs mt-2 leading-relaxed">{spec.desc}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Global Network Visual */}
+      {/* In-House Team Visual */}
       <section className="relative py-32 z-10 overflow-hidden bg-brand-black/40">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-20">
             <div className="flex-1 space-y-8">
               <h2 className="text-5xl font-black text-white tracking-tighter leading-none">
-                {t('A truly')} <span className="text-brand-pink">{t('Global')}</span> <br /> {t('Expert Network.')}
+                {t('One')} <span className="text-brand-pink">{t('in-house')}</span> <br /> {t('team. Start to finish.')}
               </h2>
               <p className="text-gray-400 text-lg leading-relaxed font-medium">
-                {t('Our specialists operate from 142 countries, providing a follow-the-sun workflow that ensures your project never sleeps. Every node in our network is verified for local compliance and global mastery.')}
+                {t('We work with clients across the EU. Every project is handled in-house — no outsourcing, no middlemen. Straightforward communication, fixed pricing, and clean handover from start to finish.')}
               </p>
               <div className="grid grid-cols-2 gap-8 pt-4">
                 <div>
-                  <h4 className="text-3xl font-black text-white">{t('142+')}</h4>
-                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('Countries Represented')}</p>
+                  <h4 className="text-3xl font-black text-white">{t('100%')}</h4>
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('In-House Delivery')}</p>
                 </div>
                 <div>
                   <h4 className="text-3xl font-black text-brand-green">{t('24/7')}</h4>
-                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('Active Collaboration')}</p>
+                  <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('Direct Support')}</p>
                 </div>
               </div>
             </div>

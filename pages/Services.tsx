@@ -81,7 +81,7 @@ const serviceCategories: Service[] = [
     title: 'AI & Automation',
     description: 'n8n workflows, AI integrations, and hands-on training. We automate the repetitive parts of your business and teach your team to do the same.',
     icon: <Cpu className="text-brand-green" size={40} />,
-    price: 'From €600',
+    price: 'Custom Quote',
     tag: 'Automation',
     accent: 'green',
     features: [
@@ -212,7 +212,9 @@ const Services: React.FC = () => {
 
               <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div>
-                  <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest mb-1">{t('Starting at')}</p>
+                  <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest mb-1">
+                    {service.price.startsWith('From') ? t('Starting at') : t('Pricing')}
+                  </p>
                   <p className="text-3xl font-black text-white">{t(service.price)}</p>
                 </div>
                 <Link
