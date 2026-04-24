@@ -184,38 +184,38 @@ const Home: React.FC = () => {
       <NeuralBackground parallax={true} />
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-32 px-4 z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-8 text-xs font-medium text-brand-green animate-pulse">
+      <section className="relative pt-28 pb-20 px-4 z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-6 text-xs font-medium text-brand-green animate-pulse">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
             </span>
             <span>{t('New: Gemini Live Voice-First Integration')}</span>
           </div>
-          
-          <h1 className="text-6xl md:text-8xl font-extrabold text-white mb-8 tracking-tight leading-[0.9]">
+
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
             {t('Top Talent')} <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
               {t('Talent Network')}
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-100 mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
+          <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
             {t('The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.')}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
             <Link
               to="/marketplace"
-              className="w-full sm:w-auto px-10 py-5 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
+              className="w-full sm:w-auto px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
             >
               <span>{t('Explore Marketplace')}</span>
               <ArrowRight size={20} />
             </Link>
             <Link
               to="/services"
-              className="w-full sm:w-auto px-10 py-5 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
+              className="w-full sm:w-auto px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
             >
               {t('Cenner Services')}
             </Link>
