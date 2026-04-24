@@ -187,7 +187,7 @@ const Subscription: React.FC = () => {
       />
       <NeuralBackground parallax={true} />
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-4 py-16 lg:py-20">
+      <div className="relative z-10 max-w-[1600px] mx-auto px-4 py-16 lg:py-20">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
           <div className="inline-flex items-center space-x-2 bg-brand-green/10 border border-brand-green/20 rounded-full px-4 py-1.5 mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-brand-green">
@@ -204,11 +204,11 @@ const Subscription: React.FC = () => {
         </div>
 
         {/* Pricing Grid */}
-        <div className="grid lg:grid-cols-3 gap-6 items-start">
+        <div className="grid lg:grid-cols-3 gap-4 items-start">
           {tiers.map((tier) => (
             <div
               key={tier.id}
-              className={`relative group bg-brand-grey/70 border transition-all duration-500 rounded-[2.5rem] p-8 flex flex-col shadow-2xl overflow-hidden ${
+              className={`relative group bg-brand-grey/70 border transition-all duration-500 rounded-[2rem] p-7 flex flex-col shadow-2xl overflow-hidden ${
                 tier.highlight
                   ? 'border-brand-green/50 ring-4 ring-brand-green/5 bg-brand-green/[0.02]'
                   : tier.special
@@ -220,38 +220,38 @@ const Subscription: React.FC = () => {
               {tier.highlight && <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/10 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none" />}
 
               {tier.highlight && (
-                <div className="absolute top-8 right-8 px-4 py-1.5 bg-brand-green text-brand-black text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
+                <div className="absolute top-6 right-6 px-3 py-1 bg-brand-green text-brand-black text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg">
                   {t('Recommended')}
                 </div>
               )}
 
               {/* Tier header */}
-              <div className="mb-8 relative">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 border ${
+              <div className="mb-6 relative">
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 border ${
                   tier.highlight ? 'bg-brand-green/10 border-brand-green/20' :
                   tier.special  ? 'bg-brand-pink/10 border-brand-pink/20' :
                   'bg-white/5 border-white/10'
                 }`}>
-                  {tier.icon}
+                  {React.cloneElement(tier.icon as React.ReactElement, { size: 20 })}
                 </div>
-                <h3 className="text-3xl font-black text-white mb-1 tracking-tight">{t(tier.name)}</h3>
-                <p className={`text-sm font-black uppercase tracking-widest ${
+                <h3 className="text-2xl font-black text-white mb-1 tracking-tight">{t(tier.name)}</h3>
+                <p className={`text-xs font-black uppercase tracking-widest ${
                   tier.highlight ? 'text-brand-green' : tier.special ? 'text-brand-pink' : 'text-gray-500'
                 }`}>{t(tier.description)}</p>
               </div>
 
               {/* Price */}
-              <div className="mb-10 relative">
+              <div className="mb-6 relative">
                 <div className="flex items-baseline space-x-1">
-                  <span className="text-5xl font-black text-white tracking-tighter">{tier.price}</span>
-                  <span className="text-gray-600 font-black uppercase text-xs tracking-widest">/ {t(tier.period)}</span>
+                  <span className="text-4xl font-black text-white tracking-tighter">{tier.price}</span>
+                  <span className="text-gray-600 font-black uppercase text-[10px] tracking-widest">/ {t(tier.period)}</span>
                 </div>
               </div>
 
               {/* CTA */}
               <button
                 onClick={() => handlePlanSelection(tier.id)}
-                className={`w-full py-4 rounded-2xl font-black text-sm transition-all mb-10 relative ${
+                className={`w-full py-3 rounded-xl font-black text-xs transition-all mb-7 relative ${
                   tier.highlight
                     ? 'bg-brand-green text-brand-black hover:scale-105 shadow-xl shadow-brand-green/20'
                     : tier.special
@@ -263,21 +263,21 @@ const Subscription: React.FC = () => {
               </button>
 
               {/* Features with detail */}
-              <div className="space-y-5 relative">
-                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-600 mb-2">
+              <div className="space-y-4 relative">
+                <p className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-600 mb-2">
                   {t("What's included")}
                 </p>
                 {tier.features.map((feature, i) => (
-                  <div key={i} className="flex items-start gap-3">
+                  <div key={i} className="flex items-start gap-2.5">
                     <Check
                       className={`mt-0.5 shrink-0 ${
                         tier.highlight ? 'text-brand-green' : tier.special ? 'text-brand-pink' : 'text-gray-600'
                       }`}
-                      size={16}
+                      size={14}
                     />
                     <div>
-                      <p className="text-sm font-bold text-white leading-snug">{feature.name}</p>
-                      <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">{feature.detail}</p>
+                      <p className="text-[13px] font-bold text-white leading-snug">{feature.name}</p>
+                      <p className="text-[11px] text-gray-400 mt-0.5 leading-relaxed">{feature.detail}</p>
                     </div>
                   </div>
                 ))}
