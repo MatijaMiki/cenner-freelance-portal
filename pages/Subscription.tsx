@@ -89,8 +89,8 @@ const tiers: Tier[] = [
         detail: 'Full dashboard showing click-through rates, search impressions, profile conversion stats, and which skills are driving the most interest.',
       },
       {
-        name: 'Verified ID + Skill tests',
-        detail: 'Complete KYC identity verification and optional skill assessments to earn a Verified badge. Clients consistently choose verified freelancers first.',
+        name: 'Verified ID',
+        detail: 'Complete KYC identity verification to earn a Verified badge. Clients consistently choose verified freelancers first.',
       },
       {
         name: 'Lower platform fee (8%)',
@@ -128,10 +128,6 @@ const tiers: Tier[] = [
       {
         name: 'Homepage spotlight',
         detail: 'Your profile is featured in the homepage hero section on a rotating basis — the most visible placement on the entire platform.',
-      },
-      {
-        name: 'Dedicated profile review',
-        detail: 'A Cenner team member personally reviews your profile, portfolio, and pricing, then sends you a tailored recommendations report to maximise conversions.',
       },
       {
         name: 'Trusted freelancer status',
@@ -191,28 +187,28 @@ const Subscription: React.FC = () => {
       />
       <NeuralBackground parallax={true} />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-24 lg:py-32">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 py-16 lg:py-20">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20 lg:mb-28">
-          <div className="inline-flex items-center space-x-2 bg-brand-green/10 border border-brand-green/20 rounded-full px-5 py-2 mb-8 text-[10px] font-black uppercase tracking-[0.3em] text-brand-green">
+        <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
+          <div className="inline-flex items-center space-x-2 bg-brand-green/10 border border-brand-green/20 rounded-full px-4 py-1.5 mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-brand-green">
             <Cpu size={14} />
             <span>{t('Pricing')}</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-none">
+          <h1 className="text-4xl md:text-6xl font-black text-white mb-4 tracking-tighter leading-none">
             {t('Simple, Honest Pricing.').split(',')[0]}, <br />
             <span className="text-brand-pink">{t('Simple, Honest Pricing.').split(',').slice(1).join(',').trim()}</span>
           </h1>
-          <p className="text-gray-400 text-lg md:text-xl font-medium leading-relaxed">
+          <p className="text-gray-400 text-base md:text-lg font-medium leading-relaxed">
             {t('Pick the plan that fits where you are. Upgrade or downgrade any time.')}
           </p>
         </div>
 
         {/* Pricing Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 items-start">
+        <div className="grid lg:grid-cols-3 gap-6 items-start">
           {tiers.map((tier) => (
             <div
               key={tier.id}
-              className={`relative group bg-brand-grey/70 border transition-all duration-500 rounded-[3rem] p-10 flex flex-col shadow-2xl overflow-hidden ${
+              className={`relative group bg-brand-grey/70 border transition-all duration-500 rounded-[2.5rem] p-8 flex flex-col shadow-2xl overflow-hidden ${
                 tier.highlight
                   ? 'border-brand-green/50 ring-4 ring-brand-green/5 bg-brand-green/[0.02]'
                   : tier.special
@@ -291,8 +287,8 @@ const Subscription: React.FC = () => {
         </div>
 
         {/* Trust strip */}
-        <section className="mt-32 py-20 border-y border-white/5 text-center">
-          <h2 className="text-3xl font-black text-white mb-16 tracking-tighter">{t('Why upgrade?')}</h2>
+        <section className="mt-20 py-16 border-y border-white/5 text-center">
+          <h2 className="text-3xl font-black text-white mb-12 tracking-tighter">{t('Why upgrade?')}</h2>
           <div className="grid md:grid-cols-3 gap-12">
             {[
               { icon: <Star />, title: t('Protected Payments'), desc: 'Every transaction is processed securely through Cenner. Your payments and earnings are always protected.' },
