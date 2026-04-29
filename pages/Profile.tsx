@@ -667,6 +667,10 @@ const Profile: React.FC = () => {
   const [isAddingPortfolio, setIsAddingPortfolio] = useState(false);
   const portfolioFileRef = useRef<HTMLInputElement>(null);
 
+  // Analytics state
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+
   const navigate = useNavigate();
   const { user: currentUser, updateUser } = useAuth();
 
@@ -698,6 +702,17 @@ const Profile: React.FC = () => {
   React.useEffect(() => {
     if (activeTab === 'portfolio' && currentUser?.id) {
       API.getPortfolio(currentUser.id).then(setPortfolioItems).catch(() => {});
+    }
+  }, [activeTab, currentUser?.id]);
+
+  // Load analytics when stats tab is active
+  React.useEffect(() => {
+    if (activeTab === 'stats' && currentUser?.id) {
+      setAnalyticsLoading(true);
+      API.getMyAnalytics()
+        .then(setAnalytics)
+        .catch(() => setAnalytics(null))
+        .finally(() => setAnalyticsLoading(false));
     }
   }, [activeTab, currentUser?.id]);
 
@@ -1307,25 +1322,112 @@ const Profile: React.FC = () => {
         return <SavedTab />;
       case 'orders':
         return <OrdersTab />;
-      case 'stats':
+      case 'stats': {
+        const tier = analytics?.tier || subscriptionTier;
+        const isPaid = tier === 'pro' || tier === 'ultra' || tier === 'enterprise';
         return (
-          <div className="animate-in fade-in duration-500">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: t('Response Rate'), value: 'N/A' },
-                { label: t('Delivered on Time'), value: 'N/A' },
-                { label: t('Order Completion'), value: 'N/A' },
-                { label: t('Avg. Rating'), value: '0.0', sub: t('No Reviews Yet') },
-              ].map((stat, i) => (
-                <div key={i} className="bg-brand-grey/40 border border-white/5 rounded-2xl p-6 text-center">
-                  <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">{stat.label}</p>
-                  <p className="text-2xl font-black text-gray-500">{stat.value}</p>
-                  {stat.sub && <p className="text-[10px] text-gray-600 mt-1">{stat.sub}</p>}
+          <div className="animate-in fade-in duration-500 space-y-6">
+            {analyticsLoading && (
+              <p className="text-gray-500 text-sm">{t('Loading analytics…')}</p>
+            )}
+
+            {!analyticsLoading && analytics && (
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { label: t('Profile Views'), value: analytics.totalViews.toLocaleString() },
+                    { label: t('Active Listings'), value: analytics.listingCount },
+                    { label: t('Saved By Clients'), value: analytics.savedCount },
+                    { label: t('Contracts Won'), value: analytics.contractsCompleted, sub: `${analytics.contractsTotal} ${t('total')}` },
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-brand-grey/40 border border-white/5 rounded-2xl p-6 text-center">
+                      <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">{stat.label}</p>
+                      <p className="text-2xl font-black text-white">{stat.value}</p>
+                      {stat.sub && <p className="text-[10px] text-gray-600 mt-1">{stat.sub}</p>}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+
+                {/* Boost credits card */}
+                <div className={`rounded-2xl p-6 border ${
+                  analytics.boosts.credits > 0
+                    ? 'bg-brand-green/5 border-brand-green/20'
+                    : 'bg-brand-grey/40 border-white/5'
+                }`}>
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                      <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">{t('Monthly Boosts')}</p>
+                      <p className="text-2xl font-black text-white">
+                        {analytics.boosts.remaining} <span className="text-gray-500 text-lg">/ {analytics.boosts.credits}</span>
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {analytics.boosts.credits === 0
+                          ? t('Upgrade to Pro or Ultra to unlock profile boosts.')
+                          : `${analytics.boosts.used} ${t('used this month — resets on the 1st')}`}
+                      </p>
+                    </div>
+                    {analytics.boosts.credits > 0 && (
+                      <div className="w-full sm:w-48 h-2 bg-white/5 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-brand-green transition-all"
+                          style={{ width: `${(analytics.boosts.used / analytics.boosts.credits) * 100}%` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Pro-only: conversion + top listings */}
+                {isPaid ? (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-brand-grey/40 border border-white/5 rounded-2xl p-6">
+                        <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">{t('View → Contract Rate')}</p>
+                        <p className="text-2xl font-black text-white">{analytics.conversionRate}%</p>
+                        <p className="text-[10px] text-gray-600 mt-1">{t('Percentage of views that led to a contract')}</p>
+                      </div>
+                      <div className="bg-brand-grey/40 border border-white/5 rounded-2xl p-6">
+                        <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">{t('Plan')}</p>
+                        <p className="text-2xl font-black text-white capitalize">{tier}</p>
+                        <p className="text-[10px] text-gray-600 mt-1">{t('Active subscription tier')}</p>
+                      </div>
+                    </div>
+
+                    {analytics.topListings?.length > 0 && (
+                      <div className="bg-brand-grey/40 border border-white/5 rounded-2xl p-6">
+                        <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-4">{t('Top Listings by Views')}</p>
+                        <div className="space-y-3">
+                          {analytics.topListings.map((l: any) => (
+                            <div key={l.id} className="flex items-center justify-between gap-3 text-sm">
+                              <span className="text-white font-medium truncate flex-1">{l.title}</span>
+                              <span className="text-gray-500 text-xs shrink-0">{l.views.toLocaleString()} {t('views')}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="bg-brand-pink/5 border border-brand-pink/20 rounded-2xl p-6 text-center">
+                    <p className="text-sm text-white font-bold mb-2">{t('Unlock advanced analytics with Pro')}</p>
+                    <p className="text-xs text-gray-400 mb-4">{t('See conversion rate, top listings, and profile impressions.')}</p>
+                    <button
+                      onClick={() => navigate('/subscription')}
+                      className="px-6 py-2 bg-brand-green text-brand-black font-black rounded-xl text-xs uppercase tracking-widest hover:scale-105 transition-all"
+                    >
+                      {t('Upgrade to Pro')}
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+
+            {!analyticsLoading && !analytics && (
+              <p className="text-gray-500 text-sm">{t('Analytics unavailable right now.')}</p>
+            )}
           </div>
         );
+      }
       default:
         return null;
     }

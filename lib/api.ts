@@ -281,6 +281,25 @@ export const API = {
   getDashboardStats: () =>
     request<any>('/dashboard/stats'),
 
+  getMyAnalytics: () =>
+    request<{
+      tier: string;
+      totalViews: number;
+      listingCount: number;
+      savedCount: number;
+      contractsTotal: number;
+      contractsCompleted: number;
+      conversionRate: number;
+      boosts: { credits: number; used: number; remaining: number };
+      topListings: { id: string; title: string; views: number; rating: number; reviews: number }[];
+    }>('/me/analytics'),
+
+  getTopPros: () =>
+    request<any[]>('/featured/top-pros'),
+
+  getSpotlight: () =>
+    request<any[]>('/featured/spotlight'),
+
   // ── Saved Listings ──────────────────────────────────────────────────────
   getSavedListings: () =>
     request<any[]>('/saved-listings'),

@@ -7,7 +7,7 @@ import NotificationBell from './NotificationBell';
 import PermissionModal from './PermissionModal';
 import ChatWidget from './ChatWidget';
 import Footer from './Footer';
-import CookieBanner from './CookieBanner';
+import ConsentModal from './ConsentModal';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage, useT } from '../i18n';
 import { API } from '../lib/api';
@@ -96,10 +96,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const currentLang = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
 
   const navLinks = [
-    { name: t('Services'),  path: '/services' },
-    { name: t('Pricing'),   path: '/subscription' },
-    { name: t('Blog'),      path: '/blog' },
-    { name: t('Contact'),   path: '/contact' },
+    { name: t('Services'),   path: '/services' },
+    { name: t('Pricing'),    path: '/subscription' },
+    { name: t('Onboarding'), path: '/onboarding' },
+    { name: t('Blog'),       path: '/blog' },
+    { name: t('Contact'),    path: '/contact' },
   ];
 
   const marketDropdownItems = [
@@ -374,7 +375,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       <main className="flex-grow">{children}</main>
       {!location.pathname.startsWith('/messages') && <Footer />}
-      <CookieBanner />
+      <ConsentModal />
     </div>
   );
 };

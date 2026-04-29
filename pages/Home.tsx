@@ -12,6 +12,8 @@ import { MOCK_LISTINGS } from '../constants';
 import SEO from '../components/SEO';
 import { useT } from '../i18n';
 import { useAuth } from '../contexts/AuthContext';
+import { API } from '../lib/api';
+import Avatar from '../components/Avatar';
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -173,6 +175,14 @@ const Home: React.FC = () => {
   const t = useT();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [topPros, setTopPros] = React.useState<any[]>([]);
+  const [spotlight, setSpotlight] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    API.getTopPros().then(setTopPros).catch(() => setTopPros([]));
+    API.getSpotlight().then(setSpotlight).catch(() => setSpotlight([]));
+  }, []);
+
   return (
     <div className="relative min-h-screen">
       <SEO
@@ -222,6 +232,102 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Ultra Spotlight */}
+      {spotlight.length > 0 && (
+        <section className="relative z-10 py-12">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-pink">{t('Ultra Spotlight')}</span>
+                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mt-2">{t('This week\'s featured talent')}</h2>
+              </div>
+              <Link to="/marketplace" className="text-brand-pink text-sm font-bold hover:translate-x-1 transition-transform flex items-center gap-2">
+                {t('Browse all')} <ArrowRight size={16} />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {spotlight.map(p => (
+                <Link
+                  key={p.id}
+                  to={`/freelancer/${p.id}`}
+                  className="bg-brand-grey/60 border border-brand-pink/20 rounded-[2rem] p-6 hover:border-brand-pink/50 hover:scale-[1.02] transition-all group"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <Avatar src={p.avatar} name={p.name} size={48} className="rounded-2xl" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-white font-bold text-sm truncate">{p.name}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        {p.trusted ? (
+                          <span className="text-yellow-400 text-[9px] font-black uppercase tracking-wider">★ Trusted</span>
+                        ) : (
+                          <span className="text-brand-pink text-[9px] font-black uppercase tracking-wider">Ultra</span>
+                        )}
+                        {p.avgRating > 0 && (
+                          <span className="text-gray-500 text-[10px] font-bold flex items-center gap-0.5">
+                            <Star size={10} fill="currentColor" className="text-yellow-400" /> {p.avgRating.toFixed(1)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {p.bio && <p className="text-gray-400 text-xs leading-relaxed line-clamp-3 mb-3">{p.bio}</p>}
+                  {p.skills?.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {p.skills.slice(0, 3).map((s: string) => (
+                        <span key={s} className="text-[10px] text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">{s}</span>
+                      ))}
+                    </div>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Top Pros */}
+      {topPros.length > 0 && (
+        <section className="relative z-10 py-12">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-green">{t('Top Pros')}</span>
+                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mt-2">{t('Trusted freelancers on Cenner')}</h2>
+              </div>
+              <Link to="/marketplace" className="text-brand-green text-sm font-bold hover:translate-x-1 transition-transform flex items-center gap-2">
+                {t('Browse all')} <ArrowRight size={16} />
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              {topPros.slice(0, 12).map(p => (
+                <Link
+                  key={p.id}
+                  to={`/freelancer/${p.id}`}
+                  className="bg-brand-grey/40 border border-white/5 rounded-2xl p-4 hover:border-brand-green/30 transition-all text-center group"
+                >
+                  <Avatar src={p.avatar} name={p.name} size={56} className="rounded-full mx-auto mb-3 border-2 border-white/10 group-hover:border-brand-green/50 transition-colors" />
+                  <p className="text-white font-bold text-xs truncate mb-1">{p.name}</p>
+                  <div className="flex items-center justify-center gap-1">
+                    {p.trusted ? (
+                      <span className="text-yellow-400 text-[9px] font-black uppercase">★</span>
+                    ) : p.tier === 'ultra' ? (
+                      <span className="text-brand-pink text-[9px] font-black uppercase">Ultra</span>
+                    ) : (
+                      <span className="text-brand-green text-[9px] font-black uppercase">Pro</span>
+                    )}
+                    {p.avgRating > 0 && (
+                      <span className="text-gray-500 text-[10px] font-bold flex items-center gap-0.5">
+                        <Star size={9} fill="currentColor" className="text-yellow-400" /> {p.avgRating.toFixed(1)}
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Why Cenner — trust pillars */}
       <section className="relative z-10 py-12">
@@ -335,6 +441,54 @@ const Home: React.FC = () => {
                   <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-brand-pink rounded-full blur-[2px]"></div>
                   <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-brand-green rounded-full blur-[2px]"></div>
                </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Onboarding (paušalni obrt) — legal-readiness CTA for new freelancers */}
+      <section className="relative py-24 z-10">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-brand-pink/10 via-brand-grey/40 to-brand-green/10 p-10 md:p-16">
+            <div className="absolute -top-20 -right-20 w-64 h-64 bg-brand-pink/10 rounded-full blur-[100px]" />
+            <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-green/10 rounded-full blur-[100px]" />
+            <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[10px] font-black uppercase tracking-widest mb-6">
+                  <ShieldCheck size={12} />
+                  {t('Legal in Croatia')}
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-[1.05] mb-4">
+                  {t('You cannot just sign up and work.')}
+                </h2>
+                <p className="text-gray-400 text-base md:text-lg leading-relaxed mb-6 font-medium">
+                  {t('To invoice clients in Croatia you must be registered as a paušalni obrt or a similar legal entity. We put together a step-by-step guide so you know exactly what to do.')}
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/onboarding"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-brand-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform"
+                  >
+                    {t('Read the guide')} <ArrowRight size={14} />
+                  </Link>
+                  <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+                    {t('Informational only — not legal advice')}
+                  </span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { n: '01', label: t('Pick activity') },
+                  { n: '02', label: t('Open via START') },
+                  { n: '03', label: t('Register HZMO/HZZO') },
+                  { n: '04', label: t('Connect to Cenner') },
+                ].map(s => (
+                  <div key={s.n} className="p-5 rounded-2xl border border-white/10 bg-brand-black/40 backdrop-blur-sm">
+                    <p className="text-brand-green text-2xl font-black mb-1">{s.n}</p>
+                    <p className="text-white text-xs font-bold leading-snug">{s.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

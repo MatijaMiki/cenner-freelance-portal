@@ -126,7 +126,7 @@ const Marketplace: React.FC = () => {
               type="range"
               min="50"
               max="5000"
-              step="50"
+              step="1"
               value={priceRange}
               onChange={(e) => setPriceRange(parseInt(e.target.value))}
               className="cenner-slider w-full cursor-pointer"
@@ -166,8 +166,8 @@ const Marketplace: React.FC = () => {
         <Tag size={24} className="text-white mb-4" />
         <h4 className="text-white font-black text-lg mb-2">{t('Priority Matching')}</h4>
         <p className="text-gray-400 text-xs leading-relaxed mb-6 font-medium">{t('Skip the search and get matched with a verified freelancer within 2 hours.')}</p>
-        <button className="w-full py-3.5 bg-white text-brand-black rounded-xl text-xs font-black hover:scale-105 transition-all uppercase tracking-widest">
-          {t('Find a Match')}
+        <button disabled className="w-full py-3.5 bg-white/20 text-gray-400 rounded-xl text-xs font-black uppercase tracking-widest cursor-not-allowed">
+          {t('Coming Soon')}
         </button>
       </div>
     </div>
@@ -343,13 +343,21 @@ const Marketplace: React.FC = () => {
                         <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="rounded-full border-2 border-brand-green" />
                         <div className="flex-grow min-w-0">
                           <p className="text-white text-sm font-bold truncate">{listing.freelancerName}</p>
-                          {listing.freelancerTier === 'ultra' || listing.freelancerTier === 'enterprise' ? (
-                            <p className="text-brand-pink text-[10px] font-black uppercase tracking-tighter">Ultra</p>
-                          ) : listing.freelancerTier === 'pro' ? (
-                            <p className="text-brand-green text-[10px] font-black uppercase tracking-tighter">Pro</p>
-                          ) : (
-                            <p className="text-gray-600 text-[10px] font-black uppercase tracking-tighter">Free</p>
-                          )}
+                          <div className="flex items-center gap-1.5">
+                            {listing.freelancerTier === 'ultra' || listing.freelancerTier === 'enterprise' ? (
+                              <p className="text-brand-pink text-[10px] font-black uppercase tracking-tighter">Ultra</p>
+                            ) : listing.freelancerTier === 'pro' ? (
+                              <p className="text-brand-green text-[10px] font-black uppercase tracking-tighter">Pro</p>
+                            ) : (
+                              <p className="text-gray-600 text-[10px] font-black uppercase tracking-tighter">Free</p>
+                            )}
+                            {listing.freelancerTrusted && (
+                              <span title="Trusted freelancer" className="text-yellow-400 text-[9px] font-black uppercase tracking-tighter">★ Trusted</span>
+                            )}
+                            {listing.freelancerKycVerified && !listing.freelancerTrusted && (
+                              <span title="KYC verified" className="text-brand-green text-[9px] font-bold">✓ Verified</span>
+                            )}
+                          </div>
                         </div>
                         <div className="flex items-center space-x-1.5 text-yellow-400">
                           <Star size={14} fill="currentColor" />

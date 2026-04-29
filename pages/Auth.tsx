@@ -5,6 +5,7 @@ import { Mail, Lock, User, Github, ArrowRight, Phone, AlertCircle, ChevronDown, 
 import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
+import { hasRequiredConsent, openConsentModal } from '../lib/consent';
 
 const SAFE_REDIRECT_PATHS = ['/profile', '/dashboard', '/marketplace', '/messages', '/orders', '/projects', '/creator-onboarding', '/subscription', '/match', '/blog', '/services'];
 function getSafeRedirect(from: unknown): string {
@@ -96,6 +97,11 @@ const Auth: React.FC = () => {
       if (isLogin) {
         await login(email, password);
       } else {
+        if (!hasRequiredConsent()) {
+          openConsentModal('register');
+          setLoading(false);
+          return;
+        }
         const fullPhone = `${selectedCountry.code}${phone}`;
         await register({ email, password, name: username, mobile: fullPhone });
       }

@@ -45,6 +45,8 @@ export interface ServiceListing {
   galleryImages?: string[];
   createdAt?: string;
   freelancerTier?: string;
+  freelancerTrusted?: boolean;
+  freelancerKycVerified?: boolean;
   isSponsored?: boolean;
   boostedUntil?: string | null;
 }

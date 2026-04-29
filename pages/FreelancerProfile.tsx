@@ -368,6 +368,21 @@ const FreelancerProfile: React.FC = () => {
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-3 mb-2">
                 <h1 className="text-3xl font-black text-white tracking-tighter">{profile.name}</h1>
+                {profile.trusted && (
+                  <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1" title="Trusted freelancer — top-tier Ultra">
+                    ★ Trusted
+                  </span>
+                )}
+                {profile.tier === 'ultra' && !profile.trusted && (
+                  <span className="px-3 py-1 bg-brand-pink/10 border border-brand-pink/30 rounded-full text-[10px] font-black text-brand-pink uppercase tracking-widest">
+                    Ultra
+                  </span>
+                )}
+                {profile.tier === 'pro' && (
+                  <span className="px-3 py-1 bg-brand-green/10 border border-brand-green/30 rounded-full text-[10px] font-black text-brand-green uppercase tracking-widest">
+                    Pro
+                  </span>
+                )}
                 {isVerified && (
                   <span className="px-3 py-1 bg-brand-green/10 border border-brand-green/20 rounded-full text-[10px] font-black text-brand-green uppercase tracking-widest flex items-center gap-1">
                     <ShieldCheck size={10} /> Verified
