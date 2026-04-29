@@ -28,7 +28,6 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const FreelancerProfile = lazy(() => import('./pages/FreelancerProfile'));
 const Orders = lazy(() => import('./pages/Orders'));
 const Inbox = lazy(() => import('./pages/Inbox'));
-const Chat = lazy(() => import('./pages/Chat'));
 const Contracts = lazy(() => import('./pages/Contracts'));
 const ContractDetail = lazy(() => import('./pages/ContractDetail'));
 const Projects = lazy(() => import('./pages/Projects'));
