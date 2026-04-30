@@ -13,6 +13,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import { useT } from '../i18n';
 import AvatarImg from '../components/Avatar';
+import FreelancerHeatmap from '../components/FreelancerHeatmap';
 
 type MarketplaceMode = 'freelancers' | 'clients';
 
@@ -192,7 +193,7 @@ const Marketplace: React.FC = () => {
   };
 
   return (
-    <div className="pt-12 pb-24 px-4 max-w-7xl mx-auto">
+    <div className="pt-12 pb-24 px-4 max-w-[1600px] mx-auto">
       <SEO
         title="Marketplace — Freelanceri Hrvatska"
         canonical="/marketplace"
@@ -294,20 +295,20 @@ const Marketplace: React.FC = () => {
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-12">
+      <div className="flex flex-col lg:flex-row gap-10">
         {/* Desktop Filters Sidebar */}
-        <aside className="hidden lg:block w-64 flex-shrink-0">
+        <aside className="hidden lg:block w-56 flex-shrink-0">
           <div className="sticky top-24">
             <SidebarContent />
           </div>
         </aside>
 
         {/* Main Content Area */}
-        <div className="flex-grow">
+        <div className="flex-grow min-w-0">
           {mode === 'freelancers' ? (
             /* Service Listings Grid */
             filteredServices.length > 0 ? (
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8 animate-in fade-in duration-500">
+              <div className="grid sm:grid-cols-2 2xl:grid-cols-3 gap-8 animate-in fade-in duration-500">
                 {filteredServices.map((listing) => (
                   <Link
                     key={listing.id}
@@ -451,6 +452,15 @@ const Marketplace: React.FC = () => {
             )
           )}
         </div>
+
+        {/* Right column — Talent density heatmap (freelancer mode only) */}
+        {mode === 'freelancers' && (
+          <aside className="hidden xl:block w-[260px] flex-shrink-0">
+            <div className="sticky top-24">
+              <FreelancerHeatmap listings={listings} />
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   );

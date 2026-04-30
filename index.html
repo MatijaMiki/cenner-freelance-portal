@@ -128,20 +128,27 @@
       .cenner-slider {
         -webkit-appearance: none;
         appearance: none;
+        height: 24px;
+        background: transparent;
+        outline: none;
+        border: none;
+        touch-action: pan-y;
+      }
+      .cenner-slider::-webkit-slider-runnable-track {
+        -webkit-appearance: none;
         height: 6px;
         border-radius: 3px;
         background: linear-gradient(to right, #4ade80 var(--slider-pct, 50%), #1a1a1a var(--slider-pct, 50%));
-        outline: none;
-        border: none;
       }
       .cenner-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
         width: 24px;
         height: 24px;
+        margin-top: -9px;
         border-radius: 50%;
         background: #4ade80;
-        cursor: pointer;
+        cursor: grab;
         box-shadow: 0 0 0 4px rgba(74,222,128,0.15), 0 2px 8px rgba(0,0,0,0.5);
         transition: box-shadow 0.2s, transform 0.15s;
       }
@@ -149,19 +156,25 @@
         box-shadow: 0 0 0 8px rgba(74,222,128,0.2), 0 2px 12px rgba(0,0,0,0.6);
         transform: scale(1.1);
       }
-      .cenner-slider::-moz-range-thumb {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: #4ade80;
-        cursor: pointer;
-        border: none;
-        box-shadow: 0 0 0 4px rgba(74,222,128,0.15);
+      .cenner-slider:active::-webkit-slider-thumb {
+        cursor: grabbing;
       }
       .cenner-slider::-moz-range-track {
         height: 6px;
         border-radius: 3px;
         background: linear-gradient(to right, #4ade80 var(--slider-pct, 50%), #1a1a1a var(--slider-pct, 50%));
+      }
+      .cenner-slider::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #4ade80;
+        cursor: grab;
+        border: none;
+        box-shadow: 0 0 0 4px rgba(74,222,128,0.15);
+      }
+      .cenner-slider:active::-moz-range-thumb {
+        cursor: grabbing;
       }
     </style>
   <script type="importmap">
