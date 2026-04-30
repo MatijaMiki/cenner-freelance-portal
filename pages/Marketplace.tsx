@@ -455,7 +455,7 @@ const Marketplace: React.FC = () => {
 
         {/* Right column — Talent density heatmap (freelancer mode only) */}
         {mode === 'freelancers' && (
-          <aside className="hidden xl:block w-[260px] flex-shrink-0">
+          <aside className="hidden xl:block w-[360px] flex-shrink-0">
             <div className="sticky top-24">
               <FreelancerHeatmap listings={listings} />
             </div>
