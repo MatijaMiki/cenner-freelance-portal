@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ShieldCheck, ArrowLeft, Lock, CheckCircle2, ShoppingBag, Info, Loader2 } from 'lucide-react';
+import { ShieldCheck, ArrowLeft, Lock, ShoppingBag, Info, Loader2 } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useData } from '../contexts/DataContext';
@@ -31,7 +31,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, onSucce
       elements,
       redirect: 'if_required',
       confirmParams: {
-        return_url: `${window.location.origin}/orders`,
+        return_url: `${window.location.origin}/order-success?type=service`,
       },
     });
 
@@ -92,14 +92,11 @@ const Checkout: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState<1 | 2>(1);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [serverTotal, setServerTotal] = useState<number | null>(null);
   const [serverFee, setServerFee] = useState<number | null>(null);
   const [loadingIntent, setLoadingIntent] = useState(true);
   const [intentError, setIntentError] = useState<string | null>(null);
-  const [confirmedPaymentId, setConfirmedPaymentId] = useState<string | null>(null);
-  const [receiptUrl, setReceiptUrl] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<ReturnType<typeof loadStripe> | null>(null);
 
   const listing = id ? getListingById(id) : undefined;
@@ -149,64 +146,6 @@ const Checkout: React.FC = () => {
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-4">
         <h2 className="text-3xl font-bold text-white mb-4">Service not found</h2>
         <Link to="/marketplace" className="text-brand-green font-bold">Back to Marketplace</Link>
-      </div>
-    );
-  }
-
-  if (step === 2) {
-    return (
-      <div className="pt-24 pb-32 max-w-2xl mx-auto px-4 text-center">
-        <div className="w-24 h-24 bg-brand-green/20 rounded-full flex items-center justify-center text-brand-green mx-auto mb-8 animate-in zoom-in duration-500">
-          <CheckCircle2 size={48} />
-        </div>
-        <h1 className="text-5xl font-extrabold text-white mb-4 tracking-tight">Order Confirmed!</h1>
-        <p className="text-gray-400 text-lg mb-12">
-          Your payment of <span className="text-brand-pink font-bold">€{serverTotal ?? totalAmount}</span> has been processed securely.
-          <span className="text-brand-green font-bold"> {listing.freelancerName}</span> has been notified and will start working on your project immediately.
-        </p>
-
-        <div className="bg-brand-grey/90 border border-white/10 rounded-3xl p-8 mb-12 text-left shadow-2xl">
-          <h3 className="text-white font-bold mb-4 uppercase text-xs tracking-widest">Order Details</h3>
-          {confirmedPaymentId && (
-            <div className="flex justify-between items-center py-3 border-b border-white/5">
-              <span className="text-gray-500 text-sm">Payment ID</span>
-              <span className="text-white font-mono text-xs">{confirmedPaymentId.slice(0, 24)}…</span>
-            </div>
-          )}
-          <div className="flex justify-between items-center py-3 border-b border-white/5">
-            <span className="text-gray-500 text-sm">Project</span>
-            <span className="text-white font-bold text-sm">{listing.title}</span>
-          </div>
-          <div className="flex justify-between items-center py-3 border-b border-white/5">
-            <span className="text-gray-500 text-sm">Amount Paid</span>
-            <span className="text-brand-pink font-black text-sm">€{serverTotal ?? totalAmount}</span>
-          </div>
-          <div className="flex justify-between items-center py-3">
-            <span className="text-gray-500 text-sm">Estimated Delivery</span>
-            <span className="text-brand-pink font-bold text-sm">{listing.deliveryTime}</span>
-          </div>
-        </div>
-
-        {receiptUrl && (
-          <a
-            href={receiptUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center space-x-2 text-brand-green font-bold text-sm mb-8 hover:underline"
-          >
-            <ArrowLeft size={14} className="rotate-[-90deg]" />
-            <span>Download Stripe Receipt</span>
-          </a>
-        )}
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link to="/profile" className="px-10 py-4 bg-brand-green text-brand-black font-black rounded-xl hover:scale-105 transition-all shadow-lg shadow-brand-green/20">
-            Go to My Orders
-          </Link>
-          <Link to="/marketplace" className="px-10 py-4 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all">
-            Continue Shopping
-          </Link>
-        </div>
       </div>
     );
   }
@@ -278,12 +217,33 @@ const Checkout: React.FC = () => {
                   listing={listing}
                   totalAmount={serverTotal ?? totalAmount}
                   onSuccess={(paymentId) => {
-                    setConfirmedPaymentId(paymentId);
-                    setStep(2);
                     API.createOrder(id!, paymentId).catch(() => {});
                     API.getPaymentReceipt(paymentId)
-                      .then(({ receiptUrl: url }) => { if (url) setReceiptUrl(url); })
-                      .catch(() => {});
+                      .then(({ receiptUrl: url }) => {
+                        navigate('/order-success?type=service', {
+                          replace: true,
+                          state: {
+                            listingTitle: listing.title,
+                            freelancerName: listing.freelancerName,
+                            deliveryTime: listing.deliveryTime,
+                            amount: serverTotal ?? totalAmount,
+                            paymentId,
+                            receiptUrl: url || undefined,
+                          },
+                        });
+                      })
+                      .catch(() => {
+                        navigate('/order-success?type=service', {
+                          replace: true,
+                          state: {
+                            listingTitle: listing.title,
+                            freelancerName: listing.freelancerName,
+                            deliveryTime: listing.deliveryTime,
+                            amount: serverTotal ?? totalAmount,
+                            paymentId,
+                          },
+                        });
+                      });
                   }}
                 />
               </Elements>

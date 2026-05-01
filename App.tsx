@@ -37,6 +37,7 @@ const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const Earnings = lazy(() => import('./pages/Earnings'));
 const SavedListings = lazy(() => import('./pages/SavedListings'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
+const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const App: React.FC = () => {
@@ -80,6 +81,7 @@ const App: React.FC = () => {
                   <Route path="/earnings" element={<Earnings />} />
                   <Route path="/saved" element={<SavedListings />} />
                   <Route path="/onboarding" element={<Onboarding />} />
+                  <Route path="/order-success" element={<OrderSuccess />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
