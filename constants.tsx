@@ -1,5 +1,5 @@
 
-import { ServiceListing, BlogPost, BlogComment, JobPosting } from './types';
+import { ServiceListing, CommunityPost, CommunityComment, JobPosting } from './types';
 
 export const CATEGORIES = [
   'Design', 
@@ -17,9 +17,9 @@ export const CATEGORIES = [
 ];
 
 // Initialize as empty arrays for a fresh platform state
-export const MOCK_BLOG_POSTS: BlogPost[] = [];
+export const MOCK_COMMUNITY_POSTS: CommunityPost[] = [];
 
-export const MOCK_BLOG_COMMENTS: BlogComment[] = [];
+export const MOCK_COMMUNITY_COMMENTS: CommunityComment[] = [];
 
 export const MOCK_LISTINGS: ServiceListing[] = [];
 

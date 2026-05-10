@@ -5,7 +5,7 @@ export interface User {
   email: string;
   mobile?: string;
   avatar: string;
-  role: 'freelancer' | 'client';
+  role: 'freelancer' | 'client' | 'admin';
   bio?: string;
   skills?: string[];
   creatorStatus?: 'none' | 'pending' | 'approved' | 'rejected';
@@ -65,7 +65,7 @@ export interface JobPosting {
   urgency: 'low' | 'medium' | 'high';
 }
 
-export interface BlogPost {
+export interface CommunityPost {
   id: string;
   title: string;
   author: string;
@@ -79,7 +79,7 @@ export interface BlogPost {
   isPrivate?: boolean;
 }
 
-export interface BlogComment {
+export interface CommunityComment {
   id: string;
   author: string;
   authorId?: string;
@@ -87,7 +87,24 @@ export interface BlogComment {
   content: string;
   timestamp: string;
   votes: number;
-  replies?: BlogComment[];
+  replies?: CommunityComment[];
+}
+
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt?: string | null;
+  content: string;
+  coverImage?: string | null;
+  published: boolean;
+  publishedAt?: string | null;
+  viewCount?: number;
+  author: string;
+  authorAvatar?: string;
+  authorId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type Category = 'Design' | 'Development' | 'Writing' | 'Marketing' | 'Video' | 'Music';

@@ -100,6 +100,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: t('Pricing'),    path: '/subscription' },
     { name: t('Onboarding'), path: '/onboarding' },
     { name: t('Blog'),       path: '/blog' },
+    { name: t('Community'),  path: '/community' },
     { name: t('Contact'),    path: '/contact' },
   ];
 

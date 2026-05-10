@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { ServiceListing, JobPosting, BlogPost } from '../types';
+import { ServiceListing, JobPosting, CommunityPost } from '../types';
 import { API } from '../lib/api';
 import { io } from 'socket.io-client';
 
@@ -9,13 +9,13 @@ const BACKEND = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 interface DataContextType {
   listings: ServiceListing[];
   jobs: JobPosting[];
-  blogPosts: BlogPost[];
+  communityPosts: CommunityPost[];
   loading: boolean;
   addListing: (listing: Omit<ServiceListing, 'id'>) => Promise<ServiceListing>;
   addJob: (job: Omit<JobPosting, 'id'>) => Promise<JobPosting>;
-  addBlogPost: (post: Omit<BlogPost, 'id'>) => Promise<BlogPost>;
-  updateBlogPost: (id: string, data: Partial<BlogPost>) => Promise<BlogPost>;
-  deleteBlogPost: (id: string) => Promise<void>;
+  addCommunityPost: (post: Omit<CommunityPost, 'id'>) => Promise<CommunityPost>;
+  updateCommunityPost: (id: string, data: Partial<CommunityPost>) => Promise<CommunityPost>;
+  deleteCommunityPost: (id: string) => Promise<void>;
   updateListing: (id: string, data: Partial<ServiceListing>) => Promise<ServiceListing>;
   deleteListing: (id: string) => Promise<void>;
   getListingById: (id: string) => ServiceListing | undefined;
@@ -27,15 +27,15 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [listings, setListings] = useState<ServiceListing[]>([]);
   const [jobs, setJobs] = useState<JobPosting[]>([]);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([API.getListings(), API.getJobs(), API.getPosts()])
+    Promise.all([API.getListings(), API.getJobs(), API.getCommunityPosts()])
       .then(([l, j, p]) => {
         setListings(l);
         setJobs(j);
-        setBlogPosts(p);
+        setCommunityPosts(p);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -65,21 +65,21 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return job;
   };
 
-  const addBlogPost = async (data: Omit<BlogPost, 'id'>): Promise<BlogPost> => {
-    const post = await API.createPost(data);
-    setBlogPosts(prev => [post, ...prev]);
+  const addCommunityPost = async (data: Omit<CommunityPost, 'id'>): Promise<CommunityPost> => {
+    const post = await API.createCommunityPost(data);
+    setCommunityPosts(prev => [post, ...prev]);
     return post;
   };
 
-  const updateBlogPost = async (id: string, data: Partial<BlogPost>): Promise<BlogPost> => {
-    const post = await API.updatePost(id, data);
-    setBlogPosts(prev => prev.map(p => p.id === id ? { ...p, ...post } : p));
+  const updateCommunityPost = async (id: string, data: Partial<CommunityPost>): Promise<CommunityPost> => {
+    const post = await API.updateCommunityPost(id, data);
+    setCommunityPosts(prev => prev.map(p => p.id === id ? { ...p, ...post } : p));
     return post;
   };
 
-  const deleteBlogPost = async (id: string): Promise<void> => {
-    await API.deletePost(id);
-    setBlogPosts(prev => prev.filter(p => p.id !== id));
+  const deleteCommunityPost = async (id: string): Promise<void> => {
+    await API.deleteCommunityPost(id);
+    setCommunityPosts(prev => prev.filter(p => p.id !== id));
   };
 
   const updateListing = async (id: string, data: Partial<ServiceListing>): Promise<ServiceListing> => {
@@ -102,8 +102,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <DataContext.Provider value={{
-      listings, jobs, blogPosts, loading,
-      addListing, addJob, addBlogPost, updateBlogPost, deleteBlogPost,
+      listings, jobs, communityPosts, loading,
+      addListing, addJob, addCommunityPost, updateCommunityPost, deleteCommunityPost,
       updateListing, deleteListing,
       getListingById, refreshListings,
     }}>

@@ -19,7 +19,10 @@ const Profile = lazy(() => import('./pages/Profile'));
 const About = lazy(() => import('./pages/About'));
 const Contact = lazy(() => import('./pages/Contact'));
 const CreatorOnboarding = lazy(() => import('./pages/CreatorOnboarding'));
+const Community = lazy(() => import('./pages/Community'));
 const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const BlogEditor = lazy(() => import('./pages/BlogEditor'));
 const Subscription = lazy(() => import('./pages/Subscription'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
@@ -61,7 +64,11 @@ const App: React.FC = () => {
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/creator-onboarding" element={<CreatorOnboarding />} />
+                  <Route path="/community" element={<Community />} />
                   <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog-admin" element={<BlogEditor />} />
+                  <Route path="/blog-admin/:id" element={<BlogEditor />} />
+                  <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />

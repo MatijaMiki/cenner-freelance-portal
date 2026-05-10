@@ -44,6 +44,7 @@ const COMPANY_LINKS = [
 
 const RESOURCE_LINKS = [
   { label: 'Blog',           path: '/blog' },
+  { label: 'Community',      path: '/community' },
   { label: 'Privacy Policy', path: '/privacy' },
   { label: 'Terms of Use',   path: '/terms' },
   { label: 'Cookie Policy',  path: '/cookies' },

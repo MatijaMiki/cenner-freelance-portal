@@ -1,6 +1,7 @@
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://api.cenner.hr/api/v1/portal';
 const CRM_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
+const PUBLIC_BASE = API_BASE.replace(/\/portal$/, '/public');
 
 async function request<T>(
   endpoint: string,
@@ -16,6 +17,15 @@ async function request<T>(
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+async function requestPublic<T>(endpoint: string): Promise<T> {
+  const res = await fetch(`${PUBLIC_BASE}${endpoint}`, { method: 'GET' });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }));
     throw new Error(err.error || `HTTP ${res.status}`);
@@ -122,22 +132,34 @@ export const API = {
   deleteJob: (id: string) =>
     request<{ success: boolean }>(`/jobs/${id}`, 'DELETE'),
 
-  // ── Blog posts ────────────────────────────────────────────────────────
-  getPosts: () => request<any[]>('/posts'),
+  // ── Community Hub (Reddit-style) ─────────────────────────────────────
+  getCommunityPosts: () => request<any[]>('/community/posts'),
 
-  createPost: (data: any) => request<any>('/posts', 'POST', data),
+  createCommunityPost: (data: any) => request<any>('/community/posts', 'POST', data),
 
-  updatePost: (id: string, data: any) =>
-    request<any>(`/posts/${id}`, 'PUT', data),
+  updateCommunityPost: (id: string, data: any) =>
+    request<any>(`/community/posts/${id}`, 'PUT', data),
 
-  deletePost: (id: string) =>
-    request<{ success: boolean }>(`/posts/${id}`, 'DELETE'),
+  deleteCommunityPost: (id: string) =>
+    request<{ success: boolean }>(`/community/posts/${id}`, 'DELETE'),
 
-  getComments: (postId: string) =>
-    request<any[]>(`/posts/${postId}/comments`),
+  getCommunityComments: (postId: string) =>
+    request<any[]>(`/community/posts/${postId}/comments`),
 
-  addComment: (postId: string, content: string, parentId?: string) =>
-    request<any>(`/posts/${postId}/comments`, 'POST', { content, ...(parentId && { parentId }) }),
+  addCommunityComment: (postId: string, content: string, parentId?: string) =>
+    request<any>(`/community/posts/${postId}/comments`, 'POST', { content, ...(parentId && { parentId }) }),
+
+  // ── Blog (long-form, admin-authored) ──────────────────────────────────
+  // Public reads
+  listPublicBlogPosts: () => requestPublic<any[]>('/blog'),
+  getPublicBlogPost: (slug: string) => requestPublic<any>(`/blog/${encodeURIComponent(slug)}`),
+  // Admin (auth + ADMIN role)
+  listAdminBlogPosts: () => request<any[]>('/blog'),
+  getAdminBlogPost: (id: string) => request<any>(`/blog/${id}`),
+  createBlogPost: (data: { title: string; slug?: string; excerpt?: string; content: string; coverImage?: string; published?: boolean }) =>
+    request<any>('/blog', 'POST', data),
+  updateBlogPost: (id: string, data: any) => request<any>(`/blog/${id}`, 'PUT', data),
+  deleteBlogPost: (id: string) => request<{ success: boolean }>(`/blog/${id}`, 'DELETE'),
 
   // ── Contact form ─────────────────────────────────────────────────────
   contact: (data: { name: string; email: string; subject: string; message: string }) =>
@@ -348,9 +370,9 @@ export const API = {
     return request<{ data: any[]; total: number; page: number; totalPages: number }>(`/listings/search?${qs}`);
   },
 
-  // ── Blog Votes ──────────────────────────────────────────────────────────
-  votePost: (postId: string, direction: 'up' | 'down') =>
-    request<{ votes: number }>(`/posts/${postId}/vote`, 'POST', { direction }),
+  // ── Community Votes ──────────────────────────────────────────────────────
+  voteCommunityPost: (postId: string, direction: 'up' | 'down') =>
+    request<{ votes: number }>(`/community/posts/${postId}/vote`, 'POST', { direction }),
 
   // ── Stripe Config ────────────────────────────────────────────────────────
   getStripeConfig: () =>

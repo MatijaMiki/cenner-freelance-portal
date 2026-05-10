@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
 import { hasRequiredConsent, openConsentModal } from '../lib/consent';
 
-const SAFE_REDIRECT_PATHS = ['/profile', '/dashboard', '/marketplace', '/messages', '/orders', '/projects', '/creator-onboarding', '/subscription', '/match', '/blog', '/services'];
+const SAFE_REDIRECT_PATHS = ['/profile', '/dashboard', '/marketplace', '/messages', '/orders', '/projects', '/creator-onboarding', '/subscription', '/match', '/blog', '/community', '/services'];
 function getSafeRedirect(from: unknown): string {
   if (typeof from !== 'string') return '/profile';
   if (SAFE_REDIRECT_PATHS.some(p => from === p || from.startsWith(p + '/'))) return from;
