@@ -5,13 +5,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) — Ads (G-YEYHV1V9WP) + Analytics (G-MQ8LYQNEC5) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YEYHV1V9WP"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+
+      // Google Consent Mode v2 — required for EU/EEA users.
+      // Default everything to "denied"; cookieless pings will still fire so we
+      // get aggregated modeled data, but no real cookies are set until consent.
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500
+      });
+
+      // If user previously accepted on this device, lift the denial immediately
+      // (before any pings fire) so we don't lose tracking on returning visitors.
+      try {
+        var c = JSON.parse(localStorage.getItem('cenner_consent_v2') || '{}');
+        if (c && c.cookies === 'accepted') {
+          gtag('consent', 'update', {
+            ad_storage: 'granted',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted',
+            analytics_storage: 'granted'
+          });
+        }
+      } catch (e) {}
+
       gtag('js', new Date());
       gtag('config', 'G-YEYHV1V9WP');
+      gtag('config', 'G-MQ8LYQNEC5');
     </script>
 
     <title>Cenner — Freelance Platforma Hrvatska | Honorarni Posao EU</title>

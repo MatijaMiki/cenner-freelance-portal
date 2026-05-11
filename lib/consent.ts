@@ -20,6 +20,20 @@ export const setConsent = (patch: Partial<ConsentState>) => {
   const merged = { ...getConsent(), ...patch };
   localStorage.setItem(KEY, JSON.stringify(merged));
   window.dispatchEvent(new CustomEvent('consent:changed', { detail: merged }));
+
+  // Google Consent Mode v2 — propagate cookie consent to gtag so Ads/Analytics
+  // switch between cookieless pings and full tracking without a page reload.
+  const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+  if (typeof w.gtag === 'function') {
+    const granted = merged.cookies === 'accepted' ? 'granted' : 'denied';
+    w.gtag('consent', 'update', {
+      ad_storage: granted,
+      ad_user_data: granted,
+      ad_personalization: granted,
+      analytics_storage: granted,
+    });
+  }
+
   return merged;
 };
 

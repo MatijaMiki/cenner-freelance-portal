@@ -8,7 +8,6 @@ import {
   ShieldCheck, Cpu, Briefcase, Globe2, Clock, CheckCircle, Lock, Plus, Minus
 } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
-import { MOCK_LISTINGS } from '../constants';
 import SEO from '../components/SEO';
 import { useT } from '../i18n';
 import { useAuth } from '../contexts/AuthContext';
