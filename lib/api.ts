@@ -3,34 +3,57 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://api.cenner.hr/api
 const CRM_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 const PUBLIC_BASE = API_BASE.replace(/\/portal$/, '/public');
 
+// Thrown when the server responds with a 403 + banned:true payload.
+// The router watches for this and sends the user to /banned.
+export class BannedError extends Error {
+  banId?: string;
+  reason?: string;
+  canAppeal?: boolean;
+  constructor(payload: { banId?: string; reason?: string; canAppeal?: boolean; error?: string }) {
+    super(payload.reason || payload.error || 'Banned');
+    this.name = 'BannedError';
+    this.banId = payload.banId;
+    this.reason = payload.reason;
+    this.canAppeal = payload.canAppeal;
+  }
+}
+
+async function handleResponse<T>(res: Response): Promise<T> {
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    if (res.status === 403 && err && err.banned) {
+      // Notify the app so it can redirect the user to /banned
+      window.dispatchEvent(new CustomEvent('api:banned', { detail: err }));
+      throw new BannedError(err);
+    }
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
 async function request<T>(
   endpoint: string,
   method: string = 'GET',
   body?: unknown,
 ): Promise<T> {
   const headers: HeadersInit = { 'Content-Type': 'application/json' };
-
   const res = await fetch(`${API_BASE}${endpoint}`, {
     method,
     headers,
     credentials: 'include',
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || `HTTP ${res.status}`);
-  }
-  return res.json();
+  return handleResponse<T>(res);
 }
 
-async function requestPublic<T>(endpoint: string): Promise<T> {
-  const res = await fetch(`${PUBLIC_BASE}${endpoint}`, { method: 'GET' });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || `HTTP ${res.status}`);
-  }
-  return res.json();
+async function requestPublic<T>(endpoint: string, method: string = 'GET', body?: unknown): Promise<T> {
+  const headers: HeadersInit = { 'Content-Type': 'application/json' };
+  const res = await fetch(`${PUBLIC_BASE}${endpoint}`, {
+    method,
+    headers,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+  return handleResponse<T>(res);
 }
 
 export const API = {
@@ -160,6 +183,15 @@ export const API = {
     request<any>('/blog', 'POST', data),
   updateBlogPost: (id: string, data: any) => request<any>(`/blog/${id}`, 'PUT', data),
   deleteBlogPost: (id: string) => request<{ success: boolean }>(`/blog/${id}`, 'DELETE'),
+
+  // ── Bans (public status/appeal + admin review) ────────────────────────
+  getBanStatus: () => requestPublic<{ banned: boolean; banId?: string; reason?: string; route?: string; canAppeal?: boolean; appealedAt?: string; createdAt?: string }>('/ban-status'),
+  submitBanAppeal: (banId: string, appealText: string) =>
+    requestPublic<{ success: boolean }>('/ban-appeal', 'POST', { banId, appealText }),
+  listAdminBans: (filter?: 'active' | 'appealed' | 'lifted') =>
+    request<any[]>(`/admin/bans${filter ? `?filter=${filter}` : ''}`),
+  liftAdminBan: (id: string) =>
+    request<any>(`/admin/bans/${id}/lift`, 'POST'),
 
   // ── Contact form ─────────────────────────────────────────────────────
   contact: (data: { name: string; email: string; subject: string; message: string }) =>

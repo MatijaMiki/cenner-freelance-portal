@@ -23,6 +23,8 @@ const Community = lazy(() => import('./pages/Community'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const BlogEditor = lazy(() => import('./pages/BlogEditor'));
+const Banned = lazy(() => import('./pages/Banned'));
+const AdminBans = lazy(() => import('./pages/AdminBans'));
 const Subscription = lazy(() => import('./pages/Subscription'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
@@ -69,6 +71,8 @@ const App: React.FC = () => {
                   <Route path="/blog-admin" element={<BlogEditor />} />
                   <Route path="/blog-admin/:id" element={<BlogEditor />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
+                  <Route path="/banned" element={<Banned />} />
+                  <Route path="/admin/bans" element={<AdminBans />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />

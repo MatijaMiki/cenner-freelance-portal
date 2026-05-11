@@ -61,6 +61,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  // Auto-redirect to /banned when any API call returns 403 + banned:true.
+  // api.ts dispatches this event from its central response handler.
+  useEffect(() => {
+    const onBanned = () => {
+      if (window.location.pathname !== '/banned') navigate('/banned');
+    };
+    window.addEventListener('api:banned', onBanned);
+    return () => window.removeEventListener('api:banned', onBanned);
+  }, [navigate]);
+
   useEffect(() => {
     if (!user) { setUnread(0); return; }
     const fetchUnread = () => {

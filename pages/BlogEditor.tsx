@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, FileText, Plus, Save, Trash2, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { ArrowLeft, FileText, Plus, Save, Trash2, Eye, EyeOff, Loader2, ShieldAlert } from 'lucide-react';
 import SEO from '../components/SEO';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
@@ -157,11 +157,16 @@ const BlogEditor: React.FC = () => {
       <SEO title="Blog Admin" canonical="/blog-admin" noIndex />
 
       <div className="max-w-7xl mx-auto px-4 lg:px-12">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 flex-wrap gap-3">
           <Link to="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-white text-xs font-black uppercase tracking-widest">
             <ArrowLeft size={14} /> Back to Blog
           </Link>
-          <h1 className="text-2xl font-black text-white tracking-tighter">Blog Admin</h1>
+          <div className="flex items-center gap-4">
+            <Link to="/admin/bans" className="inline-flex items-center gap-1.5 text-gray-500 hover:text-white text-xs font-black uppercase tracking-widest">
+              <ShieldAlert size={14} /> Bans
+            </Link>
+            <h1 className="text-2xl font-black text-white tracking-tighter">Blog Admin</h1>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-[280px_1fr] gap-8">
