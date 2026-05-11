@@ -1009,7 +1009,7 @@ const Profile: React.FC = () => {
                 <div key={listing.id} className={`group bg-brand-grey/30 border border-white/5 rounded-3xl p-6 transition-all hover:border-brand-green/30 cursor-pointer`}
                   onClick={(e) => { if ((e.target as HTMLElement).closest('button')) return; navigate(`/service/${listing.id}`); }}>
                   <div className="flex flex-col lg:flex-row lg:items-center gap-6">
-                    <img src={listing.imageUrl} className="w-24 h-24 rounded-2xl object-cover border border-white/10" alt="" />
+                    <img src={listing.imageUrl} className="w-24 h-24 rounded-2xl object-cover border border-white/10" alt={listing.title} />
                     <div className="flex-grow">
                       <div className="flex justify-between items-start mb-2">
                         <div>
@@ -1592,7 +1592,7 @@ const Profile: React.FC = () => {
                   <div className="flex flex-wrap gap-2">
                     {newListingImages.map((url, i) => (
                       <div key={i} className="relative group w-20 h-20">
-                        <img src={url} alt="" className="w-20 h-20 rounded-xl object-cover border border-white/10" />
+                        <img src={url} alt={`New listing image ${i + 1}`} className="w-20 h-20 rounded-xl object-cover border border-white/10" />
                         {i === 0 && <span className="absolute bottom-1 left-1 text-[9px] font-black bg-brand-green text-brand-black px-1.5 py-0.5 rounded-md">Cover</span>}
                         <button
                           type="button"
@@ -1662,7 +1662,7 @@ const Profile: React.FC = () => {
               <div className="flex flex-wrap gap-2">
                 {editListingImages.map((url, i) => (
                   <div key={i} className="relative group w-20 h-20">
-                    <img src={url} alt="" className="w-20 h-20 rounded-xl object-cover border border-white/10" />
+                    <img src={url} alt={`Listing image ${i + 1}`} className="w-20 h-20 rounded-xl object-cover border border-white/10" />
                     {i === 0 && <span className="absolute bottom-1 left-1 text-[9px] font-black bg-brand-green text-brand-black px-1.5 py-0.5 rounded-md">Cover</span>}
                     <button
                       type="button"

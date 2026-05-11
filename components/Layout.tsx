@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, User as UserIcon, LogOut, ChevronDown, MessageSquare, UserCheck, FileText } from 'lucide-react';
+import { Menu, X, User as UserIcon, LogOut, ChevronDown, MessageSquare, UserCheck, FileText, ShoppingBag, Briefcase, Tag, UserPlus, BookOpen, Users, Mail, Info } from 'lucide-react';
 import AvatarImg from './Avatar';
 import NotificationBell from './NotificationBell';
 import PermissionModal from './PermissionModal';
@@ -106,12 +106,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const currentLang = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
 
   const navLinks = [
-    { name: t('Services'),   path: '/services' },
-    { name: t('Pricing'),    path: '/subscription' },
-    { name: t('Onboarding'), path: '/onboarding' },
-    { name: t('Blog'),       path: '/blog' },
-    { name: t('Community'),  path: '/community' },
-    { name: t('Contact'),    path: '/contact' },
+    { name: t('Services'),   path: '/services',     icon: Briefcase },
+    { name: t('Pricing'),    path: '/subscription', icon: Tag },
+    { name: t('Onboarding'), path: '/onboarding',   icon: UserPlus },
+    { name: t('Blog'),       path: '/blog',         icon: BookOpen },
+    { name: t('Community'),  path: '/community',    icon: Users },
+    { name: t('Contact'),    path: '/contact',      icon: Mail },
   ];
 
   const marketDropdownItems = [
@@ -143,16 +143,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
+            <div className="hidden lg:flex items-center lg:space-x-1 xl:space-x-8">
 
               {/* Marketplace Dropdown */}
               <div ref={marketRef} className="relative">
                 <button
                   onClick={() => setIsMarketOpen(v => !v)}
-                  className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green ${isMarketActive ? 'text-brand-green' : 'text-gray-400'}`}
+                  className={`group/navicon relative flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 xl:p-0 xl:rounded-none xl:hover:bg-transparent ${isMarketActive ? 'text-brand-green' : 'text-gray-400'}`}
                 >
-                  {t('Marketplace')}
-                  <ChevronDown size={12} className={`transition-transform duration-200 ${isMarketOpen ? 'rotate-180' : ''}`} />
+                  <ShoppingBag size={18} className="xl:hidden" />
+                  <span className="hidden xl:flex items-center gap-1">
+                    {t('Marketplace')}
+                    <ChevronDown size={12} className={`transition-transform duration-200 ${isMarketOpen ? 'rotate-180' : ''}`} />
+                  </span>
+                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap xl:hidden z-50">
+                    {t('Marketplace')}
+                  </span>
                 </button>
                 {isMarketOpen && (
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-brand-grey border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-200">
@@ -169,9 +175,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               {/* Plain links */}
               {navLinks.map((link) => (
                 <Link key={link.name} to={link.path}
-                  className={`text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green ${location.pathname === link.path ? 'text-brand-green' : 'text-gray-400'}`}
+                  className={`group/navicon relative flex items-center text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 xl:p-0 xl:rounded-none xl:hover:bg-transparent ${location.pathname === link.path ? 'text-brand-green' : 'text-gray-400'}`}
                 >
-                  {link.name}
+                  <link.icon size={18} className="xl:hidden" />
+                  <span className="hidden xl:block">{link.name}</span>
+                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap xl:hidden z-50">
+                    {link.name}
+                  </span>
                 </Link>
               ))}
 
@@ -179,10 +189,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div ref={aboutRef} className="relative">
                 <button
                   onClick={() => setIsAboutOpen(v => !v)}
-                  className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green ${isAboutActive ? 'text-brand-green' : 'text-gray-400'}`}
+                  className={`group/navicon relative flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 xl:p-0 xl:rounded-none xl:hover:bg-transparent ${isAboutActive ? 'text-brand-green' : 'text-gray-400'}`}
                 >
-                  {t('About')}
-                  <ChevronDown size={12} className={`transition-transform duration-200 ${isAboutOpen ? 'rotate-180' : ''}`} />
+                  <Info size={18} className="xl:hidden" />
+                  <span className="hidden xl:flex items-center gap-1">
+                    {t('About')}
+                    <ChevronDown size={12} className={`transition-transform duration-200 ${isAboutOpen ? 'rotate-180' : ''}`} />
+                  </span>
+                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap xl:hidden z-50">
+                    {t('About')}
+                  </span>
                 </button>
                 {isAboutOpen && (
                   <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-brand-grey border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-200">
@@ -352,7 +368,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <>
                   <div className="flex items-center gap-3 py-3">
                     {user.avatar ? (
-                      <img src={user.avatar} alt="" className="w-8 h-8 rounded-full border border-brand-green" />
+                      <img src={user.avatar} alt={user.displayName || 'User avatar'} className="w-8 h-8 rounded-full border border-brand-green" />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-brand-grey border border-brand-green flex items-center justify-center text-brand-green">
                         <UserIcon size={16} />

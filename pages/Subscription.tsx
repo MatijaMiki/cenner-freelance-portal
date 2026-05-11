@@ -177,13 +177,41 @@ const Subscription: React.FC = () => {
         title="Pricing & Plans"
         canonical="/subscription"
         description="Choose the Cenner plan that fits your needs. From Starter to Enterprise — unlock elite freelance talent, AI matching, and premium collaboration tools."
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'WebPage',
-          name: 'Cenner Planovi — Pretplata za Freelancere i Klijente',
-          description: 'Odaberi plan koji odgovara tvojim potrebama. Besplatni i premium planovi za freelancere i klijente na Cenner platformi.',
-          url: 'https://cenner.hr/subscription',
-        }}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'Cenner Planovi — Pretplata za Freelancere i Klijente',
+            description: 'Odaberi plan koji odgovara tvojim potrebama. Besplatni i premium planovi za freelancere i klijente na Cenner platformi.',
+            url: 'https://cenner.hr/subscription',
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'Postoji li besplatan plan na Cenner platformi?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Da, Cenner nudi besplatan Starter plan koji omogućuje kreiranje profila, pregledavanje usluga i osnovno komuniciranje s klijentima i freelancerima.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Mogu li otkazati pretplatu u bilo koje vrijeme?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Da, možeš otkazati premium pretplatu u bilo koje vrijeme bez penala. Pristup premium značajkama traje do kraja plaćenog razdoblja.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Koje načine plaćanja Cenner prihvaća?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Cenner prihvaća plaćanje kreditnim i debitnim karticama (Visa, Mastercard) te PayPal-om. Sve transakcije su zaštićene SSL enkripcijom.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Koja je razlika između freelancer i klijent planova?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Freelancer planovi fokusirani su na vidljivost profila, broj aktivnih oglasa i prioritetno pojavljivanje u pretrazi. Klijent planovi nude napredne filtere pretrage, AI matching i upravljanje projektima.' },
+              },
+            ],
+          },
+        ]}
       />
       <NeuralBackground parallax={true} />
 

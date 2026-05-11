@@ -9,6 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import NeuralBackground from '../components/NeuralBackground';
 import { useT } from '../i18n';
+import SEO from '../components/SEO';
 
 interface DashStats {
   activeListings?: number;
@@ -69,6 +70,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="relative min-h-screen pt-12 pb-24 px-4 overflow-hidden">
+      <SEO noIndex />
       <NeuralBackground parallax={false} />
 
       <div className="relative z-10 max-w-6xl mx-auto">

@@ -141,13 +141,36 @@ const Services: React.FC = () => {
         canonical="/services"
         description="Freelance usluge u Hrvatskoj i EU: web razvoj, grafički dizajn, digitalni marketing, AI razvoj, video produkcija. Verificirani freelanceri, sigurno plaćanje, zajamčena kvaliteta."
         keywords="web razvoj hrvatska freelance, grafički dizajn freelancer hrvatska, digitalni marketing freelancer, AI razvoj hrvatska, video produkcija freelancer, freelance usluge eu"
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'CollectionPage',
-          name: 'Freelance Usluge — Kategorije | Cenner',
-          description: 'Pregledaj sve kategorije freelance usluga na Cenner platformi. Web razvoj, dizajn, marketing, pisanje i više.',
-          url: 'https://cenner.hr/services',
-        }}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Freelance Usluge — Kategorije | Cenner',
+            description: 'Pregledaj sve kategorije freelance usluga na Cenner platformi. Web razvoj, dizajn, marketing, pisanje i više.',
+            url: 'https://cenner.hr/services',
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'Koje usluge mogu naći na Cenner platformi?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Na Cenner platformi možeš pronaći web razvoj, grafički dizajn, digitalni marketing, pisanje i prevođenje, AI razvoj, video i audio produkciju te mnoge druge freelance usluge.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Kako unajmiti freelancera za web razvoj u Hrvatskoj?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Pretraži Cenner Marketplace, filtriraj po kategoriji Web razvoj, pregledaj profile i recenzije, te kontaktiraj freelancera direktno ili naruči uslugu odmah.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Jesu li freelanceri na Cenner platformi verificirani?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Da, Cenner provjerava identitet freelancera i potiče verificiranje poslovnih podataka. Verificirani profili imaju posebnu oznaku koja klijentima pruža dodatnu sigurnost.' },
+              },
+            ],
+          },
+        ]}
       />
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-32">
 

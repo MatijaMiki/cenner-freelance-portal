@@ -7,6 +7,7 @@ import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-
 import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
+import SEO from '../components/SEO';
 
 interface PaymentFormProps {
   listing: any;
@@ -176,6 +177,7 @@ const Checkout: React.FC = () => {
 
   return (
     <div className="pt-12 pb-32 max-w-6xl mx-auto px-4">
+      <SEO noIndex />
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center space-x-2 text-gray-500 hover:text-white mb-12 transition-colors"

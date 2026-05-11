@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Crown, Zap, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import SEO from '../components/SEO';
 
 const API_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 
@@ -109,6 +110,7 @@ const SubscriptionCheckout: React.FC = () => {
 
   return (
     <div className="pt-12 pb-32 max-w-lg mx-auto px-4">
+      <SEO noIndex />
       <button onClick={() => navigate(-1)} className="inline-flex items-center gap-2 text-gray-500 hover:text-white mb-12 transition-colors">
         <ArrowLeft size={18} />
         <span className="text-sm font-medium">Back</span>

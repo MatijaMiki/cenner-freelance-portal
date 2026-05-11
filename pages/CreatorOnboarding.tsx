@@ -6,6 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import NeuralBackground from '../components/NeuralBackground';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
+import SEO from '../components/SEO';
 
 const stripePromise = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
   ? loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
@@ -166,6 +167,7 @@ const CreatorOnboarding: React.FC = () => {
 
   return (
     <div className="relative min-h-screen pt-32 pb-24 px-4 overflow-hidden">
+      <SEO noIndex />
       <NeuralBackground parallax={true} />
 
       <div className="relative z-10 max-w-2xl mx-auto">

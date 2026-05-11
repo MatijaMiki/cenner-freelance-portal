@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Lock, CheckCircle2, AlertCircle } from 'lucide-react';
 import { API } from '../lib/api';
+import SEO from '../components/SEO';
 
 const ResetPassword: React.FC = () => {
   const location = useLocation();
@@ -48,6 +49,7 @@ const ResetPassword: React.FC = () => {
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">
+      <SEO noIndex />
       <div className="w-full max-w-md">
         <div className="flex items-center gap-3 mb-8">
           <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center text-brand-green">
