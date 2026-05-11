@@ -43,20 +43,30 @@ const Blog: React.FC = () => {
         canonical="/blog"
         description="Vodiči, savjeti i vijesti o freelancingu u Hrvatskoj i EU. Otvaranje paušalnog obrta, ugovori, cijene, alati i sve ostalo što trebate znati kao slobodni radnik."
         keywords="freelance blog hrvatska, paušalni obrt vodič, freelancing savjeti, slobodni radnik blog, freelance hrvatska vijesti"
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'Blog',
-          name: 'Cenner Blog',
-          description: 'Vodiči i savjeti za freelancere i klijente u Hrvatskoj i EU.',
-          url: 'https://cenner.hr/blog',
-          inLanguage: ['hr', 'en'],
-          publisher: {
-            '@type': 'Organization',
-            name: 'Cenner',
-            url: 'https://cenner.hr',
-            logo: { '@type': 'ImageObject', url: 'https://cenner.hr/favicon.svg' },
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Blog',
+            name: 'Cenner Blog',
+            description: 'Vodiči i savjeti za freelancere i klijente u Hrvatskoj i EU.',
+            url: 'https://cenner.hr/blog',
+            inLanguage: ['hr', 'en'],
+            publisher: {
+              '@type': 'Organization',
+              name: 'Cenner',
+              url: 'https://cenner.hr',
+              logo: { '@type': 'ImageObject', url: 'https://cenner.hr/favicon.svg' },
+            },
           },
-        }}
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Početna', item: 'https://cenner.hr' },
+              { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://cenner.hr/blog' },
+            ],
+          },
+        ]}
       />
 
       <div className="max-w-5xl mx-auto px-4 lg:px-12">

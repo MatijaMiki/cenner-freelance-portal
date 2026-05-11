@@ -2,6 +2,7 @@
 import React from 'react';
 import { CheckCircle2, ArrowUpRight } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
+import SEO from '../components/SEO';
 
 const CLIENT_PROJECTS = [
   {
@@ -29,6 +30,7 @@ const CLIENT_PROJECTS = [
 const Projects: React.FC = () => {
   return (
     <div className="relative min-h-screen pt-16 pb-24 overflow-hidden">
+      <SEO noIndex />
       <NeuralBackground parallax={false} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4">

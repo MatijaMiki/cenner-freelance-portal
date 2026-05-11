@@ -309,7 +309,7 @@ const ServiceDetails: React.FC = () => {
                   {editGallery.map((url, i) => (
                     <div key={i} className="relative group/img">
                       <div className={`rounded-2xl overflow-hidden border-2 ${i === 0 ? 'w-48 h-32 border-brand-green' : 'w-24 h-16 border-white/10'}`}>
-                        <img src={url} alt="" className="w-full h-full object-cover" />
+                        <img src={url} alt={`Gallery image ${i + 1}`} className="w-full h-full object-cover" />
                       </div>
                       {i === 0 && <span className="absolute bottom-1 left-1 text-[9px] font-black bg-brand-green text-brand-black px-1.5 py-0.5 rounded-md">Cover</span>}
                       <button
@@ -404,7 +404,7 @@ const ServiceDetails: React.FC = () => {
                                 : 'border-white/10 hover:border-white/30 opacity-60 hover:opacity-100'
                             }`}
                           >
-                            <img src={url} alt="" className="w-full h-full object-cover" />
+                            <img src={url} alt={`Service image ${i + 1}`} className="w-full h-full object-cover" />
                           </button>
                         ))}
                       </div>

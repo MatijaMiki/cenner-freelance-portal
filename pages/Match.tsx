@@ -82,15 +82,38 @@ const Match: React.FC = () => {
         title="Match"
         canonical="/match"
         description="Find your perfect freelancer-client match on Cenner. AI-powered matching connects talent with the right projects."
-        jsonLd={{
-          '@context': 'https://schema.org',
-          '@type': 'WebApplication',
-          name: 'Cenner AI Match — Pronađi Savršenog Freelancera',
-          description: 'AI-powered matching za pronalazak idealnog freelancera u Hrvatskoj i EU. Opišite projekt i dobijte personaliziranu listu kandidata.',
-          url: 'https://cenner.hr/match',
-          applicationCategory: 'BusinessApplication',
-          operatingSystem: 'Web',
-        }}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebApplication',
+            name: 'Cenner AI Match — Pronađi Savršenog Freelancera',
+            description: 'AI-powered matching za pronalazak idealnog freelancera u Hrvatskoj i EU. Opišite projekt i dobijte personaliziranu listu kandidata.',
+            url: 'https://cenner.hr/match',
+            applicationCategory: 'BusinessApplication',
+            operatingSystem: 'Web',
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'Kako funkcionira Cenner AI Match?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Opišeš projekt ili potrebe, a Cenner AI analizira profil, vještine i recenzije dostupnih freelancera te predlaže one koji se najbolje podudaraju s tvojim zahtjevima.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Koliko brzo ću biti upareni s freelancerom?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Rezultati matchinga pojavljuju se odmah — AI u realnom vremenu pregledava sve aktivne profile i vraća personaliziranu listu kandidata.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Je li AI Match besplatan?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Osnovna verzija AI Matcha dostupna je svim korisnicima. Premium planovi nude napredne filtere i prioritetni pristup top freelancerima.' },
+              },
+            ],
+          },
+        ]}
       />
       <NeuralBackground parallax={false} />
 

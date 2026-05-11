@@ -174,23 +174,33 @@ const Marketplace: React.FC = () => {
     </div>
   );
 
-  const marketplaceJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: 'Cenner Marketplace — Freelance Usluge Hrvatska',
-    description: 'Pretraži stotine provjerenih freelance usluga u Hrvatskoj i EU. Web razvoj, dizajn, marketing, pisanje i više.',
-    url: 'https://cenner.hr/marketplace',
-    inLanguage: ['hr', 'en'],
-    about: {
-      '@type': 'Thing',
-      name: 'Freelance usluge Hrvatska',
+  const marketplaceJsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Cenner Marketplace — Freelance Usluge Hrvatska',
+      description: 'Pretraži stotine provjerenih freelance usluga u Hrvatskoj i EU. Web razvoj, dizajn, marketing, pisanje i više.',
+      url: 'https://cenner.hr/marketplace',
+      inLanguage: ['hr', 'en'],
+      about: {
+        '@type': 'Thing',
+        name: 'Freelance usluge Hrvatska',
+      },
+      provider: {
+        '@type': 'Organization',
+        name: 'Cenner',
+        url: 'https://cenner.hr',
+      },
     },
-    provider: {
-      '@type': 'Organization',
-      name: 'Cenner',
-      url: 'https://cenner.hr',
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Početna', item: 'https://cenner.hr' },
+        { '@type': 'ListItem', position: 2, name: 'Marketplace', item: 'https://cenner.hr/marketplace' },
+      ],
     },
-  };
+  ];
 
   return (
     <div className="pt-12 pb-24 px-4 max-w-[1600px] mx-auto">
