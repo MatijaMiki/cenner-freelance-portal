@@ -44,8 +44,15 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
-const root = ReactDOM.createRoot(rootElement);
-root.render(
+// Reuse a single root across HMR re-runs (dev) and clear any prerendered SEO
+// fallback content from index.html before the very first createRoot call.
+type RootHolder = { __root?: ReturnType<typeof ReactDOM.createRoot> };
+const holder = rootElement as HTMLElement & RootHolder;
+if (!holder.__root) {
+  rootElement.replaceChildren();
+  holder.__root = ReactDOM.createRoot(rootElement);
+}
+holder.__root.render(
   <React.StrictMode>
     <ErrorBoundary>
       <LanguageProvider>

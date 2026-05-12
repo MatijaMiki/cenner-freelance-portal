@@ -61,6 +61,9 @@ const en: Record<string, string> = {
   'New: Gemini Live Voice-First Integration': 'New: Gemini Live Voice-First Integration',
   'Elite Talent': 'Elite Talent',
   'Neural Network': 'Neural Network',
+  'Freelance Hrvatska': 'Freelance Croatia',
+  'Pronađi Freelancera': 'Hire a Freelancer',
+  'Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.': 'The leading freelance platform in Croatia. We connect companies with verified freelancers for web development, design, marketing and engineering. Freelance work — fast, safe, professional.',
   'The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.': 'The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.',
   'Explore Marketplace': 'Explore Marketplace',
   'Cenner Services': 'Cenner Services',
@@ -471,6 +474,9 @@ const hr: Record<string, string> = {
   'New: Gemini Live Voice-First Integration': 'Novo: Gemini Live glasovna integracija',
   'Elite Talent': 'Elitni Talent',
   'Neural Network': 'Neuronska Mreža',
+  'Freelance Hrvatska': 'Freelance Hrvatska',
+  'Pronađi Freelancera': 'Pronađi Freelancera',
+  'Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.': 'Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.',
   'The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.': 'Visokokvalitetni freelance portal gdje projekti susreću preciznost. Povežite se s najboljim 1% kreatora koristeći moderne AI alate za suradnju.',
   'Explore Marketplace': 'Istraži poslove',
   'Cenner Services': 'Cenner usluge',
@@ -841,9 +847,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [lang, setLangState] = useState<LangCode>(() => {
     const stored = localStorage.getItem('cenner_lang');
     if (stored) return stored;
-    // Auto-detect from browser language — default HR only for Croatian browsers
-    const browserLang = navigator.language?.split('-')[0]?.toUpperCase();
-    return (browserLang && dicts[browserLang]) ? browserLang : 'EN';
+    // Default to Croatian since cenner.hr targets the Croatian market.
+    // English speakers can switch via the language toggle.
+    return 'HR';
   });
 
   const setLang = (code: LangCode) => {

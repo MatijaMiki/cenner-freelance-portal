@@ -6,6 +6,8 @@ Allow: /
 Allow: /marketplace
 Allow: /services
 Allow: /service/
+Allow: /usluge/
+Allow: /freelanceri/
 Allow: /blog
 Allow: /about
 Allow: /contact

@@ -17,8 +17,8 @@ const BASE_URL = 'https://cenner.hr';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 const SITE_NAME = 'Cenner';
 
-// Core keyword set injected on every page
-const BASE_KEYWORDS = 'freelance hrvatska, freelancing hrvatska, honorarni posao, freelance eu, slobodni radnik hrvatska, online posao hrvatska, freelance platforma, honorarni rad, outsourcing hrvatska, najam freelancera, freelance Croatia, hire freelancer Croatia, Croatian freelancer, EU freelance marketplace, cenner';
+// Core keyword set injected on every page — kept short so per-page keywords stay focused
+const BASE_KEYWORDS = 'freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera';
 
 const SEO: React.FC<SEOProps> = ({
   title,
@@ -53,9 +53,8 @@ const SEO: React.FC<SEOProps> = ({
       )}
       {fullCanonical && <link rel="canonical" href={fullCanonical} />}
 
-      {/* hreflang — signals Croatian & EU relevance to Google */}
-      {fullCanonical && <link rel="alternate" hrefLang="hr" href={fullCanonical} />}
-      {fullCanonical && <link rel="alternate" hrefLang="en" href={fullCanonical} />}
+      {/* hreflang — Croatian primary market */}
+      {fullCanonical && <link rel="alternate" hrefLang="hr-HR" href={fullCanonical} />}
       {fullCanonical && <link rel="alternate" hrefLang="x-default" href={fullCanonical} />}
 
       {/* Open Graph */}
@@ -68,7 +67,6 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:locale" content={ogLocale} />
-      <meta property="og:locale:alternate" content="en_US" />
 
       {/* Twitter / X */}
       <meta name="twitter:card" content="summary_large_image" />

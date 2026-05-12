@@ -185,9 +185,10 @@ const Home: React.FC = () => {
   return (
     <div className="relative min-h-screen">
       <SEO
+        title="Freelance Hrvatska — Pronađi Freelancera"
         canonical="/"
-        description="Cenner — vodeća freelance platforma u Hrvatskoj i EU. Pronađi provjerene freelancere za web razvoj, dizajn i marketing. Honorarni posao brzo i sigurno."
-        keywords="freelance hrvatska, honorarni posao, slobodni radnik hrvatska, freelance platforma hrvatska, online posao hrvatska, najam freelancera hrvatska"
+        description="Cenner — vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno."
+        keywords="freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera"
         jsonLd={[organizationJsonLd, localBusinessJsonLd, websiteJsonLd, faqJsonLd]}
       />
       <NeuralBackground parallax={true} />
@@ -204,14 +205,14 @@ const Home: React.FC = () => {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
-            {t('Top Talent')} <br />
+            {t('Freelance Hrvatska')} <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
-              {t('Talent Network')}
+              {t('Pronađi Freelancera')}
             </span>
           </h1>
 
           <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
-            {t('The high-end freelance portal where projects meet precision. Connect with top 1% creators using modern AI-driven collaboration tools.')}
+            {t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.')}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
