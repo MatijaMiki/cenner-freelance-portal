@@ -143,26 +143,6 @@ const Marketplace: React.FC = () => {
         </div>
       )}
 
-      <div>
-        <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-6">{t('Sort Mechanism')}</h3>
-        <div className="space-y-2">
-          {[
-            { label: t('Recently Added'), val: 'newest' },
-            { label: t('Price: Low to High'), val: 'price-asc' },
-            { label: t('Price: High to Low'), val: 'price-desc' },
-            { label: t('Top Rated'), val: 'rating' }
-          ].map(opt => (
-            <button 
-              key={opt.val}
-              onClick={() => setSortBy(opt.val as any)}
-              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold border transition-all ${sortBy === opt.val ? 'border-brand-pink/50 text-brand-pink bg-brand-pink/5' : 'border-white/5 text-gray-500 hover:text-gray-300 hover:border-white/10'}`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="p-8 rounded-[2rem] bg-gradient-to-br from-brand-pink/20 to-brand-green/20 border border-white/10 backdrop-blur-md hidden lg:block">
         <Tag size={24} className="text-white mb-4" />
         <h4 className="text-white font-black text-lg mb-2">{t('Priority Matching')}</h4>
@@ -280,7 +260,7 @@ const Marketplace: React.FC = () => {
       </div>
 
       {/* Search & Mobile Filter Trigger */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-12">
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <div className="relative flex-grow">
           {searching ? (
             <Loader2 className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-green animate-spin" size={18} />
@@ -295,14 +275,37 @@ const Marketplace: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
-        <button 
+
+        <button
           onClick={() => setIsFilterDrawerOpen(true)}
           className="lg:hidden flex items-center justify-center space-x-3 bg-brand-grey border border-white/10 rounded-2xl py-5 px-8 text-white font-bold text-sm hover:border-brand-pink transition-all active:scale-95 shadow-2xl"
         >
           <SlidersHorizontal size={18} className="text-brand-pink" />
           <span>{t('Filters')}</span>
         </button>
+      </div>
+
+      {/* Sort row — under search bar so users don't have to open the filters drawer */}
+      <div className="flex items-center gap-3 mb-12 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+        <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] flex-shrink-0">{t('Sort')}:</span>
+        {[
+          { label: t('Recently Added'), val: 'newest' },
+          { label: t('Price: Low to High'), val: 'price-asc' },
+          { label: t('Price: High to Low'), val: 'price-desc' },
+          { label: t('Top Rated'), val: 'rating' }
+        ].map(opt => (
+          <button
+            key={opt.val}
+            onClick={() => setSortBy(opt.val as any)}
+            className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold border transition-all ${
+              sortBy === opt.val
+                ? 'border-brand-pink/60 text-brand-pink bg-brand-pink/10 shadow-md shadow-brand-pink/10'
+                : 'border-white/10 text-gray-400 hover:text-white hover:border-white/30 bg-brand-grey/40'
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
       </div>
 
       <div className="flex flex-col lg:flex-row gap-10">
