@@ -31,6 +31,53 @@ const Marketplace: React.FC = () => {
   const [searchResults, setSearchResults] = useState<typeof allListings | null>(null);
   const [searching, setSearching] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Slider runs uncontrolled (defaultValue + ref) so React re-renders don't
+  // fight the browser's native drag. We push state updates through rAF.
+  const sliderRef = useRef<HTMLInputElement>(null);
+  const priceInputRef = useRef<HTMLInputElement>(null);
+  const sliderRafRef = useRef<number | null>(null);
+
+  const updateSliderFill = useCallback((value: number) => {
+    const pct = ((value - 50) / (5000 - 50)) * 100;
+    sliderRef.current?.style.setProperty('--slider-pct', `${pct}%`);
+  }, []);
+
+  const handleSliderInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    const v = parseInt(e.currentTarget.value);
+    updateSliderFill(v);
+    // Mirror to the number input without going through React (avoids re-render mid-drag).
+    if (priceInputRef.current && document.activeElement !== priceInputRef.current) {
+      priceInputRef.current.value = String(v);
+    }
+    // Defer state update to next frame so the browser's drag isn't interrupted.
+    if (sliderRafRef.current != null) cancelAnimationFrame(sliderRafRef.current);
+    sliderRafRef.current = requestAnimationFrame(() => setPriceRange(v));
+  }, [updateSliderFill]);
+
+  // When user types into the number input, push the value into the slider via ref.
+  const handlePriceNumberChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = parseInt(e.target.value);
+    const v = isNaN(raw) ? 50 : Math.max(50, Math.min(5000, raw));
+    setPriceRange(v);
+    if (sliderRef.current) {
+      sliderRef.current.value = String(v);
+      updateSliderFill(v);
+    }
+  }, [updateSliderFill]);
+
+  // Track latest priceRange in a ref so the ref callback can read it on mount
+  // without re-binding when state changes.
+  const priceRangeRef = useRef(priceRange);
+  priceRangeRef.current = priceRange;
+
+  // Ref callback runs only on actual mount/unmount of the slider DOM node
+  // (e.g. when the filter drawer opens). It sets the initial fill so the
+  // green bar matches the thumb position right away. We deliberately do NOT
+  // re-set the fill on every render — the onInput handler owns it during drag.
+  const setSliderRef = useCallback((el: HTMLInputElement | null) => {
+    sliderRef.current = el;
+    if (el) updateSliderFill(priceRangeRef.current);
+  }, [updateSliderFill]);
 
   // Server-side search with 350ms debounce
   useEffect(() => {
@@ -118,22 +165,34 @@ const Marketplace: React.FC = () => {
 
       {mode === 'freelancers' && (
         <div>
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center mb-4">
             <h3 className="text-xs font-black text-white uppercase tracking-[0.2em]">{t('Budget Threshold')}</h3>
-            <span className="text-brand-green font-black text-lg">€{priceRange.toLocaleString()}</span>
+            <div className="flex items-center bg-brand-black border border-white/10 rounded-lg focus-within:border-brand-green transition-colors">
+              <span className="text-gray-500 text-sm font-bold pl-2.5 select-none">€</span>
+              <input
+                ref={priceInputRef}
+                type="number"
+                min={50}
+                max={5000}
+                step={50}
+                defaultValue={priceRange}
+                onChange={handlePriceNumberChange}
+                aria-label={t('Budget Threshold')}
+                className="w-20 bg-transparent text-brand-green font-black text-sm py-1.5 px-2 text-right focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
           </div>
           <div className="relative py-3">
             <input
+              ref={setSliderRef}
               type="range"
-              min="50"
-              max="5000"
-              step="1"
-              value={priceRange}
-              onChange={(e) => setPriceRange(parseInt(e.target.value))}
+              min={50}
+              max={5000}
+              step={1}
+              defaultValue={priceRange}
+              onInput={handleSliderInput}
+              aria-label={t('Budget Threshold')}
               className="cenner-slider w-full cursor-pointer"
-              style={{
-                '--slider-pct': `${((priceRange - 50) / (5000 - 50)) * 100}%`,
-              } as React.CSSProperties}
             />
           </div>
           <div className="flex justify-between text-[10px] font-bold text-gray-600 uppercase">
@@ -202,8 +261,8 @@ const Marketplace: React.FC = () => {
                 <X size={24} />
               </button>
             </div>
-            <SidebarContent />
-            <button 
+            {SidebarContent()}
+            <button
               onClick={() => setIsFilterDrawerOpen(false)}
               className="w-full mt-10 py-5 bg-brand-green text-brand-black font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg shadow-brand-green/20"
             >
@@ -312,7 +371,7 @@ const Marketplace: React.FC = () => {
         {/* Desktop Filters Sidebar */}
         <aside className="hidden lg:block w-56 flex-shrink-0">
           <div className="sticky top-24">
-            <SidebarContent />
+            {SidebarContent()}
           </div>
         </aside>
 
