@@ -116,7 +116,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const marketDropdownItems = [
     { label: t('Marketplace'), path: '/marketplace', desc: t('Browse all freelancer listings') },
-    { label: t('Job Matching'), path: '/match',       desc: t('Find jobs that match your skills') },
+    { label: t('Job Matching'), path: '/match',       desc: t('Coming Soon') },
   ];
 
   const aboutDropdownItems = [

@@ -197,6 +197,10 @@ export const API = {
   contact: (data: { name: string; email: string; subject: string; message: string }) =>
     request<{ success: boolean }>('/contact', 'POST', data),
 
+  // ── Launch waitlist (unreleased features) ────────────────────────────
+  notifyLaunch: (email: string, feature: 'job-matching') =>
+    request<{ success: boolean; alreadySignedUp?: boolean }>('/notify-launch', 'POST', { email, feature }),
+
   // ── KYC (Stripe Identity) ─────────────────────────────────────────────────
   createKycSession: () =>
     request<{ clientSecret: string }>('/kyc/create-session', 'POST'),

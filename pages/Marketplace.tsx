@@ -25,7 +25,7 @@ const Marketplace: React.FC = () => {
   const [mode, setMode] = useState<MarketplaceMode>('freelancers');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [priceRange, setPriceRange] = useState<number>(3000);
+  const [priceRange, setPriceRange] = useState<number>(5000);
   const [sortBy, setSortBy] = useState<'newest' | 'price-asc' | 'price-desc' | 'rating'>('newest');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<typeof allListings | null>(null);
