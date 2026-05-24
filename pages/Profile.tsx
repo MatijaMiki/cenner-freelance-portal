@@ -6,7 +6,7 @@ import {
   TrendingUp, Clock, CheckCircle, AlertCircle, MoreVertical,
   MoreHorizontal, Edit2, Trash2, ArrowUpRight, Search,
   X, Download, ShieldAlert, Image as ImageIcon, Mail, Crown, Zap,
-  Upload, Loader2, ExternalLink, ShieldCheck, MapPin, Banknote, BadgeCheck, Heart
+  Upload, Loader2, ExternalLink, ShieldCheck, MapPin, Banknote, BadgeCheck, Heart, Phone
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';
@@ -16,7 +16,30 @@ import { useT } from '../i18n';
 import { useNotify } from '../contexts/NotifyContext';
 import AvatarImg from '../components/Avatar';
 
-type ActiveTab = 'listings' | 'inbox' | 'earnings' | 'settings' | 'portfolio' | 'saved' | 'orders' | 'stats';
+type TopTab = 'selling' | 'buying' | 'messages' | 'settings';
+type SellingSection = 'listings' | 'portfolio' | 'sales' | 'earnings' | 'stats';
+type BuyingSection = 'purchases' | 'saved';
+type SettingsSection = 'account' | 'security' | 'billing';
+
+// Backwards-compat: old ?tab=listings|portfolio|earnings|stats|saved|orders|inbox|settings
+// links should still land on the right place after the role-grouped redesign.
+function mapLegacyTab(raw: string | null): { tab: TopTab; section?: string } | null {
+  if (!raw) return null;
+  switch (raw) {
+    case 'selling': case 'buying': case 'messages': case 'settings':
+      return { tab: raw as TopTab };
+    case 'listings': case 'portfolio': case 'earnings': case 'stats':
+      return { tab: 'selling', section: raw };
+    case 'orders':
+      return { tab: 'buying', section: 'purchases' };
+    case 'saved':
+      return { tab: 'buying', section: 'saved' };
+    case 'inbox':
+      return { tab: 'messages' };
+    default:
+      return null;
+  }
+}
 
 // ─── Manage Subscription Card ────────────────────────────────────────────────
 const ManageSubscriptionCard: React.FC = () => {
@@ -54,6 +77,159 @@ const ManageSubscriptionCard: React.FC = () => {
         {loading ? <Loader2 size={15} className="animate-spin" /> : <ExternalLink size={15} />}
         {loading ? 'Opening…' : 'Open Billing Portal'}
       </button>
+    </div>
+  );
+};
+
+// ─── Verification Status Card ───────────────────────────────────────────────
+const VerificationStatusCard: React.FC<{ currentUser: any; updateUser: (u: any) => void }> = ({ currentUser, updateUser }) => {
+  const t = useT();
+  const [resending, setResending] = React.useState(false);
+  const [resendMsg, setResendMsg] = React.useState('');
+
+  // Phone-add / verify state
+  const [phoneInput, setPhoneInput] = React.useState(currentUser?.mobile || '');
+  const [codeInput, setCodeInput] = React.useState('');
+  const [sendingOtp, setSendingOtp] = React.useState(false);
+  const [verifyingOtp, setVerifyingOtp] = React.useState(false);
+  const [otpSent, setOtpSent] = React.useState(false);
+  const [phoneError, setPhoneError] = React.useState('');
+  const [phoneMsg, setPhoneMsg] = React.useState('');
+
+  const inputClass = "w-full bg-brand-black border border-white/10 rounded-xl py-2.5 px-4 text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/50 transition-colors text-sm";
+
+  const handleResendEmail = async () => {
+    setResending(true); setResendMsg('');
+    try {
+      await API.resendVerificationEmail();
+      setResendMsg(t('Verification email sent. Check your inbox.'));
+    } catch (e: any) {
+      setResendMsg(e.message || t('Failed to send verification email.'));
+    } finally { setResending(false); }
+  };
+
+  const handleSendOtp = async () => {
+    setPhoneError(''); setPhoneMsg('');
+    const normalized = phoneInput.replace(/\s/g, '');
+    if (!/^\+[1-9]\d{6,14}$/.test(normalized)) {
+      setPhoneError(t('Phone must be international format, e.g. +385991234567.'));
+      return;
+    }
+    setSendingOtp(true);
+    try {
+      await API.sendPhoneOtp(normalized);
+      setOtpSent(true);
+      setPhoneMsg(t('Code sent. Enter it below to verify.'));
+      updateUser({ mobile: normalized, mobileVerified: false } as any);
+    } catch (e: any) {
+      setPhoneError(e.message || t('Failed to send code.'));
+    } finally { setSendingOtp(false); }
+  };
+
+  const handleVerifyOtp = async () => {
+    setPhoneError(''); setPhoneMsg('');
+    if (!codeInput.trim()) { setPhoneError(t('Enter the code we sent you.')); return; }
+    setVerifyingOtp(true);
+    try {
+      await API.verifyPhoneOtp(phoneInput.replace(/\s/g, ''), codeInput.trim());
+      setOtpSent(false);
+      setCodeInput('');
+      setPhoneMsg(t('Phone verified.'));
+      updateUser({ mobileVerified: true } as any);
+    } catch (e: any) {
+      setPhoneError(e.message || t('Invalid or expired code.'));
+    } finally { setVerifyingOtp(false); }
+  };
+
+  const phoneVerified = !!currentUser?.mobileVerified;
+  const hasPhone = !!currentUser?.mobile;
+
+  return (
+    <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8 space-y-4">
+      <h3 className="text-white font-bold text-lg">{t('Verification Status')}</h3>
+      <div className="space-y-3">
+        {/* Email row */}
+        <div className="flex items-center justify-between gap-4 py-3 border-b border-white/5">
+          <div className="flex items-center gap-3 min-w-0">
+            <Mail size={16} className="text-gray-500 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-sm text-white font-medium">{t('Email')}</p>
+              <p className="text-xs text-gray-500 truncate">{currentUser?.email}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 shrink-0">
+            {currentUser?.emailVerified
+              ? <span className="flex items-center gap-1 text-[10px] font-bold text-brand-green"><CheckCircle size={12} /> {t('Verified')}</span>
+              : (
+                <>
+                  <span className="text-[10px] font-bold text-brand-pink">{t('Unverified')}</span>
+                  <button onClick={handleResendEmail} disabled={resending}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-lg transition-all disabled:opacity-50">
+                    {resending ? <Loader2 size={12} className="animate-spin" /> : null}
+                    {t('Resend')}
+                  </button>
+                </>
+              )}
+          </div>
+        </div>
+        {!currentUser?.emailVerified && resendMsg && (
+          <p className={`text-xs ${resendMsg.includes('Failed') ? 'text-brand-pink' : 'text-brand-green'}`}>{resendMsg}</p>
+        )}
+
+        {/* Phone row */}
+        <div className="flex items-center justify-between gap-4 py-3 border-b border-white/5">
+          <div className="flex items-center gap-3 min-w-0">
+            <Phone size={16} className="text-gray-500 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-sm text-white font-medium">{t('Phone')}</p>
+              <p className="text-xs text-gray-500 truncate">{currentUser?.mobile || t('No phone number on file')}</p>
+            </div>
+          </div>
+          <div className="shrink-0">
+            {phoneVerified
+              ? <span className="flex items-center gap-1 text-[10px] font-bold text-brand-green"><CheckCircle size={12} /> {t('Verified')}</span>
+              : <span className="text-[10px] font-bold text-brand-pink">{hasPhone ? t('Unverified') : t('Not added')}</span>}
+          </div>
+        </div>
+
+        {!phoneVerified && (
+          <div className="space-y-3 pt-1">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                type="tel"
+                className={inputClass}
+                value={phoneInput}
+                onChange={e => { setPhoneInput(e.target.value); setOtpSent(false); }}
+                placeholder="+385991234567"
+              />
+              <button onClick={handleSendOtp} disabled={sendingOtp || !phoneInput.trim()}
+                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white text-sm font-bold rounded-xl transition-all disabled:opacity-50 whitespace-nowrap">
+                {sendingOtp ? <Loader2 size={14} className="animate-spin" /> : null}
+                {otpSent ? t('Resend code') : (hasPhone ? t('Send code') : t('Add & verify'))}
+              </button>
+            </div>
+            {otpSent && (
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  className={inputClass}
+                  value={codeInput}
+                  onChange={e => setCodeInput(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                  placeholder={t('Verification code')}
+                />
+                <button onClick={handleVerifyOtp} disabled={verifyingOtp || !codeInput.trim()}
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-green text-brand-black text-sm font-black rounded-xl transition-all disabled:opacity-50 whitespace-nowrap">
+                  {verifyingOtp ? <Loader2 size={14} className="animate-spin" /> : <ShieldCheck size={14} />}
+                  {t('Verify')}
+                </button>
+              </div>
+            )}
+            {phoneError && <p className="text-xs text-brand-pink font-medium">{phoneError}</p>}
+            {phoneMsg && <p className="text-xs text-brand-green font-medium">{phoneMsg}</p>}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -208,23 +384,7 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
             </button>
           </div>
 
-          <div className="bg-brand-grey/30 border border-white/5 rounded-3xl p-8 space-y-4">
-            <h3 className="text-white font-bold text-lg">{t('Verification Status')}</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between py-3 border-b border-white/5">
-                <div className="flex items-center gap-3">
-                  <Mail size={16} className="text-gray-500" />
-                  <div>
-                    <p className="text-sm text-white font-medium">{t('Email')}</p>
-                    <p className="text-xs text-gray-500">{currentUser?.email}</p>
-                  </div>
-                </div>
-                {currentUser?.emailVerified
-                  ? <span className="flex items-center gap-1 text-[10px] font-bold text-brand-green"><CheckCircle size={12} /> {t('Verified')}</span>
-                  : <span className="text-[10px] font-bold text-brand-pink">{t('Unverified')}</span>}
-              </div>
-            </div>
-          </div>
+          <VerificationStatusCard currentUser={currentUser} updateUser={updateUser} />
 
           <div className="bg-red-950/30 border border-red-900/30 rounded-3xl p-8 space-y-4">
             <h3 className="text-red-400 font-bold text-lg">{t('Danger Zone')}</h3>
@@ -410,12 +570,11 @@ const SavedTab: React.FC = () => {
   );
 };
 
-const OrdersTab: React.FC = () => {
+const OrdersTab: React.FC<{ role: 'buyer' | 'seller' }> = ({ role }) => {
   const t = useT();
   const navigate = useNavigate();
   const [orders, setOrders] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [role, setRole] = React.useState<'buyer' | 'seller'>('buyer');
   React.useEffect(() => {
     setLoading(true);
     API.getOrders(role).then(setOrders).catch(() => setOrders([])).finally(() => setLoading(false));
@@ -427,14 +586,6 @@ const OrdersTab: React.FC = () => {
   };
   return (
     <div className="space-y-4 animate-in fade-in duration-500">
-      <div className="flex gap-2">
-        {(['buyer', 'seller'] as const).map(r => (
-          <button key={r} onClick={() => setRole(r)}
-            className={`px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${role === r ? 'bg-brand-green text-brand-black' : 'bg-brand-grey/40 border border-white/10 text-gray-500 hover:text-white'}`}>
-            {r === 'buyer' ? t('Purchases') : t('Sales')}
-          </button>
-        ))}
-      </div>
       {loading ? <div className="flex justify-center py-16"><Loader2 className="animate-spin text-gray-500" size={28} /></div>
       : orders.length === 0 ? (
         <div className="text-center py-20 bg-brand-grey/20 border-2 border-dashed border-white/5 rounded-[2.5rem]">
@@ -473,10 +624,49 @@ const Profile: React.FC = () => {
   const t = useT();
   const notify = useNotify();
   const { listings, addListing, updateListing, deleteListing, refreshListings } = useData();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const connectResult = searchParams.get('connect');
-  const initialTab = (searchParams.get('tab') as ActiveTab) || (connectResult ? 'settings' : 'listings');
-  const [activeTab, setActiveTab] = useState<ActiveTab>(initialTab);
+  const legacy = mapLegacyTab(searchParams.get('tab'));
+  const initialTab: TopTab = legacy?.tab || (connectResult ? 'settings' : 'selling');
+  const initialSellingSection: SellingSection = (legacy?.tab === 'selling' && legacy.section as SellingSection) || 'listings';
+  const initialBuyingSection: BuyingSection = (legacy?.tab === 'buying' && legacy.section as BuyingSection) || 'purchases';
+  const [activeTab, setActiveTab] = useState<TopTab>(initialTab);
+  const [sellingSection, setSellingSection] = useState<SellingSection>(initialSellingSection);
+  const [buyingSection, setBuyingSection] = useState<BuyingSection>(initialBuyingSection);
+
+  // Sync top tab + sub-section back to the URL so the page is bookmarkable
+  // and deep-linkable (and email links can target a specific section).
+  const updateActiveTab = (next: TopTab) => {
+    setActiveTab(next);
+    setSelectedMessage(null);
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      params.set('tab', next);
+      // section param only meaningful for selling/buying/settings
+      if (next === 'messages') params.delete('section');
+      else if (next === 'selling') params.set('section', sellingSection);
+      else if (next === 'buying') params.set('section', buyingSection);
+      return params;
+    }, { replace: true });
+  };
+  const updateSellingSection = (next: SellingSection) => {
+    setSellingSection(next);
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      params.set('tab', 'selling');
+      params.set('section', next);
+      return params;
+    }, { replace: true });
+  };
+  const updateBuyingSection = (next: BuyingSection) => {
+    setBuyingSection(next);
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      params.set('tab', 'buying');
+      params.set('section', next);
+      return params;
+    }, { replace: true });
+  };
   const [searchQuery, setSearchQuery] = useState('');
 
   // Local UI State
@@ -698,23 +888,23 @@ const Profile: React.FC = () => {
     }
   }, [currentUser?.id]);
 
-  // Load portfolio when tab is active
+  // Load portfolio when its sub-tab is active
   React.useEffect(() => {
-    if (activeTab === 'portfolio' && currentUser?.id) {
+    if (activeTab === 'selling' && sellingSection === 'portfolio' && currentUser?.id) {
       API.getPortfolio(currentUser.id).then(setPortfolioItems).catch(() => {});
     }
-  }, [activeTab, currentUser?.id]);
+  }, [activeTab, sellingSection, currentUser?.id]);
 
-  // Load analytics when stats tab is active
+  // Load analytics when stats sub-tab is active
   React.useEffect(() => {
-    if (activeTab === 'stats' && currentUser?.id) {
+    if (activeTab === 'selling' && sellingSection === 'stats' && currentUser?.id) {
       setAnalyticsLoading(true);
       API.getMyAnalytics()
         .then(setAnalytics)
         .catch(() => setAnalytics(null))
         .finally(() => setAnalyticsLoading(false));
     }
-  }, [activeTab, currentUser?.id]);
+  }, [activeTab, sellingSection, currentUser?.id]);
 
   // Check auth status for rendering
   const creatorStatus = currentUser?.creatorStatus || 'none';
@@ -931,7 +1121,14 @@ const Profile: React.FC = () => {
   };
 
   const renderTabContent = () => {
-    switch (activeTab) {
+    // Resolve the actual section to render from (top tab, sub-section).
+    // Top-level Messages/Settings have no sub-section.
+    const section: string =
+      activeTab === 'messages' ? 'messages' :
+      activeTab === 'settings' ? 'settings' :
+      activeTab === 'selling'  ? sellingSection :
+                                 buyingSection;
+    switch (section) {
       case 'listings':
         return (
           <div className="space-y-6 animate-in fade-in duration-500">
@@ -1058,7 +1255,7 @@ const Profile: React.FC = () => {
             </div>
           </div>
         );
-      case 'inbox':
+      case 'messages':
         // ... (Existing Inbox Logic)
         return selectedMessage ? (
           <div className="bg-brand-grey/30 border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col h-[600px] animate-in slide-in-from-right-10 duration-500">
@@ -1320,8 +1517,10 @@ const Profile: React.FC = () => {
         return <SettingsTab currentUser={currentUser} updateUser={updateUser} navigate={navigate} initialSection={(searchParams.get('section') as any) || (connectResult ? 'billing' : 'account')} />;
       case 'saved':
         return <SavedTab />;
-      case 'orders':
-        return <OrdersTab />;
+      case 'purchases':
+        return <OrdersTab role="buyer" />;
+      case 'sales':
+        return <OrdersTab role="seller" />;
       case 'stats': {
         const tier = analytics?.tier || subscriptionTier;
         const isPaid = tier === 'pro' || tier === 'ultra' || tier === 'enterprise';
@@ -1948,20 +2147,16 @@ const Profile: React.FC = () => {
 
         {/* Dynamic Content Area */}
         <div className="lg:col-span-3">
-          {/* Horizontal tab nav */}
-          <div className="flex gap-1 overflow-x-auto mb-8 bg-brand-grey/40 border border-white/5 rounded-2xl p-1">
+          {/* Top tab nav — role-grouped: Selling / Buying / Messages / Settings */}
+          <div className="flex gap-1 overflow-x-auto mb-4 bg-brand-grey/40 border border-white/5 rounded-2xl p-1">
             {([
-              { id: 'listings',  label: t('Listings') },
-              { id: 'earnings',  label: t('Earnings') },
-              { id: 'inbox',     label: t('Messages'), badge: inboxMessages.filter(m => m.unread).length },
-              { id: 'saved',     label: t('Saved') },
-              { id: 'orders',    label: t('Orders') },
-              { id: 'portfolio', label: t('Portfolio') },
-              { id: 'stats',     label: t('Stats') },
-              { id: 'settings',  label: t('Settings') },
-            ] as { id: ActiveTab; label: string; badge?: number }[]).map(item => (
+              { id: 'selling',  label: t('Selling') },
+              { id: 'buying',   label: t('Buying') },
+              { id: 'messages', label: t('Messages'), badge: inboxMessages.filter(m => m.unread).length },
+              { id: 'settings', label: t('Settings') },
+            ] as { id: TopTab; label: string; badge?: number }[]).map(item => (
               <button key={item.id}
-                onClick={() => { setActiveTab(item.id); setSelectedMessage(null); }}
+                onClick={() => updateActiveTab(item.id)}
                 className={`relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                   activeTab === item.id ? 'bg-brand-green text-brand-black shadow-lg' : 'text-gray-500 hover:text-white'
                 }`}>
@@ -1974,6 +2169,48 @@ const Profile: React.FC = () => {
               </button>
             ))}
           </div>
+
+          {/* Sub-nav for Selling */}
+          {activeTab === 'selling' && (
+            <div className="flex gap-1 overflow-x-auto mb-8 px-1">
+              {([
+                { id: 'listings',  label: t('Listings') },
+                { id: 'portfolio', label: t('Portfolio') },
+                { id: 'sales',     label: t('Sales') },
+                { id: 'earnings',  label: t('Earnings') },
+                { id: 'stats',     label: t('Stats') },
+              ] as { id: SellingSection; label: string }[]).map(item => (
+                <button key={item.id}
+                  onClick={() => updateSellingSection(item.id)}
+                  className={`px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-widest whitespace-nowrap transition-all ${
+                    sellingSection === item.id ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-white'
+                  }`}>
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Sub-nav for Buying */}
+          {activeTab === 'buying' && (
+            <div className="flex gap-1 overflow-x-auto mb-8 px-1">
+              {([
+                { id: 'purchases', label: t('Purchases') },
+                { id: 'saved',     label: t('Saved') },
+              ] as { id: BuyingSection; label: string }[]).map(item => (
+                <button key={item.id}
+                  onClick={() => updateBuyingSection(item.id)}
+                  className={`px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-widest whitespace-nowrap transition-all ${
+                    buyingSection === item.id ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-white'
+                  }`}>
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Spacer for tabs without sub-nav (Messages, Settings) so layout stays consistent */}
+          {(activeTab === 'messages' || activeTab === 'settings') && <div className="mb-4" />}
 
           {renderTabContent()}
 

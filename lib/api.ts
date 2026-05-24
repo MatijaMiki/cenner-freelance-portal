@@ -82,6 +82,9 @@ export const API = {
   verifyEmail: (token: string) =>
     request<{ success: boolean }>('/auth/verify-email', 'POST', { token }),
 
+  resendVerificationEmail: () =>
+    request<{ success: boolean }>('/auth/resend-verification', 'POST'),
+
   sendPhoneOtp: (phone: string) =>
     request<{ success: boolean }>('/auth/send-phone-otp', 'POST', { phone }),
 

@@ -282,7 +282,7 @@ const Marketplace: React.FC = () => {
         <div className="flex items-center gap-4">
         {user && (
           <button
-            onClick={() => navigate('/profile?tab=listings&create=1')}
+            onClick={() => navigate('/profile?tab=selling&section=listings&create=1')}
             className="px-6 py-3.5 bg-brand-pink text-white rounded-2xl text-xs font-black uppercase tracking-widest flex items-center space-x-2 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-pink/20"
           >
             <Plus size={16} />
