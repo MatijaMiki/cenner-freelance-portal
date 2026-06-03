@@ -509,7 +509,7 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
             <div className="p-6 border border-dashed border-white/10 rounded-2xl flex flex-col items-center text-center gap-3">
               <CreditCard size={28} className="text-gray-600" />
               <p className="text-gray-500 text-sm">{t('No saved payment methods.')}</p>
-              <p className="text-gray-600 text-xs">Payment methods are managed through Stripe and PayPal at checkout.</p>
+              <p className="text-gray-600 text-xs">Payment methods are managed through Stripe at checkout.</p>
             </div>
           </div>
 

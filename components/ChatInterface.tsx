@@ -114,14 +114,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-resize textarea as content grows
-  useEffect(() => {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = 'auto';
-    el.style.height = `${el.scrollHeight}px`;
-  }, [inputText]);
-
   // Auto-scroll on new messages
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -346,7 +338,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     ? 'Support is typing...'
                     : 'Ask us anything...'
                 }
-                className="w-full resize-none overflow-hidden bg-brand-black/60 border border-white/10 rounded-2xl py-5 pl-14 pr-16 text-white text-base placeholder:text-gray-600 focus:outline-none focus:border-brand-green/50 focus:ring-4 focus:ring-brand-green/5 transition-all disabled:opacity-50 leading-relaxed max-h-40"
+                className="w-full resize-none overflow-y-auto bg-brand-black/60 border border-white/10 rounded-2xl py-5 pl-14 pr-16 text-white text-base placeholder:text-gray-600 focus:outline-none focus:border-brand-green/50 focus:ring-4 focus:ring-brand-green/5 transition-all disabled:opacity-50 leading-relaxed"
               />
               <div className="absolute left-5 top-5 text-gray-600 group-focus-within:text-brand-green transition-colors">
                 <Smile size={24} />

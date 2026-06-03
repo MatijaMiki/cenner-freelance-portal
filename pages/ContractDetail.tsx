@@ -10,6 +10,7 @@ import { useNotify } from '../contexts/NotifyContext';
 import NeuralBackground from '../components/NeuralBackground';
 import AvatarImg from '../components/Avatar';
 import SEO from '../components/SEO';
+import MilestoneFundModal from '../components/MilestoneFundModal';
 
 interface Milestone {
   id: string; title: string; description?: string;
@@ -96,6 +97,7 @@ const ContractDetail: React.FC = () => {
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
   const [reviewSent, setReviewSent] = useState(false);
+  const [fundTarget, setFundTarget] = useState<Milestone | null>(null);
 
   const reload = () => {
     if (!id) return;
@@ -287,12 +289,12 @@ const ContractDetail: React.FC = () => {
                 <div className="flex gap-2 mt-3 flex-wrap">
                   {isClient && m.status === 'PENDING' && contract.status === 'ACTIVE' && (
                     <button
-                      onClick={() => doAction(() => API.fundMilestone(m.id), `fund-${m.id}`)}
+                      onClick={() => setFundTarget(m)}
                       disabled={!!actionLoading}
                       className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg text-xs font-bold hover:bg-blue-500/20 transition-all disabled:opacity-50"
                     >
                       <DollarSign size={12} />
-                      {actionLoading === `fund-${m.id}` ? 'Funding…' : 'Fund milestone'}
+                      Fund milestone
                     </button>
                   )}
                   {isFreelancer && m.status === 'FUNDED' && (
@@ -317,12 +319,35 @@ const ContractDetail: React.FC = () => {
                   )}
                   {['FUNDED', 'SUBMITTED'].includes(m.status) && (
                     <button
-                      onClick={() => doAction(() => API.disputeMilestone(m.id, 'Dispute raised'), `dispute-${m.id}`)}
+                      onClick={() => {
+                        const raw = window.prompt('Briefly describe why you are disputing this milestone (max 1000 chars):', '');
+                        if (raw === null) return; // user cancelled
+                        const reason = raw.trim().slice(0, 1000) || 'Dispute raised';
+                        doAction(() => API.disputeMilestone(m.id, reason), `dispute-${m.id}`);
+                      }}
                       disabled={!!actionLoading}
                       className="flex items-center gap-1.5 px-3 py-1.5 bg-red-400/10 border border-red-400/20 text-red-400 rounded-lg text-xs font-bold hover:bg-red-400/20 transition-all disabled:opacity-50"
                     >
                       <AlertTriangle size={12} />
                       Dispute
+                    </button>
+                  )}
+                  {isClient && m.status === 'DISPUTED' && (
+                    <button
+                      onClick={async () => {
+                        const ok = await notify.confirm('Refund this milestone back to your card? This cannot be undone — the freelancer will be notified.', {
+                          title: 'Request refund?',
+                          confirmLabel: 'Yes, refund',
+                          cancelLabel: 'Keep disputed',
+                          variant: 'danger',
+                        });
+                        if (ok) doAction(() => API.refundMilestone(m.id), `refund-${m.id}`);
+                      }}
+                      disabled={!!actionLoading}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-400/10 border border-orange-400/20 text-orange-400 rounded-lg text-xs font-bold hover:bg-orange-400/20 transition-all disabled:opacity-50"
+                    >
+                      <DollarSign size={12} />
+                      {actionLoading === `refund-${m.id}` ? 'Refunding…' : 'Request refund'}
                     </button>
                   )}
                 </div>
@@ -401,6 +426,22 @@ const ContractDetail: React.FC = () => {
           </div>
         )}
       </div>
+
+      {fundTarget && (
+        <MilestoneFundModal
+          milestoneId={fundTarget.id}
+          milestoneTitle={fundTarget.title}
+          amount={fundTarget.amount}
+          onClose={() => setFundTarget(null)}
+          onPaid={() => {
+            setFundTarget(null);
+            notify.toast('Payment authorised — milestone will be marked funded once Stripe confirms.', 'success');
+            // Webhook flips status to FUNDED; reload now and again after a short delay.
+            reload();
+            setTimeout(reload, 3000);
+          }}
+        />
+      )}
     </div>
   );
 };

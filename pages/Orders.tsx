@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Briefcase, Clock, CheckCircle2, XCircle, ArrowRight, Package, Loader2, Truck, RefreshCw, FileText } from 'lucide-react';
+import { Briefcase, Clock, CheckCircle2, XCircle, ArrowRight, Package, Loader2, Truck, RefreshCw, FileText, DollarSign } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNotify } from '../contexts/NotifyContext';
 import { API } from '../lib/api';
 import SEO from '../components/SEO';
 
@@ -30,15 +31,58 @@ const STATUS_CONFIG: Record<OrderStatus, { label: string; color: string; icon: R
 const Orders: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const notify = useNotify();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<'buyer' | 'seller'>('buyer');
+  const [actionId, setActionId] = useState<string | null>(null);
+
+  const reload = () => API.getOrders(role).then(setOrders).catch(() => {});
 
   useEffect(() => {
     if (!user) { navigate('/auth'); return; }
     setLoading(true);
     API.getOrders(role).then(setOrders).catch(() => setOrders([])).finally(() => setLoading(false));
   }, [user, navigate, role]);
+
+  async function markComplete(orderId: string) {
+    const ok = await notify.confirm('Mark this order as complete and release payment to the freelancer? This cannot be undone.', {
+      title: 'Complete order?',
+      confirmLabel: 'Yes, release payment',
+      cancelLabel: 'Not yet',
+    });
+    if (!ok) return;
+    setActionId(orderId);
+    try {
+      await API.updateOrderStatus(orderId, 'COMPLETED');
+      notify.toast('Payment released to the freelancer.', 'success');
+      reload();
+    } catch (e: any) {
+      notify.toast(e?.message || 'Could not complete order', 'error');
+    } finally {
+      setActionId(null);
+    }
+  }
+
+  async function refundOrder(orderId: string) {
+    const ok = await notify.confirm('Refund this order to the buyer? This cannot be undone.', {
+      title: 'Issue refund?',
+      confirmLabel: 'Yes, refund',
+      cancelLabel: 'Cancel',
+      variant: 'danger',
+    });
+    if (!ok) return;
+    setActionId(orderId);
+    try {
+      await API.refundOrder(orderId);
+      notify.toast('Order refunded. The buyer was notified.', 'success');
+      reload();
+    } catch (e: any) {
+      notify.toast(e?.message || 'Could not issue refund', 'error');
+    } finally {
+      setActionId(null);
+    }
+  }
 
   if (!user) return null;
 
@@ -104,6 +148,28 @@ const Orders: React.FC = () => {
                   <span className={`flex items-center gap-1.5 px-3 py-1 border rounded-full text-[10px] font-black uppercase tracking-widest ${cfg.color}`}>
                     {cfg.icon} {cfg.label}
                   </span>
+
+                  {role === 'buyer' && ['PAID', 'IN_PROGRESS', 'DELIVERED'].includes(order.status) && (
+                    <button
+                      onClick={() => markComplete(order.id)}
+                      disabled={actionId === order.id}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-green/10 border border-brand-green/20 text-brand-green rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-brand-green/20 transition-all disabled:opacity-50"
+                    >
+                      <CheckCircle2 size={12} />
+                      {actionId === order.id ? '…' : 'Complete'}
+                    </button>
+                  )}
+                  {role === 'seller' && ['PAID', 'IN_PROGRESS', 'DELIVERED', 'COMPLETED'].includes(order.status) && (
+                    <button
+                      onClick={() => refundOrder(order.id)}
+                      disabled={actionId === order.id}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-400/10 border border-orange-400/20 text-orange-400 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-400/20 transition-all disabled:opacity-50"
+                    >
+                      <DollarSign size={12} />
+                      {actionId === order.id ? '…' : 'Refund'}
+                    </button>
+                  )}
+
                   <a
                     href={`${import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr'}/api/v1/portal/orders/${order.id}/invoice`}
                     target="_blank"

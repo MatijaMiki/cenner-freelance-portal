@@ -158,6 +158,16 @@ export const API = {
   deleteJob: (id: string) =>
     request<{ success: boolean }>(`/jobs/${id}`, 'DELETE'),
 
+  // ── Job proposals ─────────────────────────────────────────────────────
+  getJobProposals: (jobId: string) =>
+    request<any[]>(`/jobs/${jobId}/proposals`),
+
+  submitJobProposal: (jobId: string, data: { coverLetter: string; bidAmount: number; deliveryDays: number }) =>
+    request<any>(`/jobs/${jobId}/proposals`, 'POST', data),
+
+  updateJobProposal: (proposalId: string, status: 'ACCEPTED' | 'REJECTED' | 'WITHDRAWN') =>
+    request<any>(`/jobs/proposals/${proposalId}`, 'PATCH', { status }),
+
   // ── Community Hub (Reddit-style) ─────────────────────────────────────
   getCommunityPosts: () => request<any[]>('/community/posts'),
 
@@ -402,6 +412,8 @@ export const API = {
   // ── Refund ──────────────────────────────────────────────────────────────
   refundMilestone: (milestoneId: string) =>
     request<{ success: boolean }>(`/milestones/${milestoneId}/refund`, 'POST'),
+  refundOrder: (orderId: string) =>
+    request<{ success: boolean }>(`/orders/${orderId}/refund`, 'POST'),
 
   // ── Advanced Search ─────────────────────────────────────────────────────
   searchListings: (params: Record<string, string>) => {

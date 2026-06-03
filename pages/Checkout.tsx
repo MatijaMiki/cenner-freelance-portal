@@ -39,8 +39,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, onSucce
     if (confirmError) {
       setError(confirmError.message || 'Payment failed. Please try again.');
       setIsProcessing(false);
-    } else if (paymentIntent?.status === 'succeeded') {
+    } else if (paymentIntent && ['requires_capture', 'succeeded', 'processing'].includes(paymentIntent.status)) {
+      // Manual-capture marketplace flow returns `requires_capture` after auth.
       onSuccess(paymentIntent.id);
+    } else {
+      setError('Payment did not complete. Please try again.');
+      setIsProcessing(false);
     }
   };
 

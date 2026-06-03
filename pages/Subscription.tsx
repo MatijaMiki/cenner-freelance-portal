@@ -202,7 +202,7 @@ const Subscription: React.FC = () => {
               {
                 '@type': 'Question',
                 name: 'Koje načine plaćanja Cenner prihvaća?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Cenner prihvaća plaćanje kreditnim i debitnim karticama (Visa, Mastercard) te PayPal-om. Sve transakcije su zaštićene SSL enkripcijom.' },
+                acceptedAnswer: { '@type': 'Answer', text: 'Cenner prihvaća plaćanje kreditnim i debitnim karticama (Visa, Mastercard), Apple Pay i Google Pay. Sve transakcije su zaštićene SSL enkripcijom.' },
               },
               {
                 '@type': 'Question',
