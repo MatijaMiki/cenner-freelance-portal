@@ -143,20 +143,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center lg:space-x-1 xl:space-x-8">
+            <div className="hidden lg:flex items-center lg:space-x-1 2xl:space-x-8">
 
               {/* Marketplace Dropdown */}
               <div ref={marketRef} className="relative">
                 <button
                   onClick={() => setIsMarketOpen(v => !v)}
-                  className={`group/navicon relative flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 xl:p-0 xl:rounded-none xl:hover:bg-transparent ${isMarketActive ? 'text-brand-green' : 'text-gray-400'}`}
+                  className={`group/navicon relative flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 2xl:p-0 2xl:rounded-none 2xl:hover:bg-transparent ${isMarketActive ? 'text-brand-green' : 'text-gray-400'}`}
                 >
-                  <ShoppingBag size={18} className="xl:hidden" />
-                  <span className="hidden xl:flex items-center gap-1">
+                  <ShoppingBag size={18} className="2xl:hidden" />
+                  <span className="hidden 2xl:flex items-center gap-1">
                     {t('Marketplace')}
                     <ChevronDown size={12} className={`transition-transform duration-200 ${isMarketOpen ? 'rotate-180' : ''}`} />
                   </span>
-                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap xl:hidden z-50">
+                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50">
                     {t('Marketplace')}
                   </span>
                 </button>
@@ -175,11 +175,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               {/* Plain links */}
               {navLinks.map((link) => (
                 <Link key={link.name} to={link.path}
-                  className={`group/navicon relative flex items-center text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 xl:p-0 xl:rounded-none xl:hover:bg-transparent ${location.pathname === link.path ? 'text-brand-green' : 'text-gray-400'}`}
+                  className={`group/navicon relative flex items-center text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 2xl:p-0 2xl:rounded-none 2xl:hover:bg-transparent ${location.pathname === link.path ? 'text-brand-green' : 'text-gray-400'}`}
                 >
-                  <link.icon size={18} className="xl:hidden" />
-                  <span className="hidden xl:block">{link.name}</span>
-                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap xl:hidden z-50">
+                  <link.icon size={18} className="2xl:hidden" />
+                  <span className="hidden 2xl:block">{link.name}</span>
+                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50">
                     {link.name}
                   </span>
                 </Link>
@@ -189,14 +189,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div ref={aboutRef} className="relative">
                 <button
                   onClick={() => setIsAboutOpen(v => !v)}
-                  className={`group/navicon relative flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 xl:p-0 xl:rounded-none xl:hover:bg-transparent ${isAboutActive ? 'text-brand-green' : 'text-gray-400'}`}
+                  className={`group/navicon relative flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 2xl:p-0 2xl:rounded-none 2xl:hover:bg-transparent ${isAboutActive ? 'text-brand-green' : 'text-gray-400'}`}
                 >
-                  <Info size={18} className="xl:hidden" />
-                  <span className="hidden xl:flex items-center gap-1">
+                  <Info size={18} className="2xl:hidden" />
+                  <span className="hidden 2xl:flex items-center gap-1">
                     {t('About')}
                     <ChevronDown size={12} className={`transition-transform duration-200 ${isAboutOpen ? 'rotate-180' : ''}`} />
                   </span>
-                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap xl:hidden z-50">
+                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50">
                     {t('About')}
                   </span>
                 </button>
