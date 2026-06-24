@@ -59,7 +59,7 @@ async function requestPublic<T>(endpoint: string, method: string = 'GET', body?:
 export const API = {
   // ── Auth ──────────────────────────────────────────────────────────────
   register: (data: { email: string; password: string; name: string; mobile?: string }) =>
-    request<{ user: any }>('/auth/register', 'POST', data),
+    request<{ pending: boolean }>('/auth/register', 'POST', data),
 
   login: (email: string, password: string) =>
     request<{ user: any }>('/auth/login', 'POST', { email, password }),

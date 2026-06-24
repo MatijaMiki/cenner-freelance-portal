@@ -78,8 +78,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (data: Parameters<typeof API.register>[0]) => {
     setLoading(true);
     try {
-      const { user: newUser } = await API.register(data);
-      persistSession(newUser);
+      // No auto-login: registration is confirmed via email to prevent account enumeration.
+      // The caller prompts the user to check their inbox and sign in.
+      await API.register(data);
     } finally {
       setLoading(false);
     }

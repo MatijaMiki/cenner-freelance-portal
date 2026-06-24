@@ -126,6 +126,7 @@ const Auth: React.FC = () => {
     );
   }, [countrySearch]);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -136,6 +137,7 @@ const Auth: React.FC = () => {
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setNotice(null);
     setLoading(true);
 
     const from = getSafeRedirect((location.state as any)?.from);
@@ -151,6 +153,13 @@ const Auth: React.FC = () => {
         }
         const fullPhone = `${selectedCountry.code}${phone}`;
         await register({ email, password, name: username, mobile: fullPhone });
+        // Registration no longer auto-logs-in (anti-enumeration). Switch to the sign-in
+        // view and prompt the user to check their email — same message regardless of
+        // whether the address was already registered.
+        setIsLogin(true);
+        setPassword('');
+        setNotice(t('Almost there — check your email to continue, then sign in.'));
+        return;
       }
       navigate(from, { replace: true });
     } catch (err: any) {
@@ -194,6 +203,12 @@ const Auth: React.FC = () => {
             <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center space-x-3 text-red-400 text-sm animate-in fade-in slide-in-from-top-2">
               <AlertCircle size={18} />
               <span>{error}</span>
+            </div>
+          )}
+
+          {notice && (
+            <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center space-x-3 text-emerald-400 text-sm animate-in fade-in slide-in-from-top-2">
+              <span>{notice}</span>
             </div>
           )}
 
@@ -395,6 +410,7 @@ const Auth: React.FC = () => {
               onClick={() => {
                 setIsLogin(!isLogin);
                 setError(null);
+                setNotice(null);
               }}
               className="ml-2 text-brand-pink font-bold hover:text-brand-green hover:underline transition-colors"
             >

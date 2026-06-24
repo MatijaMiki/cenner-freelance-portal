@@ -38,6 +38,18 @@ const SEO: React.FC<SEOProps> = ({
   // Support both a single JSON-LD object and an array of schemas
   const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
+  // SECURITY: JSON.stringify does NOT escape `<`, `>` or `&`, so user-controlled fields
+  // (bio, listing title/description, etc.) fed into a JSON-LD <script> could break out
+  // with `</script>`. Escape those to their \u-encoded forms — still valid JSON, but
+  // inert as markup. Also escape the JS line/paragraph separators.
+  const safeJsonLd = (obj: object): string =>
+    JSON.stringify(obj)
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026')
+      .replace(/\u2028/g, '\\u2028')
+      .replace(/\u2029/g, '\\u2029');
+
   return (
     <Helmet>
       <title>{fullTitle}</title>
@@ -78,7 +90,7 @@ const SEO: React.FC<SEOProps> = ({
       {/* JSON-LD — each schema as its own script block for AI Overview compatibility */}
       {schemas.map((schema, i) => (
         <script key={i} type="application/ld+json">
-          {JSON.stringify(schema)}
+          {safeJsonLd(schema)}
         </script>
       ))}
     </Helmet>
