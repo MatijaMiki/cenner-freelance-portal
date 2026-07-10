@@ -6,6 +6,17 @@ import SEO from '../components/SEO';
 
 const CLIENT_PROJECTS = [
   {
+    id: 'cistimo',
+    title: 'Čistimo',
+    url: 'https://cistimo.com',
+    category: 'Cleaning Services',
+    deliverable: 'Full booking platform and web presence for a Zagreb apartment- and office-cleaning company — online scheduling, transparent pricing, and multilingual support.',
+    tags: ['Web', 'Booking', 'Multilingual'],
+    logo: '/logos/cistimo.svg',
+    screenshot: '/screenshots/cistimo.jpg',
+    accentLight: 'rgba(0,77,64,0.16)',
+  },
+  {
     id: 'marubosfood',
     title: 'Marubosfood',
     url: 'https://marubosfood.com',
@@ -13,6 +24,7 @@ const CLIENT_PROJECTS = [
     deliverable: 'Full-stack web presence and e-commerce platform for a premium Croatian food brand — product catalogue, online ordering, and brand identity.',
     tags: ['Web', 'E-commerce', 'Branding'],
     logo: '/logos/marubosfood.png',
+    screenshot: '/screenshots/marubosfood.jpg',
     accentLight: 'rgba(92,45,11,0.12)',
   },
   {
@@ -23,6 +35,7 @@ const CLIENT_PROJECTS = [
     deliverable: 'Premium real estate portal for a Croatian luxury property agency — property listings, search, agent profiles, and multilingual support.',
     tags: ['Web', 'Real Estate', 'Multilingual'],
     logo: '/logos/selectedrealestate.webp',
+    screenshot: '/screenshots/selectedrealestate.jpg',
     accentLight: 'rgba(201,168,112,0.08)',
   },
 ];
@@ -49,60 +62,74 @@ const Projects: React.FC = () => {
         </div>
 
         {/* Project Cards */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {CLIENT_PROJECTS.map((project) => (
             <a
               key={project.id}
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative bg-brand-grey/70 border border-white/5 rounded-[2.5rem] p-10 hover:border-white/10 transition-all duration-300 overflow-hidden flex flex-col"
+              className="group relative bg-brand-grey/70 border border-white/5 rounded-[2.5rem] hover:border-white/10 transition-all duration-300 overflow-hidden flex flex-col"
             >
-              {/* Glow blob on hover */}
-              <div
-                className="absolute top-0 right-0 w-64 h-64 rounded-full blur-[100px] -mr-32 -mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{ background: project.accentLight }}
-              />
+              {/* Homepage screenshot preview */}
+              <div className="relative h-52 overflow-hidden border-b border-white/5">
+                <img
+                  src={project.screenshot}
+                  alt={`${project.title} homepage`}
+                  loading="lazy"
+                  className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                />
+                {/* Fade the screenshot into the card body */}
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-brand-grey/95 to-transparent" />
+              </div>
 
-              <div className="relative z-10 flex flex-col h-full">
-                {/* Logo — grayscale by default, full color on hover */}
-                <div className="mb-8 h-16 flex items-center">
-                  <img
-                    src={project.logo}
-                    alt={project.title}
-                    className="max-h-14 w-auto object-contain transition-all duration-500 grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100"
-                  />
-                </div>
+              <div className="relative p-10 flex flex-col flex-1">
+                {/* Glow blob on hover */}
+                <div
+                  className="absolute top-0 right-0 w-64 h-64 rounded-full blur-[100px] -mr-32 -mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: project.accentLight }}
+                />
 
-                {/* Category */}
-                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 mb-2">
-                  {project.category}
-                </span>
-
-                {/* Title */}
-                <h2 className="text-2xl font-black text-white mb-4 tracking-tight">
-                  {project.title}
-                </h2>
-
-                {/* Description */}
-                <p className="text-gray-400 text-sm leading-relaxed mb-8 flex-1">
-                  {project.deliverable}
-                </p>
-
-                {/* Tags + arrow */}
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map(tag => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-gray-300"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                <div className="relative z-10 flex flex-col h-full">
+                  {/* Logo — grayscale by default, full color on hover */}
+                  <div className="mb-8 h-16 flex items-center">
+                    <img
+                      src={project.logo}
+                      alt={project.title}
+                      className="max-h-14 w-auto object-contain transition-all duration-500 grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100"
+                    />
                   </div>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 text-gray-600 group-hover:border-white/20 group-hover:text-white transition-all shrink-0 ml-4">
-                    <ArrowUpRight size={16} />
+
+                  {/* Category */}
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-400 mb-2">
+                    {project.category}
+                  </span>
+
+                  {/* Title */}
+                  <h2 className="text-2xl font-black text-white mb-4 tracking-tight">
+                    {project.title}
+                  </h2>
+
+                  {/* Description */}
+                  <p className="text-gray-400 text-sm leading-relaxed mb-8 flex-1">
+                    {project.deliverable}
+                  </p>
+
+                  {/* Tags + arrow */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map(tag => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-gray-300"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 text-gray-600 group-hover:border-white/20 group-hover:text-white transition-all shrink-0 ml-4">
+                      <ArrowUpRight size={16} />
+                    </div>
                   </div>
                 </div>
               </div>
