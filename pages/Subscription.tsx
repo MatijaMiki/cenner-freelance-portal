@@ -269,12 +269,31 @@ const Subscription: React.FC = () => {
               </div>
 
               {/* Price */}
-              <div className="mb-6 relative">
+              <div className="mb-4 relative">
                 <div className="flex items-baseline space-x-1">
                   <span className="text-4xl font-black text-white tracking-tighter">{tier.price}</span>
                   <span className="text-gray-600 font-black uppercase text-[10px] tracking-widest">/ {t(tier.period)}</span>
                 </div>
               </div>
+
+              {/* Commission rate — the headline benefit, made to stand out */}
+              {(() => {
+                const feeRate = { free: 15, pro: 10, ultra: 5 }[tier.id] ?? 15;
+                const accent = tier.highlight
+                  ? 'border-brand-green/40 bg-brand-green/10 text-brand-green'
+                  : tier.special
+                  ? 'border-brand-pink/40 bg-brand-pink/10 text-brand-pink'
+                  : 'border-white/10 bg-white/5 text-gray-300';
+                return (
+                  <div className={`mb-6 relative flex items-center justify-between rounded-2xl border px-4 py-3 ${accent}`}>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-3xl font-black tracking-tighter">{feeRate}%</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest opacity-80">{t('platform fee')}</span>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white/70">{t('Keep')} {100 - feeRate}%</span>
+                  </div>
+                );
+              })()}
 
               {/* CTA */}
               <button
@@ -313,6 +332,11 @@ const Subscription: React.FC = () => {
             </div>
           ))}
         </div>
+
+        {/* Fee transparency note */}
+        <p className="text-center text-gray-500 text-xs font-medium mt-6 mb-2">
+          {t('Commission shown is deducted from the freelancer’s payout. Buyers pay a flat')} <span className="text-white font-black">5%</span> {t('service fee at checkout.')}
+        </p>
 
         {/* Enterprise — Contact Sales */}
         <div className="mt-4 relative bg-brand-grey/70 border border-white/10 rounded-[2rem] p-7 lg:p-8 flex flex-col lg:flex-row lg:items-center gap-6 shadow-2xl overflow-hidden">
