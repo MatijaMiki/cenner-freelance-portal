@@ -276,22 +276,15 @@ const Subscription: React.FC = () => {
                 </div>
               </div>
 
-              {/* Commission rate — the headline benefit, made to stand out */}
+              {/* Commission rate — a subtle bold callout, not a big badge */}
               {(() => {
                 const feeRate = { free: 15, pro: 10, ultra: 5 }[tier.id] ?? 15;
-                const accent = tier.highlight
-                  ? 'border-brand-green/40 bg-brand-green/10 text-brand-green'
-                  : tier.special
-                  ? 'border-brand-pink/40 bg-brand-pink/10 text-brand-pink'
-                  : 'border-white/10 bg-white/5 text-gray-300';
+                const accent = tier.highlight ? 'text-brand-green' : tier.special ? 'text-brand-pink' : 'text-white';
                 return (
-                  <div className={`mb-6 relative flex items-center justify-between rounded-2xl border px-4 py-3 ${accent}`}>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-3xl font-black tracking-tighter">{feeRate}%</span>
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-80">{t('platform fee')}</span>
-                    </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/70">{t('Keep')} {100 - feeRate}%</span>
-                  </div>
+                  <p className="mb-6 relative text-sm font-medium text-gray-500">
+                    <span className={`font-black ${accent}`}>{feeRate}% {t('platform fee')}</span>
+                    <span className="text-gray-600"> · {t('keep')} {100 - feeRate}%</span>
+                  </p>
                 );
               })()}
 
