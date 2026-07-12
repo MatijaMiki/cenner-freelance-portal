@@ -26,7 +26,7 @@ function getStripe() {
   return stripePromise;
 }
 
-const PayForm: React.FC<{ amount: number; onPaid: () => void }> = ({ amount, onPaid }) => {
+const PayForm: React.FC<{ amount: number; serviceFee: number; total: number; feeRate: number; onPaid: () => void }> = ({ amount, serviceFee, total, feeRate, onPaid }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [processing, setProcessing] = useState(false);
@@ -62,6 +62,12 @@ const PayForm: React.FC<{ amount: number; onPaid: () => void }> = ({ amount, onP
     <form onSubmit={submit} className="space-y-5">
       <PaymentElement options={{ layout: 'tabs', wallets: { applePay: 'auto', googlePay: 'auto' } }} />
 
+      <div className="space-y-2 text-sm">
+        <div className="flex justify-between text-gray-400"><span>Milestone amount</span><span className="text-white font-bold">€{amount.toFixed(2)}</span></div>
+        <div className="flex justify-between text-gray-400"><span>Service fee ({feeRate}%)</span><span className="text-white font-bold">€{serviceFee.toFixed(2)}</span></div>
+        <div className="flex justify-between pt-2 border-t border-white/10"><span className="text-white font-black uppercase tracking-tighter">Total</span><span className="text-brand-green font-black">€{total.toFixed(2)}</span></div>
+      </div>
+
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm">{error}</div>
       )}
@@ -81,7 +87,7 @@ const PayForm: React.FC<{ amount: number; onPaid: () => void }> = ({ amount, onP
         {processing ? (
           <><Loader2 className="animate-spin" size={18} /><span>Authorising…</span></>
         ) : (
-          <><Lock size={16} /><span>Fund €{amount.toFixed(2)}</span></>
+          <><Lock size={16} /><span>Fund €{total.toFixed(2)}</span></>
         )}
       </button>
     </form>
@@ -92,12 +98,23 @@ const MilestoneFundModal: React.FC<Props> = ({ milestoneId, milestoneTitle, amou
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripe, setStripe] = useState<Stripe | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [charge, setCharge] = useState<{ serviceFee: number; total: number; feeRate: number }>({
+    serviceFee: Math.round(amount * 5) / 100,
+    total: amount + Math.round(amount * 5) / 100,
+    feeRate: 5,
+  });
 
   useEffect(() => {
     let cancelled = false;
     getStripe().then(s => { if (!cancelled) setStripe(s); });
     API.fundMilestone(milestoneId)
-      .then(({ clientSecret: cs }) => { if (!cancelled) setClientSecret(cs); })
+      .then((data: any) => {
+        if (cancelled) return;
+        setClientSecret(data.clientSecret);
+        if (typeof data.total === 'number') {
+          setCharge({ serviceFee: data.serviceFee ?? 0, total: data.total, feeRate: data.serviceFeeRate ?? 5 });
+        }
+      })
       .catch(err => { if (!cancelled) setLoadError(err?.message || 'Could not initialise payment'); });
     return () => { cancelled = true; };
   }, [milestoneId]);
@@ -154,7 +171,7 @@ const MilestoneFundModal: React.FC<Props> = ({ milestoneId, milestoneTitle, amou
           </div>
         ) : (
           <Elements stripe={stripe} options={elementsOptions}>
-            <PayForm amount={amount} onPaid={onPaid} />
+            <PayForm amount={amount} serviceFee={charge.serviceFee} total={charge.total} feeRate={charge.feeRate} onPaid={onPaid} />
           </Elements>
         )}
       </div>

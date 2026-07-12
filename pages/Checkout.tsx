@@ -99,14 +99,18 @@ const Checkout: React.FC = () => {
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [serverTotal, setServerTotal] = useState<number | null>(null);
+  const [serverFee, setServerFee] = useState<number | null>(null);
   const [loadingIntent, setLoadingIntent] = useState(true);
   const [intentError, setIntentError] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<ReturnType<typeof loadStripe> | null>(null);
 
   const listing = id ? getListingById(id) : undefined;
 
-  // Buyer pays the listing price; the platform commission is deducted from the freelancer's payout.
-  const totalAmount = listing ? listing.price : 0;
+  // Buyer pays the listing price plus a service fee. The freelancer commission is separate and
+  // deducted from the freelancer's payout. Server values override these local estimates.
+  const BUYER_FEE_RATE = 5;
+  const serviceFee = listing ? Math.round(listing.price * BUYER_FEE_RATE) / 100 : 0;
+  const totalAmount = listing ? listing.price + serviceFee : 0;
 
   useEffect(() => {
     API.getStripeConfig()
@@ -127,6 +131,7 @@ const Checkout: React.FC = () => {
       .then(data => {
         setClientSecret(data.clientSecret);
         setServerTotal(data.totalAmount);
+        setServerFee(data.buyerFee ?? null);
       })
       .catch(err => setIntentError(err.message || 'Could not initialise payment'))
       .finally(() => setLoadingIntent(false));
@@ -272,16 +277,20 @@ const Checkout: React.FC = () => {
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-400 font-bold uppercase tracking-tighter">Subtotal</span>
-                  <span className="text-white font-black">€{listing.price}</span>
+                  <span className="text-white font-black">€{listing.price.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-400 font-bold uppercase tracking-tighter">Service fee ({BUYER_FEE_RATE}%)</span>
+                  <span className="text-white font-black">€{(serverFee ?? serviceFee).toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="pt-6 border-t border-white/10 mb-8">
                 <div className="flex justify-between items-center">
                   <span className="text-white font-black text-lg uppercase tracking-tighter">Total Amount</span>
-                  <span className="text-brand-pink font-black text-2xl">€{serverTotal ?? totalAmount}</span>
+                  <span className="text-brand-pink font-black text-2xl">€{(serverTotal ?? totalAmount).toFixed(2)}</span>
                 </div>
-                <p className="text-[10px] text-gray-500 mt-2 uppercase tracking-widest font-black">No hidden buyer fees — price shown is what you pay</p>
+                <p className="text-[10px] text-gray-500 mt-2 uppercase tracking-widest font-black">Includes a {BUYER_FEE_RATE}% service fee</p>
               </div>
 
               <div className="space-y-3">

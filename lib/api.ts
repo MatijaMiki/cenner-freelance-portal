@@ -253,7 +253,7 @@ export const API = {
 
   // ── Marketplace listing purchase ──────────────────────────────────────────
   createListingPaymentIntent: (listingId: string) =>
-    request<{ clientSecret: string; totalAmount: number; platformFee: number }>(`/listings/${listingId}/create-payment-intent`, 'POST'),
+    request<{ clientSecret: string; totalAmount: number; platformFee: number; buyerFee: number; buyerFeeRate: number }>(`/listings/${listingId}/create-payment-intent`, 'POST'),
 
   // ── Notifications ─────────────────────────────────────────────────────────
   getNotifications: () => request<any[]>('/notifications'),

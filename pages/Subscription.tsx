@@ -93,8 +93,8 @@ const tiers: Tier[] = [
         detail: 'Complete KYC identity verification to earn a Verified badge. Clients consistently choose verified freelancers first.',
       },
       {
-        name: 'Lower platform fee (8%)',
-        detail: 'Your fee drops from 15% to 8% — nearly half. On a €1,000 project that is €70 more in your pocket compared to the Free tier.',
+        name: 'Lower platform fee (10%)',
+        detail: 'Your commission drops from 15% to 10%. On a €1,000 project that is €50 more in your pocket compared to the Free tier.',
       },
       {
         name: 'Priority support',
@@ -134,8 +134,8 @@ const tiers: Tier[] = [
         detail: 'A gold Trusted badge that signals to clients you are among the top-tier freelancers on Cenner. Clients filter specifically for Trusted status on high-budget jobs.',
       },
       {
-        name: 'Lowest fee (3–5%)',
-        detail: 'Only 3% on long-term retainer clients, 5% on one-off projects. The most competitive fee structure available — designed for freelancers who earn serious revenue.',
+        name: 'Lowest fee (5%)',
+        detail: 'A flat 5% commission — the most competitive fee on Cenner. On a €1,000 project you keep €950. Designed for freelancers who earn serious revenue.',
       },
       {
         name: 'Personal onboarding call',
@@ -176,7 +176,7 @@ const Subscription: React.FC = () => {
       <SEO
         title="Pricing & Plans"
         canonical="/subscription"
-        description="Choose the Cenner plan that fits your needs. From Starter to Enterprise — unlock elite freelance talent, AI matching, and premium collaboration tools."
+        description="Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility — with Enterprise for teams."
         jsonLd={[
           {
             '@context': 'https://schema.org',
@@ -192,7 +192,7 @@ const Subscription: React.FC = () => {
               {
                 '@type': 'Question',
                 name: 'Postoji li besplatan plan na Cenner platformi?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Da, Cenner nudi besplatan Starter plan koji omogućuje kreiranje profila, pregledavanje usluga i osnovno komuniciranje s klijentima i freelancerima.' },
+                acceptedAnswer: { '@type': 'Answer', text: 'Da, Cenner nudi besplatan Free plan koji omogućuje kreiranje profila, pregledavanje usluga i osnovno komuniciranje s klijentima i freelancerima.' },
               },
               {
                 '@type': 'Question',
@@ -314,6 +314,31 @@ const Subscription: React.FC = () => {
           ))}
         </div>
 
+        {/* Enterprise — Contact Sales */}
+        <div className="mt-4 relative bg-brand-grey/70 border border-white/10 rounded-[2rem] p-7 lg:p-8 flex flex-col lg:flex-row lg:items-center gap-6 shadow-2xl overflow-hidden">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-[100px] -ml-32 -mt-32 pointer-events-none" />
+          <div className="flex-1 relative">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/5 border border-white/10">
+                <Rocket className="text-white" size={20} />
+              </div>
+              <h3 className="text-2xl font-black text-white tracking-tight">{t('Enterprise')}</h3>
+              <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 border border-white/10 rounded-full px-2 py-1">{t('For teams & agencies')}</span>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed max-w-2xl">
+              {t('Team seats, a custom commission rate, consolidated invoicing, SSO, and a dedicated account manager. Built for agencies and high-volume teams routing serious GMV through Cenner.')}
+            </p>
+          </div>
+          <div className="relative shrink-0">
+            <button
+              onClick={() => navigate('/contact')}
+              className="w-full lg:w-auto px-8 py-3 rounded-xl font-black text-xs bg-white text-brand-black hover:scale-105 transition-all shadow-xl"
+            >
+              {t('Contact Sales')}
+            </button>
+          </div>
+        </div>
+
         {/* Trust strip */}
         <section className="mt-20 py-16 border-y border-white/5 text-center">
           <h2 className="text-3xl font-black text-white mb-12 tracking-tighter">{t('Why upgrade?')}</h2>
@@ -321,7 +346,7 @@ const Subscription: React.FC = () => {
             {[
               { icon: <Star />, title: t('Protected Payments'), desc: 'Every transaction is processed securely through Cenner. Your payments and earnings are always protected.' },
               { icon: <Rocket />, title: t('More Visibility'), desc: 'Higher tiers rank you above free users. Clients searching for your skills will see you before the competition.' },
-              { icon: <Sparkles />, title: t('Lower Fees'), desc: 'Going from Free to Ultra cuts your platform fee from 15% down to 3–5%. On €5,000 a month that is €500 extra in your pocket.' },
+              { icon: <Sparkles />, title: t('Lower Fees'), desc: 'Going from Free to Ultra cuts your commission from 15% down to 5%. On €5,000 a month that is €500 extra in your pocket.' },
             ].map((item, i) => (
               <div key={i} className="space-y-4">
                 <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 text-brand-green">{item.icon}</div>
