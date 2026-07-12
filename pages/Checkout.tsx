@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ShieldCheck, ArrowLeft, Lock, ShoppingBag, Info, Loader2 } from 'lucide-react';
+import { ShieldCheck, ArrowLeft, Lock, ShoppingBag, Loader2 } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useData } from '../contexts/DataContext';
@@ -99,15 +99,14 @@ const Checkout: React.FC = () => {
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [serverTotal, setServerTotal] = useState<number | null>(null);
-  const [serverFee, setServerFee] = useState<number | null>(null);
   const [loadingIntent, setLoadingIntent] = useState(true);
   const [intentError, setIntentError] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<ReturnType<typeof loadStripe> | null>(null);
 
   const listing = id ? getListingById(id) : undefined;
 
-  const platformFee = listing ? Math.round(listing.price * 0.05) : 0;
-  const totalAmount = listing ? listing.price + platformFee : 0;
+  // Buyer pays the listing price; the platform commission is deducted from the freelancer's payout.
+  const totalAmount = listing ? listing.price : 0;
 
   useEffect(() => {
     API.getStripeConfig()
@@ -128,7 +127,6 @@ const Checkout: React.FC = () => {
       .then(data => {
         setClientSecret(data.clientSecret);
         setServerTotal(data.totalAmount);
-        setServerFee(data.platformFee);
       })
       .catch(err => setIntentError(err.message || 'Could not initialise payment'))
       .finally(() => setLoadingIntent(false));
@@ -276,13 +274,6 @@ const Checkout: React.FC = () => {
                   <span className="text-gray-400 font-bold uppercase tracking-tighter">Subtotal</span>
                   <span className="text-white font-black">€{listing.price}</span>
                 </div>
-                <div className="flex justify-between items-center text-sm">
-                  <div className="flex items-center text-gray-400">
-                    <span className="font-bold uppercase tracking-tighter">Cenner Fee</span>
-                    <Info size={14} className="ml-1 opacity-50" />
-                  </div>
-                  <span className="text-white font-black">€{serverFee ?? platformFee}</span>
-                </div>
               </div>
 
               <div className="pt-6 border-t border-white/10 mb-8">
@@ -290,7 +281,7 @@ const Checkout: React.FC = () => {
                   <span className="text-white font-black text-lg uppercase tracking-tighter">Total Amount</span>
                   <span className="text-brand-pink font-black text-2xl">€{serverTotal ?? totalAmount}</span>
                 </div>
-                <p className="text-[10px] text-gray-500 mt-2 uppercase tracking-widest font-black">Includes local taxes & platform fees</p>
+                <p className="text-[10px] text-gray-500 mt-2 uppercase tracking-widest font-black">No hidden buyer fees — price shown is what you pay</p>
               </div>
 
               <div className="space-y-3">
