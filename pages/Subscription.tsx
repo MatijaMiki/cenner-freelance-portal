@@ -283,7 +283,7 @@ const Subscription: React.FC = () => {
                 return (
                   <p className="mb-6 relative text-sm font-medium text-gray-500">
                     <span className={`font-black ${accent}`}>{feeRate}% {t('platform fee')}</span>
-                    <span className="text-gray-600"> · {t('keep')} {100 - feeRate}%</span>
+                    <span className="text-gray-600"> · {t('you keep')} {100 - feeRate}%</span>
                   </p>
                 );
               })()}
