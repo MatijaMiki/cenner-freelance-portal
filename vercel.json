@@ -1,5 +1,13 @@
 {
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.cenner.hr" }],
+      "destination": "https://cenner.hr/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/:path*", "destination": "/index.html" }
   ],

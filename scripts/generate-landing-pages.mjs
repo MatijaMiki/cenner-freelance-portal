@@ -53,7 +53,7 @@ const services = [
         ],
       },
     ],
-    related: ['dizajn-loga', 'seo-optimizacija', 'wordpress-izrada'],
+    related: ['programiranje', 'seo-optimizacija', 'wordpress-izrada'],
   },
   {
     slug: 'dizajn-loga',
@@ -180,6 +180,45 @@ const services = [
       },
     ],
     related: ['izrada-web-stranica', 'seo-optimizacija', 'dizajn-loga'],
+  },
+  {
+    slug: 'programiranje',
+    title: 'Usluge Programiranja — Freelance Developeri Hrvatska | Cenner',
+    keyword: 'usluge programiranja',
+    description:
+      'Trebaš programera? Pronađi provjerene freelance developere u Hrvatskoj — web, mobilne aplikacije, backend, API integracije. Profesionalno programiranje bez agencijskih marži.',
+    h1: 'Usluge Programiranja — Freelance Developeri',
+    intro:
+      'Od web aplikacija i API integracija do mobilnih aplikacija i automatizacije — Cenner te povezuje s provjerenim hrvatskim programerima koji rade s modernim tehnologijama. Profesionalno programiranje po transparentnim cijenama, bez skupih agencijskih marži.',
+    sections: [
+      {
+        h2: 'Koje usluge programiranja možeš pronaći?',
+        body: [
+          'Na Cenneru pronalaziš profesionalne developere za: <strong>web aplikacije</strong> (React, Next.js, Vue, Angular), <strong>backend i API razvoj</strong> (Node.js, Python, PHP, .NET, Java), <strong>mobilne aplikacije</strong> (React Native, Flutter, iOS, Android), <strong>e-commerce i integracije plaćanja</strong>, <strong>automatizaciju i skripte</strong>, <strong>bazu podataka i DevOps</strong>, te <strong>održavanje i nadogradnju postojećeg koda</strong>.',
+        ],
+      },
+      {
+        h2: 'Koliko koštaju usluge programiranja u Hrvatskoj?',
+        body: [
+          'Satnica iskusnog freelance developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Manji projekti (landing aplikacija, integracija, automatizacija) kreću od <strong>500 € do 2.000 €</strong>. Kompletne web ili mobilne aplikacije idu od <strong>3.000 € pa naviše</strong>, ovisno o opsegu.',
+          'Na Cenneru dobivaš <strong>više ponuda</strong> od različitih programera i biraš onu koja odgovara tvom proračunu. Plaćanje ide kroz osigurani escrow sustav — plaćaš tek kad je posao isporučen.',
+        ],
+      },
+      {
+        h2: 'Zašto freelance programer umjesto agencije?',
+        body: [
+          'Za većinu projekata dobar freelance developer isporučuje <strong>jednaku kvalitetu uz 2–3x nižu cijenu</strong> od agencije. Direktna komunikacija s osobom koja piše kod znači brže odluke, manje nesporazuma i transparentniji napredak.',
+          'Svi programeri na Cenneru prošli su <strong>KYC verifikaciju</strong>, a njihovi profili sadrže portfolio, ocjene prijašnjih klijenata i tehnologije kojima vladaju.',
+        ],
+      },
+      {
+        h2: 'Kako pronaći pravog programera?',
+        body: [
+          'Klikni na "Pronađi freelancera", opiši svoj projekt i tehnički zahtjev u par rečenica, a naš AI matching predlaže 3–5 najprikladnijih developera u roku od minute. Pregledaj portfolije i reference, zatraži ponudu i kreni.',
+        ],
+      },
+    ],
+    related: ['izrada-web-stranica', 'wordpress-izrada', 'seo-optimizacija'],
   },
 ];
 
