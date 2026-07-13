@@ -54,7 +54,10 @@
     <title>Freelance Hrvatska — Pronađi Freelancera | Cenner</title>
     <meta name="description" content="Cenner — vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo, sigurno i profesionalno." />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-    <link rel="canonical" href="https://cenner.hr/" />
+    <!-- NO hardcoded canonical/hreflang/og:url in this shell: it is served for EVERY SPA route,
+         so a static homepage URL canonicalizes every dynamic page (/service/:id, /freelancer/:id, …)
+         to the homepage — that was the cause of GSC "Duplicate without user-selected canonical".
+         Per-page canonical/hreflang/og:url are set at runtime by components/SEO.tsx (react-helmet). -->
     <meta name="keywords" content="freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera, freelancer zagreb" />
     <meta name="author" content="Cenner" />
     <meta name="geo.region" content="HR" />
@@ -62,13 +65,8 @@
     <meta name="geo.position" content="45.8150;15.9819" />
     <meta name="ICBM" content="45.8150, 15.9819" />
 
-    <!-- hreflang -->
-    <link rel="alternate" hreflang="hr-HR" href="https://cenner.hr/" />
-    <link rel="alternate" hreflang="x-default" href="https://cenner.hr/" />
-
-    <!-- Open Graph -->
+    <!-- Open Graph (per-page og:url + hreflang set at runtime by components/SEO.tsx) -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://cenner.hr/" />
     <meta property="og:site_name" content="Cenner" />
     <meta property="og:title" content="Freelance Hrvatska — Pronađi Freelancera | Cenner" />
     <meta property="og:description" content="Vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn i marketing. AI matching, sigurno plaćanje, verificirani kreatori." />
