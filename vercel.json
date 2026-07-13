@@ -2,6 +2,12 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.cenner.hr" }],
+      "destination": "https://cenner.hr/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.cenner.hr" }],
       "destination": "https://cenner.hr/:path*",
