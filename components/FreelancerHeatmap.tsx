@@ -128,16 +128,23 @@ const LOCALE_TO_CITY: Record<string, string> = {
   'en-us': 'new york', 'en-ca': 'toronto', en: 'new york',
 };
 
-// Equirectangular projection. ViewBox is 1000 wide × 500 tall (2:1 aspect).
-// Longitude [-180, 180] → x [0, 1000], Latitude [85, -85] → y [0, 500].
+// The background image (public/world-map-dark.png, 1692×929) is NOT a plain 2:1
+// equirectangular map: Antarctica is cropped and it is stretched ~1.23× taller
+// than a true equirectangular, so the old ±180/±85 formula placed every dot too
+// far north (e.g. Zagreb landed in Finland). Meridians and parallels are still
+// straight lines, so lat/lng map linearly to image pixels. The coefficients
+// below were fit to detected coastal extremes (Cape Horn, Cape Agulhas, North
+// Cape, S. Greenland, New Zealand, Tasmania) and reproduce known city positions
+// to within a few pixels worldwide.
+//
+// The SVG viewBox matches the image's aspect ratio (1692/929) so the overlay and
+// the object-cover <img> are sliced identically and dots stay pinned to the map.
 const MAP_W = 1000;
-const MAP_H = 500;
-const LAT_MAX = 85;
-const LAT_MIN = -85;
+const MAP_H = 549; // 1000 × 929/1692 — matches the image aspect ratio
 
 const project = (lat: number, lng: number): [number, number] => {
-  const x = ((lng + 180) / 360) * MAP_W;
-  const y = ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * MAP_H;
+  const x = ((4.4623 * lng + 779.505) / 1692) * MAP_W;
+  const y = ((-5.4862 * lat + 587.343) / 929) * MAP_H;
   return [x, y];
 };
 
