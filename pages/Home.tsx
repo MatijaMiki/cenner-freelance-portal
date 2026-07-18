@@ -71,9 +71,11 @@ const Home: React.FC = () => {
   const [heroPaused, setHeroPaused] = React.useState(false);
   React.useEffect(() => {
     if (heroPaused) return;
+    // heroSlide in deps restarts the countdown on every switch, so a manual dot
+    // click always buys the chosen slide a full 6 seconds.
     const id = setInterval(() => setHeroSlide(s => (s + 1) % 2), 6000);
     return () => clearInterval(id);
-  }, [heroPaused]);
+  }, [heroPaused, heroSlide]);
 
   React.useEffect(() => {
     API.getTopPros().then(setTopPros).catch(() => setTopPros([]));
@@ -97,84 +99,109 @@ const Home: React.FC = () => {
         onMouseLeave={() => setHeroPaused(false)}
       >
         <div className="max-w-4xl mx-auto text-center grid overflow-x-clip">
-          {/* Slide 1 — default. Carousel ping-pong: exits/enters stage LEFT. */}
-          <div
-            className={`[grid-area:1/1] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${heroSlide === 0 ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-24 scale-[0.97] pointer-events-none'}`}
-            aria-hidden={heroSlide !== 0}
-          >
-            <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-6 text-xs font-medium text-brand-green animate-pulse">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
-              </span>
-              <span>{t('New: Gemini Live Voice-First Integration')}</span>
-            </div>
+          {(() => {
+            // Staggered entrance for a slide's inner elements: each rises in a beat
+            // after the previous, so the switch reads as motion, not a swap.
+            const reveal = (active: boolean, delayMs: number) => ({
+              className: `transition-all duration-700 ease-out ${active ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`,
+              style: { transitionDelay: active ? `${delayMs}ms` : '0ms' } as React.CSSProperties,
+            });
+            const slideCls = (active: boolean, dir: 1 | -1) =>
+              `[grid-area:1/1] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${active ? 'opacity-100 translate-x-0' : `opacity-0 ${dir === -1 ? '-translate-x-[80%]' : 'translate-x-[80%]'} pointer-events-none`}`;
+            const a0 = heroSlide === 0, a1 = heroSlide === 1;
+            return (
+              <>
+                {/* Slide 1 — default. Carousel ping-pong: exits/enters stage LEFT. */}
+                <div className={slideCls(a0, -1)} aria-hidden={!a0}>
+                  <div {...reveal(a0, 0)}>
+                    <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-6 text-xs font-medium text-brand-green animate-pulse">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
+                      </span>
+                      <span>{t('New: Gemini Live Voice-First Integration')}</span>
+                    </div>
+                  </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
-              {t('Freelance Hrvatska')} <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
-                {t('Pronađi Freelancera')}
-              </span>
-            </h1>
+                  <div {...reveal(a0, 150)}>
+                    <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
+                      {t('Freelance Hrvatska')} <br />
+                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
+                        {t('Pronađi Freelancera')}
+                      </span>
+                    </h1>
+                  </div>
 
-            <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
-              {t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.')}
-            </p>
+                  <div {...reveal(a0, 300)}>
+                    <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
+                      {t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.')}
+                    </p>
+                  </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <Link
-                to="/marketplace"
-                className="w-full sm:w-auto px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
-              >
-                <span>{t('Explore Marketplace')}</span>
-                <ArrowRight size={20} />
-              </Link>
-              <Link
-                to="/services"
-                className="w-full sm:w-auto px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
-              >
-                {t('Cenner Services')}
-              </Link>
-            </div>
-          </div>
+                  <div {...reveal(a0, 450)}>
+                    <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                      <Link
+                        to="/marketplace"
+                        className="w-full sm:w-auto px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
+                      >
+                        <span>{t('Explore Marketplace')}</span>
+                        <ArrowRight size={20} />
+                      </Link>
+                      <Link
+                        to="/services"
+                        className="w-full sm:w-auto px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
+                      >
+                        {t('Cenner Services')}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Slide 2 — Refer & Win promo (styled after /referral). Exits/enters stage RIGHT. */}
-          <div
-            className={`[grid-area:1/1] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${heroSlide === 1 ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-24 scale-[0.97] pointer-events-none'}`}
-            aria-hidden={heroSlide !== 1}
-          >
-            <div className="inline-flex items-center gap-2 mb-6 text-[11px] font-black uppercase tracking-[0.3em] text-brand-green">
-              <Gift size={14} />
-              <span>{t('Refer & Win')}</span>
-            </div>
+                {/* Slide 2 — Refer & Win promo (styled after /referral). Exits/enters stage RIGHT. */}
+                <div className={slideCls(a1, 1)} aria-hidden={!a1}>
+                  <div {...reveal(a1, 0)}>
+                    <div className="inline-flex items-center gap-2 mb-6 text-[11px] font-black uppercase tracking-[0.3em] text-brand-green">
+                      <Gift size={14} />
+                      <span>{t('Refer & Win')}</span>
+                    </div>
+                  </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
-              {t('Win 12 months of')} <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
-                {t('free Enterprise.')}
-              </span>
-            </h1>
+                  <div {...reveal(a1, 150)}>
+                    <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
+                      {t('Win 12 months of')} <br />
+                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
+                        {t('free Enterprise.')}
+                      </span>
+                    </h1>
+                  </div>
 
-            <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
-              {t('Our referral contest is on: share your personal link, climb the leaderboard, and the top 3 referrers win free Enterprise plus year-long listing boosts.')}
-            </p>
+                  <div {...reveal(a1, 300)}>
+                    <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
+                      {t('Our referral contest is on: share your personal link, climb the leaderboard, and the top 3 referrers win free Enterprise plus year-long listing boosts.')}
+                    </p>
+                  </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <Link
-                to="/referral"
-                className="w-full sm:w-auto px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
-              >
-                <span>{t('Get my referral link')}</span>
-                <ArrowRight size={20} />
-              </Link>
-              <Link
-                to="/referral"
-                className="w-full sm:w-auto px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
-              >
-                {t('See the prizes')}
-              </Link>
-            </div>
-          </div>
+                  <div {...reveal(a1, 450)}>
+                    <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                      <Link
+                        to="/referral"
+                        className="w-full sm:w-auto px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
+                      >
+                        <span>{t('Get my referral link')}</span>
+                        <ArrowRight size={20} />
+                      </Link>
+                      <Link
+                        to="/referral"
+                        className="w-full sm:w-auto px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
+                      >
+                        {t('See the prizes')}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </>
+            );
+          })()}
         </div>
 
         {/* Slide dots */}
