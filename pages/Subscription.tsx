@@ -357,15 +357,16 @@ const Subscription: React.FC = () => {
         </div>
 
         {/* Trust strip */}
-        <section className="mt-20 py-16 border-y border-white/5 text-center">
+        <section className="mt-20 py-16 text-center">
           <h2 className="text-3xl font-black text-white mb-12 tracking-tighter">{t('Why upgrade?')}</h2>
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="grid md:grid-cols-3 gap-6">
             {[
               { icon: <Star />, title: t('Protected Payments'), desc: 'Every transaction is processed securely through Cenner. Your payments and earnings are always protected.' },
               { icon: <Rocket />, title: t('More Visibility'), desc: 'Higher tiers rank you above free users. Clients searching for your skills will see you before the competition.' },
               { icon: <Sparkles />, title: t('Lower Fees'), desc: 'Going from Free to Ultra cuts your commission from 15% down to 5%. On €5,000 a month that is €500 extra in your pocket.' },
             ].map((item, i) => (
-              <div key={i} className="space-y-4">
+              // bg + blur lift the copy off the animated NeuralBackground (matches pricing cards above)
+              <div key={i} className="space-y-4 bg-brand-grey/70 backdrop-blur-sm border border-white/10 rounded-[2rem] p-7 shadow-2xl">
                 <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 text-brand-green">{item.icon}</div>
                 <h4 className="text-xl font-bold text-white">{item.title}</h4>
                 <p className="text-gray-400 text-sm max-w-xs mx-auto leading-relaxed">{item.desc}</p>
