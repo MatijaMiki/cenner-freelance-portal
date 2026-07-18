@@ -96,10 +96,10 @@ const Home: React.FC = () => {
         onMouseEnter={() => setHeroPaused(true)}
         onMouseLeave={() => setHeroPaused(false)}
       >
-        <div className="max-w-4xl mx-auto text-center grid">
-          {/* Slide 1 — default */}
+        <div className="max-w-4xl mx-auto text-center grid overflow-x-clip">
+          {/* Slide 1 — default. Carousel ping-pong: exits/enters stage LEFT. */}
           <div
-            className={`[grid-area:1/1] transition-all duration-700 ease-out ${heroSlide === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+            className={`[grid-area:1/1] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${heroSlide === 0 ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-24 scale-[0.97] pointer-events-none'}`}
             aria-hidden={heroSlide !== 0}
           >
             <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-6 text-xs font-medium text-brand-green animate-pulse">
@@ -138,9 +138,9 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Slide 2 — Refer & Win promo (styled after the /referral page) */}
+          {/* Slide 2 — Refer & Win promo (styled after /referral). Exits/enters stage RIGHT. */}
           <div
-            className={`[grid-area:1/1] transition-all duration-700 ease-out ${heroSlide === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+            className={`[grid-area:1/1] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${heroSlide === 1 ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-24 scale-[0.97] pointer-events-none'}`}
             aria-hidden={heroSlide !== 1}
           >
             <div className="inline-flex items-center gap-2 mb-6 text-[11px] font-black uppercase tracking-[0.3em] text-brand-green">
@@ -178,15 +178,17 @@ const Home: React.FC = () => {
         </div>
 
         {/* Slide dots */}
-        <div className="flex items-center justify-center gap-2 mt-8">
-          {[0, 1].map(i => (
-            <button
-              key={i}
-              onClick={() => setHeroSlide(i)}
-              aria-label={i === 0 ? 'Show main headline' : 'Show referral contest'}
-              className={`h-1.5 rounded-full transition-all duration-500 ${heroSlide === i ? 'w-6 bg-brand-green' : 'w-1.5 bg-white/20 hover:bg-white/40'}`}
-            />
-          ))}
+        <div className="flex justify-center mt-10">
+          <div className="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-full px-4 py-2.5 backdrop-blur-sm">
+            {[0, 1].map(i => (
+              <button
+                key={i}
+                onClick={() => setHeroSlide(i)}
+                aria-label={i === 0 ? 'Show main headline' : 'Show referral contest'}
+                className={`h-2.5 rounded-full transition-all duration-500 ${heroSlide === i ? 'w-9 bg-brand-green shadow-[0_0_14px_rgba(74,222,128,0.7)]' : 'w-2.5 bg-white/40 hover:bg-white/70'}`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
