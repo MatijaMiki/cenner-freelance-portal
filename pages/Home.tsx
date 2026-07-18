@@ -5,7 +5,7 @@ import {
   ArrowRight, Star, Shield, Zap, Globe, ChevronRight,
   Layers, Users, Search, Code, Palette,
   Terminal, BarChart3, Rocket, Activity, Server,
-  ShieldCheck, Cpu, Briefcase, Globe2, Clock, CheckCircle, Lock, Plus, Minus
+  ShieldCheck, Cpu, Briefcase, Globe2, Clock, CheckCircle, Lock, Plus, Minus, Gift
 } from 'lucide-react';
 import NeuralBackground from '../components/NeuralBackground';
 import SEO from '../components/SEO';
@@ -66,6 +66,15 @@ const Home: React.FC = () => {
   const [topPros, setTopPros] = React.useState<any[]>([]);
   const [spotlight, setSpotlight] = React.useState<any[]>([]);
 
+  // Rotating hero: alternates the default headline with the Refer & Win promo.
+  const [heroSlide, setHeroSlide] = React.useState(0);
+  const [heroPaused, setHeroPaused] = React.useState(false);
+  React.useEffect(() => {
+    if (heroPaused) return;
+    const id = setInterval(() => setHeroSlide(s => (s + 1) % 2), 6000);
+    return () => clearInterval(id);
+  }, [heroPaused]);
+
   React.useEffect(() => {
     API.getTopPros().then(setTopPros).catch(() => setTopPros([]));
     API.getSpotlight().then(setSpotlight).catch(() => setSpotlight([]));
@@ -81,43 +90,103 @@ const Home: React.FC = () => {
       />
       <NeuralBackground parallax={true} />
 
-      {/* Hero Section */}
-      <section className="relative pt-28 pb-20 px-4 z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-6 text-xs font-medium text-brand-green animate-pulse">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
-            </span>
-            <span>{t('New: Gemini Live Voice-First Integration')}</span>
+      {/* Hero Section — rotates between the default headline and the Refer & Win promo */}
+      <section
+        className="relative pt-28 pb-20 px-4 z-10"
+        onMouseEnter={() => setHeroPaused(true)}
+        onMouseLeave={() => setHeroPaused(false)}
+      >
+        <div className="max-w-4xl mx-auto text-center grid">
+          {/* Slide 1 — default */}
+          <div
+            className={`[grid-area:1/1] transition-all duration-700 ease-out ${heroSlide === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+            aria-hidden={heroSlide !== 0}
+          >
+            <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-6 text-xs font-medium text-brand-green animate-pulse">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
+              </span>
+              <span>{t('New: Gemini Live Voice-First Integration')}</span>
+            </div>
+
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
+              {t('Freelance Hrvatska')} <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
+                {t('Pronađi Freelancera')}
+              </span>
+            </h1>
+
+            <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
+              {t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.')}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+              <Link
+                to="/marketplace"
+                className="w-full sm:w-auto px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
+              >
+                <span>{t('Explore Marketplace')}</span>
+                <ArrowRight size={20} />
+              </Link>
+              <Link
+                to="/services"
+                className="w-full sm:w-auto px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
+              >
+                {t('Cenner Services')}
+              </Link>
+            </div>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
-            {t('Freelance Hrvatska')} <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
-              {t('Pronađi Freelancera')}
-            </span>
-          </h1>
+          {/* Slide 2 — Refer & Win promo (styled after the /referral page) */}
+          <div
+            className={`[grid-area:1/1] transition-all duration-700 ease-out ${heroSlide === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}
+            aria-hidden={heroSlide !== 1}
+          >
+            <div className="inline-flex items-center gap-2 mb-6 text-[11px] font-black uppercase tracking-[0.3em] text-brand-green">
+              <Gift size={14} />
+              <span>{t('Refer & Win')}</span>
+            </div>
 
-          <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
-            {t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.')}
-          </p>
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
+              {t('Win 12 months of')} <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-green via-brand-pink to-brand-green bg-[length:200%_auto] animate-gradient">
+                {t('free Enterprise.')}
+              </span>
+            </h1>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <Link
-              to="/marketplace"
-              className="w-full sm:w-auto px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
-            >
-              <span>{t('Explore Marketplace')}</span>
-              <ArrowRight size={20} />
-            </Link>
-            <Link
-              to="/services"
-              className="w-full sm:w-auto px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
-            >
-              {t('Cenner Services')}
-            </Link>
+            <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
+              {t('Our referral contest is on: share your personal link, climb the leaderboard, and the top 3 referrers win free Enterprise plus year-long listing boosts.')}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+              <Link
+                to="/referral"
+                className="w-full sm:w-auto px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl flex items-center justify-center space-x-3 hover:scale-105 transition-all shadow-[0_0_40px_rgba(74,222,128,0.2)]"
+              >
+                <span>{t('Get my referral link')}</span>
+                <ArrowRight size={20} />
+              </Link>
+              <Link
+                to="/referral"
+                className="w-full sm:w-auto px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 backdrop-blur-xl transition-all"
+              >
+                {t('See the prizes')}
+              </Link>
+            </div>
           </div>
+        </div>
+
+        {/* Slide dots */}
+        <div className="flex items-center justify-center gap-2 mt-8">
+          {[0, 1].map(i => (
+            <button
+              key={i}
+              onClick={() => setHeroSlide(i)}
+              aria-label={i === 0 ? 'Show main headline' : 'Show referral contest'}
+              className={`h-1.5 rounded-full transition-all duration-500 ${heroSlide === i ? 'w-6 bg-brand-green' : 'w-1.5 bg-white/20 hover:bg-white/40'}`}
+            />
+          ))}
         </div>
       </section>
 
