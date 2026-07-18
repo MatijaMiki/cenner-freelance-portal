@@ -23,7 +23,7 @@ interface AuthContextType {
   user: AuthUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: { email: string; password: string; name: string; mobile?: string }) => Promise<void>;
+  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string }) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => void;
   updateUser: (data: Partial<AuthUser>) => void;
@@ -91,11 +91,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const idToken = await firebaseSignInWithGoogle();
       const CRM_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
+      // Referral attribution: backend only applies this when the Google sign-in
+      // creates a brand-new account, so sending it on every login is harmless.
+      const referralCode = localStorage.getItem('cenner_ref') || undefined;
       const res = await fetch(`${CRM_BASE}/api/v1/portal/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ idToken }),
+        body: JSON.stringify({ idToken, ...(referralCode ? { referralCode } : {}) }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: res.statusText }));

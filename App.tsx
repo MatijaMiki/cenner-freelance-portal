@@ -1,5 +1,5 @@
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './components/Layout';
@@ -43,9 +43,19 @@ const Earnings = lazy(() => import('./pages/Earnings'));
 const SavedListings = lazy(() => import('./pages/SavedListings'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
+const Referral = lazy(() => import('./pages/Referral'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const App: React.FC = () => {
+  // Capture ?ref=CODE on any entry point and persist it for the signup flow.
+  // Only overwrite an existing stored code when a new one is actually present.
+  useEffect(() => {
+    try {
+      const ref = new URLSearchParams(window.location.search).get('ref');
+      if (ref) localStorage.setItem('cenner_ref', ref);
+    } catch { /* ignore */ }
+  }, []);
+
   return (
     <HelmetProvider>
       <NotifyProvider>
@@ -93,6 +103,7 @@ const App: React.FC = () => {
                   <Route path="/saved" element={<SavedListings />} />
                   <Route path="/onboarding" element={<Onboarding />} />
                   <Route path="/order-success" element={<OrderSuccess />} />
+                  <Route path="/referral" element={<Referral />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

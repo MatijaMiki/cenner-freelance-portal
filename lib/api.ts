@@ -58,7 +58,7 @@ async function requestPublic<T>(endpoint: string, method: string = 'GET', body?:
 
 export const API = {
   // ── Auth ──────────────────────────────────────────────────────────────
-  register: (data: { email: string; password: string; name: string; mobile?: string }) =>
+  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string }) =>
     request<{ pending: boolean }>('/auth/register', 'POST', data),
 
   login: (email: string, password: string) =>
@@ -436,4 +436,28 @@ export const API = {
   // ── Stripe receipt URL ────────────────────────────────────────────────────
   getPaymentReceipt: (paymentIntentId: string) =>
     request<{ receiptUrl: string | null }>(`/payments/${paymentIntentId}/receipt`),
+
+  // ── Referral (Refer & Win contest) ────────────────────────────────────────
+  getReferralMe: () =>
+    request<{
+      code: string;
+      shareUrl: string;
+      referralCount: number;
+      rank: number;
+      totalParticipants: number;
+      pendingBoostMonths: number;
+      tier: string;
+      subscriptionExpiresAt: string | null;
+      campaign: { name: string; slug: string; startsAt: string; endsAt: string; active: boolean; awarded: boolean } | null;
+      wins: { place: number; enterpriseMonths: number; boostMonths: number; grantedAt: string; campaign: { name: string } }[];
+    }>('/referral/me'),
+
+  getReferralLeaderboard: () =>
+    request<{
+      campaign: { name: string; endsAt: string; active: boolean } | null;
+      leaders: { rank: number; name: string; referralCount: number }[];
+    }>('/referral/leaderboard'),
+
+  claimReferralBoost: (listingId: string) =>
+    request<{ success: boolean; boostedUntil: string; monthsApplied: number }>('/referral/claim-boost', 'POST', { listingId }),
 };

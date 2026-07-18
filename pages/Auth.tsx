@@ -152,7 +152,8 @@ const Auth: React.FC = () => {
           return;
         }
         const fullPhone = `${selectedCountry.code}${phone}`;
-        await register({ email, password, name: username, mobile: fullPhone });
+        const referralCode = localStorage.getItem('cenner_ref') || undefined;
+        await register({ email, password, name: username, mobile: fullPhone, referralCode });
         // Registration no longer auto-logs-in (anti-enumeration). Switch to the sign-in
         // view and prompt the user to check their email — same message regardless of
         // whether the address was already registered.

@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, User as UserIcon, LogOut, ChevronDown, MessageSquare, UserCheck, FileText, ShoppingBag, Briefcase, Tag, UserPlus, BookOpen, Users, Mail, Info } from 'lucide-react';
+import { Menu, X, User as UserIcon, LogOut, ChevronDown, MessageSquare, UserCheck, FileText, ShoppingBag, Briefcase, Tag, UserPlus, BookOpen, Users, Mail, Info, Gift } from 'lucide-react';
 import AvatarImg from './Avatar';
 import NotificationBell from './NotificationBell';
 import PermissionModal from './PermissionModal';
@@ -111,6 +111,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: t('Onboarding'), path: '/onboarding',   icon: UserPlus },
     { name: t('Blog'),       path: '/blog',         icon: BookOpen },
     { name: t('Community'),  path: '/community',    icon: Users },
+    { name: t('Refer & Win'), path: '/referral',    icon: Gift },
     { name: t('Contact'),    path: '/contact',      icon: Mail },
   ];
 
@@ -301,6 +302,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                           <FileText size={15} className="text-gray-500" />
                           {t('Contracts')}
                         </Link>
+                        <Link to="/referral" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+                          <Gift size={15} className="text-brand-green" />
+                          {t('Refer & Win')}
+                        </Link>
                       </div>
 
                       <div className="border-t border-white/10" />
@@ -390,6 +395,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     )}
                   </Link>
                   <Link to="/contracts" onClick={() => setIsMenuOpen(false)} className="block py-2.5 text-base font-bold text-white">{t('Contracts')}</Link>
+                  <Link to="/referral" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-2.5 text-base font-bold text-white"><Gift size={16} className="text-brand-green" />{t('Refer & Win')}</Link>
                   <button onClick={handleLogout} className="block py-2.5 text-base font-bold text-brand-pink w-full text-left">{t('Sign out')}</button>
                 </>
               ) : (
