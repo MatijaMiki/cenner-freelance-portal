@@ -41,8 +41,29 @@ const TermsOfService: React.FC = () => {
           </p>
         </section>
 
+        <section className="bg-white dark:bg-brand-grey/30 border border-gray-100 dark:border-white/5 rounded-3xl p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">4. Keeping Activity On-Platform</h2>
+          <p className="mb-4">
+            Cenner operates as an intermediary marketplace. The fees we charge fund the escrow, payment protection, and dispute resolution described above. To keep these protections available to everyone, you agree that while you are engaged with — or within twelve (12) months of first being introduced to — another user through Cenner, you will not:
+          </p>
+          <ul className="space-y-3 mb-4">
+            <li className="flex items-start space-x-3">
+              <CheckSquare className="text-brand-pink shrink-0 mt-0.5" size={18} />
+              <span>Solicit, request, or arrange to move communication, negotiation, or payment for services off the platform — including requesting or sharing personal email addresses, phone numbers, or other off-platform contact details for that purpose.</span>
+            </li>
+            <li className="flex items-start space-x-3">
+              <CheckSquare className="text-brand-pink shrink-0 mt-0.5" size={18} />
+              <span>Pay for, invoice, or otherwise settle services outside of Cenner's payment system in order to avoid platform fees.</span>
+            </li>
+          </ul>
+          <div className="flex items-start space-x-3 text-sm">
+            <AlertTriangle className="text-yellow-500 shrink-0" size={18} />
+            <p>Off-platform arrangements are not covered by Cenner's escrow, buyer or seller protection, or dispute resolution. Violations may result in suspension or permanent termination of your account.</p>
+          </div>
+        </section>
+
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">4. Intellectual Property</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">5. Intellectual Property</h2>
           <p>
             The Service and its original content (excluding content provided by users), features, and functionality are and will remain the exclusive property of Cenner Platform Inc. and its licensors.
           </p>

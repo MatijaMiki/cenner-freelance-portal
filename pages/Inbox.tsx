@@ -370,6 +370,16 @@ const MessagingHub: React.FC = () => {
               </div>
             </div>
 
+            {/* Off-platform safety notice — pinned at the top of every thread */}
+            <div className="flex-shrink-0 flex items-start gap-2.5 mx-6 mt-4 bg-brand-green/5 border border-brand-green/15 rounded-xl px-4 py-3">
+              <ShieldCheck size={15} className="text-brand-green shrink-0 mt-0.5" />
+              <p className="text-[11px] text-gray-400 leading-relaxed">
+                Keep all communication and payments on Cenner. Sharing personal contact details or taking the deal off-platform to avoid fees violates our{' '}
+                <button onClick={() => navigate('/terms')} className="text-brand-green hover:underline font-semibold">Terms of Service</button>
+                {' '}and voids buyer and seller protection.
+              </p>
+            </div>
+
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
               {messagesLoading ? (
