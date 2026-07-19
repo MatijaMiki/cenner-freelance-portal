@@ -331,27 +331,37 @@ const Subscription: React.FC = () => {
           {t('Commission shown is deducted from the freelancer’s payout. Buyers pay a flat')} <span className="text-white font-black">5%</span> {t('service fee at checkout.')}
         </p>
 
-        {/* Enterprise — Contact Sales */}
+        {/* Enterprise */}
         <div className="mt-4 relative bg-brand-grey/70 border border-white/10 rounded-[2rem] p-7 lg:p-8 flex flex-col lg:flex-row lg:items-center gap-6 shadow-2xl overflow-hidden">
           <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-[100px] -ml-32 -mt-32 pointer-events-none" />
           <div className="flex-1 relative">
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-2 flex-wrap">
               <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/5 border border-white/10">
                 <Rocket className="text-white" size={20} />
               </div>
               <h3 className="text-2xl font-black text-white tracking-tight">{t('Enterprise')}</h3>
-              <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 border border-white/10 rounded-full px-2 py-1">{t('For teams & agencies')}</span>
+              <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 border border-white/10 rounded-full px-2 py-1">{t('Our best plan — everything included')}</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-2xl">
-              {t('Team seats, a custom commission rate, consolidated invoicing, SSO, and a dedicated account manager. Built for agencies and high-volume teams routing serious GMV through Cenner.')}
+              {t('Everything in Ultra, maxed out: the lowest 5% commission, Trusted status, homepage spotlight — plus the highest marketplace ranking above every other tier and 30 listing boosts per month.')}
             </p>
           </div>
-          <div className="relative shrink-0">
+          <div className="relative shrink-0 flex flex-col items-stretch lg:items-end gap-2">
+            <div className="text-center lg:text-right mb-1">
+              <span className="text-3xl font-black text-white">€99</span>
+              <span className="text-gray-500 text-sm font-medium"> / {t('per month').replace('per ', '')}</span>
+            </div>
             <button
-              onClick={() => navigate('/contact')}
+              onClick={() => handlePlanSelection('enterprise')}
               className="w-full lg:w-auto px-8 py-3 rounded-xl font-black text-xs bg-white text-brand-black hover:scale-105 transition-all shadow-xl"
             >
-              {t('Contact Sales')}
+              {t('Get Enterprise')}
+            </button>
+            <button
+              onClick={() => navigate('/contact')}
+              className="w-full lg:w-auto text-[11px] font-bold text-gray-500 hover:text-white transition-colors"
+            >
+              {t('Custom needs? Contact sales')}
             </button>
           </div>
         </div>

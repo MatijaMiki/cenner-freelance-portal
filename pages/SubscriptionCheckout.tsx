@@ -1,15 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
-import { ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Crown, Zap, AlertCircle } from 'lucide-react';
+import { ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Crown, Zap, Rocket, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import SEO from '../components/SEO';
 
 const API_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 
 const PLANS: Record<string, { title: string; price: number; icon: React.ReactNode; color: string }> = {
-  pro:   { title: 'Pro Plan',   price: 19, icon: <Zap size={24} />,   color: 'text-brand-green' },
-  ultra: { title: 'Ultra Plan', price: 59, icon: <Crown size={24} />, color: 'text-brand-pink'  },
+  pro:        { title: 'Pro Plan',        price: 19, icon: <Zap size={24} />,    color: 'text-brand-green' },
+  ultra:      { title: 'Ultra Plan',      price: 59, icon: <Crown size={24} />,  color: 'text-brand-pink'  },
+  enterprise: { title: 'Enterprise Plan', price: 99, icon: <Rocket size={24} />, color: 'text-white'       },
 };
 
 // ── Success screen ─────────────────────────────────────────────────────────
