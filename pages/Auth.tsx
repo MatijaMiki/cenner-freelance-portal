@@ -113,6 +113,7 @@ const Auth: React.FC = () => {
         sitekey: TURNSTILE_SITE_KEY,
         theme: 'dark',
         execution: 'execute',
+        appearance: 'interaction-only',
         callback: (token: string) => { setTurnstileToken(token); setCaptchaState('done'); },
         'expired-callback': () => { setTurnstileToken(''); setCaptchaState('idle'); },
         'error-callback': () => { setTurnstileToken(''); setCaptchaState('idle'); },
@@ -423,7 +424,7 @@ const Auth: React.FC = () => {
                     {captchaState === 'done' ? t('Verified — you are human') : captchaState === 'verifying' ? t('Verifying…') : t('Confirm you are not a robot')}
                   </span>
                 </button>
-                <div ref={turnstileDivRef} className={`justify-center empty:hidden mt-2 ${captchaState === 'done' ? 'hidden' : 'flex'}`} />
+                <div ref={turnstileDivRef} className={`justify-center mt-2 ${captchaState === 'verifying' ? 'flex' : 'hidden'}`} />
               </div>
             )}
 
