@@ -22,8 +22,8 @@ export interface AuthUser {
 interface AuthContextType {
   user: AuthUser | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string }) => Promise<void>;
+  login: (email: string, password: string, turnstileToken?: string) => Promise<void>;
+  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string; turnstileToken?: string }) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => void;
   updateUser: (data: Partial<AuthUser>) => void;
@@ -65,10 +65,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(newUser);
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, turnstileToken?: string) => {
     setLoading(true);
     try {
-      const { user: newUser } = await API.login(email, password);
+      const { user: newUser } = await API.login(email, password, turnstileToken);
       persistSession(newUser);
     } finally {
       setLoading(false);

@@ -7,6 +7,10 @@ import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
 import { hasRequiredConsent, openConsentModal } from '../lib/consent';
 
+// Cloudflare Turnstile: sitekey via env. No key = widget hidden and no token sent
+// (backend skips verification while its TURNSTILE_SECRET_KEY is unset too).
+const TURNSTILE_SITE_KEY = (import.meta as any).env?.VITE_TURNSTILE_SITE_KEY || '';
+
 const SAFE_REDIRECT_PATHS = ['/profile', '/dashboard', '/marketplace', '/messages', '/orders', '/projects', '/creator-onboarding', '/subscription', '/match', '/blog', '/community', '/services'];
 function getSafeRedirect(from: unknown): string {
   if (typeof from !== 'string') return '/profile';
@@ -94,6 +98,37 @@ const Auth: React.FC = () => {
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const countrySearchRef = useRef<HTMLInputElement>(null);
 
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileDivRef = useRef<HTMLDivElement | null>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    const render = () => {
+      const ts = (window as any).turnstile;
+      if (!ts || !turnstileDivRef.current || turnstileWidgetId.current !== null) return;
+      turnstileWidgetId.current = ts.render(turnstileDivRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: 'dark',
+        callback: (token: string) => setTurnstileToken(token),
+        'expired-callback': () => setTurnstileToken(''),
+        'error-callback': () => setTurnstileToken(''),
+      });
+    };
+    if ((window as any).turnstile) { render(); return; }
+    const existing = document.getElementById('cf-turnstile-script');
+    if (existing) { existing.addEventListener('load', render); return; }
+    const s = document.createElement('script');
+    s.id = 'cf-turnstile-script';
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    s.async = true;
+    s.onload = render;
+    document.head.appendChild(s);
+  }, []);
+  const resetTurnstile = () => {
+    const ts = (window as any).turnstile;
+    if (ts && turnstileWidgetId.current !== null) { ts.reset(turnstileWidgetId.current); setTurnstileToken(''); }
+  };
+
   // Close country dropdown when clicking outside.
   useEffect(() => {
     if (!showCountrySelector) return;
@@ -144,7 +179,7 @@ const Auth: React.FC = () => {
 
     try {
       if (isLogin) {
-        await login(email, password);
+        await login(email, password, turnstileToken || undefined);
       } else {
         if (!hasRequiredConsent()) {
           openConsentModal('register');
@@ -153,7 +188,7 @@ const Auth: React.FC = () => {
         }
         const fullPhone = `${selectedCountry.code}${phone}`;
         const referralCode = localStorage.getItem('cenner_ref') || undefined;
-        await register({ email, password, name: username, mobile: fullPhone, referralCode });
+        await register({ email, password, name: username, mobile: fullPhone, referralCode, turnstileToken: turnstileToken || undefined });
         // Registration no longer auto-logs-in (anti-enumeration). Switch to the sign-in
         // view and prompt the user to check their email — same message regardless of
         // whether the address was already registered.
@@ -165,6 +200,7 @@ const Auth: React.FC = () => {
       navigate(from, { replace: true });
     } catch (err: any) {
       setError(err.message || 'An authentication error occurred.');
+      resetTurnstile(); // tokens are single-use — a failed attempt needs a fresh one
     } finally {
       setLoading(false);
     }
@@ -354,8 +390,12 @@ const Auth: React.FC = () => {
               </div>
             </div>
 
+            {TURNSTILE_SITE_KEY && (
+              <div ref={turnstileDivRef} className="flex justify-center" />
+            )}
+
             <button
-              disabled={loading}
+              disabled={loading || (!!TURNSTILE_SITE_KEY && !turnstileToken)}
               type="submit"
               className="group w-full py-4 bg-brand-green text-brand-black font-black rounded-xl flex items-center justify-center space-x-2 hover:scale-[1.02] active:scale-95 disabled:opacity-50 transition-all shadow-[0_10px_30px_rgba(74,222,128,0.15)]"
             >

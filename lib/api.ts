@@ -58,11 +58,11 @@ async function requestPublic<T>(endpoint: string, method: string = 'GET', body?:
 
 export const API = {
   // ── Auth ──────────────────────────────────────────────────────────────
-  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string }) =>
+  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string; turnstileToken?: string }) =>
     request<{ pending: boolean }>('/auth/register', 'POST', data),
 
-  login: (email: string, password: string) =>
-    request<{ user: any }>('/auth/login', 'POST', { email, password }),
+  login: (email: string, password: string, turnstileToken?: string) =>
+    request<{ user: any }>('/auth/login', 'POST', { email, password, ...(turnstileToken ? { turnstileToken } : {}) }),
 
   logout: () =>
     request<{ success: boolean }>('/auth/logout', 'POST'),
