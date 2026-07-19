@@ -134,8 +134,8 @@ const tiers: Tier[] = [
         detail: 'A gold Trusted badge that signals to clients you are among the top-tier freelancers on Cenner. Clients filter specifically for Trusted status on high-budget jobs.',
       },
       {
-        name: 'Lowest fee (5%)',
-        detail: 'A flat 5% commission — the most competitive fee on Cenner. On a €1,000 project you keep €950. Designed for freelancers who earn serious revenue.',
+        name: '5% commission',
+        detail: 'A flat 5% commission. On a €1,000 project you keep €950. Designed for freelancers who earn serious revenue. (Enterprise drops this to 0%.)',
       },
       {
         name: 'Personal onboarding call',
@@ -328,7 +328,8 @@ const Subscription: React.FC = () => {
 
         {/* Fee transparency note */}
         <p className="text-center text-gray-500 text-xs font-medium mt-6 mb-2">
-          {t('Commission shown is deducted from the freelancer’s payout. Buyers pay a flat')} <span className="text-white font-black">5%</span> {t('service fee at checkout.')}
+          {t('Commission shown is deducted from the freelancer’s payout. Buyers pay a flat')} <span className="text-white font-black">5%</span> {t('service fee at checkout.')}{' '}
+          {t('Enterprise sellers pay 0% commission — and their buyers pay no service fee.')}
         </p>
 
         {/* Enterprise */}
@@ -343,7 +344,10 @@ const Subscription: React.FC = () => {
               <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 border border-white/10 rounded-full px-2 py-1">{t('Our best plan — everything included')}</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-2xl">
-              {t('Everything in Ultra, maxed out: the lowest 5% commission, Trusted status, homepage spotlight — plus the highest marketplace ranking above every other tier and 30 listing boosts per month.')}
+              {t('Keep 100% of every sale: 0% commission, and your clients pay no service fee either. Plus the highest marketplace ranking above every tier, Trusted status, homepage spotlight, 30 monthly boosts, and priority support with ~1-hour response time.')}
+            </p>
+            <p className="text-brand-green text-xs font-bold mt-2">
+              {t('Pays for itself above €800 in monthly sales — above that, every euro saved is yours.')}
             </p>
           </div>
           <div className="relative shrink-0 flex flex-col items-stretch lg:items-end gap-2">
