@@ -403,25 +403,29 @@ const Auth: React.FC = () => {
 
             {TURNSTILE_SITE_KEY && (
               <div>
+                {/* Classic captcha-box look; the click runs the real Cloudflare Turnstile check */}
                 <button
                   type="button"
                   onClick={startCaptcha}
                   disabled={captchaState !== 'idle'}
-                  className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-all text-sm font-bold ${
-                    captchaState === 'done'
-                      ? 'bg-brand-green/10 border-brand-green/30 text-brand-green cursor-default'
-                      : 'bg-white/5 border-white/10 text-white hover:border-white/25 hover:bg-white/10'
-                  }`}
+                  aria-label={t("I'm not a robot")}
+                  className="w-[300px] max-w-full mx-auto flex items-center gap-3.5 pl-4 pr-3 py-4 rounded-[4px] border bg-[#222] border-[#4a4a4a] hover:border-[#6a6a6a] transition-colors shadow-md cursor-pointer disabled:cursor-default"
                 >
                   {captchaState === 'done' ? (
-                    <CheckCircle2 size={20} className="text-brand-green shrink-0" />
+                    <span className="w-7 h-7 rounded-sm bg-white flex items-center justify-center shrink-0">
+                      <CheckCircle2 size={22} className="text-green-600" />
+                    </span>
                   ) : captchaState === 'verifying' ? (
-                    <Loader2 size={20} className="animate-spin shrink-0" />
+                    <span className="w-7 h-7 flex items-center justify-center shrink-0">
+                      <Loader2 size={24} className="animate-spin text-white" />
+                    </span>
                   ) : (
-                    <span className="w-5 h-5 rounded border-2 border-white/40 shrink-0" />
+                    <span className="w-7 h-7 rounded-sm bg-white border-2 border-gray-400 shrink-0" />
                   )}
-                  <span>
-                    {captchaState === 'done' ? t('Verified — you are human') : captchaState === 'verifying' ? t('Verifying…') : t('Confirm you are not a robot')}
+                  <span className="text-white text-sm">{t("I'm not a robot")}</span>
+                  <span className="ml-auto flex flex-col items-end leading-tight text-right">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L3 6v6c0 5 3.8 9.4 9 10 5.2-.6 9-5 9-10V6l-9-4z" fill="#f6821f" opacity="0.9"/><path d="M12 6.5l5 2.2v3.5c0 3-2.1 5.6-5 6.2-2.9-.6-5-3.2-5-6.2V8.7l5-2.2z" fill="#fff" opacity="0.9"/></svg>
+                    <span className="text-[8px] text-gray-400 mt-0.5">Cloudflare<br/>Turnstile</span>
                   </span>
                 </button>
                 <div ref={turnstileDivRef} className={`justify-center mt-2 ${captchaState === 'verifying' ? 'flex' : 'hidden'}`} />
