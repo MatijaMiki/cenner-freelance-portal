@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, User, Github, ArrowRight, Phone, AlertCircle, ChevronDown, Facebook, Search, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User, Github, ArrowRight, Phone, AlertCircle, ChevronDown, Facebook, Search, Eye, EyeOff, CheckCircle2, Loader2 } from 'lucide-react';
 import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
@@ -99,6 +99,9 @@ const Auth: React.FC = () => {
   const countrySearchRef = useRef<HTMLInputElement>(null);
 
   const [turnstileToken, setTurnstileToken] = useState('');
+  // 'idle' until the user explicitly clicks "Confirm you are not a robot" —
+  // execution:'execute' keeps the challenge dormant, so there is no auto-pass.
+  const [captchaState, setCaptchaState] = useState<'idle' | 'verifying' | 'done'>('idle');
   const turnstileDivRef = useRef<HTMLDivElement | null>(null);
   const turnstileWidgetId = useRef<string | null>(null);
   useEffect(() => {
@@ -109,9 +112,10 @@ const Auth: React.FC = () => {
       turnstileWidgetId.current = ts.render(turnstileDivRef.current, {
         sitekey: TURNSTILE_SITE_KEY,
         theme: 'dark',
-        callback: (token: string) => setTurnstileToken(token),
-        'expired-callback': () => setTurnstileToken(''),
-        'error-callback': () => setTurnstileToken(''),
+        execution: 'execute',
+        callback: (token: string) => { setTurnstileToken(token); setCaptchaState('done'); },
+        'expired-callback': () => { setTurnstileToken(''); setCaptchaState('idle'); },
+        'error-callback': () => { setTurnstileToken(''); setCaptchaState('idle'); },
       });
     };
     if ((window as any).turnstile) { render(); return; }
@@ -124,9 +128,15 @@ const Auth: React.FC = () => {
     s.onload = render;
     document.head.appendChild(s);
   }, []);
+  const startCaptcha = () => {
+    const ts = (window as any).turnstile;
+    if (!ts || !turnstileDivRef.current || captchaState !== 'idle') return;
+    setCaptchaState('verifying');
+    ts.execute(turnstileDivRef.current);
+  };
   const resetTurnstile = () => {
     const ts = (window as any).turnstile;
-    if (ts && turnstileWidgetId.current !== null) { ts.reset(turnstileWidgetId.current); setTurnstileToken(''); }
+    if (ts && turnstileWidgetId.current !== null) { ts.reset(turnstileWidgetId.current); setTurnstileToken(''); setCaptchaState('idle'); }
   };
 
   // Close country dropdown when clicking outside.
@@ -391,7 +401,30 @@ const Auth: React.FC = () => {
             </div>
 
             {TURNSTILE_SITE_KEY && (
-              <div ref={turnstileDivRef} className="flex justify-center" />
+              <div>
+                <button
+                  type="button"
+                  onClick={startCaptcha}
+                  disabled={captchaState !== 'idle'}
+                  className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-all text-sm font-bold ${
+                    captchaState === 'done'
+                      ? 'bg-brand-green/10 border-brand-green/30 text-brand-green cursor-default'
+                      : 'bg-white/5 border-white/10 text-white hover:border-white/25 hover:bg-white/10'
+                  }`}
+                >
+                  {captchaState === 'done' ? (
+                    <CheckCircle2 size={20} className="text-brand-green shrink-0" />
+                  ) : captchaState === 'verifying' ? (
+                    <Loader2 size={20} className="animate-spin shrink-0" />
+                  ) : (
+                    <span className="w-5 h-5 rounded border-2 border-white/40 shrink-0" />
+                  )}
+                  <span>
+                    {captchaState === 'done' ? t('Verified — you are human') : captchaState === 'verifying' ? t('Verifying…') : t('Confirm you are not a robot')}
+                  </span>
+                </button>
+                <div ref={turnstileDivRef} className={`justify-center empty:hidden mt-2 ${captchaState === 'done' ? 'hidden' : 'flex'}`} />
+              </div>
             )}
 
             <button
