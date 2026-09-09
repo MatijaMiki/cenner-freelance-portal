@@ -102,11 +102,10 @@ async function fetchJson(url) {
 /**
  * Resolve an entity to the metadata for its <head>.
  *
- * `type` and `id` come from the query string, NOT the path: a Vercel rewrite
- * replaces the path the function sees, so req.url here is "/api/render" no
- * matter which page was requested. vercel.json therefore carries the entity
- * through as ?type=…&id=…. Reading the pathname instead silently renders the
- * bare shell for every entity — which looks like the function never ran.
+ * `type` and `id` come from the query string, which vercel.json fills in from
+ * the rewrite (?type=…&id=…). Vercel does preserve the original path here, so
+ * parsing req.url would also work; the query form is kept because it states
+ * the contract explicitly and cannot drift from the rewrite patterns.
  *
  * Returns null when this isn't a page we render (so we fall through to the shell).
  */
