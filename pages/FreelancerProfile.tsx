@@ -334,7 +334,7 @@ const FreelancerProfile: React.FC = () => {
   return (
     <div className="relative min-h-screen pt-12 pb-24 px-4 overflow-hidden">
       <SEO
-        title={`${profile.name} — Freelance ${profile.skills?.[0] || 'Usluge'} | Cenner`}
+        title={`${profile.name} — Freelance ${profile.skills?.[0] || 'Usluge'}`}
         canonical={`/freelancer/${id}`}
         description={profile.bio || `Pogledaj profil freelancera ${profile.name} na Cenner platformi.`}
         jsonLd={freelancerJsonLd}

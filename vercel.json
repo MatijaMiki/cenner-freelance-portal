@@ -3,46 +3,94 @@
   "redirects": [
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "www.cenner.hr" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.cenner.hr"
+        }
+      ],
       "destination": "https://cenner.hr/",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.cenner.hr" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.cenner.hr"
+        }
+      ],
       "destination": "https://cenner.hr/:path*",
       "permanent": true
     }
   ],
   "rewrites": [
-    { "source": "/:path*", "destination": "/index.html" }
+    {
+      "source": "/service/:id",
+      "destination": "/api/render"
+    },
+    {
+      "source": "/freelancer/:id",
+      "destination": "/api/render"
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/api/render"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {
       "source": "/usluge/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800"
+        }
       ]
     },
     {
       "source": "/freelanceri/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800"
+        }
       ]
     },
     {
       "source": "/sitemap.xml",
       "headers": [
-        { "key": "Content-Type", "value": "application/xml" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
+        {
+          "key": "Content-Type",
+          "value": "application/xml"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
       ]
     },
     {
       "source": "/robots.txt",
       "headers": [
-        { "key": "Content-Type", "value": "text/plain" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
+        {
+          "key": "Content-Type",
+          "value": "text/plain"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/render.js": {
+      "includeFiles": "dist/index.html"
+    }
+  }
 }
