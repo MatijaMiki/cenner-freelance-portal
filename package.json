@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-landing-pages.mjs && node scripts/generate-sitemap.mjs && vite build",
+    "build": "node scripts/generate-landing-pages.mjs && node scripts/generate-sitemap.mjs && vite build && node scripts/prerender-static-routes.mjs",
     "build:no-sitemap": "vite build",
     "landing": "node scripts/generate-landing-pages.mjs",
     "sitemap": "node scripts/generate-sitemap.mjs",
+    "prerender": "node scripts/prerender-static-routes.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

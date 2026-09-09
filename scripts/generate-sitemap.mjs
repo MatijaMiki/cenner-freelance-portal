@@ -23,7 +23,8 @@ const STATIC_ROUTES = [
   { path: '/',             priority: '1.0', changefreq: 'weekly'  },
   { path: '/marketplace',  priority: '0.95', changefreq: 'daily'  },
   { path: '/services',     priority: '0.9',  changefreq: 'weekly' },
-  { path: '/match',        priority: '0.9',  changefreq: 'weekly' },
+  // '/match' is deliberately absent: pages/Match.tsx renders <SEO noIndex />, so
+  // submitting it here would ask Google to index a page that forbids indexing.
   { path: '/subscription', priority: '0.85', changefreq: 'weekly' },
   { path: '/technology',   priority: '0.8',  changefreq: 'monthly'},
   { path: '/blog',         priority: '0.8',  changefreq: 'daily'  },
