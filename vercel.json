@@ -27,15 +27,15 @@
   "rewrites": [
     {
       "source": "/service/:id",
-      "destination": "/api/render"
+      "destination": "/api/render?type=service&id=:id"
     },
     {
       "source": "/freelancer/:id",
-      "destination": "/api/render"
+      "destination": "/api/render?type=freelancer&id=:id"
     },
     {
       "source": "/blog/:slug",
-      "destination": "/api/render"
+      "destination": "/api/render?type=blog&id=:slug"
     },
     {
       "source": "/:path*",

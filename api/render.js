@@ -100,13 +100,20 @@ async function fetchJson(url) {
 }
 
 /**
- * Resolve a pathname to the metadata for its <head>.
- * Returns null when the path isn't one we render (so we fall through to the shell).
+ * Resolve an entity to the metadata for its <head>.
+ *
+ * `type` and `id` come from the query string, NOT the path: a Vercel rewrite
+ * replaces the path the function sees, so req.url here is "/api/render" no
+ * matter which page was requested. vercel.json therefore carries the entity
+ * through as ?type=…&id=…. Reading the pathname instead silently renders the
+ * bare shell for every entity — which looks like the function never ran.
+ *
+ * Returns null when this isn't a page we render (so we fall through to the shell).
  */
-async function resolve(pathname) {
-  const service = pathname.match(/^\/service\/([^/]+)\/?$/);
-  if (service) {
-    const id = decodeURIComponent(service[1]);
+async function resolve(type, id) {
+  if (!type || !id) return null;
+
+  if (type === 'service') {
     const { missing, data: l } = await fetchJson(`${API_BASE}/api/v1/public/listings/${encodeURIComponent(id)}`);
     if (missing) return { notFound: true, canonical: `${SITE}/service/${id}` };
     // Mirrors pages/ServiceDetails.tsx so the pre- and post-render heads agree.
@@ -120,9 +127,7 @@ async function resolve(pathname) {
     };
   }
 
-  const freelancer = pathname.match(/^\/freelancer\/([^/]+)\/?$/);
-  if (freelancer) {
-    const id = decodeURIComponent(freelancer[1]);
+  if (type === 'freelancer') {
     const { missing, data: u } = await fetchJson(`${API_BASE}/api/v1/public/freelancers/${encodeURIComponent(id)}`);
     if (missing) return { notFound: true, canonical: `${SITE}/freelancer/${id}` };
     return {
@@ -134,9 +139,8 @@ async function resolve(pathname) {
     };
   }
 
-  const blog = pathname.match(/^\/blog\/([^/]+)\/?$/);
-  if (blog) {
-    const slug = decodeURIComponent(blog[1]);
+  if (type === 'blog') {
+    const slug = id;
     const { missing, data: p } = await fetchJson(`${API_BASE}/api/v1/public/blog/${encodeURIComponent(slug)}`);
     if (missing) return { notFound: true, canonical: `${SITE}/blog/${slug}` };
     return {
@@ -202,7 +206,9 @@ function buildNotFound(shell) {
 
 export default async function handler(req, res) {
   const host = req.headers['x-forwarded-host'] || req.headers.host;
-  const pathname = new URL(req.url, `https://${host}`).pathname;
+  const url = new URL(req.url, `https://${host}`);
+  const type = url.searchParams.get('type');
+  const id = url.searchParams.get('id');
 
   let shell;
   try {
@@ -215,12 +221,12 @@ export default async function handler(req, res) {
 
   let meta = null;
   try {
-    meta = await resolve(pathname);
+    meta = await resolve(type, id);
   } catch (err) {
     // API down or slow: fail OPEN. The visitor still gets a working SPA that
     // fetches its own data; we just lose the pre-rendered head for this hit.
     // Short cache so the next crawl retries rather than freezing a bad head.
-    console.error('[render] metadata lookup failed:', pathname, err.message);
+    console.error('[render] metadata lookup failed:', type, id, err.message);
     res.setHeader('Cache-Control', 'public, s-maxage=30');
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     return res.status(200).send(shell);
