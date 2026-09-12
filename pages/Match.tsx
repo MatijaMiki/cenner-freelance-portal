@@ -53,7 +53,7 @@ const Match: React.FC = () => {
         </h1>
 
         <p className="text-lg md:text-xl text-gray-400 max-w-xl mx-auto leading-relaxed mb-10">
-          {t("We're building an AI matching engine that connects freelancers with the right jobs in seconds. It isn't ready yet — but it will be soon.")}
+          {t("We're building an AI matching engine that connects freelancers with the right jobs in seconds. It isn't ready yet, but it will be soon.")}
         </p>
 
         {/* Notify-me waitlist form */}

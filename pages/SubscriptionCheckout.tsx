@@ -162,7 +162,7 @@ const SubscriptionCheckout: React.FC = () => {
           {loading ? (
             <><Loader2 size={20} className="animate-spin" /> Redirecting to Stripe…</>
           ) : (
-            `Activate ${plan.title} — €${plan.price}/mo`
+            `Activate ${plan.title} for €${plan.price}/mo`
           )}
         </button>
 

@@ -145,7 +145,7 @@ const Referral: React.FC = () => {
 
   const shareUrl = data?.shareUrl || '';
   const shareMessage =
-    'Join me on Cenner — the freelance platform. Sign up with my link and let\'s both win:';
+    'Join me on Cenner, the freelance platform. Sign up with my link and let\'s both win:';
 
   const handleCopy = async () => {
     if (!shareUrl) return;
@@ -175,7 +175,7 @@ const Referral: React.FC = () => {
     setClaiming(true);
     try {
       const res = await API.claimReferralBoost(selectedListing);
-      notify.toast(`Boost applied — ${res.monthsApplied} month${res.monthsApplied === 1 ? '' : 's'} of visibility!`, 'success');
+      notify.toast(`Boost applied: ${res.monthsApplied} month${res.monthsApplied === 1 ? '' : 's'} of visibility!`, 'success');
       setSelectedListing('');
       await loadMe().catch(() => {});
     } catch (err: any) {
@@ -202,7 +202,7 @@ const Referral: React.FC = () => {
                 You won {ordinal(data.wins[0].place)} place!
               </p>
               <p className="text-gray-400 text-sm mt-0.5">
-                {data.wins[0].enterpriseMonths} months of Enterprise and a {data.wins[0].boostMonths}-month boost — from {data.wins[0].campaign.name}.
+                {data.wins[0].enterpriseMonths} months of Enterprise and a {data.wins[0].boostMonths}-month boost from {data.wins[0].campaign.name}.
               </p>
             </div>
           </div>
@@ -219,7 +219,7 @@ const Referral: React.FC = () => {
             <>
               <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-3">No active contest right now</h1>
               <p className="text-gray-500 font-medium max-w-2xl">
-                There is no referral contest running at the moment. Check back soon — your referral link below still works and counts toward the next round.
+                There is no referral contest running at the moment. Check back soon. Your referral link below still works and counts toward the next round.
               </p>
             </>
           ) : !campaign.active ? (
@@ -409,7 +409,7 @@ const Referral: React.FC = () => {
             <div className="text-center py-10">
               <Users size={32} className="text-gray-700 mx-auto mb-4" />
               <p className="text-gray-600 font-bold text-sm">No referrals yet</p>
-              <p className="text-gray-700 text-xs mt-1">Be the first to climb the board — share your link above.</p>
+              <p className="text-gray-700 text-xs mt-1">Be the first to climb the board. Share your link above.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">

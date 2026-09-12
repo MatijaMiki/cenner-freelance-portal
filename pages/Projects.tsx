@@ -10,7 +10,7 @@ const CLIENT_PROJECTS = [
     title: 'Čistimo',
     url: 'https://cistimo.com',
     category: 'Cleaning Services',
-    deliverable: 'Full booking platform and web presence for a Zagreb apartment- and office-cleaning company — online scheduling, transparent pricing, and multilingual support.',
+    deliverable: 'Full booking platform and web presence for a Zagreb apartment- and office-cleaning company: online scheduling, transparent pricing, and multilingual support.',
     tags: ['Web', 'Booking', 'Multilingual'],
     logo: '/logos/cistimo.svg',
     screenshot: '/screenshots/cistimo.jpg',
@@ -21,7 +21,7 @@ const CLIENT_PROJECTS = [
     title: 'Marubosfood',
     url: 'https://marubosfood.com',
     category: 'Food & E-commerce',
-    deliverable: 'Full-stack web presence and e-commerce platform for a premium Croatian food brand — product catalogue, online ordering, and brand identity.',
+    deliverable: 'Full-stack web presence and e-commerce platform for a premium Croatian food brand: product catalogue, online ordering, and brand identity.',
     tags: ['Web', 'E-commerce', 'Branding'],
     logo: '/logos/marubosfood.png',
     screenshot: '/screenshots/marubosfood.jpg',
@@ -32,7 +32,7 @@ const CLIENT_PROJECTS = [
     title: 'Selected Real Estate',
     url: 'https://selectedrealestate.hr',
     category: 'Real Estate',
-    deliverable: 'Premium real estate portal for a Croatian luxury property agency — property listings, search, agent profiles, and multilingual support.',
+    deliverable: 'Premium real estate portal for a Croatian luxury property agency: property listings, search, agent profiles, and multilingual support.',
     tags: ['Web', 'Real Estate', 'Multilingual'],
     logo: '/logos/selectedrealestate.webp',
     screenshot: '/screenshots/selectedrealestate.jpg',
@@ -57,7 +57,7 @@ const Projects: React.FC = () => {
             Previous Projects
           </h1>
           <p className="text-gray-500 text-lg leading-relaxed">
-            Real work delivered through the Cenner network — visit the live sites below.
+            Real work delivered through the Cenner network. Visit the live sites below.
           </p>
         </div>
 

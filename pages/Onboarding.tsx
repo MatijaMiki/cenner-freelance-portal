@@ -16,7 +16,7 @@ const Onboarding: React.FC = () => {
   return (
     <div className="pt-16 pb-24 max-w-5xl mx-auto px-4">
       <SEO
-        title={isHr ? 'Početak rada — Otvaranje paušalnog obrta | Cenner' : 'Get Started — Opening a Paušalni Obrt | Cenner'}
+        title={isHr ? 'Početak rada: Otvaranje paušalnog obrta | Cenner' : 'Get Started: Opening a Paušalni Obrt | Cenner'}
         canonical="/onboarding"
         description={isHr
           ? 'Vodič kroz pravne korake potrebne za freelance rad u Hrvatskoj. Saznaj kako otvoriti paušalni obrt i započeti suradnju kroz Cenner.'
@@ -65,8 +65,8 @@ const Onboarding: React.FC = () => {
       >
         <p>
           {t(
-            'Cenner ne može legalno isplaćivati naknade osobama koje nisu registrirane kao porezni obveznici. Bez registriranog subjekta — obrta, paušalnog obrta ili tvrtke (j.d.o.o./d.o.o.) — ne smiješ izdati račun i ne možeš primati uplate.',
-            'Cenner cannot legally pay individuals who are not registered as tax-paying entities. Without a registered entity — a regular obrt, paušalni obrt, or a company (j.d.o.o./d.o.o.) — you cannot issue an invoice and cannot receive payments.'
+            'Cenner ne može legalno isplaćivati naknade osobama koje nisu registrirane kao porezni obveznici. Bez registriranog subjekta (obrta, paušalnog obrta ili tvrtke j.d.o.o./d.o.o.) ne smiješ izdati račun i ne možeš primati uplate.',
+            'Cenner cannot legally pay individuals who are not registered as tax-paying entities. Without a registered entity (a regular obrt, paušalni obrt, or a j.d.o.o./d.o.o. company) you cannot issue an invoice and cannot receive payments.'
           )}
         </p>
         <p className="mt-3">
@@ -91,8 +91,8 @@ const Onboarding: React.FC = () => {
         <ul className="mt-4 space-y-2 text-gray-400">
           <Bullet>
             {t(
-              'Prikladno za freelancere s godišnjim prometom ispod određenog praga (orijentacijski oko 60.000 € — provjeri trenutno važeći iznos).',
-              'Suitable for freelancers under a defined yearly revenue threshold (roughly €60,000 — verify the currently applicable cap).'
+              'Prikladno za freelancere s godišnjim prometom ispod određenog praga (orijentacijski oko 60.000 €, ali provjeri trenutno važeći iznos).',
+              'Suitable for freelancers under a defined yearly revenue threshold (roughly €60,000, but verify the currently applicable cap).'
             )}
           </Bullet>
           <Bullet>
@@ -103,8 +103,8 @@ const Onboarding: React.FC = () => {
           </Bullet>
           <Bullet>
             {t(
-              'Nije obveznik PDV-a dok god promet ne premaši PDV prag (orijentacijski 60.000 € — provjeri).',
-              'Not VAT-registered as long as revenue stays below the VAT threshold (roughly €60,000 — verify).'
+              'Nije obveznik PDV-a dok god promet ne premaši PDV prag (orijentacijski 60.000 €, ali provjeri).',
+              'Not VAT-registered as long as revenue stays below the VAT threshold (roughly €60,000, but verify).'
             )}
           </Bullet>
         </ul>
@@ -168,9 +168,9 @@ const Onboarding: React.FC = () => {
         </p>
         <ul className="space-y-2 text-gray-400">
           <Bullet>{t('Otvaranje obrta: niži dvocifreni iznos u eurima.', 'Opening the obrt: a low double-digit amount in euros.')}</Bullet>
-          <Bullet>{t('Mjesečni doprinosi: orijentacijski oko 100—150 € (HZMO + HZZO).', 'Monthly contributions: roughly €100–€150 (HZMO + HZZO).')}</Bullet>
+          <Bullet>{t('Mjesečni doprinosi: orijentacijski od 100 do 150 € (HZMO + HZZO).', 'Monthly contributions: roughly €100–€150 (HZMO + HZZO).')}</Bullet>
           <Bullet>{t('Paušalni porez i prirez: ovisi o razredu godišnjeg prometa i mjestu prebivališta.', 'Flat-rate tax and surtax: depends on revenue tier and your municipality.')}</Bullet>
-          <Bullet>{t('Računovodstvo: opcionalno, najčešće 20—40 € mjesečno.', 'Accountant: optional, typically €20–€40 per month.')}</Bullet>
+          <Bullet>{t('Računovodstvo: opcionalno, najčešće od 20 do 40 € mjesečno.', 'Accountant: optional, typically €20–€40 per month.')}</Bullet>
         </ul>
       </Section>
 
@@ -181,15 +181,15 @@ const Onboarding: React.FC = () => {
       >
         <ul className="space-y-3 text-gray-400">
           <Bullet>
-            <strong className="text-white">{t('Redovni obrt — ', 'Regular obrt — ')}</strong>
+            <strong className="text-white">{t('Redovni obrt: ', 'Regular obrt: ')}</strong>
             {t('za veće prihode ili djelatnosti koje ne mogu biti paušalne. Vodi knjige, plaća porez na dohodak.', 'for higher revenue or activities that cannot be paušalni. Requires bookkeeping; income tax applies.')}
           </Bullet>
           <Bullet>
-            <strong className="text-white">{t('J.d.o.o. — ', 'J.d.o.o. — ')}</strong>
+            <strong className="text-white">{t('J.d.o.o.: ', 'J.d.o.o.: ')}</strong>
             {t('jednostavno društvo s ograničenom odgovornošću. Niska osnivačka glavnica, ali kompleksnije od paušalnog obrta.', 'simple limited liability company. Low founding capital but more complex than paušalni obrt.')}
           </Bullet>
           <Bullet>
-            <strong className="text-white">{t('D.o.o. — ', 'D.o.o. — ')}</strong>
+            <strong className="text-white">{t('D.o.o.: ', 'D.o.o.: ')}</strong>
             {t('klasični LLC, primjereniji kada zapošljavaš ljude i imaš značajne troškove.', 'classic LLC, better suited when employing people or carrying significant expenses.')}
           </Bullet>
         </ul>
@@ -201,9 +201,9 @@ const Onboarding: React.FC = () => {
         title={t('Službeni izvori', 'Official sources')}
       >
         <ul className="space-y-2">
-          <ResourceLink href="https://start.gov.hr" label="START — start.gov.hr" />
-          <ResourceLink href="https://porezna.gov.hr" label="Porezna uprava — porezna.gov.hr" />
-          <ResourceLink href="https://www.hitro.hr" label="HITRO.HR — hitro.hr" />
+          <ResourceLink href="https://start.gov.hr" label="START (start.gov.hr)" />
+          <ResourceLink href="https://porezna.gov.hr" label="Porezna uprava (porezna.gov.hr)" />
+          <ResourceLink href="https://www.hitro.hr" label="HITRO.HR (hitro.hr)" />
           <ResourceLink href="https://www.hzmo.hr" label="HZMO (Mirovinsko)" />
           <ResourceLink href="https://www.hzzo.hr" label="HZZO (Zdravstveno)" />
         </ul>

@@ -39,7 +39,7 @@ const Blog: React.FC = () => {
   return (
     <div className="min-h-screen bg-brand-black pt-12 pb-24">
       <SEO
-        title="Blog — Freelance Savjeti i Vodiči"
+        title="Blog: Freelance Savjeti i Vodiči"
         canonical="/blog"
         description="Vodiči, savjeti i vijesti o freelancingu u Hrvatskoj i EU. Otvaranje paušalnog obrta, ugovori, cijene, alati i sve ostalo što trebate znati kao slobodni radnik."
         keywords="freelance blog hrvatska, paušalni obrt vodič, freelancing savjeti, slobodni radnik blog, freelance hrvatska vijesti"

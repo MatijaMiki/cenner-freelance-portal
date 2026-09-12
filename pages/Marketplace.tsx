@@ -217,7 +217,7 @@ const Marketplace: React.FC = () => {
     {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      name: 'Cenner Marketplace — Freelance Usluge Hrvatska',
+      name: 'Cenner Marketplace: Freelance Usluge Hrvatska',
       description: 'Pretraži stotine provjerenih freelance usluga u Hrvatskoj i EU. Web razvoj, dizajn, marketing, pisanje i više.',
       url: 'https://cenner.hr/marketplace',
       inLanguage: ['hr', 'en'],
@@ -244,9 +244,9 @@ const Marketplace: React.FC = () => {
   return (
     <div className="pt-12 pb-24 px-4 max-w-[1600px] mx-auto">
       <SEO
-        title="Marketplace — Freelanceri Hrvatska"
+        title="Marketplace: Freelanceri Hrvatska"
         canonical="/marketplace"
-        description="Pronađi verificirane freelancere u Hrvatskoj i EU na Cenner marketplaceu. Web razvoj, dizajn, marketing, pisanje i više — honorarni posao na jednom mjestu."
+        description="Pronađi verificirane freelancere u Hrvatskoj i EU na Cenner marketplaceu. Web razvoj, dizajn, marketing, pisanje i više. Honorarni posao na jednom mjestu."
         keywords="freelance marketplace hrvatska, freelanceri hrvatska, najam freelancera, web developer hrvatska, grafički dizajner hrvatska, digitalni marketing hrvatska, honorarni posao eu"
         jsonLd={marketplaceJsonLd}
       />

@@ -210,9 +210,9 @@ const ServiceDetails: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
       <SEO
-        title={`${listing.title} — ${listing.freelancerName} | Freelancer Hrvatska`}
+        title={`${listing.title}, ${listing.freelancerName} | Freelancer Hrvatska`}
         canonical={`/service/${listing.id}`}
-        description={`${listing.description.slice(0, 140)}... Usluga dostupna u Hrvatskoj i EU. Isporučuje ${listing.freelancerName}${listing.reviewsCount > 0 ? ` — ocjena ${listing.rating}/5` : ''}.`}
+        description={`${listing.description.slice(0, 140)}... Usluga dostupna u Hrvatskoj i EU. Isporučuje ${listing.freelancerName}${listing.reviewsCount > 0 ? `, ocjena ${listing.rating}/5` : ''}.`}
         keywords={`${listing.category.toLowerCase()} freelancer hrvatska, ${listing.title.toLowerCase()}, honorarni posao ${listing.category.toLowerCase()}`}
         ogType="product"
         jsonLd={[serviceJsonLd, breadcrumbJsonLd]}
@@ -284,7 +284,7 @@ const ServiceDetails: React.FC = () => {
             {/* Gallery */}
             {isEditing ? (
               <div className="mb-8">
-                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Gallery Images (up to 5) — First is the cover</p>
+                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Gallery Images (up to 5). First is the cover</p>
                 <input
                   ref={galleryInputRef}
                   type="file"

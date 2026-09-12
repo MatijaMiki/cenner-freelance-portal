@@ -246,7 +246,7 @@ const ContractDetail: React.FC = () => {
         {/* Sent offer banner — waiting for other party */}
         {contract.status === 'DRAFT' && !isOfferRecipient && (
           <div className="bg-blue-400/5 border border-blue-400/20 rounded-2xl p-4 mb-4">
-            <p className="text-blue-400 font-bold text-sm">Offer sent — awaiting response</p>
+            <p className="text-blue-400 font-bold text-sm">Offer sent, awaiting response</p>
             <p className="text-gray-500 text-xs mt-0.5">
               Waiting for {other.name} to accept or decline.
               {offerExpiryDays !== null && ` Offer expires in ${Math.max(0, offerExpiryDays)} day${offerExpiryDays !== 1 ? 's' : ''}.`}
@@ -280,7 +280,7 @@ const ContractDetail: React.FC = () => {
                     <Timer size={12} />
                     <span>
                       Auto-releases in <strong><Countdown targetDate={m.autoReleaseAt} /></strong>
-                      {isClient && ' — approve or dispute to override'}
+                      {isClient && ' (approve or dispute to override)'}
                     </span>
                   </div>
                 )}
@@ -335,7 +335,7 @@ const ContractDetail: React.FC = () => {
                   {isClient && m.status === 'DISPUTED' && (
                     <button
                       onClick={async () => {
-                        const ok = await notify.confirm('Refund this milestone back to your card? This cannot be undone — the freelancer will be notified.', {
+                        const ok = await notify.confirm('Refund this milestone back to your card? This cannot be undone, and the freelancer will be notified.', {
                           title: 'Request refund?',
                           confirmLabel: 'Yes, refund',
                           cancelLabel: 'Keep disputed',
@@ -435,7 +435,7 @@ const ContractDetail: React.FC = () => {
           onClose={() => setFundTarget(null)}
           onPaid={() => {
             setFundTarget(null);
-            notify.toast('Payment authorised — milestone will be marked funded once Stripe confirms.', 'success');
+            notify.toast('Payment authorised. The milestone will be marked funded once Stripe confirms.', 'success');
             // Webhook flips status to FUNDED; reload now and again after a short delay.
             reload();
             setTimeout(reload, 3000);

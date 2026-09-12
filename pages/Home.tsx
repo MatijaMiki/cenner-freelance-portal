@@ -85,9 +85,9 @@ const Home: React.FC = () => {
   return (
     <div className="relative min-h-screen">
       <SEO
-        title="Freelance Hrvatska — Pronađi Freelancera"
+        title="Freelance Hrvatska: Pronađi Freelancera"
         canonical="/"
-        description="Cenner — vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno."
+        description="Cenner je vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno."
         keywords="freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera"
       />
       <NeuralBackground parallax={true} />
@@ -124,7 +124,7 @@ const Home: React.FC = () => {
 
                   <div {...reveal(a0, 300)}>
                     <p className="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed drop-shadow-lg font-medium">
-                      {t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao — brzo, sigurno, profesionalno.')}
+                      {t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao: brzo, sigurno, profesionalno.')}
                     </p>
                   </div>
 
@@ -398,7 +398,7 @@ const Home: React.FC = () => {
                 {t('One')} <span className="text-brand-pink">{t('in-house')}</span> <br /> {t('team. Start to finish.')}
               </h2>
               <p className="text-gray-400 text-lg leading-relaxed font-medium">
-                {t('We work with clients across the EU. Every project is handled in-house — no outsourcing, no middlemen. Straightforward communication, fixed pricing, and clean handover from start to finish.')}
+                {t('We work with clients across the EU. Every project is handled in-house. No outsourcing, no middlemen. Straightforward communication, fixed pricing, and clean handover from start to finish.')}
               </p>
               <div className="grid grid-cols-2 gap-8 pt-4">
                 <div>
@@ -448,7 +448,7 @@ const Home: React.FC = () => {
                     {t('Read the guide')} <ArrowRight size={14} />
                   </Link>
                   <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-                    {t('Informational only — not legal advice')}
+                    {t('Informational only, not legal advice')}
                   </span>
                 </div>
               </div>

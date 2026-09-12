@@ -334,7 +334,7 @@ const FreelancerProfile: React.FC = () => {
   return (
     <div className="relative min-h-screen pt-12 pb-24 px-4 overflow-hidden">
       <SEO
-        title={`${profile.name} — Freelance ${profile.skills?.[0] || 'Usluge'}`}
+        title={`${profile.name}, Freelance ${profile.skills?.[0] || 'Usluge'}`}
         canonical={`/freelancer/${id}`}
         description={profile.bio || `Pogledaj profil freelancera ${profile.name} na Cenner platformi.`}
         jsonLd={freelancerJsonLd}
@@ -369,7 +369,7 @@ const FreelancerProfile: React.FC = () => {
               <div className="flex flex-wrap items-center gap-3 mb-2">
                 <h1 className="text-3xl font-black text-white tracking-tighter">{profile.name}</h1>
                 {profile.trusted && (
-                  <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1" title="Trusted freelancer — top-tier Ultra">
+                  <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1" title="Trusted freelancer, top-tier Ultra">
                     ★ Trusted
                   </span>
                 )}

@@ -194,7 +194,7 @@ const Auth: React.FC = () => {
         // whether the address was already registered.
         setIsLogin(true);
         setPassword('');
-        setNotice(t('Almost there — check your email to continue, then sign in.'));
+        setNotice(t('Almost there. Check your email to continue, then sign in.'));
         return;
       }
       navigate(from, { replace: true });

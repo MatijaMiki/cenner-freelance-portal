@@ -42,7 +42,7 @@ const tiers: Tier[] = [
       },
       {
         name: 'Unlimited portfolio items',
-        detail: 'Upload as many past projects as you want — images, PDFs, or links. There is no cap on how much work you can showcase.',
+        detail: 'Upload as many past projects as you want: images, PDFs, or links. There is no cap on how much work you can showcase.',
       },
       {
         name: 'Apply to projects',
@@ -82,7 +82,7 @@ const tiers: Tier[] = [
       },
       {
         name: 'Featured profile rotation',
-        detail: 'Your profile is periodically included in the "Top Pros" section displayed on the homepage and in category pages — free ongoing exposure.',
+        detail: 'Your profile is periodically included in the "Top Pros" section displayed on the homepage and in category pages, giving you free ongoing exposure.',
       },
       {
         name: 'Advanced profile analytics',
@@ -119,7 +119,7 @@ const tiers: Tier[] = [
     features: [
       {
         name: 'Everything in Pro',
-        detail: 'All features from the Pro tier are included — badge, analytics, verified status, priority support, fee reduction, and the 3 monthly boosts.',
+        detail: 'All features from the Pro tier are included: badge, analytics, verified status, priority support, fee reduction, and the 3 monthly boosts.',
       },
       {
         name: 'Top search placement',
@@ -127,7 +127,7 @@ const tiers: Tier[] = [
       },
       {
         name: 'Homepage spotlight',
-        detail: 'Your profile is featured in the homepage hero section on a rotating basis — the most visible placement on the entire platform.',
+        detail: 'Your profile is featured in the homepage hero section on a rotating basis, the most visible placement on the entire platform.',
       },
       {
         name: 'Trusted freelancer status',
@@ -147,7 +147,7 @@ const tiers: Tier[] = [
       },
       {
         name: '10 monthly boosts',
-        detail: 'Triple the boosts of the Pro tier — 10 profile boosts per month. Run near-daily visibility campaigns and stay at the top of client searches all month long.',
+        detail: 'Triple the boosts of the Pro tier: 10 profile boosts per month. Run near-daily visibility campaigns and stay at the top of client searches all month long.',
       },
     ],
   },
@@ -176,12 +176,12 @@ const Subscription: React.FC = () => {
       <SEO
         title="Pricing & Plans"
         canonical="/subscription"
-        description="Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility — with Enterprise for teams."
+        description="Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams."
         jsonLd={[
           {
             '@context': 'https://schema.org',
             '@type': 'WebPage',
-            name: 'Cenner Planovi — Pretplata za Freelancere i Klijente',
+            name: 'Cenner Planovi: Pretplata za Freelancere i Klijente',
             description: 'Odaberi plan koji odgovara tvojim potrebama. Besplatni i premium planovi za freelancere i klijente na Cenner platformi.',
             url: 'https://cenner.hr/subscription',
           },
@@ -329,7 +329,7 @@ const Subscription: React.FC = () => {
         {/* Fee transparency note */}
         <p className="text-center text-gray-500 text-xs font-medium mt-6 mb-2">
           {t('Commission shown is deducted from the freelancer’s payout. Buyers pay a flat')} <span className="text-white font-black">5%</span> {t('service fee at checkout.')}{' '}
-          {t('Enterprise sellers pay 0% commission — and their buyers pay no service fee.')}
+          {t('Enterprise sellers pay 0% commission, and their buyers pay no service fee.')}
         </p>
 
         {/* Enterprise */}
@@ -341,13 +341,13 @@ const Subscription: React.FC = () => {
                 <Rocket className="text-white" size={20} />
               </div>
               <h3 className="text-2xl font-black text-white tracking-tight">{t('Enterprise')}</h3>
-              <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 border border-white/10 rounded-full px-2 py-1">{t('Our best plan — everything included')}</span>
+              <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 border border-white/10 rounded-full px-2 py-1">{t('Our best plan, everything included')}</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-2xl">
               {t('Keep 100% of every sale: 0% commission, and your clients pay no service fee either. Plus the highest marketplace ranking above every tier, Trusted status, homepage spotlight, 30 monthly boosts, and priority support with ~1-hour response time.')}
             </p>
             <p className="text-brand-green text-xs font-bold mt-2">
-              {t('Pays for itself above €800 in monthly sales — above that, every euro saved is yours.')}
+              {t('Pays for itself above €800 in monthly sales. Above that, every euro saved is yours.')}
             </p>
           </div>
           <div className="relative shrink-0 flex flex-col items-stretch lg:items-end gap-2">

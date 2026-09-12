@@ -37,7 +37,7 @@ const serviceCategories: Service[] = [
       },
       {
         name: 'HTML / CSS / JavaScript',
-        detail: 'Semantic, accessible markup paired with hand-crafted CSS and vanilla JS — no unnecessary dependencies, just clean code that works everywhere.',
+        detail: 'Semantic, accessible markup paired with hand-crafted CSS and vanilla JS. No unnecessary dependencies, just clean code that works everywhere.',
       },
       {
         name: 'Responsive & Mobile-First',
@@ -60,15 +60,15 @@ const serviceCategories: Service[] = [
     features: [
       {
         name: 'Custom Themes',
-        detail: 'Fully bespoke themes built from scratch or on top of a starter — no bloated page builders, just clean PHP and modern CSS.',
+        detail: 'Fully bespoke themes built from scratch or on top of a starter. No bloated page builders, just clean PHP and modern CSS.',
       },
       {
         name: 'Plugin Development',
-        detail: 'Custom plugins for any functionality your site needs — booking systems, custom post types, API integrations, payment logic.',
+        detail: 'Custom plugins for any functionality your site needs: booking systems, custom post types, API integrations, payment logic.',
       },
       {
         name: 'WooCommerce Shops',
-        detail: 'Complete e-commerce setups including product pages, cart, checkout, payment gateways, and shipping rules — ready to sell from day one.',
+        detail: 'Complete e-commerce setups including product pages, cart, checkout, payment gateways, and shipping rules. Ready to sell from day one.',
       },
       {
         name: 'Training Included',
@@ -87,7 +87,7 @@ const serviceCategories: Service[] = [
     features: [
       {
         name: 'n8n Workflow Builds',
-        detail: 'We design and deploy n8n automations that connect your tools — CRMs, email, forms, spreadsheets, APIs — and eliminate manual busywork.',
+        detail: 'We design and deploy n8n automations that connect your tools (CRMs, email, forms, spreadsheets, APIs) and eliminate manual busywork.',
       },
       {
         name: 'AI Integration',
@@ -114,7 +114,7 @@ const serviceCategories: Service[] = [
     features: [
       {
         name: 'Logo & Brand Identity',
-        detail: 'A complete visual identity including primary logo, colour palette, and typography — delivered in all formats you need for print and digital.',
+        detail: 'A complete visual identity including primary logo, colour palette, and typography, delivered in all formats you need for print and digital.',
       },
       {
         name: 'Marketing Assets',
@@ -122,7 +122,7 @@ const serviceCategories: Service[] = [
       },
       {
         name: 'Affinity Suite',
-        detail: 'All work is created in Affinity Designer, Publisher, and Photo — professional-grade vector and raster output with no Adobe subscription required.',
+        detail: 'All work is created in Affinity Designer, Publisher, and Photo. Professional-grade vector and raster output with no Adobe subscription required.',
       },
       {
         name: 'Print-Ready Delivery',
@@ -137,7 +137,7 @@ const Services: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-brand-black">
       <SEO
-        title="Usluge — Web Razvoj, Dizajn i Marketing Hrvatska"
+        title="Usluge: Web Razvoj, Dizajn i Marketing Hrvatska"
         canonical="/services"
         description="Freelance usluge u Hrvatskoj i EU: web razvoj, grafički dizajn, digitalni marketing, AI razvoj, video produkcija. Verificirani freelanceri, sigurno plaćanje, zajamčena kvaliteta."
         keywords="web razvoj hrvatska freelance, grafički dizajn freelancer hrvatska, digitalni marketing freelancer, AI razvoj hrvatska, video produkcija freelancer, freelance usluge eu"
@@ -145,7 +145,7 @@ const Services: React.FC = () => {
           {
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
-            name: 'Freelance Usluge — Kategorije | Cenner',
+            name: 'Freelance Usluge: Kategorije | Cenner',
             description: 'Pregledaj sve kategorije freelance usluga na Cenner platformi. Web razvoj, dizajn, marketing, pisanje i više.',
             url: 'https://cenner.hr/services',
           },
@@ -187,7 +187,7 @@ const Services: React.FC = () => {
             </span>
           </h1>
           <p className="text-base md:text-lg text-gray-400 font-medium leading-relaxed">
-            {t('Everything we offer is done in-house — no outsourcing, no middlemen. You work directly with the people building your project.')}
+            {t('Everything we offer is done in-house. No outsourcing, no middlemen. You work directly with the people building your project.')}
           </p>
         </div>
 
@@ -259,7 +259,7 @@ const Services: React.FC = () => {
             <div className="hidden md:block absolute top-7 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             {[
               { step: '01', title: t('Discovery Call'), desc: 'We talk through what you need, your timeline, and your budget. No obligation.' },
-              { step: '02', title: t('Proposal & Quote'), desc: 'We send a clear scope, timeline, and fixed price — no hidden extras.' },
+              { step: '02', title: t('Proposal & Quote'), desc: 'We send a clear scope, timeline, and fixed price. No hidden extras.' },
               { step: '03', title: t('Build & Review'), desc: 'We build in stages and share progress. You give feedback until it is right.' },
               { step: '04', title: t('Delivery & Support'), desc: 'We hand everything over clean and stay available for questions after launch.' },
             ].map((item, i) => (
@@ -277,7 +277,7 @@ const Services: React.FC = () => {
         {/* Advantage Banner */}
         <div className="grid md:grid-cols-3 gap-8 p-8 md:p-10 bg-brand-black border border-white/10 rounded-[2.5rem] text-center shadow-2xl">
           {[
-            { icon: <Zap className="text-brand-green" size={20} />, title: t('Direct Communication'), desc: 'You talk to the people actually doing the work — not account managers or project coordinators.' },
+            { icon: <Zap className="text-brand-green" size={20} />, title: t('Direct Communication'), desc: 'You talk to the people actually doing the work, not account managers or project coordinators.' },
             { icon: <Layers className="text-brand-pink" size={20} />, title: t('Fixed Pricing'), desc: 'Every project is quoted upfront. No hourly billing surprises, no scope creep without agreement.' },
             { icon: <Server className="text-brand-green" size={20} />, title: t('We Handle Hosting Too'), desc: 'Need a server set up or a site deployed? We do that as part of the service, not as an extra.' },
           ].map((adv, i) => (

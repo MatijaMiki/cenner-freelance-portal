@@ -360,8 +360,8 @@ const MessagingHub: React.FC = () => {
                       <p className="text-base font-bold text-white">Why keep payments on Cenner?</p>
                     </div>
                     <ul className="space-y-4 text-sm text-gray-400 leading-relaxed">
-                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Payments are processed through Cenner's milestone system — funds are only released to the freelancer once you approve the delivered work.</span></li>
-                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Dispute resolution is available for all platform payments — off-platform transactions are not covered.</span></li>
+                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Payments are processed through Cenner's milestone system. Funds are only released to the freelancer once you approve the delivered work.</span></li>
+                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Dispute resolution is available for all platform payments. Off-platform transactions are not covered.</span></li>
                       <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Paying outside Cenner violates our Terms of Service and removes all buyer and seller protections.</span></li>
                     </ul>
                     <button onClick={() => setShowPaymentSafetyPopout(false)} className="mt-5 w-full text-xs font-black text-gray-600 hover:text-white transition-colors uppercase tracking-widest">Got it</button>

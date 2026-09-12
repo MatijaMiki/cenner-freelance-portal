@@ -408,11 +408,11 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
                 <div>
                   <p className="text-white font-bold capitalize">{currentUser?.tier?.toLowerCase() || 'free'} Plan</p>
                   <p className="text-xs text-gray-500 mt-0.5">
-                    {currentUser?.tier === 'FREE' && 'Basic access — upgrade to unlock all features'}
-                    {currentUser?.tier === 'STARTER' && '€9/mo — Essential features'}
-                    {currentUser?.tier === 'PRO' && '€19/mo — Full feature access, 8% fee'}
-                    {currentUser?.tier === 'ULTRA' && '€59/mo — Top placement, 5% fee, 10 boosts/mo'}
-                    {currentUser?.tier === 'ENTERPRISE' && '€99/mo — Unlimited everything'}
+                    {currentUser?.tier === 'FREE' && 'Basic access: upgrade to unlock all features'}
+                    {currentUser?.tier === 'STARTER' && '€9/mo: Essential features'}
+                    {currentUser?.tier === 'PRO' && '€19/mo: Full feature access, 8% fee'}
+                    {currentUser?.tier === 'ULTRA' && '€59/mo: Top placement, 5% fee, 10 boosts/mo'}
+                    {currentUser?.tier === 'ENTERPRISE' && '€99/mo: Unlimited everything'}
                   </p>
                 </div>
               </div>
@@ -1562,7 +1562,7 @@ const Profile: React.FC = () => {
                       <p className="text-xs text-gray-500 mt-1">
                         {analytics.boosts.credits === 0
                           ? t('Upgrade to Pro or Ultra to unlock profile boosts.')
-                          : `${analytics.boosts.used} ${t('used this month — resets on the 1st')}`}
+                          : `${analytics.boosts.used} ${t('used this month, resets on the 1st')}`}
                       </p>
                     </div>
                     {analytics.boosts.credits > 0 && (

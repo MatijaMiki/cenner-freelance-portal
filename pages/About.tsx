@@ -13,7 +13,7 @@ const About: React.FC = () => {
   return (
     <div className="pt-16 pb-24 max-w-7xl mx-auto px-4">
       <SEO
-        title="O Nama — Freelance Platforma Hrvatska"
+        title="O Nama: Freelance Platforma Hrvatska"
         canonical="/about"
         description="Cenner je hrvatska freelance platforma osnovana s misijom povezivanja tvrtki s najboljim slobodnim radnicima iz Hrvatske i EU. Saznaj više o nama i našoj viziji."
         keywords="o cenner platformi, freelance platforma hrvatska priča, tko je cenner, hrvatska startup freelance"
@@ -96,7 +96,7 @@ const About: React.FC = () => {
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-green mb-3">{t('Our Stack')}</p>
             <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-3">{t('Technology We Work With')}</h2>
-            <p className="text-gray-500 max-w-lg">From React and n8n to server setup and Affinity Design — see every tool we bring to the table.</p>
+            <p className="text-gray-500 max-w-lg">From React and n8n to server setup and Affinity Design. See every tool we bring to the table.</p>
           </div>
           <Link
             to="/technology"
@@ -113,7 +113,7 @@ const About: React.FC = () => {
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-pink mb-3">{t('Delivered Work')}</p>
             <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-3">{t('Previous Projects')}</h2>
-            <p className="text-gray-500 max-w-lg">Real client work delivered through the Cenner network — see the live sites and what was built.</p>
+            <p className="text-gray-500 max-w-lg">Real client work delivered through the Cenner network. See the live sites and what was built.</p>
           </div>
           <Link
             to="/projects"

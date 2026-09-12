@@ -17,7 +17,7 @@ const OG = `${BASE}/og-image.png`;
 const services = [
   {
     slug: 'izrada-web-stranica',
-    title: 'Izrada Web Stranica — Freelanceri Hrvatska',
+    title: 'Izrada Web Stranica: Freelanceri Hrvatska',
     keyword: 'izrada web stranica',
     description:
       'Trebaš novu web stranicu? Pronađi provjerene freelancere za izradu modernih web stranica u Hrvatskoj. Cijene od 300 €. Bez agencijskih marži.',
@@ -36,13 +36,13 @@ const services = [
         h2: 'Što sve uključuje izrada web stranice?',
         body: [
           'Profesionalna izrada web stranice obično uključuje: <strong>dizajn</strong> (Figma macke i finalni mockup-ovi), <strong>responsive HTML/CSS implementaciju</strong>, <strong>integraciju s CMS-om</strong> (najčešće WordPress, Webflow ili custom rješenje), <strong>SEO osnovu</strong> (meta tagovi, sitemap, brzina), <strong>postavljanje na hosting</strong> i <strong>jamstvo na rad</strong>.',
-          'Naši freelanceri rade s modernim tehnologijama poput Reacta, Next.jsa, Astra i Vuea — ali i s WordPressom, Shopifyem i Webflowom kad je to bolji izbor za projekt.',
+          'Naši freelanceri rade s modernim tehnologijama poput Reacta, Next.jsa, Astra i Vuea, ali i s WordPressom, Shopifyem i Webflowom kad je to bolji izbor za projekt.',
         ],
       },
       {
         h2: 'Zašto angažirati freelancera umjesto agencije?',
         body: [
-          'Agencija u Hrvatskoj za istu web stranicu naplaćuje <strong>2x do 3x više</strong> jer pokriva fiksne režije (uredi, account manageri, marketing). Freelancer ti dolazi izravno — niža cijena, brža komunikacija, jednako kvalitetan rezultat.',
+          'Agencija u Hrvatskoj za istu web stranicu naplaćuje <strong>2x do 3x više</strong> jer pokriva fiksne režije (uredi, account manageri, marketing). Freelancer ti dolazi izravno: niža cijena, brža komunikacija, jednako kvalitetan rezultat.',
           'Na Cenneru su svi freelanceri prošli <strong>KYC verifikaciju</strong>, a plaćanje ide kroz osigurani escrow sustav. Plaćaš tek kad si zadovoljan rezultatom.',
         ],
       },
@@ -57,7 +57,7 @@ const services = [
   },
   {
     slug: 'dizajn-loga',
-    title: 'Dizajn Loga i Vizualnog Identiteta — Cenner',
+    title: 'Dizajn Loga i Vizualnog Identiteta | Cenner',
     keyword: 'dizajn loga',
     description:
       'Pronađi grafičkog dizajnera za izradu loga, vizualnog identiteta i brendinga u Hrvatskoj. Ponude od provjerenih freelancera. Cijene od 80 €.',
@@ -88,11 +88,11 @@ const services = [
   },
   {
     slug: 'seo-optimizacija',
-    title: 'SEO Optimizacija — Pronađi SEO Stručnjaka | Cenner',
+    title: 'SEO Optimizacija: Pronađi SEO Stručnjaka | Cenner',
     keyword: 'seo optimizacija',
     description:
       'Tvoja web stranica ne dolazi na prvu stranicu Googlea? Pronađi SEO stručnjaka u Hrvatskoj. Audit, on-page optimizacija, link building. Cijene od 200 €/mj.',
-    h1: 'SEO Optimizacija — Bolji Plasman na Googleu',
+    h1: 'SEO Optimizacija: Bolji Plasman na Googleu',
     intro:
       'Ako te kupci ne mogu pronaći na Googleu, ne postojiš. Cenner povezuje hrvatske tvrtke s SEO stručnjacima koji znaju kako tehnički, sadržajno i autoritativno postaviti web stranicu da rangira za prave ključne riječi.',
     sections: [
@@ -106,7 +106,7 @@ const services = [
         h2: 'Koliko košta SEO u Hrvatskoj?',
         body: [
           'Jednokratni SEO audit s preporukama kreće od <strong>200 € do 600 €</strong>. Mjesečni paket optimizacije za malu web stranicu ide od <strong>300 € do 800 € mjesečno</strong>. Veći e-commerce projekti i nacionalne kampanje kreću od <strong>1.000 € mjesečno</strong> i više.',
-          'Za razliku od plaćenih oglasa, SEO daje <strong>dugoročne rezultate</strong> — jednom kad rangiraš, dolazi besplatan promet mjesecima.',
+          'Za razliku od plaćenih oglasa, SEO daje <strong>dugoročne rezultate</strong>. Jednom kad rangiraš, dolazi besplatan promet mjesecima.',
         ],
       },
       {
@@ -120,13 +120,13 @@ const services = [
   },
   {
     slug: 'digitalni-marketing',
-    title: 'Digitalni Marketing — Freelance Marketinški Stručnjaci | Cenner',
+    title: 'Digitalni Marketing: Freelance Marketinški Stručnjaci | Cenner',
     keyword: 'digitalni marketing',
     description:
-      'Pronađi marketinškog freelancera u Hrvatskoj — Google Ads, Meta oglasi, social media, email marketing. Provjereni stručnjaci, transparentne cijene.',
-    h1: 'Digitalni Marketing — Freelance Stručnjaci',
+      'Pronađi marketinškog freelancera u Hrvatskoj: Google Ads, Meta oglasi, social media, email marketing. Provjereni stručnjaci, transparentne cijene.',
+    h1: 'Digitalni Marketing: Freelance Stručnjaci',
     intro:
-      'Treba ti više kvalificiranih leadova, povratnih kupaca ili pratitelja na društvenim mrežama? Cenner povezuje hrvatske tvrtke s marketinškim freelancerima koji znaju što rade — bez gubljenja proračuna na neučinkovite kampanje.',
+      'Treba ti više kvalificiranih leadova, povratnih kupaca ili pratitelja na društvenim mrežama? Cenner povezuje hrvatske tvrtke s marketinškim freelancerima koji znaju što rade, bez gubljenja proračuna na neučinkovite kampanje.',
     sections: [
       {
         h2: 'Koje marketing usluge možeš pronaći?',
@@ -152,11 +152,11 @@ const services = [
   },
   {
     slug: 'wordpress-izrada',
-    title: 'WordPress Izrada — Freelanceri u Hrvatskoj | Cenner',
+    title: 'WordPress Izrada: Freelanceri u Hrvatskoj | Cenner',
     keyword: 'wordpress izrada',
     description:
       'Trebaš WordPress web stranicu? Pronađi WordPress developera u Hrvatskoj. Tema, plugin, WooCommerce, optimizacija. Cijene od 250 €.',
-    h1: 'WordPress Izrada — Freelance Developeri',
+    h1: 'WordPress Izrada: Freelance Developeri',
     intro:
       'WordPress pokreće više od 40% svih web stranica na svijetu i ostaje najpouzdaniji izbor za blogove, korporativne stranice i web shopove. Cenner ti pomaže pronaći WordPress developera koji izrađuje brze, sigurne i SEO-prijateljske stranice.',
     sections: [
@@ -175,7 +175,7 @@ const services = [
       {
         h2: 'WordPress ili Webflow / custom?',
         body: [
-          'Ako trebaš stranicu koju će klijent moći sam ažurirati i kojoj treba bogat ekosustav plugina (npr. WooCommerce, formular, booking), <strong>WordPress je najbolji izbor</strong>. Za pure marketing stranice s naprednim animacijama često je bolji Webflow ili Astro. Za složene aplikacije — custom (Next.js, Remix).',
+          'Ako trebaš stranicu koju će klijent moći sam ažurirati i kojoj treba bogat ekosustav plugina (npr. WooCommerce, formular, booking), <strong>WordPress je najbolji izbor</strong>. Za pure marketing stranice s naprednim animacijama često je bolji Webflow ili Astro. Za složene aplikacije: custom (Next.js, Remix).',
         ],
       },
     ],
@@ -183,13 +183,13 @@ const services = [
   },
   {
     slug: 'programiranje',
-    title: 'Usluge Programiranja — Freelance Developeri Hrvatska | Cenner',
+    title: 'Usluge Programiranja: Freelance Developeri Hrvatska | Cenner',
     keyword: 'usluge programiranja',
     description:
-      'Trebaš programera? Pronađi provjerene freelance developere u Hrvatskoj — web, mobilne aplikacije, backend, API integracije. Profesionalno programiranje bez agencijskih marži.',
-    h1: 'Usluge Programiranja — Freelance Developeri',
+      'Trebaš programera? Pronađi provjerene freelance developere u Hrvatskoj: web, mobilne aplikacije, backend, API integracije. Profesionalno programiranje bez agencijskih marži.',
+    h1: 'Usluge Programiranja: Freelance Developeri',
     intro:
-      'Od web aplikacija i API integracija do mobilnih aplikacija i automatizacije — Cenner te povezuje s provjerenim hrvatskim programerima koji rade s modernim tehnologijama. Profesionalno programiranje po transparentnim cijenama, bez skupih agencijskih marži.',
+      'Od web aplikacija i API integracija do mobilnih aplikacija i automatizacije, Cenner te povezuje s provjerenim hrvatskim programerima koji rade s modernim tehnologijama. Profesionalno programiranje po transparentnim cijenama, bez skupih agencijskih marži.',
     sections: [
       {
         h2: 'Koje usluge programiranja možeš pronaći?',
@@ -201,7 +201,7 @@ const services = [
         h2: 'Koliko koštaju usluge programiranja u Hrvatskoj?',
         body: [
           'Satnica iskusnog freelance developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Manji projekti (landing aplikacija, integracija, automatizacija) kreću od <strong>500 € do 2.000 €</strong>. Kompletne web ili mobilne aplikacije idu od <strong>3.000 € pa naviše</strong>, ovisno o opsegu.',
-          'Na Cenneru dobivaš <strong>više ponuda</strong> od različitih programera i biraš onu koja odgovara tvom proračunu. Plaćanje ide kroz osigurani escrow sustav — plaćaš tek kad je posao isporučen.',
+          'Na Cenneru dobivaš <strong>više ponuda</strong> od različitih programera i biraš onu koja odgovara tvom proračunu. Plaćanje ide kroz osigurani escrow sustav. Plaćaš tek kad je posao isporučen.',
         ],
       },
       {
@@ -227,33 +227,33 @@ const cities = [
   {
     slug: 'zagreb',
     name: 'Zagreb',
-    title: 'Freelanceri Zagreb — Honorarni Posao u Zagrebu | Cenner',
+    title: 'Freelanceri Zagreb: Honorarni Posao u Zagrebu | Cenner',
     description:
-      'Pronađi provjerene freelancere u Zagrebu — web developere, dizajnere, marketinške stručnjake. Honorarni posao u Zagrebu, brzo i sigurno.',
+      'Pronađi provjerene freelancere u Zagrebu: web developere, dizajnere, marketinške stručnjake. Honorarni posao u Zagrebu, brzo i sigurno.',
     h1: 'Freelanceri u Zagrebu',
     intro:
-      'Zagreb je freelance metropola Hrvatske — više od 60% svih registriranih freelancera na Cenneru radi iz glavnog grada. Bez obzira tražiš li web developera, grafičkog dizajnera ili marketinškog stručnjaka, na jednom mjestu pregledavaš ponudu vrhunskih zagrebačkih kreatora.',
+      'Zagreb je freelance metropola Hrvatske. Više od 60% svih registriranih freelancera na Cenneru radi iz glavnog grada. Bez obzira tražiš li web developera, grafičkog dizajnera ili marketinškog stručnjaka, na jednom mjestu pregledavaš ponudu vrhunskih zagrebačkih kreatora.',
     extra:
       'Zagreb je posebno jak u <strong>tech sektoru</strong> (web razvoj, mobile aplikacije, AI/ML), <strong>kreativnim industrijama</strong> (UX/UI, branding, motion design) i <strong>digitalnom marketingu</strong>. Mnogi naši zagrebački freelanceri rade za inozemne klijente, što jamči visoku razinu kvalitete i komunikacijskih vještina.',
   },
   {
     slug: 'split',
     name: 'Split',
-    title: 'Freelanceri Split — Honorarni Posao u Splitu | Cenner',
+    title: 'Freelanceri Split: Honorarni Posao u Splitu | Cenner',
     description:
       'Pronađi vrhunske freelancere u Splitu i Dalmaciji. Web razvoj, dizajn, marketing, prijevodi. Provjereni stručnjaci, sigurno plaćanje.',
     h1: 'Freelanceri u Splitu',
     intro:
-      'Split i Dalmacija imaju brzorastuću freelance scenu — posebno u području web razvoja, turizma, hospitalityja i digitalnog marketinga. Cenner te povezuje s provjerenim splitskim freelancerima za honorarni posao u svim ključnim industrijama.',
+      'Split i Dalmacija imaju brzorastuću freelance scenu, posebno u području web razvoja, turizma, hospitalityja i digitalnog marketinga. Cenner te povezuje s provjerenim splitskim freelancerima za honorarni posao u svim ključnim industrijama.',
     extra:
-      'Mnogi splitski freelanceri specijalizirani su za <strong>turistički sektor</strong> — izradu booking stranica, marketing za hotele i privatne smještaje, multilingual SEO. Drugi rade s globalnim klijentima u tech-u i dizajnu, koristeći prednost mediteranskog načina života.',
+      'Mnogi splitski freelanceri specijalizirani su za <strong>turistički sektor</strong>: izradu booking stranica, marketing za hotele i privatne smještaje, multilingual SEO. Drugi rade s globalnim klijentima u tech-u i dizajnu, koristeći prednost mediteranskog načina života.',
   },
   {
     slug: 'rijeka',
     name: 'Rijeka',
-    title: 'Freelanceri Rijeka — Honorarni Posao u Rijeci | Cenner',
+    title: 'Freelanceri Rijeka: Honorarni Posao u Rijeci | Cenner',
     description:
-      'Pronađi freelancere u Rijeci i Primorsko-goranskoj županiji. Web izrada, dizajn, marketing, copywriting. Cenner — vodeća freelance platforma u Hrvatskoj.',
+      'Pronađi freelancere u Rijeci i Primorsko-goranskoj županiji. Web izrada, dizajn, marketing, copywriting. Cenner je vodeća freelance platforma u Hrvatskoj.',
     h1: 'Freelanceri u Rijeci',
     intro:
       'Rijeka je važno sveučilišno i tech središte sjeverne Hrvatske s rastućom freelance zajednicom. Na Cenneru pronalaziš riječke web developere, dizajnere, marketinške stručnjake i copywritere s referencama iz hrvatskih i međunarodnih projekata.',
@@ -263,7 +263,7 @@ const cities = [
   {
     slug: 'osijek',
     name: 'Osijek',
-    title: 'Freelanceri Osijek — Honorarni Posao u Slavoniji | Cenner',
+    title: 'Freelanceri Osijek: Honorarni Posao u Slavoniji | Cenner',
     description:
       'Pronađi freelancere u Osijeku i Slavoniji. Web izrada, dizajn, marketing, prijevodi. Profesionalni rad po pristupačnim cijenama.',
     h1: 'Freelanceri u Osijeku',
@@ -366,7 +366,7 @@ ${body}
     <a href="/privacy">Privatnost</a>
     <a href="/terms">Uvjeti</a>
   </div>
-  <div style="margin-top:16px">© Cenner — Freelance Platforma Hrvatska</div>
+  <div style="margin-top:16px">© Cenner, Freelance Platforma Hrvatska</div>
 </footer>
 </body>
 </html>
@@ -424,7 +424,7 @@ function cityBody(city) {
   <li><a href="/usluge/wordpress-izrada">WordPress izrada</a></li>
 </ul>
 <h2>Kako Cenner radi?</h2>
-<p>Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz ${city.name}a i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow — plaćaš tek kad si zadovoljan.</p>
+<p>Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz ${city.name}a i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow. Plaćaš tek kad si zadovoljan.</p>
 <p>
   <a href="/marketplace" class="cta">Započni sad</a>
 </p>
@@ -466,7 +466,7 @@ function cityJsonLd(city, url) {
     {
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
-      name: `Cenner — Freelanceri ${city.name}`,
+      name: `Cenner Freelanceri ${city.name}`,
       description: city.description,
       url,
       areaServed: { '@type': 'City', name: city.name },

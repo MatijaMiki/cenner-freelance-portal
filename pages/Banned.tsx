@@ -120,7 +120,7 @@ const Banned: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-black text-white mb-2">Appeal this decision</h2>
                   <p className="text-gray-500 text-sm">
-                    If this was a mistake — for example you were pasting code in good faith — explain what happened
+                    If this was a mistake (for example you were pasting code in good faith), explain what happened
                     and an admin will review. One appeal per ban.
                   </p>
                 </div>

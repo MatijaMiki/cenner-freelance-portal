@@ -31,7 +31,7 @@ const SEO: React.FC<SEOProps> = ({
   jsonLd,
   keywords,
 }) => {
-  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Freelance Platforma Hrvatska`;
+  const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME}: Freelance Platforma Hrvatska`;
   const fullCanonical = canonical ? `${BASE_URL}${canonical}` : undefined;
   const fullKeywords = keywords ? `${keywords}, ${BASE_KEYWORDS}` : BASE_KEYWORDS;
 

@@ -37,13 +37,13 @@ const BASE = 'https://cenner.hr';
 const ROUTES = [
   {
     path: '/marketplace',
-    title: 'Marketplace — Freelanceri Hrvatska | Cenner',
+    title: 'Marketplace: Freelanceri Hrvatska | Cenner',
     description:
-      'Pronađi verificirane freelancere u Hrvatskoj i EU na Cenner marketplaceu. Web razvoj, dizajn, marketing, pisanje i više — honorarni posao na jednom mjestu.',
+      'Pronađi verificirane freelancere u Hrvatskoj i EU na Cenner marketplaceu. Web razvoj, dizajn, marketing, pisanje i više. Honorarni posao na jednom mjestu.',
   },
   {
     path: '/services',
-    title: 'Usluge — Web Razvoj, Dizajn i Marketing Hrvatska | Cenner',
+    title: 'Usluge: Web Razvoj, Dizajn i Marketing Hrvatska | Cenner',
     description:
       'Freelance usluge u Hrvatskoj i EU: web razvoj, grafički dizajn, digitalni marketing, AI razvoj, video produkcija. Verificirani freelanceri, sigurno plaćanje, zajamčena kvaliteta.',
   },
@@ -58,17 +58,17 @@ const ROUTES = [
     path: '/subscription',
     title: 'Pricing & Plans | Cenner',
     description:
-      'Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility — with Enterprise for teams.',
+      'Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams.',
   },
   {
     path: '/technology',
     title: 'Technology | Cenner',
     description:
-      'Discover the technology stack powering Cenner — AI matching, real-time collaboration, and secure infrastructure built for elite freelance work.',
+      'Discover the technology stack powering Cenner: AI matching, real-time collaboration, and secure infrastructure built for elite freelance work.',
   },
   {
     path: '/blog',
-    title: 'Blog — Freelance Savjeti i Vodiči | Cenner',
+    title: 'Blog: Freelance Savjeti i Vodiči | Cenner',
     description:
       'Vodiči, savjeti i vijesti o freelancingu u Hrvatskoj i EU. Otvaranje paušalnog obrta, ugovori, cijene, alati i sve ostalo što trebate znati kao slobodni radnik.',
   },
@@ -80,7 +80,7 @@ const ROUTES = [
   },
   {
     path: '/about',
-    title: 'O Nama — Freelance Platforma Hrvatska | Cenner',
+    title: 'O Nama: Freelance Platforma Hrvatska | Cenner',
     description:
       'Cenner je hrvatska freelance platforma osnovana s misijom povezivanja tvrtki s najboljim slobodnim radnicima iz Hrvatske i EU. Saznaj više o nama i našoj viziji.',
   },
@@ -114,9 +114,9 @@ const ROUTES = [
     // hydrated heads agree. api/render.js strips this canonical back out when it uses
     // the same file as its shell for an entity page.
     path: '/',
-    title: 'Freelance Hrvatska — Pronađi Freelancera | Cenner',
+    title: 'Freelance Hrvatska: Pronađi Freelancera | Cenner',
     description:
-      'Cenner — vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno.',
+      'Cenner je vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno.',
   },
   {
     path: '/cookies',

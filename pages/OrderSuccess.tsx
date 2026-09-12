@@ -46,7 +46,7 @@ const OrderSuccess: React.FC = () => {
   return (
     <>
       <SEO
-        title={isSubscription ? 'Subscription Active — Cenner' : 'Order Confirmed — Cenner'}
+        title={isSubscription ? 'Subscription Active' : 'Order Confirmed'}
         description="Thank you for your purchase on Cenner."
       />
       <div className="pt-24 pb-32 max-w-2xl mx-auto px-4 text-center">
