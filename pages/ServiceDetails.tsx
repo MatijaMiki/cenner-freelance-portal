@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Star, Clock, CheckCircle, MessageSquare, ShieldCheck, Share2, Heart, ArrowLeft, Edit2, Save, X, Loader2, Upload, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
-import PermissionModal from '../components/PermissionModal';
 import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
@@ -17,7 +16,6 @@ const ServiceDetails: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const notify = useNotify();
-  const [isPermissionModalOpen, setIsPermissionModalOpen] = useState(false);
   const [saved, setSaved] = useState(false);
   const [contacting, setContacting] = useState(false);
 
@@ -157,10 +155,6 @@ const ServiceDetails: React.FC = () => {
     }
   };
 
-  const handleStartCall = () => {
-    setIsPermissionModalOpen(true);
-  };
-
   const handleContinue = () => {
     navigate(`/checkout/${listing.id}`);
   };
@@ -217,7 +211,6 @@ const ServiceDetails: React.FC = () => {
         ogType="product"
         jsonLd={[serviceJsonLd, breadcrumbJsonLd]}
       />
-      <PermissionModal isOpen={isPermissionModalOpen} onClose={() => setIsPermissionModalOpen(false)} />
       
       <Link to="/marketplace" className="inline-flex items-center space-x-2 text-gray-400 hover:text-white mb-8 transition-colors">
         <ArrowLeft size={18} />

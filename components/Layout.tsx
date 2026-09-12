@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, User as UserIcon, LogOut, ChevronDown, MessageSquare, UserCheck, FileText, ShoppingBag, Briefcase, Tag, UserPlus, BookOpen, Users, Mail, Info, Gift } from 'lucide-react';
 import AvatarImg from './Avatar';
 import NotificationBell from './NotificationBell';
-import PermissionModal from './PermissionModal';
 import ChatWidget from './ChatWidget';
 import Footer from './Footer';
 import ConsentModal from './ConsentModal';
@@ -28,7 +27,6 @@ const LANGUAGES = [
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen]         = useState(false);
-  const [isPermissionModalOpen, setIsPermissionModalOpen] = useState(false);
   const [isLangOpen, setIsLangOpen]         = useState(false);
   const [isAboutOpen, setIsAboutOpen]       = useState(false);
   const [isMarketOpen, setIsMarketOpen]     = useState(false);
@@ -131,7 +129,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col relative transition-colors duration-300 bg-brand-black text-white">
-      <PermissionModal isOpen={isPermissionModalOpen} onClose={() => setIsPermissionModalOpen(false)} />
       <ChatWidget />
 
       {/* Navbar */}
