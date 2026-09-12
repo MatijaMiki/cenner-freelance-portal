@@ -373,7 +373,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <>
                   <div className="flex items-center gap-3 py-3">
                     {user.avatar ? (
-                      <img src={user.avatar} alt={user.displayName || 'User avatar'} className="w-8 h-8 rounded-full border border-brand-green" />
+                      <img src={user.avatar} alt={user.name || 'User avatar'} className="w-8 h-8 rounded-full border border-brand-green" />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-brand-grey border border-brand-green flex items-center justify-center text-brand-green">
                         <UserIcon size={16} />

@@ -260,7 +260,7 @@ const Subscription: React.FC = () => {
                   tier.special  ? 'bg-brand-pink/10 border-brand-pink/20' :
                   'bg-white/5 border-white/10'
                 }`}>
-                  {React.cloneElement(tier.icon as React.ReactElement, { size: 20 })}
+                  {React.cloneElement(tier.icon as React.ReactElement<{ size?: number }>, { size: 20 })}
                 </div>
                 <h3 className="text-2xl font-black text-white mb-1 tracking-tight">{t(tier.name)}</h3>
                 <p className={`text-xs font-black uppercase tracking-widest ${

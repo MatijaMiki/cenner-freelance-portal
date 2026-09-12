@@ -187,6 +187,47 @@ async function resolve(type, id) {
   return null;
 }
 
+/**
+ * Drop the shell's page-specific JSON-LD before serving it as an entity page.
+ *
+ * index.html hardcodes four blocks — Organization, LocalBusiness, WebSite and FAQPage —
+ * and the shell is served for every route, so /service/:id was publishing the homepage's
+ * FAQ ("Sto je Cenner i kako funkcionira freelance platforma?") on a page where none of
+ * those questions appear. Google requires FAQPage markup to describe content actually
+ * visible on that page; LocalBusiness likewise describes the site, not a listing.
+ * Organization and WebSite are genuinely sitewide and stay.
+ *
+ * Deliberately best-effort: if the shell stops carrying these there is nothing to remove
+ * and the page must still render, so a miss warns instead of throwing. Blocks whose JSON
+ * does not parse are left untouched rather than guessed at.
+ */
+const PAGE_SPECIFIC_SCHEMA = ['FAQPage', 'LocalBusiness'];
+
+function stripPageSpecificSchema(html) {
+  const seen = [];
+  const out = html.replace(
+    /[ \t]*<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>\n?/g,
+    (block, json) => {
+      let type;
+      try {
+        type = JSON.parse(json)['@type'];
+      } catch {
+        return block;
+      }
+      if (PAGE_SPECIFIC_SCHEMA.includes(type)) {
+        seen.push(type);
+        return '';
+      }
+      return block;
+    },
+  );
+  const missing = PAGE_SPECIFIC_SCHEMA.filter((t) => !seen.includes(t));
+  if (missing.length) {
+    console.warn('[render] shell no longer carries expected sitewide schema:', missing.join(', '));
+  }
+  return out;
+}
+
 /** Swap a tag that the shell is known to contain; throw loudly if the shell drifts. */
 function swap(html, pattern, replacement, label) {
   if (!pattern.test(html)) throw new Error(`render: ${label} missing from shell`);
@@ -194,6 +235,7 @@ function swap(html, pattern, replacement, label) {
 }
 
 function buildHead(shell, meta) {
+  shell = stripPageSpecificSchema(shell);
   const title = escText(meta.title);
   const titleAttr = escAttr(meta.title);
   const desc = escAttr(meta.description);
@@ -230,7 +272,7 @@ function buildHead(shell, meta) {
 
 /** A gone entity: real 404 status, noindex, and no canonical to a dead URL. */
 function buildNotFound(shell) {
-  let html = shell;
+  let html = stripPageSpecificSchema(shell);
   html = swap(html, /<title>[\s\S]*?<\/title>/, '<title>Stranica nije pronađena | Cenner</title>', '<title>');
   return swap(html, /<meta name="robots" content="[\s\S]*?"\s*\/>/,
     '<meta name="robots" content="noindex, nofollow" />', 'robots');
