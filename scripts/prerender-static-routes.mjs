@@ -103,6 +103,16 @@ const ROUTES = [
       "Cenner's terms of service. Read the terms and conditions governing the use of our freelance talent marketplace.",
   },
   {
+    // Written LAST, and it overwrites dist/index.html itself — see the note in main().
+    // Mirrors the props pages/Home.tsx passes to <SEO canonical="/">, so the raw and
+    // hydrated heads agree. api/render.js strips this canonical back out when it uses
+    // the same file as its shell for an entity page.
+    path: '/',
+    title: 'Freelance Hrvatska — Pronađi Freelancera | Cenner',
+    description:
+      'Cenner — vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno.',
+  },
+  {
     path: '/cookies',
     title: 'Cookie Policy | Cenner',
     description:
@@ -204,7 +214,12 @@ async function main() {
     throw new Error(`prerender: ${shellPath} not found — run \`vite build\` first.`);
   }
 
-  for (const route of ROUTES) {
+  // '/' writes dist/index.html — the very file `shell` was read from above. The read
+  // already happened, so this cannot contaminate the other routes, but process it last
+  // so that stays true if anyone later moves the read inside the loop.
+  const ordered = [...ROUTES].sort((a, b) => (a.path === '/' ? 1 : 0) - (b.path === '/' ? 1 : 0));
+
+  for (const route of ordered) {
     const outDir = join(DIST, route.path.replace(/^\//, ''));
     await mkdir(outDir, { recursive: true });
     await writeFile(join(outDir, 'index.html'), buildRouteHtml(shell, route), 'utf8');

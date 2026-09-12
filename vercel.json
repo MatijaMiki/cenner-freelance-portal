@@ -38,8 +38,20 @@
       "destination": "/api/render?type=blog&id=:slug"
     },
     {
+      "source": "/(profile|creator-onboarding|community|blog-admin|banned|dashboard|orders|messages|contracts|projects|reset-password|earnings|saved|onboarding|order-success|referral)",
+      "destination": "/api/render?type=private"
+    },
+    {
+      "source": "/admin/bans",
+      "destination": "/api/render?type=private"
+    },
+    {
+      "source": "/(blog-admin|messages|contracts|checkout|checkout-subscription)/:id",
+      "destination": "/api/render?type=private"
+    },
+    {
       "source": "/:path*",
-      "destination": "/index.html"
+      "destination": "/api/render?type=notfound"
     }
   ],
   "headers": [

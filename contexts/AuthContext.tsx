@@ -43,7 +43,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   });
 
-  const [loading, setLoading] = useState(false);
+  // Starts TRUE: the localStorage value above is a cache, not an answer, and on a
+  // cold load there may be none at all. Consumers that gate on `loading` — the
+  // admin guards on /admin/bans and /blog-admin — read it on first render, so
+  // starting false told them "auth resolved, no user" while /auth/me was still in
+  // flight and bounced a signed-in admin to the homepage every time.
+  const [loading, setLoading] = useState(true);
 
   // On startup: call /auth/me — cookie is sent automatically, no token needed.
   // Syncs fresh user data (tier, verification status, avatar) from DB.
@@ -57,7 +62,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Cookie invalid/expired — clear stale user data
         localStorage.removeItem(USER_KEY);
         setUser(null);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const persistSession = (newUser: AuthUser) => {

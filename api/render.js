@@ -228,6 +228,23 @@ function stripPageSpecificSchema(html) {
   return out;
 }
 
+/**
+ * Remove any canonical/hreflang/og:url already in the shell.
+ *
+ * buildHead injects its own block in place of the robots meta, but it inserts —
+ * it does not replace what may follow. Since prerender-static-routes.mjs now bakes
+ * the homepage's canonical into dist/index.html (so `/` finally has one in raw
+ * HTML), that same file is this function's shell, and without this an entity page
+ * would ship two canonicals: its own and the homepage's. Two canonicals is worse
+ * than none — Google discards both.
+ */
+function stripCanonicalBlock(html) {
+  return html
+    .replace(/[ \t]*<link rel="canonical"[^>]*>\n?/g, '')
+    .replace(/[ \t]*<link rel="alternate" hreflang="[^"]*"[^>]*>\n?/g, '')
+    .replace(/[ \t]*<meta property="og:url"[^>]*>\n?/g, '');
+}
+
 /** Swap a tag that the shell is known to contain; throw loudly if the shell drifts. */
 function swap(html, pattern, replacement, label) {
   if (!pattern.test(html)) throw new Error(`render: ${label} missing from shell`);
@@ -235,7 +252,7 @@ function swap(html, pattern, replacement, label) {
 }
 
 function buildHead(shell, meta) {
-  shell = stripPageSpecificSchema(shell);
+  shell = stripCanonicalBlock(stripPageSpecificSchema(shell));
   const title = escText(meta.title);
   const titleAttr = escAttr(meta.title);
   const desc = escAttr(meta.description);
@@ -270,10 +287,14 @@ function buildHead(shell, meta) {
   return swap(html, /<meta name="robots" content="[\s\S]*?"\s*\/>/, head, 'robots');
 }
 
-/** A gone entity: real 404 status, noindex, and no canonical to a dead URL. */
-function buildNotFound(shell) {
-  let html = stripPageSpecificSchema(shell);
-  html = swap(html, /<title>[\s\S]*?<\/title>/, '<title>Stranica nije pronađena | Cenner</title>', '<title>');
+/**
+ * A noindex shell with no canonical: used both for a gone entity (404) and for the
+ * signed-in app routes (200), neither of which should be indexed or should nominate
+ * a URL. Callers set the status; react-helmet fills in the real title for humans.
+ */
+function buildNoIndex(shell, title) {
+  let html = stripCanonicalBlock(stripPageSpecificSchema(shell));
+  html = swap(html, /<title>[\s\S]*?<\/title>/, `<title>${escText(title)}</title>`, '<title>');
   return swap(html, /<meta name="robots" content="[\s\S]*?"\s*\/>/,
     '<meta name="robots" content="noindex, nofollow" />', 'robots');
 }
@@ -291,6 +312,24 @@ export default async function handler(req, res) {
     // Without the shell there is nothing to serve; let Vercel surface it.
     console.error('[render] shell unavailable:', err.message);
     return res.status(500).send('Internal Server Error');
+  }
+
+  // The signed-in app routes (/dashboard, /orders, /checkout/:id, ...) render nothing
+  // a crawler should keep: they are behind auth and their content is per-user. They
+  // used to fall through to the raw shell, which says `index, follow`.
+  if (type === 'private') {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, s-maxage=300');
+    return res.status(200).send(buildNoIndex(shell, 'Cenner'));
+  }
+
+  // Anything that matched no route at all. Previously the catch-all rewrite handed
+  // these the shell with a 200, so every typo, dead link and probe answered
+  // "200, index me" — a soft 404 in Search Console's eyes.
+  if (type === 'notfound') {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, s-maxage=60');
+    return res.status(404).send(buildNoIndex(shell, 'Stranica nije pronađena | Cenner'));
   }
 
   let meta = null;
@@ -315,7 +354,7 @@ export default async function handler(req, res) {
 
   if (meta.notFound) {
     res.setHeader('Cache-Control', 'public, s-maxage=60');
-    return res.status(404).send(buildNotFound(shell));
+    return res.status(404).send(buildNoIndex(shell, 'Stranica nije pronađena | Cenner'));
   }
 
   // CDN-cached so crawl traffic doesn't turn into a function invocation per hit.
