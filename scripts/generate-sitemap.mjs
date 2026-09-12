@@ -70,7 +70,9 @@ async function fetchJson(url) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return res.json();
   } catch (err) {
-    console.warn(`[sitemap] Could not fetch ${url}: ${err.message}`);
+    console.warn(`[sitemap] !! Could not fetch ${url}: ${err.message} — ` +
+      'continuing with static routes only. If this is unexpected, the URL is wrong ' +
+      'or the API is unreachable; do not treat the resulting sitemap as complete.');
     return [];
   }
 }
@@ -88,8 +90,10 @@ async function main() {
     entries.push(urlEntry({ loc: `${BASE_URL}${r.path}`, changefreq: r.changefreq, priority: r.priority }));
   }
 
-  // Dynamic: blog posts
-  const posts = await fetchJson(`${API_BASE}/blog`);
+  // Dynamic: blog posts.
+  // NOTE: the collection route is /api/v1/public/blog — a bare /blog is a 404 on
+  // this API and fetchJson used to swallow it, so this loop silently did nothing.
+  const posts = await fetchJson(`${API_BASE}/api/v1/public/blog`);
   for (const post of posts) {
     if (!post.slug || post.published === false) continue;
     entries.push(urlEntry({
@@ -100,18 +104,11 @@ async function main() {
     }));
   }
 
-  // Dynamic: service listings
-  const services = await fetchJson(`${API_BASE}/listings/public?limit=1000`);
-  const list = Array.isArray(services) ? services : (services?.listings ?? []);
-  for (const svc of list) {
-    if (!svc.id) continue;
-    entries.push(urlEntry({
-      loc: `${BASE_URL}/service/${svc.id}`,
-      lastmod: (svc.updatedAt || svc.createdAt || TODAY).split('T')[0],
-      changefreq: 'weekly',
-      priority: '0.65',
-    }));
-  }
+  // Service and freelancer pages are deliberately NOT built here. This API exposes
+  // no public collection endpoint for them (only /api/v1/public/listings/:id and
+  // /api/v1/public/freelancers/:id), and the backend already serves the full set from
+  // its own DB at https://api.cenner.hr/sitemap-dynamic.xml, which robots.txt lists as
+  // a second sitemap. Enumerating them a second time from here would only drift.
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

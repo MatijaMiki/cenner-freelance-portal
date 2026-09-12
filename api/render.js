@@ -21,6 +21,15 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const API_BASE = process.env.PUBLIC_API_BASE || 'https://api.cenner.hr';
+
+// Optional shared secret. api.cenner.hr sits behind Cloudflare, and a rule there
+// currently answers this function with 403 while the same requests from a laptop
+// succeed. Set RENDER_API_KEY here and add a matching Cloudflare WAF *Skip* rule
+// (Custom rule: http.request.headers["x-cenner-render"][0] eq "<value>" -> Skip:
+// All remaining custom rules + Bot Fight Mode) so the renderer is exempt without
+// widening anything for the public internet. Keyed on a header, not an IP,
+// because Vercel's egress addresses rotate. Unset = header simply not sent.
+const RENDER_KEY = process.env.RENDER_API_KEY || '';
 const SITE = 'https://cenner.hr';
 const OG_IMAGE = `${SITE}/og-image.png`;
 
@@ -75,9 +84,33 @@ function clamp(s, max = 160) {
   return (sp > max * 0.6 ? cut.slice(0, sp) : cut).trim();
 }
 
+/**
+ * Describe a non-OK upstream response well enough to act on it from the log alone.
+ *
+ * The previous version threw `upstream ${status}` and dropped the body, which made
+ * a 403 unattributable: a Cloudflare block and an origin rejection look identical
+ * at that level of detail. Both are cheap to tell apart from the payload, so keep it.
+ */
+async function describe(res) {
+  const body = await res.text().catch(() => '');
+  const snippet = body.slice(0, 300).replace(/\s+/g, ' ').trim();
+  const cfMitigated = res.headers.get('cf-mitigated');
+  const server = res.headers.get('server') || '?';
+  const ray = res.headers.get('cf-ray') || '-';
+  // A Cloudflare denial is served by the edge and never reaches Express.
+  const edge = Boolean(cfMitigated) || /Attention Required|Sorry, you have been blocked|__cf_chl/i.test(body);
+  const who = edge ? 'CLOUDFLARE EDGE' : `origin (server=${server})`;
+  return `upstream ${res.status} from ${who} cf-ray=${ray}` +
+    (cfMitigated ? ` cf-mitigated=${cfMitigated}` : '') +
+    (snippet ? ` body="${snippet}"` : ' body=<empty>');
+}
+
 async function fetchJson(url) {
   // Short timeout: a slow API must not hold a page render open.
-  const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+  const res = await fetch(url, {
+    signal: AbortSignal.timeout(4000),
+    ...(RENDER_KEY ? { headers: { 'x-cenner-render': RENDER_KEY } } : {}),
+  });
 
   if (res.status === 404) {
     // Distinguish "this entity is gone" from "this endpoint isn't there".
@@ -95,7 +128,7 @@ async function fetchJson(url) {
     return { missing: true };
   }
 
-  if (!res.ok) throw new Error(`upstream ${res.status}`);
+  if (!res.ok) throw new Error(await describe(res));
   return { data: await res.json() };
 }
 
