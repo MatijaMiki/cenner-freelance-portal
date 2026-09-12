@@ -113,16 +113,6 @@ const Home: React.FC = () => {
               <>
                 {/* Slide 1 — default. Carousel ping-pong: exits/enters stage LEFT. */}
                 <div className={slideCls(a0, -1)} aria-hidden={!a0}>
-                  <div {...reveal(a0, 0)}>
-                    <div className="inline-flex items-center space-x-2 bg-brand-black/90 border border-white/10 rounded-full px-4 py-1 mb-6 text-xs font-medium text-brand-green animate-pulse">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
-                      </span>
-                      <span>{t('New: Gemini Live Voice-First Integration')}</span>
-                    </div>
-                  </div>
-
                   <div {...reveal(a0, 150)}>
                     <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-[0.9]">
                       {t('Freelance Hrvatska')} <br />

@@ -54,7 +54,12 @@ async function getShell(host) {
   try {
     const html = await readFile(join(process.cwd(), 'dist', 'index.html'), 'utf8');
     if (looksLikeShell(html)) {
-      shellCache = html;
+      // dist/index.html is also the prerendered homepage, so it carries
+      // <link rel="canonical" href="https://cenner.hr/"> . Strip it here, once, so
+      // EVERY path below is safe — including the fail-open branches that send the
+      // shell verbatim and would otherwise canonicalise an entity page to the
+      // homepage. buildHead adds the correct one back.
+      shellCache = stripCanonicalBlock(html);
       return shellCache;
     }
     console.warn('[render] bundled shell did not look like the shell; falling back to HTTP');
@@ -66,7 +71,7 @@ async function getShell(host) {
   if (!res.ok) throw new Error(`shell fetch failed: ${res.status}`);
   const html = await res.text();
   if (!looksLikeShell(html)) throw new Error('fetched shell did not look like the shell');
-  shellCache = html;
+  shellCache = stripCanonicalBlock(html);
   return shellCache;
 }
 

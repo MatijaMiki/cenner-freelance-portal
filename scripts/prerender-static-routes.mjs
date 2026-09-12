@@ -73,6 +73,12 @@ const ROUTES = [
       'Vodiči, savjeti i vijesti o freelancingu u Hrvatskoj i EU. Otvaranje paušalnog obrta, ugovori, cijene, alati i sve ostalo što trebate znati kao slobodni radnik.',
   },
   {
+    path: '/community',
+    title: 'Community Hub | Cenner',
+    description:
+      'Diskutirajte, dijelite iskustva i postavljajte pitanja s drugim freelancerima i klijentima u Cenner zajednici.',
+  },
+  {
     path: '/about',
     title: 'O Nama — Freelance Platforma Hrvatska | Cenner',
     description:

@@ -309,7 +309,7 @@ const Community: React.FC = () => {
   return (
     <div className="min-h-screen bg-brand-black pt-12 pb-24">
       <SEO
-        title="Community Hub — Cenner"
+        title="Community Hub"
         canonical="/community"
         description="Diskutirajte, dijelite iskustva i postavljajte pitanja s drugim freelancerima i klijentima u Cenner zajednici."
         keywords="freelance zajednica, freelance hrvatska forum, freelance diskusija, slobodni radnik zajednica"

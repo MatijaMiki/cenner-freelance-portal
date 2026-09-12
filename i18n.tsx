@@ -75,7 +75,6 @@ const en: Record<string, string> = {
   'Cookies': 'Cookies',
 
   // Home page
-  'New: Gemini Live Voice-First Integration': 'New: Gemini Live Voice-First Integration',
   'Elite Talent': 'Elite Talent',
   'Neural Network': 'Neural Network',
   'Freelance Hrvatska': 'Freelance Croatia',
@@ -525,7 +524,6 @@ const hr: Record<string, string> = {
   'Cookies': 'Kolačići',
 
   // Home page
-  'New: Gemini Live Voice-First Integration': 'Novo: Gemini Live glasovna integracija',
   'Elite Talent': 'Elitni Talent',
   'Neural Network': 'Neuronska Mreža',
   'Freelance Hrvatska': 'Freelance Hrvatska',

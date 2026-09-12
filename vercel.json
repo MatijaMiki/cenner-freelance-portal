@@ -38,7 +38,7 @@
       "destination": "/api/render?type=blog&id=:slug"
     },
     {
-      "source": "/(profile|creator-onboarding|community|blog-admin|banned|dashboard|orders|messages|contracts|projects|reset-password|earnings|saved|onboarding|order-success|referral)",
+      "source": "/(profile|creator-onboarding|blog-admin|banned|dashboard|orders|messages|contracts|projects|reset-password|earnings|saved|onboarding|order-success|referral)",
       "destination": "/api/render?type=private"
     },
     {
