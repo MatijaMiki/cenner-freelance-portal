@@ -37,6 +37,7 @@ const Contracts = lazy(() => import('./pages/Contracts'));
 const ContractDetail = lazy(() => import('./pages/ContractDetail'));
 const Projects = lazy(() => import('./pages/Projects'));
 const Technology = lazy(() => import('./pages/Technology'));
+const Ranwhat = lazy(() => import('./pages/Ranwhat'));
 const Match = lazy(() => import('./pages/Match'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const Earnings = lazy(() => import('./pages/Earnings'));
@@ -97,6 +98,7 @@ const App: React.FC = () => {
                   <Route path="/contracts/:id" element={<ContractDetail />} />
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/technology" element={<Technology />} />
+                  <Route path="/ranwhat" element={<Ranwhat />} />
                   <Route path="/match" element={<Match />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/earnings" element={<Earnings />} />

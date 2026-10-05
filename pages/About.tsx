@@ -124,6 +124,23 @@ const About: React.FC = () => {
         </div>
       </section>
 
+      {/* ranwhat teaser */}
+      <section id="ranwhat" className="mb-40 scroll-mt-24">
+        <div className="bg-gradient-to-br from-brand-grey/60 to-brand-black border border-white/5 rounded-[3rem] p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-green mb-3">{t('Also from Cenner')}</p>
+            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-3">ranwhat</h2>
+            <p className="text-gray-500 max-w-lg">A flight recorder for AI coding agents, and a scanner for the authority they hold. Built and run by Cenner.</p>
+          </div>
+          <Link
+            to="/ranwhat"
+            className="shrink-0 flex items-center gap-3 px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-brand-green/10 text-sm uppercase tracking-widest"
+          >
+            {t('About ranwhat')} <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
+
       {/* Final Call to Action */}
       <section className="bg-gradient-to-br from-brand-grey to-brand-black border border-white/10 rounded-[4rem] p-12 md:p-24 text-center relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-green/10 rounded-full blur-[120px]"></div>

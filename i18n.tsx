@@ -741,6 +741,12 @@ const hr: Record<string, string> = {
   'View Stack': 'Pogledaj stack',
   'Delivered Work': 'Isporučeni radovi',
   'View Projects': 'Pogledaj projekte',
+  'A Cenner product': 'Cennerov proizvod',
+  'Also from Cenner': 'Također od Cennera',
+  'Billing, cancellation and refunds': 'Naplata, otkazivanje i povrat novca',
+  'Who runs it': 'Tko ga vodi',
+  'Terms of service': 'Uvjeti korištenja',
+  'About ranwhat': 'O ranwhatu',
 
   // Subscription
   'Simple, Honest Pricing.': 'Jednostavne, poštene cijene.',

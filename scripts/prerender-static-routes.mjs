@@ -67,6 +67,12 @@ const ROUTES = [
       'Discover the technology stack powering Cenner: AI matching, real-time collaboration, and secure infrastructure built for elite freelance work.',
   },
   {
+    path: '/ranwhat',
+    title: 'ranwhat: AI Agent Security by Cenner | Cenner',
+    description:
+      'ranwhat is a flight recorder for AI coding agents and a scanner for the authority they hold. Built and operated by Cenner, Zagreb.',
+  },
+  {
     path: '/blog',
     title: 'Blog: Freelance Savjeti i Vodiči | Cenner',
     description:

@@ -39,6 +39,7 @@ const COMPANY_LINKS = [
   { label: 'About Us',          path: '/about' },
   { label: 'Previous Projects', path: '/projects' },
   { label: 'Technology',        path: '/technology' },
+  { label: 'ranwhat',           path: '/ranwhat' },
   { label: 'Contact',           path: '/contact' },
 ];
 
