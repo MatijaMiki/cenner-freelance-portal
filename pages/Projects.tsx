@@ -38,6 +38,17 @@ const CLIENT_PROJECTS = [
     screenshot: '/screenshots/selectedrealestate.jpg',
     accentLight: 'rgba(201,168,112,0.08)',
   },
+  {
+    id: 'ranwhat',
+    title: 'ranwhat',
+    url: 'https://ranwhat.com',
+    category: 'Our Product · AI Agent Security',
+    deliverable: 'A flight recorder for AI coding agents and a scanner for the authority they hold: open-source CLI, website, and a paid catalogue feed. Built and run by Cenner.',
+    tags: ['CLI', 'Security', 'Open Source'],
+    logo: '/logos/ranwhat.png',
+    screenshot: '/screenshots/ranwhat.jpg',
+    accentLight: 'rgba(234,132,113,0.12)',
+  },
 ];
 
 const Projects: React.FC = () => {
