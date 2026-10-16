@@ -46,6 +46,7 @@ const LANDING_ROUTES = [
   { path: '/usluge/wordpress-izrada',    priority: '0.9', changefreq: 'weekly' },
   { path: '/usluge/dizajn-loga',         priority: '0.9', changefreq: 'weekly' },
   { path: '/usluge/programiranje',       priority: '0.9', changefreq: 'weekly' },
+  { path: '/usluge/web-developeri',      priority: '0.9', changefreq: 'weekly' },
   { path: '/freelanceri/zagreb',         priority: '0.85', changefreq: 'weekly' },
   { path: '/freelanceri/split',          priority: '0.85', changefreq: 'weekly' },
   { path: '/freelanceri/rijeka',         priority: '0.85', changefreq: 'weekly' },
