@@ -448,6 +448,15 @@ ${body}
 `;
 }
 
+// Cross-links to Cenner's own products on their subdomains (never the vercel.app hosts).
+const TOOLS_HTML = `<div class="related">
+  <h3>Cenner alati</h3>
+  <ul>
+    <li><a href="https://links.cenner.hr">Cenner Links</a><br><small>Link-in-bio stranica za kreatore: sve tvoje poveznice na jednom mjestu.</small></li>
+    <li><a href="https://shorten.cenner.hr">Shorten</a><br><small>Skraćivač poveznica s brojanjem klikova po državama.</small></li>
+  </ul>
+</div>`;
+
 function serviceBody(svc) {
   const sectionsHTML = svc.sections
     .map((s) => `<h2>${s.h2}</h2>${s.body.map((p) => `<p>${p}</p>`).join('\n')}`)
@@ -474,7 +483,8 @@ ${sectionsHTML}
 <div class="related">
   <h3>Povezane usluge</h3>
   <ul>${relatedHTML}</ul>
-</div>`;
+</div>
+${TOOLS_HTML}`;
 }
 
 function cityBody(city) {
@@ -507,7 +517,8 @@ function cityBody(city) {
 <div class="related">
   <h3>Freelanceri u drugim gradovima</h3>
   <ul>${otherCities}</ul>
-</div>`;
+</div>
+${TOOLS_HTML}`;
 }
 
 function serviceJsonLd(svc, url) {
