@@ -14,6 +14,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';
 import { CATEGORIES } from '../constants';
 import { API } from '../lib/api';
+import { signInWithGoogle } from '../lib/firebase';
 import { useT } from '../i18n';
 import { useNotify } from '../contexts/NotifyContext';
 import AvatarImg from '../components/Avatar';
@@ -290,6 +291,32 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
   const [pwdMsg, setPwdMsg] = React.useState('');
   const [pwdError, setPwdError] = React.useState('');
 
+  // Delete account
+  const { logout } = useAuth();
+  const [delOpen, setDelOpen] = React.useState(false);
+  const [delPwd, setDelPwd] = React.useState('');
+  const [delConfirm, setDelConfirm] = React.useState('');
+  const [delBusy, setDelBusy] = React.useState(false);
+  const [delError, setDelError] = React.useState('');
+
+  // Password accounts re-enter their password; Google accounts (no password) re-sign in with Google.
+  const handleDeleteAccount = async () => {
+    setDelError('');
+    setDelBusy(true);
+    try {
+      const body: { confirm: string; password?: string; idToken?: string } = { confirm: delConfirm };
+      if (delPwd) body.password = delPwd;
+      else body.idToken = await signInWithGoogle();
+      await API.deleteAccount(body);
+      logout();
+      navigate('/', { replace: true });
+    } catch (err: any) {
+      setDelError(err?.message || 'Could not delete the account.');
+    } finally {
+      setDelBusy(false);
+    }
+  };
+
   // Payout / Stripe Connect
   const [connectStatus, setConnectStatus] = React.useState<{ connected: boolean; ready: boolean } | null>(null);
   const [connectLoading, setConnectLoading] = React.useState(false);
@@ -425,9 +452,42 @@ const SettingsTab: React.FC<{ currentUser: any; updateUser: (u: any) => void; na
           <div className="bg-red-50 border border-red-700 p-8 space-y-4">
             <h3 className="text-red-700 font-bold text-lg">{t('Danger Zone')}</h3>
             <p className="text-slate text-sm">{t('Permanently delete your account and all associated data. This action cannot be undone.')}</p>
-            <button className="px-6 py-3 border border-red-700 text-red-700 hover:bg-red-50 font-black transition-all text-sm">
-              {t('Delete Account')}
-            </button>
+            {!delOpen ? (
+              <button onClick={() => setDelOpen(true)} className="px-6 py-3 border border-red-700 text-red-700 hover:bg-red-50 font-black transition-all text-sm">
+                {t('Delete Account')}
+              </button>
+            ) : (
+              <div className="space-y-4">
+                <p className="text-slate text-sm">{t('Your payment and order records are kept without your personal details, as accounting rules require. You cannot delete the account while you have active orders or contracts.')}</p>
+                <div className="space-y-1">
+                  <label className={labelClass}>{t('Password')}</label>
+                  <input type="password" className={inputClass} value={delPwd} onChange={e => setDelPwd(e.target.value)} placeholder="••••••••" autoComplete="current-password" />
+                  <p className="text-slate text-xs">{t('Signed up with Google? Leave the password empty and you will be asked to sign in with Google.')}</p>
+                </div>
+                <div className="space-y-1">
+                  <label className={labelClass}>{t('Type DELETE to confirm')}</label>
+                  <input type="text" className={inputClass} value={delConfirm} onChange={e => setDelConfirm(e.target.value)} placeholder="DELETE" autoComplete="off" />
+                </div>
+                {delError && <p className="text-red-700 text-sm font-medium">{delError}</p>}
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={handleDeleteAccount}
+                    disabled={delBusy || delConfirm !== 'DELETE'}
+                    className="flex items-center gap-2 px-6 py-3 border border-red-700 bg-red-700 text-white font-black transition-all disabled:opacity-50 text-sm"
+                  >
+                    {delBusy && <Loader2 size={15} className="animate-spin" />}
+                    {t('Permanently delete my account')}
+                  </button>
+                  <button
+                    onClick={() => { setDelOpen(false); setDelPwd(''); setDelConfirm(''); setDelError(''); }}
+                    disabled={delBusy}
+                    className="px-6 py-3 border border-ink text-ink font-black transition-all text-sm"
+                  >
+                    {t('Cancel')}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
