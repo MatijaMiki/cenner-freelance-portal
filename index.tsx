@@ -24,12 +24,12 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { err
   render() {
     if (this.state.error) {
       return (
-        <div style={{ minHeight: '100vh', background: '#0a0a0a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: 'sans-serif', padding: '2rem', textAlign: 'center' }}>
+        <div style={{ minHeight: '100vh', background: '#eef0f3', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#0b0c0e', fontFamily: "'Libre Franklin', system-ui, sans-serif", padding: '2rem', textAlign: 'center' }}>
           <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⚠</div>
           <h2 style={{ marginBottom: '0.5rem', fontWeight: 800 }}>Something went wrong</h2>
-          <p style={{ color: '#e55', marginBottom: '0.75rem', fontSize: '0.75rem', maxWidth: '32rem', wordBreak: 'break-word' }}>{this.state.error.message}</p>
-          <p style={{ color: '#666', marginBottom: '1.5rem', fontSize: '0.875rem' }}>Please refresh the page to continue.</p>
-          <button onClick={() => window.location.href = '/'} style={{ padding: '0.75rem 2rem', background: '#4ade80', color: '#000', fontWeight: 800, border: 'none', borderRadius: '12px', cursor: 'pointer', fontSize: '0.875rem' }}>
+          <p style={{ color: '#b91c1c', marginBottom: '0.75rem', fontSize: '0.75rem', maxWidth: '32rem', wordBreak: 'break-word' }}>{this.state.error.message}</p>
+          <p style={{ color: '#5d6470', marginBottom: '1.5rem', fontSize: '0.875rem' }}>Please refresh the page to continue.</p>
+          <button onClick={() => window.location.href = '/'} style={{ padding: '0.75rem 2rem', background: '#002ca5', color: '#fff', fontWeight: 800, border: '2px solid #0b0c0e', borderRadius: 0, boxShadow: '4px 4px 0 #0b0c0e', cursor: 'pointer', fontSize: '0.875rem' }}>
             Refresh
           </button>
         </div>
@@ -37,6 +37,12 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { err
     }
     return this.props.children;
   }
+}
+
+// Older emails linked to hash routes ("/#/reset-password?token=..."); this is a BrowserRouter app, so
+// turn those into real paths before the router reads the URL. Plain anchors ("#kontakt") are left alone.
+if (window.location.hash.startsWith('#/')) {
+  window.history.replaceState(null, '', window.location.hash.slice(1));
 }
 
 const rootElement = document.getElementById('root');

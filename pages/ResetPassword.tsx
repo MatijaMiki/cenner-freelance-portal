@@ -62,12 +62,12 @@ const ResetPassword: React.FC = () => {
           <div>
             <label className="text-xs font-bold text-slate uppercase tracking-widest block mb-2">New Password</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} required minLength={8}
-              className="w-full bg-zinc-900 border-2 border-ink py-3 px-4 text-ink focus:outline-none focus:border-sky transition-colors" placeholder="Min. 8 characters" />
+              className="w-full bg-white border-2 border-ink py-3 px-4 text-ink placeholder:text-slate focus:outline-none focus:border-sky transition-colors" placeholder="Min. 8 characters" />
           </div>
           <div>
             <label className="text-xs font-bold text-slate uppercase tracking-widest block mb-2">Confirm Password</label>
             <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} required
-              className="w-full bg-zinc-900 border-2 border-ink py-3 px-4 text-ink focus:outline-none focus:border-sky transition-colors" placeholder="Repeat password" />
+              className="w-full bg-white border-2 border-ink py-3 px-4 text-ink placeholder:text-slate focus:outline-none focus:border-sky transition-colors" placeholder="Repeat password" />
           </div>
 
           {error && (

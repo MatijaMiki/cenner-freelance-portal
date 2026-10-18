@@ -38,6 +38,7 @@ const Contracts = lazy(() => import('./pages/Contracts'));
 const ContractDetail = lazy(() => import('./pages/ContractDetail'));
 const Ranwhat = lazy(() => import('./pages/Ranwhat'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
 const Referral = lazy(() => import('./pages/Referral'));
@@ -95,6 +96,7 @@ const App: React.FC = () => {
                   <Route path="/contracts/:id" element={<ContractDetail />} />
                   <Route path="/ranwhat" element={<Ranwhat />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/verify-email" element={<VerifyEmail />} />
                   <Route path="/onboarding" element={<Onboarding />} />
                   <Route path="/order-success" element={<OrderSuccess />} />
                   <Route path="/referral" element={<Referral />} />
