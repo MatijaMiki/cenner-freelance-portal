@@ -39,7 +39,7 @@ const Panel: React.FC<{ glass: boolean; className: string; rounded?: string; chi
   glass, className, rounded = 'rounded-2xl', children,
 }) =>
   glass ? (
-    <div className={`${className} ${rounded} overflow-hidden bg-ink shadow-[0_24px_48px_-20px_rgba(11,12,14,0.55)]`}>{children}</div>
+    <div className={`${className} overflow-hidden border-2 border-ink bg-white text-ink shadow-[6px_6px_0_0_#0b0c0e]`}>{children}</div>
   ) : (
     <div className={`${className} bg-brand-grey border border-white/10 ${rounded} shadow-2xl overflow-hidden`}>{children}</div>
   );
@@ -140,7 +140,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const tip = isHome
     ? 'pointer-events-none absolute top-full mt-3 left-1/2 -translate-x-1/2 bg-ink text-white text-[10px] font-medium tracking-wide rounded-full px-3 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50'
     : 'pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50';
-  const subText = isHome ? 'text-white/60' : 'text-gray-600';
+  const subText = isHome ? 'text-slate' : 'text-gray-600';
 
   return (
     <div className={`min-h-screen flex flex-col relative isolate ${isHome ? 'bg-paper font-text text-ink' : 'bg-brand-black text-white'}`}>
@@ -199,8 +199,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 {isAboutOpen && (
                   <Panel glass={isHome} className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
                     {aboutDropdownItems.map(item => (
-                      <Link key={item.label} to={item.path} onClick={() => setIsAboutOpen(false)} className="block px-5 py-3.5 hover:bg-white/5 transition-colors group/about">
-                        <div className="text-xs font-bold text-white group-hover/about:text-brand-green transition-colors">{item.label}</div>
+                      <Link key={item.label} to={item.path} onClick={() => setIsAboutOpen(false)} className="block border-b-2 border-ink/10 px-5 py-3.5 transition-colors last:border-b-0 hover:bg-paper2 group/about">
+                        <div className="font-display text-[14px] font-bold text-ink transition-colors group-hover/about:text-sky">{item.label}</div>
                         <div className={`text-[10px] ${subText} mt-0.5`}>{item.desc}</div>
                       </Link>
                     ))}
@@ -233,11 +233,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <Panel glass={isHome} className="absolute top-full right-0 mt-3 w-40 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
                     {LANGUAGES.map(l => (
                       <button key={l.code} onClick={() => handleLangSelect(l.code)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors ${lang === l.code ? 'text-brand-green' : 'text-gray-300'}`}>
+                        className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${lang === l.code ? 'bg-ink text-white' : 'text-ink hover:bg-paper2'}`}>
                         <span className="text-base">{l.flag}</span>
                         <div>
-                          <div className="text-[10px] font-black uppercase tracking-widest">{l.code}</div>
-                          <div className={`text-[10px] ${subText}`}>{l.name}</div>
+                          <div className="font-display text-[12px] font-black uppercase tracking-widest">{l.code}</div>
+                          <div className={`text-[11px] ${lang === l.code ? 'text-white/70' : subText}`}>{l.name}</div>
                         </div>
                       </button>
                     ))}
@@ -257,66 +257,58 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <div className="relative">
                       <AvatarImg src={user.avatar} name={user.name} size={36} className="border-2 border-ink group-hover/profile:scale-110 transition-transform" />
                       {unread > 0 && (
-                        <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-0.5 bg-brand-green rounded-full flex items-center justify-center text-brand-black text-[9px] font-black border border-brand-black">
+                        <div className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 bg-brand-green flex items-center justify-center text-ink text-[9px] font-black border-2 border-ink">
                           {unread > 9 ? '9+' : unread}
                         </div>
                       )}
                     </div>
-                    <ChevronDown size={12} className={`text-gray-500 transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown size={12} className={`text-ink/60 transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {isProfileOpen && (
-                    <div className="absolute top-full right-0 mt-3 w-64 bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-200">
-                      {/* User info */}
-                      <div className="px-4 pt-4 pb-3">
-                        <div className="flex items-center gap-3 mb-3">
-                          <AvatarImg src={user.avatar} name={user.name} size={40} className="border-2 border-ink" />
-                          <div className="min-w-0">
-                            <p className="text-sm font-bold text-white truncate">{user.name || 'Freelancer'}</p>
-                            <p className="text-[11px] text-gray-500 truncate">{user.email}</p>
-                          </div>
+                    <div className="absolute top-full right-0 mt-3 w-64 overflow-hidden border-2 border-ink bg-white shadow-[6px_6px_0_0_#0b0c0e] z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                      {/* Who is signed in, on an ink bar like the Start menu's */}
+                      <div className="flex items-center gap-3 bg-ink px-4 py-3.5 text-white">
+                        <AvatarImg src={user.avatar} name={user.name} size={40} className="shrink-0 border-2 border-white/80" />
+                        <div className="min-w-0">
+                          <p className="truncate font-display text-[15px] font-bold">{user.name || 'Freelancer'}</p>
+                          <p className="truncate text-[12px] text-white/60">{user.email}</p>
                         </div>
                       </div>
 
-                      <div className="border-t border-white/10" />
-
-                      {/* Menu items */}
-                      <div className="py-1">
-                        <Link to="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                          <UserCheck size={18} className="text-gray-500" />
+                      <div className="py-1.5">
+                        <Link to="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 font-display text-[14px] font-bold text-ink transition-colors hover:bg-paper2">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-ink bg-paper2"><UserCheck size={14} /></span>
                           {t('Profile')}
                         </Link>
-                        <Link to="/messages" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                          <MessageSquare size={18} className="text-gray-500" />
+                        <Link to="/messages" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 font-display text-[14px] font-bold text-ink transition-colors hover:bg-paper2">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-ink bg-paper2"><MessageSquare size={14} /></span>
                           <span className="flex-1">{t('Messages')}</span>
                           {unread > 0 && (
-                            <span className="w-5 h-5 bg-brand-green rounded-full flex items-center justify-center text-brand-black text-[10px] font-black">
+                            <span className="flex h-5 min-w-5 items-center justify-center border-2 border-ink bg-brand-green px-1 text-[10px] font-black text-ink">
                               {unread > 9 ? '9+' : unread}
                             </span>
                           )}
                         </Link>
-                        <Link to="/contracts" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                          <FileText size={18} className="text-gray-500" />
+                        <Link to="/contracts" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 font-display text-[14px] font-bold text-ink transition-colors hover:bg-paper2">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-ink bg-paper2"><FileText size={14} /></span>
                           {t('Contracts')}
                         </Link>
-                        <Link to="/referral" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                          <Gift size={18} className="text-brand-green" />
+                        <Link to="/referral" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 font-display text-[14px] font-bold text-ink transition-colors hover:bg-paper2">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-ink bg-brand-green"><Gift size={14} /></span>
                           {t('Refer & Win')}
                         </Link>
                         {isAdmin && (
-                          <Link to="/admin" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                            <Shield size={18} className="text-gray-500" />
+                          <Link to="/admin" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 font-display text-[14px] font-bold text-ink transition-colors hover:bg-paper2">
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-ink bg-paper2"><Shield size={14} /></span>
                             Admin
                           </Link>
                         )}
                       </div>
 
-                      <div className="border-t border-white/10" />
-
-                      {/* Sign out */}
-                      <div className="py-1">
-                        <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-brand-pink hover:bg-white/5 transition-colors">
-                          <LogOut size={18} className="text-gray-500" />
+                      <div className="border-t-2 border-ink py-1.5">
+                        <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2.5 font-display text-[14px] font-bold text-ink transition-colors hover:bg-paper2 w-full text-left hover:text-red-700">
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-ink bg-paper2"><LogOut size={14} /></span>
                           {t('Sign out')}
                         </button>
                       </div>
@@ -350,7 +342,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <Panel glass={isHome} rounded="rounded-xl" className="absolute top-full right-0 mt-2 w-36 z-50">
                     {LANGUAGES.map(l => (
                       <button key={l.code} onClick={() => handleLangSelect(l.code)}
-                        className={`w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-white/5 ${lang === l.code ? 'text-brand-green' : 'text-gray-300'}`}>
+                        className={`w-full flex items-center gap-2 px-3 py-2.5 text-left ${lang === l.code ? 'bg-ink text-white' : 'text-ink hover:bg-paper2'}`}>
                         <span>{l.flag}</span>
                         <span className="text-[10px] font-bold">{l.name}</span>
                       </button>

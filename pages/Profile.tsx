@@ -2027,10 +2027,11 @@ const Profile: React.FC = () => {
       {cropSrc && cropImageRef.current && (
         <div className="fixed inset-0 z-[200] bg-ink/90 flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white border-2 border-ink p-8 flex flex-col items-center gap-6 max-w-sm w-full">
-            <h3 className="text-lg font-black text-ink tracking-tighter self-start">Crop Image</h3>
+            <h3 className="self-start font-display text-xl font-black tracking-tight text-ink">Crop Image</h3>
             <p className="text-xs text-slate self-start -mt-4">Drag the image to position it in the square. Use the slider to resize.</p>
             <canvas
               ref={cropCanvasRef}
+              className="border-2 border-ink"
               style={{ width: '100%', cursor: cropDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
               onMouseDown={handleCropMouseDown}
               onMouseMove={handleCropMouseMove}
@@ -2045,19 +2046,21 @@ const Profile: React.FC = () => {
                 max={300}
                 value={Math.round(imgZoom * 100)}
                 onChange={e => setImgZoom(Number(e.target.value) / 100)}
-                className="flex-1 accent-brand-green"
+                aria-label="Zoom"
+                className="cenner-slider-paper flex-1 cursor-pointer"
+                style={{ '--slider-pct': `${((imgZoom * 100 - 100) / 200) * 100}%` } as React.CSSProperties}
               />
             </div>
             <div className="flex gap-3 w-full">
               <button
                 onClick={() => { setCropSrc(null); if (avatarFileRef.current) avatarFileRef.current.value = ''; }}
-                className="flex-1 py-3 border-2 border-ink text-slate hover:text-ink font-black text-sm transition-colors"
+                className="flex-1 border-2 border-ink bg-white py-3 font-display text-sm font-bold text-ink transition-colors hover:bg-paper2"
               >
                 Cancel
               </button>
               <button
                 onClick={applyCrop}
-                className="flex-1 py-3 bg-sky text-white font-black text-sm hover:scale-[1.02] transition-all"
+                className="flex-1 border-2 border-ink bg-sky py-3 font-display text-sm font-bold text-white transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#0b0c0e]"
               >
                 {uploadingAvatar ? 'Uploading...' : 'Apply & Upload'}
               </button>
