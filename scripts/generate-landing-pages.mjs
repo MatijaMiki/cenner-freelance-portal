@@ -17,11 +17,11 @@ const OG = `${BASE}/og-image.png`;
 const services = [
   {
     slug: 'izrada-web-stranica',
-    title: 'Izrada Web Stranica: Freelanceri Hrvatska',
+    title: 'Izrada Web Stranica | Profesionalni Web Developeri | Cenner',
     keyword: 'izrada web stranica',
     description:
-      'Trebaš novu web stranicu? Pronađi provjerene freelancere za izradu modernih web stranica u Hrvatskoj. Cijene od 300 €. Bez agencijskih marži.',
-    h1: 'Izrada Web Stranica u Hrvatskoj',
+      'Usluge profesionalnih web developera: izrada web stranica u Hrvatskoj od 300 €. Najbolji web developeri s portfoliom, ocjenama i verifikacijom. Bez agencijskih marži.',
+    h1: 'Izrada Web Stranica: Usluge Profesionalnih Web Developera',
     intro:
       'Tražiš profesionalnu izradu web stranice po pristupačnoj cijeni? Cenner povezuje hrvatske tvrtke i poduzetnike s provjerenim web developerima koji rade brzo, kvalitetno i bez skupih agencijskih marži.',
     sections: [
@@ -44,6 +44,13 @@ const services = [
         body: [
           'Agencija u Hrvatskoj za istu web stranicu naplaćuje <strong>2x do 3x više</strong> jer pokriva fiksne režije (uredi, account manageri, marketing). Freelancer ti dolazi izravno: niža cijena, brža komunikacija, jednako kvalitetan rezultat.',
           'Na Cenneru su svi freelanceri prošli <strong>KYC verifikaciju</strong>, a plaćanje ide kroz osigurani escrow sustav. Plaćaš tek kad si zadovoljan rezultatom.',
+        ],
+      },
+      {
+        h2: 'Najbolji web developeri u Hrvatskoj: po čemu ih prepoznati?',
+        body: [
+          'Najbolji web developeri u Hrvatskoj nisu nužno oni s najglasnijim oglasom, nego oni koje možeš provjeriti. Na Cenneru uz svakog developera vidiš <strong>portfolio, ocjene prijašnjih klijenata, tehnologije kojima radi i potvrđen identitet</strong> (KYC), pa uspoređuješ stvarne radove, a ne obećanja.',
+          'Za profesionalnu izradu web stranice traži jasan opseg, rok isporuke i fiksnu cijenu unaprijed. Kod nas ih dogovaraš izravno s developerom, a novac ostaje u escrowu dok ne potvrdiš isporuku.',
         ],
       },
       {
@@ -88,11 +95,11 @@ const services = [
   },
   {
     slug: 'seo-optimizacija',
-    title: 'SEO Optimizacija: Pronađi SEO Stručnjaka | Cenner',
+    title: 'SEO Optimizacija: Cijena i Usluge SEO Stručnjaka | Cenner',
     keyword: 'seo optimizacija',
     description:
-      'Tvoja web stranica ne dolazi na prvu stranicu Googlea? Pronađi SEO stručnjaka u Hrvatskoj. Audit, on-page optimizacija, link building. Cijene od 200 €/mj.',
-    h1: 'SEO Optimizacija: Bolji Plasman na Googleu',
+      'Cijena SEO optimizacije od 200 € (audit) i 300 €/mj. Usluge SEO optimizacije u Hrvatskoj: Zagreb, Split i cijela zemlja. Audit, on-page, link building, SEO marketing.',
+    h1: 'SEO Optimizacija: Usluge i Cijena u Hrvatskoj',
     intro:
       'Ako te kupci ne mogu pronaći na Googleu, ne postojiš. Cenner povezuje hrvatske tvrtke s SEO stručnjacima koji znaju kako tehnički, sadržajno i autoritativno postaviti web stranicu da rangira za prave ključne riječi.',
     sections: [
@@ -103,10 +110,17 @@ const services = [
         ],
       },
       {
-        h2: 'Koliko košta SEO u Hrvatskoj?',
+        h2: 'Koliko košta SEO optimizacija? Cijena SEO usluga u Hrvatskoj',
         body: [
           'Jednokratni SEO audit s preporukama kreće od <strong>200 € do 600 €</strong>. Mjesečni paket optimizacije za malu web stranicu ide od <strong>300 € do 800 € mjesečno</strong>. Veći e-commerce projekti i nacionalne kampanje kreću od <strong>1.000 € mjesečno</strong> i više.',
           'Za razliku od plaćenih oglasa, SEO daje <strong>dugoročne rezultate</strong>. Jednom kad rangiraš, dolazi besplatan promet mjesecima.',
+        ],
+      },
+      {
+        h2: 'SEO optimizacija u Zagrebu, Splitu i cijeloj Hrvatskoj',
+        body: [
+          'SEO se radi na daljinu, pa ne moraš birati stručnjaka samo iz svog grada. Na Cenneru nalaziš SEO stručnjake i za <strong>SEO optimizaciju u Zagrebu</strong> i za <strong>SEO optimizaciju u Splitu</strong>, ali i za manja mjesta i lokalne obrte, uz isti pregled portfolija, ocjena i cijena.',
+          'Uz klasičnu optimizaciju web stranice dobivaš i <strong>SEO marketing</strong>: sadržaj, lokalni SEO (Google Business profil) i izvještavanje o rezultatima, s cijenom koju dogovoriš unaprijed.',
         ],
       },
       {
@@ -183,10 +197,10 @@ const services = [
   },
   {
     slug: 'programiranje',
-    title: 'Usluge Programiranja: Freelance Developeri Hrvatska | Cenner',
+    title: 'Usluge Programiranja: Programeri po Projektu od 500 € | Cenner',
     keyword: 'usluge programiranja',
     description:
-      'Trebaš programera? Pronađi provjerene freelance developere u Hrvatskoj: web, mobilne aplikacije, backend, API integracije. Profesionalno programiranje bez agencijskih marži.',
+      'Usluge programiranja od 500 €: provjereni freelance programeri za web, mobilne aplikacije, backend i API integracije. Više ponuda, escrow plaćanje, bez agencijskih marži.',
     h1: 'Usluge Programiranja: Freelance Developeri',
     intro:
       'Od web aplikacija i API integracija do mobilnih aplikacija i automatizacije, Cenner te povezuje s provjerenim hrvatskim programerima koji rade s modernim tehnologijama. Profesionalno programiranje po transparentnim cijenama, bez skupih agencijskih marži.',
