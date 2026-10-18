@@ -103,7 +103,7 @@ const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', cont
     };
     // eager: as soon as the poster has painted (or failed), with a 2.5 s backstop
     const poster = posterRef.current;
-    const onPoster = () => { if (!cancelled) requestAnimationFrame(start); };
+    const onPoster = () => { if (!cancelled) window.setTimeout(start, 0); };   // (a timer, not a frame: frames stall in background tabs)
     if (eager) {
       timerId = window.setTimeout(start, 2500);
       if (poster && poster.complete) onPoster();
