@@ -25,13 +25,13 @@ const Toggle: React.FC<{ checked: boolean; onChange: (v: boolean) => void; disab
     onClick={() => !disabled && onChange(!checked)}
     aria-pressed={checked}
     disabled={disabled}
-    className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${
-      disabled ? 'bg-brand-green/40 cursor-not-allowed' : checked ? 'bg-brand-green' : 'bg-white/10'
+    className={`relative h-6 w-11 shrink-0 border-2 border-ink transition-colors ${
+      disabled ? 'cursor-not-allowed bg-leaf/40' : checked ? 'bg-ink' : 'bg-white'
     }`}
   >
     <span
-      className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${
-        checked ? 'translate-x-5' : 'translate-x-0'
+      className={`absolute left-0.5 top-0.5 h-4 w-4 transition-transform ${
+        checked ? 'translate-x-5 bg-white' : 'translate-x-0 bg-ink'
       }`}
     />
   </button>
@@ -122,13 +122,13 @@ const ConsentModal: React.FC = () => {
   const canRegister = state.tos === 'accepted' && state.cookies === 'accepted';
 
   return (
-    <div className="fixed inset-0 z-[400] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="relative w-full max-w-md bg-brand-grey border border-white/10 rounded-3xl shadow-2xl p-7 sm:p-8 animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-[400] flex items-center justify-center p-4 bg-ink/55 backdrop-blur-[2px] animate-in fade-in duration-300">
+      <div className="relative w-full max-h-[92vh] max-w-md overflow-y-auto border-2 border-ink bg-paper p-6 text-ink shadow-[6px_6px_0_0_#0b0c0e] sm:p-8 animate-in zoom-in-95 duration-300">
         {reason !== 'register' && (
           <button
             onClick={skip}
             aria-label={isHr ? 'Zatvori' : 'Close'}
-            className="absolute top-4 right-4 p-1.5 text-gray-500 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+            className="absolute top-4 right-4 border-2 border-transparent p-1 text-slate transition-colors hover:border-ink hover:text-ink"
           >
             <X size={18} />
           </button>
@@ -136,25 +136,25 @@ const ConsentModal: React.FC = () => {
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center">
-            <Cookie size={18} className="text-brand-green" />
+          <div className="flex h-10 w-10 items-center justify-center border-2 border-ink bg-white">
+            <Cookie size={18} className="text-ink" />
           </div>
           <div className="relative">
             <button
               onClick={() => setShowLangs(v => !v)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 border border-white/10 rounded-lg text-[10px] text-gray-400 hover:text-white hover:border-white/20 font-bold uppercase tracking-widest"
+              className="flex items-center gap-1.5 border-2 border-ink bg-white px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-widest text-ink hover:bg-paper2"
             >
               <Globe size={11} />
               <span>{lang}</span>
             </button>
             {showLangs && (
-              <div className="absolute top-full mt-2 left-0 bg-brand-grey border border-white/10 rounded-xl overflow-hidden shadow-xl w-36 z-10">
+              <div className="absolute left-0 top-full z-10 mt-2 w-36 overflow-hidden border-2 border-ink bg-white shadow-[3px_3px_0_0_#0b0c0e]">
                 {LANGS.map(l => (
                   <button
                     key={l.code}
                     onClick={() => { setLang(l.code); setShowLangs(false); }}
                     className={`w-full text-left px-3 py-2 text-xs font-bold transition-colors ${
-                      lang === l.code ? 'text-brand-green bg-brand-green/10' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      lang === l.code ? 'bg-ink text-white' : 'text-ink hover:bg-paper2'
                     }`}
                   >
                     {l.label}
@@ -165,67 +165,67 @@ const ConsentModal: React.FC = () => {
           </div>
         </div>
 
-        <h2 className="text-white text-xl font-black tracking-tight mb-2">{title}</h2>
-        <p className="text-gray-400 text-xs leading-relaxed mb-6">{subtitle}</p>
+        <h2 className="mb-2 text-xl font-black tracking-tight text-ink">{title}</h2>
+        <p className="mb-6 text-xs leading-relaxed text-slate">{subtitle}</p>
 
         {/* Toggles */}
         <div className="space-y-3 mb-6">
           {/* Terms */}
-          <div className="flex items-start gap-3 p-3 rounded-xl border border-white/5 bg-white/[0.02]">
-            <FileText size={16} className="text-gray-400 mt-0.5 shrink-0" />
+          <div className="flex items-start gap-3 border-2 border-ink bg-white p-3">
+            <FileText size={16} className="mt-0.5 shrink-0 text-ink" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-3 mb-1">
-                <p className="text-white text-xs font-bold">
+                <p className="text-xs font-bold text-ink">
                   {isHr ? 'Uvjeti korištenja' : 'Terms of Service'}
-                  <span className="ml-1.5 text-[9px] text-brand-pink font-black uppercase tracking-widest">
+                  <span className="ml-1.5 text-[9px] font-black text-sky uppercase tracking-widest">
                     {isHr ? 'Obavezno' : 'Required'}
                   </span>
                 </p>
                 <Toggle checked={state.tos === 'accepted'} onChange={v => toggle('tos', v)} />
               </div>
-              <p className="text-[11px] text-gray-500 leading-relaxed">
+              <p className="text-[11px] leading-relaxed text-slate">
                 {isHr
-                  ? <>Slažem se s <Link to="/terms" className="text-brand-green hover:underline" onClick={skip}>Uvjetima korištenja</Link> Cennera.</>
-                  : <>I agree to the Cenner <Link to="/terms" className="text-brand-green hover:underline" onClick={skip}>Terms of Service</Link>.</>}
+                  ? <>Slažem se s <Link to="/terms" className="font-bold text-sky underline hover:no-underline" onClick={skip}>Uvjetima korištenja</Link> Cennera.</>
+                  : <>I agree to the Cenner <Link to="/terms" className="font-bold text-sky underline hover:no-underline" onClick={skip}>Terms of Service</Link>.</>}
               </p>
             </div>
           </div>
 
           {/* Cookies */}
-          <div className="flex items-start gap-3 p-3 rounded-xl border border-white/5 bg-white/[0.02]">
-            <Cookie size={16} className="text-gray-400 mt-0.5 shrink-0" />
+          <div className="flex items-start gap-3 border-2 border-ink bg-white p-3">
+            <Cookie size={16} className="mt-0.5 shrink-0 text-ink" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-3 mb-1">
-                <p className="text-white text-xs font-bold">
+                <p className="text-xs font-bold text-ink">
                   {isHr ? 'Kolačići' : 'Cookies'}
-                  <span className="ml-1.5 text-[9px] text-brand-pink font-black uppercase tracking-widest">
+                  <span className="ml-1.5 text-[9px] font-black text-sky uppercase tracking-widest">
                     {isHr ? 'Obavezno' : 'Required'}
                   </span>
                 </p>
                 <Toggle checked={state.cookies === 'accepted'} onChange={v => toggle('cookies', v)} />
               </div>
-              <p className="text-[11px] text-gray-500 leading-relaxed">
+              <p className="text-[11px] leading-relaxed text-slate">
                 {isHr
-                  ? <>Koristimo kolačiće za temeljnu funkcionalnost i analitiku. <Link to="/cookies" className="text-brand-green hover:underline" onClick={skip}>Saznaj više</Link>.</>
-                  : <>We use cookies for core functionality and analytics. <Link to="/cookies" className="text-brand-green hover:underline" onClick={skip}>Learn more</Link>.</>}
+                  ? <>Koristimo kolačiće za temeljnu funkcionalnost i analitiku. <Link to="/cookies" className="font-bold text-sky underline hover:no-underline" onClick={skip}>Saznaj više</Link>.</>
+                  : <>We use cookies for core functionality and analytics. <Link to="/cookies" className="font-bold text-sky underline hover:no-underline" onClick={skip}>Learn more</Link>.</>}
               </p>
             </div>
           </div>
 
           {/* Location */}
-          <div className="flex items-start gap-3 p-3 rounded-xl border border-white/5 bg-white/[0.02]">
-            <MapPin size={16} className="text-gray-400 mt-0.5 shrink-0" />
+          <div className="flex items-start gap-3 border-2 border-ink bg-white p-3">
+            <MapPin size={16} className="mt-0.5 shrink-0 text-ink" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-3 mb-1">
-                <p className="text-white text-xs font-bold">
+                <p className="text-xs font-bold text-ink">
                   {isHr ? 'Lokacija' : 'Location'}
-                  <span className="ml-1.5 text-[9px] text-gray-500 font-black uppercase tracking-widest">
+                  <span className="ml-1.5 text-[9px] font-black text-slate uppercase tracking-widest">
                     {isHr ? 'Neobavezno' : 'Optional'}
                   </span>
                 </p>
                 <Toggle checked={state.location === 'accepted'} onChange={v => toggle('location', v)} />
               </div>
-              <p className="text-[11px] text-gray-500 leading-relaxed">
+              <p className="text-[11px] leading-relaxed text-slate">
                 {isHr
                   ? 'Anonimno doprinosite mapi zajednice Cennera. Bez praćenja u stvarnom vremenu.'
                   : 'Contribute anonymously to the Cenner community heatmap. No real-time tracking.'}
@@ -239,7 +239,7 @@ const ConsentModal: React.FC = () => {
           {reason !== 'register' && (
             <button
               onClick={skip}
-              className="px-4 py-3 text-xs font-bold text-gray-400 hover:text-white border border-white/10 hover:border-white/20 rounded-xl transition-colors"
+              className="border-2 border-ink bg-white px-4 py-3 text-xs font-bold text-ink transition-colors hover:bg-paper2"
             >
               {isHr ? 'Preskoči' : 'Skip'}
             </button>
@@ -247,17 +247,17 @@ const ConsentModal: React.FC = () => {
           <button
             onClick={savePreferences}
             disabled={reason === 'register' && !canRegister}
-            className={`flex-1 px-4 py-3 text-xs font-black border rounded-xl transition-colors uppercase tracking-widest ${
+            className={`flex-1 border-2 px-4 py-3 text-xs font-black uppercase tracking-widest transition-colors ${
               reason === 'register' && !canRegister
-                ? 'border-white/5 text-gray-600 cursor-not-allowed'
-                : 'border-white/10 text-white hover:border-white/30'
+                ? 'cursor-not-allowed border-slate/40 bg-white text-slate/50'
+                : 'border-ink bg-white text-ink hover:bg-paper2'
             }`}
           >
             {isHr ? 'Spremi' : 'Save'}
           </button>
           <button
             onClick={acceptAll}
-            className="flex-1 px-4 py-3 text-xs font-black bg-brand-green text-brand-black rounded-xl hover:scale-[1.02] transition-transform uppercase tracking-widest"
+            className="flex-1 border-2 border-ink bg-ink px-4 py-3 text-xs font-black uppercase tracking-widest text-white shadow-[3px_3px_0_0_#1b7a3e] transition-transform hover:-translate-y-0.5"
           >
             {isHr ? 'Prihvati sve' : 'Accept all'}
           </button>
