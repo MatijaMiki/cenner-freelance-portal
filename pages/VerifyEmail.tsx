@@ -4,24 +4,32 @@ import { MailCheck, AlertCircle, Loader2 } from 'lucide-react';
 import { API } from '../lib/api';
 import SEO from '../components/SEO';
 import { useLanguage } from '../i18n';
+import { useAuth } from '../contexts/AuthContext';
 
 /** The link in the "Confirm your email address" mail lands here (/verify-email?token=...). */
 const VerifyEmail: React.FC = () => {
   const location = useLocation();
   const { lang } = useLanguage();
   const isHr = lang === 'HR';
-  const token = new URLSearchParams(location.search || location.hash?.split('?')[1]).get('token') || '';
-  const [state, setState] = useState<'working' | 'done' | 'error'>(token ? 'working' : 'error');
-  const [error, setError] = useState('');
+  const { user, updateUser } = useAuth();
+  // Read the one-time token once, then take it out of the URL so it doesn't sit in history or analytics.
+  const [token] = useState(() => new URLSearchParams(location.search || location.hash?.split('?')[1]).get('token') || '');
+  const [state, setState] = useState<'working' | 'done' | 'again' | 'error'>(token ? 'working' : 'error');
   const sent = useRef(false);
 
   useEffect(() => {
     if (!token || sent.current) return;   // tokens are single-use: never send one twice (StrictMode runs effects twice)
     sent.current = true;
+    window.history.replaceState(window.history.state, '', window.location.pathname);
     API.verifyEmail(token)
-      .then(() => setState('done'))
-      .catch((err: any) => { setError(err?.message || ''); setState('error'); });
+      .then(r => setState(r?.alreadyVerified ? 'again' : 'done'))
+      .catch(() => setState('error'));
   }, [token]);
+
+  // keep the signed-in user in step, so the profile doesn't still say "Unverified"
+  useEffect(() => {
+    if ((state === 'done' || state === 'again') && user && !user.emailVerified) updateUser({ emailVerified: true });
+  }, [state, user, updateUser]);
 
   const card = 'w-full max-w-md border-2 border-ink bg-white p-8 text-center shadow-[6px_6px_0_0_#0b0c0e]';
   const button = 'inline-flex items-center justify-center border-2 border-ink bg-sky px-7 py-3 font-display text-[15px] font-bold text-white transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#0b0c0e]';
@@ -36,11 +44,15 @@ const VerifyEmail: React.FC = () => {
             <h1 className="font-display text-2xl font-black text-ink">{isHr ? 'Potvrđujemo tvoju adresu…' : 'Confirming your address…'}</h1>
           </>
         )}
-        {state === 'done' && (
+        {(state === 'done' || state === 'again') && (
           <>
             <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center border-2 border-ink bg-leaf/10 text-leaf"><MailCheck size={28} /></div>
             <h1 className="mb-2 font-display text-2xl font-black text-ink">{isHr ? 'E-mail je potvrđen' : 'Email confirmed'}</h1>
-            <p className="mb-7 text-slate">{isHr ? 'Hvala! Tvoja adresa je potvrđena.' : 'Thanks, your address is confirmed.'}</p>
+            <p className="mb-7 text-slate">
+              {state === 'again'
+                ? (isHr ? 'Ova adresa je već potvrđena, ne trebaš ništa više napraviti.' : 'This address was already confirmed, nothing more to do.')
+                : (isHr ? 'Hvala! Tvoja adresa je potvrđena.' : 'Thanks, your address is confirmed.')}
+            </p>
             <Link to="/profile" className={button}>{isHr ? 'Otvori profil' : 'Open your profile'}</Link>
           </>
         )}
@@ -49,9 +61,9 @@ const VerifyEmail: React.FC = () => {
             <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center border-2 border-ink bg-red-50 text-red-700"><AlertCircle size={28} /></div>
             <h1 className="mb-2 font-display text-2xl font-black text-ink">{isHr ? 'Poveznica ne vrijedi' : 'This link does not work'}</h1>
             <p className="mb-7 text-slate">
-              {error || (isHr
+              {isHr
                 ? 'Poveznica je istekla ili je već iskorištena. Prijavi se i zatraži novu iz profila.'
-                : 'The link has expired or was already used. Sign in and request a new one from your profile.')}
+                : 'The link has expired or was already used. Sign in and request a new one from your profile.'}
             </p>
             <Link to="/auth" className={button}>{isHr ? 'Prijava' : 'Sign in'}</Link>
           </>

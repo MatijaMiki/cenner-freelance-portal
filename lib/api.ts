@@ -80,7 +80,7 @@ export const API = {
     request<{ success: boolean }>('/auth/change-password', 'POST', { currentPassword, newPassword }),
 
   verifyEmail: (token: string) =>
-    request<{ success: boolean }>('/auth/verify-email', 'POST', { token }),
+    request<{ success: boolean; alreadyVerified?: boolean }>('/auth/verify-email', 'POST', { token }),
 
   resendVerificationEmail: () =>
     request<{ success: boolean }>('/auth/resend-verification', 'POST'),

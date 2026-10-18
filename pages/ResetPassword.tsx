@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Lock, CheckCircle2, AlertCircle } from 'lucide-react';
 import { API } from '../lib/api';
@@ -6,8 +6,11 @@ import SEO from '../components/SEO';
 
 const ResetPassword: React.FC = () => {
   const location = useLocation();
-  const params = new URLSearchParams(location.search || location.hash?.split('?')[1]);
-  const token = params.get('token') || '';
+  // Read the one-time token once, then take it out of the URL so it doesn't sit in history or analytics.
+  const [token] = useState(() => new URLSearchParams(location.search || location.hash?.split('?')[1]).get('token') || '');
+  useEffect(() => {
+    if (token) window.history.replaceState(window.history.state, '', window.location.pathname);
+  }, [token]);
 
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');

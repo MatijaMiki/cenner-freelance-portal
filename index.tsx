@@ -41,8 +41,9 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { err
 
 // Older emails linked to hash routes ("/#/reset-password?token=..."); this is a BrowserRouter app, so
 // turn those into real paths before the router reads the URL. Plain anchors ("#kontakt") are left alone.
-if (window.location.hash.startsWith('#/')) {
-  window.history.replaceState(null, '', window.location.hash.slice(1));
+// Only same-site paths ("#/x", not "#//host" or "#/\host"), and never let a bad hash stop the app mounting.
+if (/^#\/(?![\/\\])/.test(window.location.hash)) {
+  try { window.history.replaceState(null, '', window.location.hash.slice(1)); } catch { /* leave the URL as it is */ }
 }
 
 const rootElement = document.getElementById('root');

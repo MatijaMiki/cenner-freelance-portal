@@ -49,8 +49,12 @@
       } catch (e) {}
 
       gtag('js', new Date());
-      gtag('config', 'G-YEYHV1V9WP');
-      gtag('config', 'G-MQ8LYQNEC5');
+      // Reset and verify links carry a one-time token in ?token=; never send it to analytics.
+      var ceCfg = /[?&]token=/.test(location.search)
+        ? { page_location: location.href.replace(/([?&]token=)[^&#]*/g, '$1redacted') }
+        : {};
+      gtag('config', 'G-YEYHV1V9WP', ceCfg);
+      gtag('config', 'G-MQ8LYQNEC5', ceCfg);
     </script>
 
     <title>Freelance Hrvatska: Pronađi Freelancera | Cenner</title>
