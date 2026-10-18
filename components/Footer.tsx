@@ -44,6 +44,7 @@ const TOOL_LINKS = [
 const COMPANY_LINKS = [
   { label: 'About Us',          path: '/about' },
   { label: 'Previous Projects', path: '/services#radovi' },
+  { label: 'Onboarding',        path: '/onboarding' },
   { label: 'ranwhat',           path: '/ranwhat' },
   { label: 'Contact',           path: '/about#kontakt' },
 ];

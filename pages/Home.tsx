@@ -7,7 +7,7 @@ import ProjectDots from '../components/ProjectDots';
 import MeadowBackdrop from '../components/MeadowBackdrop';
 // the desktop's chrome (desktop icons, window buttons, taskbar, Start menu, the pocket device) wears the pixel icon set
 import {
-  PxShoppingBag, PxBriefcase, PxFolder, PxBookOpen, PxMessage, PxChevronUp, PxChevronRight, PxBell, PxCheck, PxUser, PxFileText,
+  PxShoppingBag, PxBriefcase, PxFolder, PxMessage, PxChevronUp, PxChevronRight, PxBell, PxCheck, PxUser, PxFileText,
   PxLogout, PxPower, PxGlobe, PxCalendar, PxStar, PxLabel, PxUsers, PxMail, PxListBox, PxVolume, PxKeyboard, PxClock, PxClose,
   PxGift, PxMinus, PxSave, PxArrowBigUp, PxBatteryMedium, PxInfoBox, PxShield,
 } from '../components/PixelIcon';
@@ -2117,7 +2117,6 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
     { to: '/marketplace', label: t('Explore Marketplace'), Icon: PxShoppingBag },
     { to: '/services', label: t('Cenner Services'), Icon: PxBriefcase },
     { to: '/services#radovi', label: t('Previous Projects'), Icon: PxFolder },
-    { to: '/onboarding', label: t('Read the guide'), Icon: PxBookOpen },
   ];
 
   const balloonShown = balloon && screen === 'on' && !start && !langOpen;
@@ -2446,7 +2445,7 @@ const Wizard: React.FC = () => {
               <div className="mt-8 flex justify-between gap-3">
                 <button type="button" disabled={step === 0} onClick={() => setStep(s => s - 1)} className="cn-press border-2 border-ink bg-paper px-5 py-3 font-display text-[15px] font-bold disabled:opacity-40">←</button>
                 {last ? (
-                  <Link to="/onboarding" className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-brand-green px-5 py-3 font-display text-[15px] font-bold">{t('Read the guide')} <ArrowRight size={17} /></Link>
+                  <Link to="/marketplace" className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-brand-green px-5 py-3 font-display text-[15px] font-bold">{t('Explore Marketplace')} <ArrowRight size={17} /></Link>
                 ) : (
                   <button type="button" onClick={() => setStep(s => s + 1)} className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-sky px-5 py-3 font-display text-[15px] font-bold text-white">{t(STEPS[step + 1])} <ArrowRight size={17} /></button>
                 )}

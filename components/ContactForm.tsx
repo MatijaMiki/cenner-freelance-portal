@@ -3,13 +3,8 @@ import { AlertCircle, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
 import { API } from '../lib/api';
 import { useT } from '../i18n';
 
-declare global {
-  interface Window {
-    grecaptcha: any;
-  }
-}
-
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string | undefined;
+// Cloudflare Turnstile, the same widget and site key as the sign-in form. No key = no widget.
+const TURNSTILE_SITE_KEY = (import.meta as any).env?.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
 /**
  * The site's one message form (About's #kontakt and the Services quote request, #upit), in the
@@ -29,42 +24,52 @@ const ContactForm: React.FC<{ subjects: string[]; pick?: { index: number; n: num
   const [token, setToken] = useState<string | null>(null);
   const [needCaptcha, setNeedCaptcha] = useState(false);
   const box = useRef<HTMLDivElement>(null);
-  const widget = useRef<number | null>(null);
+  const widget = useRef<string | null>(null);
   const doneRef = useRef<HTMLDivElement>(null);
 
   // a service's "Request a quote" picks its own subject (every click, even the same one again)
   useEffect(() => { if (pick) setIdx(pick.index); }, [pick?.n]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (status === 'sent') doneRef.current?.focus(); }, [status]);
 
-  // reCAPTCHA v2, when the site has a key (index.html loads the script)
+  // Turnstile, when the site has a key (the script loads on demand, once)
   useEffect(() => {
-    if (!RECAPTCHA_SITE_KEY || !box.current) return;
+    if (!TURNSTILE_SITE_KEY || !box.current) return;
     const render = () => {
-      if (!box.current || widget.current !== null || !window.grecaptcha?.render) return;
-      widget.current = window.grecaptcha.render(box.current, {
-        sitekey: RECAPTCHA_SITE_KEY,
+      const ts = (window as any).turnstile;
+      if (!ts || !box.current || widget.current !== null) return;
+      widget.current = ts.render(box.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: 'light',
         callback: (tk: string) => { setToken(tk); setNeedCaptcha(false); },
         'expired-callback': () => setToken(null),
         'error-callback': () => setToken(null),
       });
     };
-    if (window.grecaptcha?.render) render();
-    else (window as any)._onRecaptchaReady = render;
+    if ((window as any).turnstile) { render(); return; }
+    const existing = document.getElementById('cf-turnstile-script');
+    if (existing) { existing.addEventListener('load', render); return; }
+    const sc = document.createElement('script');
+    sc.id = 'cf-turnstile-script';
+    sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    sc.async = true;
+    sc.onload = render;
+    document.head.appendChild(sc);
   }, []);
 
   const resetCaptcha = () => {
-    if (widget.current !== null && window.grecaptcha?.reset) window.grecaptcha.reset(widget.current);
+    const ts = (window as any).turnstile;
+    if (ts && widget.current !== null) ts.reset(widget.current);
     setToken(null);
   };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (status === 'sending') return;
-    if (RECAPTCHA_SITE_KEY && !token) { setNeedCaptcha(true); return; }
+    if (TURNSTILE_SITE_KEY && !token) { setNeedCaptcha(true); return; }
     setStatus('sending');
     setError('');
     try {
-      await API.contact({ name: name.trim(), email: email.trim(), subject: subjects[idx] ?? subjects[0], message: message.trim() });
+      await API.contact({ name: name.trim(), email: email.trim(), subject: subjects[idx] ?? subjects[0], message: message.trim(), ...(token ? { turnstileToken: token } : {}) });
       setStatus('sent');
       setName(''); setEmail(''); setMessage('');
       resetCaptcha();
@@ -121,7 +126,7 @@ const ContactForm: React.FC<{ subjects: string[]; pick?: { index: number; n: num
         <label htmlFor={`${idPrefix}-message`} className={label}>{t('Message')}</label>
         <textarea id={`${idPrefix}-message`} required rows={6} value={message} onChange={e => setMessage(e.target.value)} placeholder={messagePlaceholder} className={`${field} resize-y`} />
       </div>
-      {RECAPTCHA_SITE_KEY && (
+      {TURNSTILE_SITE_KEY && (
         <div>
           <div ref={box} />
           {needCaptcha && <p className="mt-2 text-[0.95rem] text-[#9b1c1c]">{t('Please confirm you are not a robot.')}</p>}

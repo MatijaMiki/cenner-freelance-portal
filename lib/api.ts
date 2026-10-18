@@ -207,7 +207,7 @@ export const API = {
     request<any>(`/admin/bans/${id}/lift`, 'POST'),
 
   // ── Contact form ─────────────────────────────────────────────────────
-  contact: (data: { name: string; email: string; subject: string; message: string }) =>
+  contact: (data: { name: string; email: string; subject: string; message: string; turnstileToken?: string }) =>
     request<{ success: boolean }>('/contact', 'POST', data),
 
   // ── Launch waitlist (unreleased features) ────────────────────────────

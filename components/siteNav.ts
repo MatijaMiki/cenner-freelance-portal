@@ -32,7 +32,6 @@ export function useSiteNav() {
   const links: NavItem[] = [
     { label: t('Services'), path: '/services', icon: Briefcase, desc: t('Websites, apps and automations, built in-house') },
     { label: t('Pricing'), path: '/subscription', icon: Tag, desc: t('Plans and fees') },
-    { label: t('Onboarding'), path: '/onboarding', icon: UserPlus, desc: t('How Cenner works, step by step') },
     { label: t('Blog'), path: '/blog', icon: BookOpen },
     { label: t('Community'), path: '/community', icon: Users },
     { label: t('Refer & Win'), path: '/referral', icon: Gift },
