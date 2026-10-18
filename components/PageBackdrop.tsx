@@ -155,16 +155,14 @@ export const PageBackdrop: React.FC<{ seed: string }> = ({ seed }) => {
       const w = win!;
       const C = cols();
 
-      // The blobs ride behind the page at a slower speed, and each one slowly changes shape:
+      // The blobs sit in the page and scroll with it, and each one slowly changes shape:
       // it stretches, turns, and its edge breathes in and out, like the forms in the cards.
       const live = spots.map(sp => {
         const el = 1 + 0.38 * Math.sin(t * 0.00021 + sp.phase);
         const th = sp.rot + t * sp.spin;
         return {
           x: sp.fx * vw + Math.sin(t * 0.00018 + sp.phase) * 46,
-          // depth: a blob crosses the middle of the screen when its place in the page does, but travels at 0.6 of
-          // the content's speed, so the colour slides through the dots as you scroll (a parallax layer behind the page)
-          y: sy + vh * 0.5 + ((w.mainTop + sp.fy * w.mainH) - (sy + vh * 0.5)) * 0.6 + Math.cos(t * 0.00014 + sp.phase) * 36,
+          y: w.mainTop + sp.fy * w.mainH + Math.cos(t * 0.00014 + sp.phase) * 36,
           rad: sp.rad * (0.94 + 0.06 * Math.sin(t * 0.0003 + sp.phase)),
           c: Math.cos(th), s: Math.sin(th), el, ph: sp.phase, grad: sp.grad,
         };
