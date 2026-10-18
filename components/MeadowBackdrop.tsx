@@ -10,8 +10,8 @@ import { useT } from '../i18n';
  * is actually playing) -> film grain masked to the sky -> legibility scrims.
  *
  * Weight is the whole game here, so:
- *  - the poster paints first and the video is only requested after the page has
- *    loaded and the browser is idle, never in the critical path;
+ *  - the poster paints first; the opening film (`eager`) is requested as soon as the
+ *    poster is on screen, others only after the page has loaded and the browser is idle;
  *  - nothing but the poster is loaded under prefers-reduced-motion, Save-Data
  *    or a 2G connection;
  *  - phones get the 720p cut (~2.8 MB), everyone else the 1080p cut (~4.8 MB);
@@ -68,12 +68,16 @@ interface MeadowBackdropProps {
   active?: boolean;
   /** false while the grain can't be seen (its opacity is 0): it is taken out instead of animating unseen. */
   grain?: boolean;
+  /** Start fetching the film as soon as the poster is on screen, not after the page's load + an idle moment
+   *  (for the opening film, the first thing a visitor sees; the outro's can wait). */
+  eager?: boolean;
 }
 
-const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', controls = true, active = true, grain = true }) => {
+const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', controls = true, active = true, grain = true, eager = false }) => {
   const t = useT();
   const wrapRef = React.useRef<HTMLDivElement>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const posterRef = React.useRef<HTMLImageElement>(null);
   const [src, setSrc] = React.useState<string | null>(null);
   const [ready, setReady] = React.useState(false);     // the video is really playing
   const [inView, setInView] = React.useState(true);
@@ -97,15 +101,27 @@ const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', cont
       if (typeof window.requestIdleCallback === 'function') idleId = window.requestIdleCallback(start, { timeout: 2500 });
       else timerId = window.setTimeout(start, 1200);
     };
-    if (document.readyState === 'complete') schedule();
+    // eager: as soon as the poster has painted (or failed), with a 2.5 s backstop
+    const poster = posterRef.current;
+    const onPoster = () => { if (!cancelled) requestAnimationFrame(start); };
+    if (eager) {
+      timerId = window.setTimeout(start, 2500);
+      if (poster && poster.complete) onPoster();
+      else {
+        poster?.addEventListener('load', onPoster, { once: true });
+        poster?.addEventListener('error', onPoster, { once: true });
+      }
+    } else if (document.readyState === 'complete') schedule();
     else window.addEventListener('load', schedule, { once: true });
     return () => {
       cancelled = true;
+      poster?.removeEventListener('load', onPoster);
+      poster?.removeEventListener('error', onPoster);
       window.removeEventListener('load', schedule);
       if (idleId !== undefined) window.cancelIdleCallback(idleId);
       if (timerId !== undefined) window.clearTimeout(timerId);
     };
-  }, []);
+  }, [eager]);
 
   // Only spend decode/battery while the hero is on screen.
   React.useEffect(() => {
@@ -160,6 +176,7 @@ const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', cont
       >
         <div className="mh-cover">
           <img
+            ref={posterRef}
             src={POSTER_WIDE}
             srcSet={`${POSTER_NARROW} 960w, ${POSTER_WIDE} 1920w`}
             sizes={variant === 'frame' ? '100vw' : 'max(100vw, 178vh)'}

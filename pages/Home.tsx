@@ -632,7 +632,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     <section ref={ref} className={reduce ? 'relative' : 'relative h-[380vh]'}>
       <div className={`${reduce ? 'relative h-[calc(100svh-4.5rem)]' : 'sticky top-[4.5rem] h-[calc(100svh-4.5rem)]'} overflow-hidden bg-sky`}>
         <div ref={film} className="absolute inset-0 will-change-transform">
-          <MeadowBackdrop variant="frame" controls={false} active={reduce || meadowOn} grain={reduce || meadowGrain} />
+          <MeadowBackdrop variant="frame" controls={false} eager active={reduce || meadowOn} grain={reduce || meadowGrain} />
           {!reduce && (
             <img
               ref={still}
