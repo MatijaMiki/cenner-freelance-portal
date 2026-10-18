@@ -132,8 +132,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Homepage = plain bar on the grey ground; elsewhere the classic bar (strings unchanged).
   // Pages already in the new look (homepage design): plain bar, solid menus, `Footer home`.
-  // Every page is in the new look except the admin tools and /ranwhat, which keep the classic dark chrome.
-  const isHome = !['/admin', '/blog-admin', '/ranwhat'].some(p => location.pathname === p || location.pathname.startsWith(p + '/'));
+  // Every page is in the new look.
+  const isHome = true;
   const navItem = (active: boolean) => isHome
     ? `group/navicon relative flex items-center whitespace-nowrap border-2 font-display text-[14px] font-bold transition-[background-color,color,box-shadow,transform] duration-100 lg:p-2 2xl:px-2.5 2xl:py-1.5 ${active ? 'border-ink bg-ink text-white' : 'border-transparent text-ink/70 hover:-translate-x-px hover:-translate-y-px hover:border-ink hover:bg-white hover:text-ink hover:shadow-[3px_3px_0_0_#0b0c0e] focus-visible:border-ink focus-visible:outline-none'}`
     : `group/navicon relative flex items-center whitespace-nowrap text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 2xl:p-0 2xl:rounded-none 2xl:hover:bg-transparent ${active ? 'text-brand-green' : 'text-gray-400'}`;

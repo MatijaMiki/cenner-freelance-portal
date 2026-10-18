@@ -35,62 +35,62 @@ const Ranwhat: React.FC = () => {
       />
 
       <div className="mb-20">
-        <div className="inline-block px-4 py-1 rounded-full bg-brand-green/10 text-brand-green text-xs font-black uppercase tracking-widest mb-6">{t('A Cenner product')}</div>
-        <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">ranwhat</h1>
-        <p className="text-xl md:text-2xl text-gray-400 leading-relaxed max-w-3xl mb-8">
+        <div className="inline-block px-4 py-1 bg-leaf/10 text-leaf text-xs font-black uppercase tracking-widest mb-6">{t('A Cenner product')}</div>
+        <h1 className="text-5xl md:text-6xl font-extrabold text-ink mb-6 tracking-tight">ranwhat</h1>
+        <p className="text-xl md:text-2xl text-slate leading-relaxed max-w-3xl mb-8">
           A flight recorder for AI agents, and a scanner for the authority they hold. ranwhat reads what coding agents such as Claude Code actually ran on your machine and surfaces the irreversible actions worth knowing about: credentials read, bulk deletions, force pushes, packages published.
         </p>
         <a
           href={RW}
           target="_blank"
           rel="noopener"
-          className="inline-flex items-center gap-3 px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest"
+          className="inline-flex items-center gap-3 px-8 py-4 bg-sky text-white font-black hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest"
         >
           ranwhat.com <ExternalLink size={16} />
         </a>
       </div>
 
       <section className="mb-20">
-        <h2 className="text-3xl font-black text-white tracking-tight mb-8">{t('Pricing')}</h2>
+        <h2 className="text-3xl font-black text-ink tracking-tight mb-8">{t('Pricing')}</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {PLANS.map(p => (
-            <div key={p.name} className="p-8 bg-brand-grey/40 border border-white/5 rounded-3xl">
-              <h3 className="text-white font-black text-xl mb-1">{p.name}</h3>
-              <p className="text-brand-green font-bold text-sm mb-4">{p.price}</p>
-              <p className="text-gray-400 text-sm leading-relaxed">{p.body}</p>
+            <div key={p.name} className="p-8 bg-white border-2 border-ink">
+              <h3 className="text-ink font-black text-xl mb-1">{p.name}</h3>
+              <p className="text-leaf font-bold text-sm mb-4">{p.price}</p>
+              <p className="text-slate text-sm leading-relaxed">{p.body}</p>
             </div>
           ))}
         </div>
-        <p className="text-gray-500 text-sm mt-6">
-          Full details on <a href={`${RW}/pricing`} target="_blank" rel="noopener" className="text-brand-green hover:underline">ranwhat.com/pricing</a>.
+        <p className="text-slate text-sm mt-6">
+          Full details on <a href={`${RW}/pricing`} target="_blank" rel="noopener" className="text-leaf hover:underline">ranwhat.com/pricing</a>.
         </p>
       </section>
 
       <section className="mb-20 grid md:grid-cols-2 gap-6">
-        <div className="p-8 bg-brand-grey/40 border border-white/5 rounded-3xl">
-          <h2 className="text-white font-black text-xl mb-4">{t('Billing, cancellation and refunds')}</h2>
-          <ul className="text-gray-400 text-sm leading-relaxed space-y-3">
+        <div className="p-8 bg-white border-2 border-ink">
+          <h2 className="text-ink font-black text-xl mb-4">{t('Billing, cancellation and refunds')}</h2>
+          <ul className="text-slate text-sm leading-relaxed space-y-3">
             <li>Payments are processed by Stripe through its Link checkout; Stripe issues receipts and invoices and collects any VAT.</li>
             <li>Plus renews automatically each month or year and can be cancelled any time; it then runs to the end of the paid period.</li>
             <li>Full refund on request within 14 days of the first payment, no reason needed. Renewals after that are not refunded.</li>
           </ul>
-          <p className="text-gray-500 text-sm mt-6">
-            <a href={`${RW}/terms`} target="_blank" rel="noopener" className="text-brand-green hover:underline">{t('Terms of service')}</a>
+          <p className="text-slate text-sm mt-6">
+            <a href={`${RW}/terms`} target="_blank" rel="noopener" className="text-leaf hover:underline">{t('Terms of service')}</a>
             {' · '}
-            <a href={`${RW}/privacy`} target="_blank" rel="noopener" className="text-brand-green hover:underline">{t('Privacy Policy')}</a>
+            <a href={`${RW}/privacy`} target="_blank" rel="noopener" className="text-leaf hover:underline">{t('Privacy Policy')}</a>
           </p>
         </div>
 
-        <div className="p-8 bg-brand-grey/40 border border-white/5 rounded-3xl">
-          <h2 className="text-white font-black text-xl mb-4">{t('Who runs it')}</h2>
-          <p className="text-gray-400 text-sm leading-relaxed">
+        <div className="p-8 bg-white border-2 border-ink">
+          <h2 className="text-ink font-black text-xl mb-4">{t('Who runs it')}</h2>
+          <p className="text-slate text-sm leading-relaxed">
             Cenner, obrt za računalno programiranje i ostale usluge, vl. Matija Mikulinec<br />
             Mikulinci 8, 10010 Zagreb, Croatia<br />
             OIB 23152585818 · MB 99210363
           </p>
-          <p className="text-gray-400 text-sm leading-relaxed mt-4">
-            <a href="mailto:hello@ranwhat.com" className="text-brand-green hover:underline">hello@ranwhat.com</a><br />
-            <a href="tel:+385993525500" className="text-brand-green hover:underline">+385 99 352 5500</a>
+          <p className="text-slate text-sm leading-relaxed mt-4">
+            <a href="mailto:hello@ranwhat.com" className="text-leaf hover:underline">hello@ranwhat.com</a><br />
+            <a href="tel:+385993525500" className="text-leaf hover:underline">+385 99 352 5500</a>
           </p>
         </div>
       </section>

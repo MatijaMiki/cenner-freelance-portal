@@ -11,14 +11,14 @@ const TABS = [
 
 const AdminTabs: React.FC = () => (
   <div className="flex items-center gap-2 flex-wrap">
-    <h1 className="mr-2 text-2xl font-black text-white tracking-tighter">Admin</h1>
+    <h1 className="mr-2 text-2xl font-black text-ink tracking-tighter">Admin</h1>
     <nav aria-label="Admin" className="flex items-center gap-2">
       {TABS.map(({ to, label, Icon }) => (
         <NavLink
           key={to}
           to={to}
-          className={({ isActive }) => `inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-colors ${
-            isActive ? 'bg-brand-pink text-white border-brand-pink' : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white'
+          className={({ isActive }) => `inline-flex items-center gap-1.5 px-4 py-2 border text-[12px] font-black uppercase tracking-widest transition-colors ${
+            isActive ? 'bg-sky text-white border-ink' : 'bg-ink/5 border-ink text-slate hover:bg-ink/10 hover:text-ink'
           }`}
         >
           <Icon size={14} /> {label}
