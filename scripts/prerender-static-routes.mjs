@@ -128,6 +128,12 @@ const ROUTES = [
       'Cenner je vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno.',
   },
   {
+    path: '/onboarding',
+    title: 'Početak rada: Otvaranje paušalnog obrta | Cenner',
+    description:
+      'Vodič kroz pravne korake potrebne za freelance rad u Hrvatskoj. Saznaj kako otvoriti paušalni obrt i započeti suradnju kroz Cenner.',
+  },
+  {
     path: '/cookies',
     title: 'Cookie Policy | Cenner',
     description:

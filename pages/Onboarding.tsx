@@ -16,7 +16,7 @@ const Onboarding: React.FC = () => {
   return (
     <div className="pt-16 pb-24 max-w-5xl mx-auto px-4">
       <SEO
-        title={isHr ? 'Početak rada: Otvaranje paušalnog obrta | Cenner' : 'Get Started: Opening a Paušalni Obrt | Cenner'}
+        title={isHr ? 'Početak rada: Otvaranje paušalnog obrta' : 'Get Started: Opening a Paušalni Obrt'}
         canonical="/onboarding"
         description={isHr
           ? 'Vodič kroz pravne korake potrebne za freelance rad u Hrvatskoj. Saznaj kako otvoriti paušalni obrt i započeti suradnju kroz Cenner.'
