@@ -9,7 +9,6 @@ import {
 import AvatarImg from '../components/Avatar';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
-import NeuralBackground from '../components/NeuralBackground';
 import SEO from '../components/SEO';
 
 // ── Create Contract Modal ─────────────────────────────────────────────────────
@@ -80,63 +79,63 @@ const ContractModal: React.FC<ContractModalProps> = ({ freelancerId, freelancerN
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
+      style={{ background: 'rgba(11,12,14,0.6)' }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="bg-[#111] border border-white/10 rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
+      <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto border-2 border-ink bg-paper text-ink">
+        <div className="flex items-center justify-between border-b-2 border-ink p-6">
           <div>
-            <h2 className="text-lg font-black text-white tracking-tight">Propose Contract</h2>
-            <p className="text-xs text-gray-500 mt-0.5">to {freelancerName}</p>
+            <h2 className="font-display text-xl font-extrabold tracking-[-0.02em]">Propose Contract</h2>
+            <p className="mt-0.5 text-sm text-slate">to {freelancerName}</p>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
-            <X size={16} className="text-gray-400" />
+          <button onClick={onClose} className="flex h-8 w-8 items-center justify-center border-2 border-ink transition-colors hover:bg-ink hover:text-white">
+            <X size={16} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Title */}
           <div>
-            <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Contract Title</label>
+            <label className="mb-2 block font-display text-[12px] font-extrabold uppercase tracking-wide">Contract Title</label>
             <input
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="e.g. Brand identity design"
               maxLength={120}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/40"
+              className="w-full border-2 border-ink bg-white px-4 py-3 text-sm placeholder:text-slate focus:border-sky focus:outline-none"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Description <span className="text-gray-600 normal-case font-normal">(optional)</span></label>
+            <label className="mb-2 block font-display text-[12px] font-extrabold uppercase tracking-wide">Description <span className="font-normal normal-case text-slate">(optional)</span></label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="Describe the scope of work..."
               rows={3}
               maxLength={2000}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/40 resize-none"
+              className="w-full resize-none border-2 border-ink bg-white px-4 py-3 text-sm placeholder:text-slate focus:border-sky focus:outline-none"
             />
           </div>
 
           {/* Milestones */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Milestones</label>
+              <label className="font-display text-[12px] font-extrabold uppercase tracking-wide">Milestones</label>
               <button
                 type="button"
                 onClick={addMilestone}
-                className="flex items-center gap-1 text-[11px] text-brand-green font-bold hover:opacity-80 transition-opacity"
+                className="flex items-center gap-1 font-display text-[13px] font-bold text-sky hover:text-ink"
               >
                 <Plus size={12} /> Add
               </button>
             </div>
             <div className="space-y-3">
               {milestones.map((m, i) => (
-                <div key={i} className="bg-white/3 border border-white/8 rounded-2xl p-4 space-y-3">
+                <div key={i} className="space-y-3 border-2 border-ink bg-white p-4">
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-brand-green/10 text-brand-green text-[10px] font-black flex items-center justify-center shrink-0">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center bg-ink font-display text-[11px] font-bold text-white">
                       {i + 1}
                     </span>
                     <input
@@ -144,13 +143,13 @@ const ContractModal: React.FC<ContractModalProps> = ({ freelancerId, freelancerN
                       onChange={e => updateMilestone(i, 'title', e.target.value)}
                       placeholder="Milestone title"
                       maxLength={120}
-                      className="flex-1 bg-transparent text-sm text-white placeholder-gray-600 focus:outline-none"
+                      className="flex-1 bg-transparent text-sm placeholder:text-slate focus:outline-none"
                     />
                     {milestones.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeMilestone(i)}
-                        className="text-gray-600 hover:text-red-400 transition-colors"
+                        className="text-slate transition-colors hover:text-red-700"
                       >
                         <Trash2 size={13} />
                       </button>
@@ -158,7 +157,7 @@ const ContractModal: React.FC<ContractModalProps> = ({ freelancerId, freelancerN
                   </div>
                   <div className="flex gap-3">
                     <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">€</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate">€</span>
                       <input
                         type="number"
                         min="1"
@@ -166,15 +165,15 @@ const ContractModal: React.FC<ContractModalProps> = ({ freelancerId, freelancerN
                         value={m.amount}
                         onChange={e => updateMilestone(i, 'amount', e.target.value)}
                         placeholder="Amount"
-                        className="w-full bg-white/5 border border-white/10 rounded-lg pl-7 pr-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/40"
+                        className="w-full border-2 border-ink bg-white py-2 pl-7 pr-3 text-sm placeholder:text-slate focus:border-sky focus:outline-none"
                       />
                     </div>
                     <input
                       type="date"
                       value={m.dueDate}
                       onChange={e => updateMilestone(i, 'dueDate', e.target.value)}
-                      className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-green/40"
-                      style={{ colorScheme: 'dark' }}
+                      className="flex-1 border-2 border-ink bg-white px-3 py-2 text-sm focus:border-sky focus:outline-none"
+                      style={{ colorScheme: 'light' }}
                     />
                   </div>
                 </div>
@@ -183,13 +182,13 @@ const ContractModal: React.FC<ContractModalProps> = ({ freelancerId, freelancerN
           </div>
 
           {/* Total */}
-          <div className="flex items-center justify-between pt-2 border-t border-white/5">
-            <span className="text-xs text-gray-500">Total contract value</span>
-            <span className="text-brand-green font-black text-base">€{totalAmount.toFixed(2)}</span>
+          <div className="flex items-center justify-between border-t-2 border-ink pt-3">
+            <span className="text-sm text-slate">Total contract value</span>
+            <span className="font-display text-lg font-extrabold">€{totalAmount.toFixed(2)}</span>
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 text-red-400 text-xs bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3">
+            <div className="flex items-center gap-2 border-2 border-red-700 bg-red-50 px-4 py-3 text-sm text-red-800">
               <AlertCircle size={14} className="shrink-0" />
               {error}
             </div>
@@ -199,14 +198,14 @@ const ContractModal: React.FC<ContractModalProps> = ({ freelancerId, freelancerN
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 rounded-xl border border-white/10 text-sm text-gray-400 font-bold hover:bg-white/5 transition-colors"
+              className="flex-1 border-2 border-ink py-3 text-sm font-bold transition-colors hover:bg-ink hover:text-white"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 py-3 rounded-xl bg-brand-green text-brand-black font-black text-sm hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex flex-1 items-center justify-center gap-2 bg-sky py-3 font-display text-sm font-bold text-white transition-colors hover:bg-ink disabled:opacity-50"
             >
               {submitting ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />}
               {submitting ? 'Creating...' : 'Send Proposal'}
@@ -226,7 +225,7 @@ const StarRating: React.FC<{ rating: number; size?: number }> = ({ rating, size 
       <Star
         key={s}
         size={size}
-        className={s <= Math.round(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-700 fill-gray-700'}
+        className={s <= Math.round(rating) ? 'fill-ink text-ink' : 'fill-ink/20 text-ink/20'}
       />
     ))}
   </div>
@@ -285,7 +284,7 @@ const FreelancerProfile: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 size={32} className="animate-spin text-brand-green" />
+        <Loader2 size={32} className="animate-spin text-ink" />
       </div>
     );
   }
@@ -293,10 +292,10 @@ const FreelancerProfile: React.FC = () => {
   if (error || !profile) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4">
-        <AlertCircle size={40} className="text-red-400" />
-        <h2 className="text-2xl font-black text-white">Profile not found</h2>
-        <p className="text-gray-500">{error || 'This freelancer profile does not exist.'}</p>
-        <Link to="/marketplace" className="mt-4 px-6 py-3 bg-brand-green text-brand-black font-black rounded-xl text-sm">
+        <AlertCircle size={40} className="text-red-700" />
+        <h2 className="font-display text-2xl font-extrabold">Profile not found</h2>
+        <p className="text-slate">{error || 'This freelancer profile does not exist.'}</p>
+        <Link to="/marketplace" className="mt-4 bg-sky px-6 py-3 font-display text-sm font-bold text-white transition-colors hover:bg-ink">
           Back to Marketplace
         </Link>
       </div>
@@ -332,14 +331,13 @@ const FreelancerProfile: React.FC = () => {
   } : undefined;
 
   return (
-    <div className="relative min-h-screen pt-12 pb-24 px-4 overflow-hidden">
+    <div className="min-h-screen px-4 pb-24 pt-10 font-text md:px-8 md:pt-14">
       <SEO
         title={`${profile.name}, Freelance ${profile.skills?.[0] || 'Usluge'}`}
         canonical={`/freelancer/${id}`}
         description={profile.bio || `Pogledaj profil freelancera ${profile.name} na Cenner platformi.`}
         jsonLd={freelancerJsonLd}
       />
-      <NeuralBackground parallax={false} />
 
       {showContractModal && id && (
         <ContractModal
@@ -350,16 +348,16 @@ const FreelancerProfile: React.FC = () => {
         />
       )}
 
-      <div className="relative z-10 max-w-5xl mx-auto">
+      <div className="mx-auto max-w-[1500px]">
         {/* Hero Card */}
-        <div className="bg-brand-grey/60 border border-white/10 rounded-[3rem] p-10 md:p-14 mb-10 backdrop-blur-xl">
+        <div className="mb-10 border-2 border-ink bg-white p-8 md:p-12">
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Avatar */}
             <div className="relative shrink-0">
-              <AvatarImg src={profile.avatar} name={profile.name} size={112} className="rounded-3xl border-2 border-brand-green/30" />
+              <AvatarImg src={profile.avatar} name={profile.name} size={112} className="rounded-none border-2 border-ink" />
               {isVerified && (
                 <div className="absolute -bottom-2 -right-2 w-9 h-9 flex items-center justify-center" title="Identity Verified">
-                  <BadgeCheck size={36} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]" fill="#1a1a1a" strokeWidth={1.5} />
+                  <BadgeCheck size={36} className="text-ink" fill="#4ade80" strokeWidth={1.75} />
                 </div>
               )}
             </div>
@@ -367,47 +365,47 @@ const FreelancerProfile: React.FC = () => {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h1 className="text-3xl font-black text-white tracking-tighter">{profile.name}</h1>
+                <h1 className="font-display text-[clamp(2rem,1.4rem+2.4vw,3.5rem)] font-extrabold leading-none tracking-[-0.035em]">{profile.name}</h1>
                 {profile.trusted && (
-                  <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center gap-1" title="Trusted freelancer, top-tier Ultra">
+                  <span className="flex items-center gap-1 bg-ink px-3 py-1 font-display text-[11px] font-bold uppercase tracking-wide text-white" title="Trusted freelancer, top-tier Ultra">
                     ★ Trusted
                   </span>
                 )}
                 {profile.tier === 'ultra' && !profile.trusted && (
-                  <span className="px-3 py-1 bg-brand-pink/10 border border-brand-pink/30 rounded-full text-[10px] font-black text-brand-pink uppercase tracking-widest">
+                  <span className="bg-sky px-3 py-1 font-display text-[11px] font-bold uppercase tracking-wide text-white">
                     Ultra
                   </span>
                 )}
                 {profile.tier === 'pro' && (
-                  <span className="px-3 py-1 bg-brand-green/10 border border-brand-green/30 rounded-full text-[10px] font-black text-brand-green uppercase tracking-widest">
+                  <span className="border-2 border-ink px-3 py-1 font-display text-[11px] font-bold uppercase tracking-wide">
                     Pro
                   </span>
                 )}
                 {isVerified && (
-                  <span className="px-3 py-1 bg-brand-green/10 border border-brand-green/20 rounded-full text-[10px] font-black text-brand-green uppercase tracking-widest flex items-center gap-1">
+                  <span className="flex items-center gap-1 bg-brand-green px-3 py-1 font-display text-[11px] font-bold uppercase tracking-wide text-ink">
                     <ShieldCheck size={10} /> Verified
                   </span>
                 )}
               </div>
 
-              <p className="text-gray-400 text-sm font-medium capitalize mb-3">{profile.role || 'Freelancer'}</p>
+              <p className="mb-3 text-[1rem] capitalize text-slate">{profile.role || 'Freelancer'}</p>
 
               {/* Rating */}
               {profile.avgRating != null && profile.reviewCount > 0 && (
                 <div className="flex items-center gap-2 mb-4">
                   <StarRating rating={profile.avgRating} />
-                  <span className="text-white font-bold text-sm">{profile.avgRating.toFixed(1)}</span>
-                  <span className="text-gray-500 text-xs">({profile.reviewCount} review{profile.reviewCount !== 1 ? 's' : ''})</span>
+                  <span className="font-display text-sm font-bold">{profile.avgRating.toFixed(1)}</span>
+                  <span className="text-xs text-slate">({profile.reviewCount} review{profile.reviewCount !== 1 ? 's' : ''})</span>
                 </div>
               )}
 
               {profile.bio && (
-                <p className="text-gray-300 leading-relaxed mb-6 max-w-xl">{profile.bio}</p>
+                <p className="mb-6 max-w-xl leading-relaxed text-ink/90">{profile.bio}</p>
               )}
               {profile.skills && profile.skills.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {profile.skills.map((skill: string) => (
-                    <span key={skill} className="px-3 py-1.5 bg-white/5 border border-white/5 rounded-xl text-[11px] font-bold text-gray-400">{skill}</span>
+                    <span key={skill} className="border-2 border-ink bg-white px-3 py-1.5 font-display text-[12px] font-bold">{skill}</span>
                   ))}
                 </div>
               )}
@@ -419,7 +417,7 @@ const FreelancerProfile: React.FC = () => {
                 <button
                   onClick={handleMessage}
                   disabled={messagingLoading}
-                  className="flex items-center gap-2 px-6 py-3 bg-brand-green text-brand-black font-black rounded-xl text-sm hover:scale-105 transition-all disabled:opacity-60 disabled:scale-100"
+                  className="flex items-center gap-2 bg-sky px-6 py-3 font-display text-sm font-bold text-white transition-colors hover:bg-ink disabled:opacity-60"
                 >
                   {messagingLoading
                     ? <Loader2 size={15} className="animate-spin" />
@@ -430,9 +428,9 @@ const FreelancerProfile: React.FC = () => {
                 {isLoggedIn && (
                   <button
                     onClick={() => setShowContractModal(true)}
-                    className="flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white font-bold rounded-xl text-sm hover:bg-white/10 transition-colors"
+                    className="flex items-center gap-2 border-2 border-ink px-6 py-3 font-display text-sm font-bold transition-colors hover:bg-ink hover:text-white"
                   >
-                    <FileText size={15} className="text-brand-green" />
+                    <FileText size={15} />
                     Propose Contract
                   </button>
                 )}
@@ -447,12 +445,12 @@ const FreelancerProfile: React.FC = () => {
             {/* Portfolio */}
             {portfolio.length > 0 ? (
               <div>
-                <h2 className="text-xs font-black text-gray-600 uppercase tracking-[0.2em] mb-6">Portfolio</h2>
+                <h2 className="mb-6 border-t-2 border-ink pt-4 font-display text-[13px] font-extrabold uppercase tracking-[0.12em]">Portfolio</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {portfolio.map((item: any) => (
-                    <div key={item.id} className="bg-brand-grey/40 border border-white/5 rounded-2xl overflow-hidden group hover:border-white/10 transition-colors">
+                    <div key={item.id} className="group overflow-hidden border-2 border-ink bg-white transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#0b0c0e]">
                       {(item.imageUrl || item.fileType?.startsWith('image/')) && (
-                        <div className="h-40 overflow-hidden">
+                        <div className="h-40 overflow-hidden border-b-2 border-ink">
                           <img
                             src={item.imageUrl}
                             alt={item.title}
@@ -461,14 +459,14 @@ const FreelancerProfile: React.FC = () => {
                         </div>
                       )}
                       <div className="p-5">
-                        <h3 className="text-white font-bold text-sm mb-1">{item.title}</h3>
-                        {item.description && <p className="text-gray-500 text-xs">{item.description}</p>}
+                        <h3 className="mb-1 font-display text-[1rem] font-bold">{item.title}</h3>
+                        {item.description && <p className="text-[13px] text-slate">{item.description}</p>}
                         {item.fileUrl && /^https?:\/\//i.test(item.fileUrl) && (
                           <a
                             href={item.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-brand-green text-[11px] font-bold mt-3 hover:underline"
+                            className="mt-3 inline-flex items-center gap-1 font-display text-[13px] font-bold text-sky underline underline-offset-4 hover:text-ink"
                           >
                             View file <ExternalLink size={11} />
                           </a>
@@ -479,33 +477,33 @@ const FreelancerProfile: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="bg-brand-grey/40 border border-white/5 rounded-2xl p-10 text-center">
-                <Briefcase size={28} className="text-gray-700 mx-auto mb-3" />
-                <p className="text-gray-600 text-sm font-bold">No portfolio items yet</p>
+              <div className="border-2 border-dashed border-ink/40 bg-white p-10 text-center">
+                <Briefcase size={28} className="mx-auto mb-3 text-slate" />
+                <p className="font-display text-sm font-bold text-slate">No portfolio items yet</p>
               </div>
             )}
 
             {/* Reviews */}
             {reviews.length > 0 && (
               <div>
-                <h2 className="text-xs font-black text-gray-600 uppercase tracking-[0.2em] mb-6">
-                  Reviews <span className="text-gray-700 font-normal">({reviews.length})</span>
+                <h2 className="mb-6 border-t-2 border-ink pt-4 font-display text-[13px] font-extrabold uppercase tracking-[0.12em]">
+                  Reviews <span className="font-normal text-slate">({reviews.length})</span>
                 </h2>
                 <div className="space-y-4">
                   {reviews.map((rev: any) => (
-                    <div key={rev.id} className="bg-brand-grey/40 border border-white/5 rounded-2xl p-5">
+                    <div key={rev.id} className="border-2 border-ink bg-white p-5">
                       <div className="flex items-start gap-4">
-                        <AvatarImg src={rev.reviewer?.avatar} name={rev.reviewer?.name} size={36} className="rounded-xl shrink-0" />
+                        <AvatarImg src={rev.reviewer?.avatar} name={rev.reviewer?.name} size={36} className="shrink-0 rounded-none border-2 border-ink" />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-1">
-                            <span className="text-white font-bold text-sm">{rev.reviewer?.name || 'Anonymous'}</span>
+                            <span className="font-display text-sm font-bold">{rev.reviewer?.name || 'Anonymous'}</span>
                             <StarRating rating={rev.rating} size={12} />
-                            <span className="text-gray-600 text-[11px] ml-auto">
+                            <span className="ml-auto text-[12px] text-slate">
                               {new Date(rev.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
                           </div>
                           {rev.comment && (
-                            <p className="text-gray-400 text-sm leading-relaxed">{rev.comment}</p>
+                            <p className="text-[0.95rem] leading-relaxed text-ink/90">{rev.comment}</p>
                           )}
                         </div>
                       </div>
@@ -518,30 +516,30 @@ const FreelancerProfile: React.FC = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <div className="bg-brand-grey/40 border border-white/5 rounded-2xl p-6">
-              <h3 className="text-xs font-black text-gray-600 uppercase tracking-[0.2em] mb-5">Details</h3>
+            <div className="border-2 border-ink bg-white p-6">
+              <h3 className="mb-5 font-display text-[13px] font-extrabold uppercase tracking-[0.12em]">Details</h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-sm">
-                  <Clock size={16} className="text-gray-600 shrink-0" />
-                  <span className="text-gray-400">Member since <span className="text-white font-bold">{profile.createdAt ? new Date(profile.createdAt).getFullYear() : '—'}</span></span>
+                  <Clock size={16} className="shrink-0 text-slate" />
+                  <span className="text-slate">Member since <span className="font-bold text-ink">{profile.createdAt ? new Date(profile.createdAt).getFullYear() : '—'}</span></span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <ShieldCheck size={16} className={isVerified ? 'text-brand-green shrink-0' : 'text-gray-600 shrink-0'} />
-                  <span className="text-gray-400">
-                    KYC: <span className={`font-bold ${isVerified ? 'text-brand-green' : 'text-yellow-400'}`}>{isVerified ? 'Verified' : 'Pending'}</span>
+                  <ShieldCheck size={16} className={isVerified ? 'shrink-0 text-leaf' : 'shrink-0 text-slate'} />
+                  <span className="text-slate">
+                    KYC: <span className={`font-bold ${isVerified ? 'text-leaf' : 'text-slate'}`}>{isVerified ? 'Verified' : 'Pending'}</span>
                   </span>
                 </div>
                 {profile.location && (
                   <div className="flex items-center gap-3 text-sm">
-                    <MapPin size={16} className="text-gray-600 shrink-0" />
-                    <span className="text-gray-400">{profile.location}</span>
+                    <MapPin size={16} className="shrink-0 text-slate" />
+                    <span className="text-slate">{profile.location}</span>
                   </div>
                 )}
                 {profile.avgRating != null && profile.reviewCount > 0 && (
                   <div className="flex items-center gap-3 text-sm">
-                    <Star size={16} className="text-yellow-400 shrink-0" />
-                    <span className="text-gray-400">
-                      <span className="text-white font-bold">{profile.avgRating.toFixed(1)}</span> avg rating
+                    <Star size={16} className="shrink-0" />
+                    <span className="text-slate">
+                      <span className="font-bold text-ink">{profile.avgRating.toFixed(1)}</span> avg rating
                     </span>
                   </div>
                 )}
@@ -553,16 +551,16 @@ const FreelancerProfile: React.FC = () => {
                 <button
                   onClick={handleMessage}
                   disabled={messagingLoading}
-                  className="w-full py-3 bg-brand-green/10 border border-brand-green/20 rounded-2xl text-center text-sm font-black text-brand-green hover:bg-brand-green/15 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="flex w-full items-center justify-center gap-2 bg-sky py-3 text-center font-display text-sm font-bold text-white transition-colors hover:bg-ink disabled:opacity-60"
                 >
                   {messagingLoading ? <Loader2 size={14} className="animate-spin" /> : <MessageSquare size={14} />}
                   Send message
                 </button>
                 <button
                   onClick={() => setShowContractModal(true)}
-                  className="w-full py-3 bg-white/3 border border-white/8 rounded-2xl text-center text-sm font-bold text-gray-300 hover:bg-white/8 transition-colors flex items-center justify-center gap-2"
+                  className="flex w-full items-center justify-center gap-2 border-2 border-ink py-3 text-center font-display text-sm font-bold transition-colors hover:bg-ink hover:text-white"
                 >
-                  <FileText size={14} className="text-brand-green" />
+                  <FileText size={14} />
                   Propose a contract
                 </button>
               </div>
@@ -570,7 +568,7 @@ const FreelancerProfile: React.FC = () => {
 
             <Link
               to="/marketplace"
-              className="flex items-center justify-center gap-1.5 w-full py-4 bg-brand-grey/40 border border-white/5 rounded-2xl text-center text-xs font-black text-gray-400 hover:text-white hover:border-white/10 transition-colors"
+              className="flex w-full items-center justify-center gap-1.5 border-2 border-ink bg-white py-4 text-center font-display text-[13px] font-bold transition-colors hover:bg-ink hover:text-white"
             >
               Browse More Freelancers <ArrowRight size={12} />
             </Link>

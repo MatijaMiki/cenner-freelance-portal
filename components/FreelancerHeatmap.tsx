@@ -211,7 +211,8 @@ const MapCanvas: React.FC<MapCanvasProps> = ({
           src="/world-map-dark.png"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none opacity-90"
+          className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+          style={{ filter: 'invert(1) contrast(1.15)', mixBlendMode: 'multiply' }}
           draggable={false}
           onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
         />
@@ -222,14 +223,14 @@ const MapCanvas: React.FC<MapCanvasProps> = ({
         >
           <defs>
             <radialGradient id="cenner-heat-blob" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#4ADE80" stopOpacity="0.95" />
-              <stop offset="35%" stopColor="#22C55E" stopOpacity="0.55" />
-              <stop offset="70%" stopColor="#16A34A" stopOpacity="0.18" />
-              <stop offset="100%" stopColor="#16A34A" stopOpacity="0" />
+              <stop offset="0%" stopColor="#002CA5" stopOpacity="0.9" />
+              <stop offset="35%" stopColor="#2F5BFF" stopOpacity="0.5" />
+              <stop offset="70%" stopColor="#6F8FFF" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="#6F8FFF" stopOpacity="0" />
             </radialGradient>
           </defs>
 
-          <g style={{ mixBlendMode: 'screen' }}>
+          <g style={{ mixBlendMode: 'multiply' }}>
             {clusters.map(({ city, count, x, y }) => {
               const intensity = count / maxCount;
               const radius = (28 + intensity * 42) / Math.max(1, zoom * 0.6);
@@ -241,7 +242,7 @@ const MapCanvas: React.FC<MapCanvasProps> = ({
                   onMouseLeave={onHoverCity ? () => onHoverCity(null) : undefined}
                 >
                   <circle cx={x} cy={y} r={radius} fill="url(#cenner-heat-blob)" />
-                  <circle cx={x} cy={y} r={2 / Math.max(1, zoom * 0.3)} fill="#86EFAC" opacity={0.95} />
+                  <circle cx={x} cy={y} r={2 / Math.max(1, zoom * 0.3)} fill="#002CA5" opacity={0.95} />
                 </g>
               );
             })}
@@ -255,7 +256,7 @@ const MapCanvas: React.FC<MapCanvasProps> = ({
                 textAnchor="middle"
                 fontSize={hoveredCity === city ? 11 : 9}
                 fontWeight={700}
-                fill={hoveredCity === city ? '#86EFAC' : 'rgba(255,255,255,0.55)'}
+                fill={hoveredCity === city ? '#002CA5' : 'rgba(11,12,14,0.65)'}
                 style={{ textTransform: 'capitalize', transition: 'all .15s' }}
               >
                 {city} · {count}
@@ -321,29 +322,29 @@ const FreelancerHeatmap: React.FC<Props> = ({ listings }) => {
 
   return (
     <>
-      <div className="bg-brand-grey/40 border border-white/10 rounded-[1.75rem] p-5 backdrop-blur-md shadow-2xl overflow-hidden">
+      <div className="overflow-hidden border-2 border-ink bg-white p-5 text-ink">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
-            <Globe2 size={13} className="text-brand-green" />
-            <h3 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
+            <Globe2 size={15} className="text-ink" />
+            <h3 className="font-display text-[13px] font-extrabold uppercase tracking-[0.12em]">
               {t('Talent Density')}
             </h3>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[9px] font-black text-brand-green uppercase tracking-widest">
+            <span className="font-display text-[12px] font-extrabold uppercase tracking-wide text-sky">
               {totalMapped} {t('mapped')}
             </span>
             <button
               onClick={() => setExpanded(true)}
               aria-label={t('Expand map')}
-              className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400 hover:text-brand-green transition-colors"
+              className="p-1.5 text-ink transition-colors hover:bg-ink hover:text-white"
             >
-              <Maximize2 size={12} />
+              <Maximize2 size={14} />
             </button>
           </div>
         </div>
 
-        <div className="relative aspect-[2/1] w-full rounded-xl overflow-hidden bg-gradient-to-br from-black via-[#0a0e14] to-[#08120a] border border-white/5">
+        <div className="relative aspect-[2/1] w-full overflow-hidden border-2 border-ink bg-paper2">
           <MapCanvas
             clusters={cityClusters}
             maxCount={maxCount}
@@ -351,15 +352,15 @@ const FreelancerHeatmap: React.FC<Props> = ({ listings }) => {
             zoom={2.6}
           />
           {cityClusters.length === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-              <p className="text-gray-500 text-[9px] font-bold uppercase tracking-widest">
+            <div className="absolute inset-0 flex items-center justify-center bg-white/40">
+              <p className="font-display text-[12px] font-bold uppercase tracking-wide text-ink">
                 {t('No mapped freelancers yet')}
               </p>
             </div>
           )}
         </div>
 
-        <p className="mt-3 text-[9px] text-gray-500 font-medium leading-relaxed">
+        <p className="mt-3 text-[13px] leading-relaxed text-slate">
           {t('Approximate city-level density. Exact locations are never shown.')}
         </p>
       </div>
@@ -371,18 +372,18 @@ const FreelancerHeatmap: React.FC<Props> = ({ listings }) => {
           aria-modal="true"
         >
           <div
-            className="absolute inset-0 bg-black/85 backdrop-blur-xl"
+            className="absolute inset-0 bg-ink/60"
             onClick={handleClose}
           />
-          <div className="absolute inset-4 md:inset-8 flex flex-col bg-brand-grey/60 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl">
-            <div className="flex items-center justify-between px-6 md:px-10 py-5 border-b border-white/10">
+          <div className="absolute inset-4 flex flex-col overflow-hidden border-2 border-ink bg-paper text-ink md:inset-8">
+            <div className="flex items-center justify-between border-b-2 border-ink px-6 py-5 md:px-10">
               <div className="flex items-center gap-3">
-                <Globe2 size={18} className="text-brand-green" />
+                <Globe2 size={20} className="text-ink" />
                 <div>
-                  <h2 className="text-base md:text-lg font-black text-white tracking-tight">
+                  <h2 className="font-display text-lg font-extrabold tracking-[-0.02em] md:text-xl">
                     {t('Talent Density')}
                   </h2>
-                  <p className="text-[10px] text-gray-500 font-medium uppercase tracking-widest mt-0.5">
+                  <p className="mt-0.5 font-display text-[12px] font-bold uppercase tracking-wide text-slate">
                     {totalMapped} {t('freelancers across')} {cityClusters.length} {t('cities')}
                   </p>
                 </div>
@@ -390,13 +391,13 @@ const FreelancerHeatmap: React.FC<Props> = ({ listings }) => {
               <button
                 onClick={handleClose}
                 aria-label={t('Close')}
-                className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                className="border-2 border-ink p-2 transition-colors hover:bg-ink hover:text-white"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div className="relative flex-grow bg-black overflow-hidden">
+            <div className="relative flex-grow overflow-hidden bg-paper2">
               <MapCanvas
                 clusters={cityClusters}
                 maxCount={maxCount}
@@ -408,14 +409,14 @@ const FreelancerHeatmap: React.FC<Props> = ({ listings }) => {
               />
               {cityClusters.length === 0 && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">
+                  <p className="font-display text-sm font-bold uppercase tracking-wide text-ink">
                     {t('No mapped freelancers yet')}
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="px-6 md:px-10 py-4 border-t border-white/10 flex items-center justify-between text-[10px] text-gray-500 font-medium uppercase tracking-widest">
+            <div className="flex items-center justify-between border-t-2 border-ink px-6 py-4 font-display text-[12px] font-bold uppercase tracking-wide text-slate md:px-10">
               <span>{t('Approximate city-level density. Exact locations are never shown.')}</span>
               <span className="hidden md:block">{t('Press ESC to close')}</span>
             </div>

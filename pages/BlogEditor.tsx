@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, FileText, Plus, Save, Trash2, Eye, EyeOff, Loader2, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, FileText, Plus, Save, Trash2, Eye, EyeOff, Loader2 } from 'lucide-react';
 import SEO from '../components/SEO';
+import AdminTabs from '../components/AdminTabs';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -125,7 +126,7 @@ const BlogEditor: React.FC = () => {
         await API.updateBlogPost(id, payload);
       } else {
         const created = await API.createBlogPost(payload);
-        navigate(`/blog-admin/${created.id}`, { replace: true });
+        navigate(`/admin/blog/${created.id}`, { replace: true });
       }
       loadList();
     } catch (err: any) {
@@ -140,7 +141,7 @@ const BlogEditor: React.FC = () => {
     if (!window.confirm('Delete this post? This cannot be undone.')) return;
     try {
       await API.deleteBlogPost(id);
-      navigate('/blog-admin', { replace: true });
+      navigate('/admin/blog', { replace: true });
       loadList();
     } catch (err: any) {
       setError(err?.message || 'Delete failed');
@@ -154,26 +155,21 @@ const BlogEditor: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-brand-black pt-12 pb-24">
-      <SEO title="Blog Admin" canonical="/blog-admin" noIndex />
+      <SEO title="Blog Admin" canonical="/admin/blog" noIndex />
 
       <div className="max-w-7xl mx-auto px-4 lg:px-12">
         <div className="flex items-center justify-between mb-8 flex-wrap gap-3">
+          <AdminTabs />
           <Link to="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-white text-xs font-black uppercase tracking-widest">
             <ArrowLeft size={14} /> Back to Blog
           </Link>
-          <div className="flex items-center gap-4">
-            <Link to="/admin/bans" className="inline-flex items-center gap-1.5 text-gray-500 hover:text-white text-xs font-black uppercase tracking-widest">
-              <ShieldAlert size={14} /> Bans
-            </Link>
-            <h1 className="text-2xl font-black text-white tracking-tighter">Blog Admin</h1>
-          </div>
         </div>
 
         <div className="grid lg:grid-cols-[280px_1fr] gap-8">
           {/* Sidebar */}
           <aside className="space-y-2">
             <Link
-              to="/blog-admin"
+              to="/admin/blog"
               className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-black uppercase tracking-widest transition-colors ${
                 !id ? 'bg-brand-pink text-white border-brand-pink' : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
               }`}
@@ -187,7 +183,7 @@ const BlogEditor: React.FC = () => {
               {posts.map(p => (
                 <Link
                   key={p.id}
-                  to={`/blog-admin/${p.id}`}
+                  to={`/admin/blog/${p.id}`}
                   className={`block px-4 py-3 rounded-xl border text-sm transition-colors ${
                     id === p.id
                       ? 'bg-white/10 border-white/20 text-white'

@@ -43,28 +43,15 @@ const ROUTES = [
   },
   {
     path: '/services',
-    title: 'Usluge: Web Razvoj, Dizajn i Marketing Hrvatska | Cenner',
+    title: 'Izrada web stranica, aplikacija i automatizacija | Cenner',
     description:
-      'Freelance usluge u Hrvatskoj i EU: web razvoj, grafički dizajn, digitalni marketing, AI razvoj, video produkcija. Verificirani freelanceri, sigurno plaćanje, zajamčena kvaliteta.',
-  },
-  {
-    path: '/match',
-    title: 'Job Matching | Cenner',
-    description:
-      'AI-powered job matching is coming soon to Cenner. Sign up to be the first to try it.',
-    noIndex: true, // pages/Match.tsx passes noIndex — keep raw HTML consistent
+      'Cenner izrađuje web stranice, WordPress, SaaS i CRM sustave, n8n automatizacije, grafički dizajn i oglase te postavlja servere i hosting. Fiksna cijena, izravna komunikacija.',
   },
   {
     path: '/subscription',
     title: 'Pricing & Plans | Cenner',
     description:
       'Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams.',
-  },
-  {
-    path: '/technology',
-    title: 'Technology | Cenner',
-    description:
-      'Discover the technology stack powering Cenner: AI matching, real-time collaboration, and secure infrastructure built for elite freelance work.',
   },
   {
     path: '/ranwhat',
@@ -86,18 +73,13 @@ const ROUTES = [
   },
   {
     path: '/about',
-    title: 'O Nama: Freelance Platforma Hrvatska | Cenner',
+    title: 'O nama i kontakt | Cenner',
     description:
-      'Cenner je hrvatska freelance platforma osnovana s misijom povezivanja tvrtki s najboljim slobodnim radnicima iz Hrvatske i EU. Saznaj više o nama i našoj viziji.',
-  },
-  {
-    path: '/contact',
-    title: 'Contact | Cenner',
-    description:
-      "Get in touch with the Cenner team. We're here to help you find elite freelance talent or answer any questions about the platform.",
+      'Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i automatizacije. Kontakt, adresa i podaci o tvrtki.',
   },
   {
     path: '/auth',
+    noIndex: true, // a sign-in form, not a page to rank (SEO page map)
     title: 'Login / Sign Up | Cenner',
     description:
       'Sign in or create your Cenner account to access elite freelance talent and premium collaboration tools.',

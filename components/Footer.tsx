@@ -2,6 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useT } from '../i18n';
+import Logo from './Logo';
+import { COMPANY, companyAddress } from '../lib/company';
 
 // Inline branded SVG icons (lucide doesn't include X/Facebook/Medium)
 const XIcon = () => (
@@ -31,16 +33,19 @@ const SOCIAL = [
 const PLATFORM_LINKS = [
   { label: 'Marketplace',   path: '/marketplace' },
   { label: 'Services',      path: '/services' },
-  { label: 'Job Matching',  path: '/match' },
-  { label: 'Dashboard',     path: '/dashboard' },
+];
+
+// Cenner's own apps, on their own subdomains (plain links: they are ours)
+const TOOL_LINKS = [
+  { label: 'Cenner Links', href: 'https://links.cenner.hr' },
+  { label: 'Shorten',      href: 'https://shorten.cenner.hr' },
 ];
 
 const COMPANY_LINKS = [
   { label: 'About Us',          path: '/about' },
-  { label: 'Previous Projects', path: '/projects' },
-  { label: 'Technology',        path: '/technology' },
+  { label: 'Previous Projects', path: '/services#radovi' },
   { label: 'ranwhat',           path: '/ranwhat' },
-  { label: 'Contact',           path: '/contact' },
+  { label: 'Contact',           path: '/about#kontakt' },
 ];
 
 const RESOURCE_LINKS = [
@@ -51,20 +56,24 @@ const RESOURCE_LINKS = [
   { label: 'Cookie Policy',  path: '/cookies' },
 ];
 
-const Footer: React.FC = () => {
+// `home`: the homepage's own close (one display face, sentence-case labels, no rules).
+// Every other page keeps the classic footer unchanged.
+const Footer: React.FC<{ home?: boolean }> = ({ home = false }) => {
   const t = useT();
+  const c = (h: string, classic: string) => (home ? h : classic);
+  const label = c('font-display text-[15px] font-bold text-white', 'text-[10px] font-black text-white uppercase tracking-[0.3em]');
+  const small = c('font-display text-[14px] text-white/70 hover:text-white', 'text-[10px] font-bold text-gray-500 hover:text-white uppercase tracking-widest');
   return (
-    <footer className="pt-24 border-t border-white/5 bg-brand-black/20 rounded-t-[4rem] relative z-10">
-      <div className="max-w-7xl mx-auto px-4">
+    <footer className={c('relative z-10 pt-24 font-display', 'pt-24 border-t border-white/5 bg-brand-black/20 rounded-t-[4rem] relative z-10')}>
+      <div className={c('mx-auto max-w-[1500px] px-4 md:px-8', 'max-w-7xl mx-auto px-4')}>
         <div className="grid md:grid-cols-4 gap-12 mb-20">
 
           {/* Brand column */}
           <div className="col-span-1">
-            <div className="flex items-center space-x-3 mb-8">
-              <div className="w-10 h-10 bg-gradient-to-br from-brand-green to-brand-pink rounded-xl flex items-center justify-center font-black text-brand-black">C</div>
-              <span className="text-2xl font-black tracking-tighter text-white">CENNER</span>
-            </div>
-            <p className="text-gray-500 text-sm leading-relaxed mb-8">
+            <Link to="/" aria-label="Cenner" className="group mb-8 inline-flex focus-visible:outline-none focus-visible:underline">
+              <Logo tone="dark" />
+            </Link>
+            <p className={c('mb-8 font-text text-[1rem] leading-relaxed text-white/75', 'text-gray-500 text-sm leading-relaxed mb-8')}>
               {t("The platform for high-quality digital collaboration. Connecting top creators worldwide.")}
             </p>
             <div className="flex space-x-3">
@@ -73,7 +82,7 @@ const Footer: React.FC = () => {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="w-10 h-10 bg-white/5 border border-white/5 rounded-lg flex items-center justify-center text-gray-400 hover:text-brand-green hover:border-brand-green transition-all"
+                  className={c('flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand-green hover:text-ink', 'w-10 h-10 bg-white/5 border border-white/5 rounded-lg flex items-center justify-center text-gray-400 hover:text-brand-green hover:border-brand-green transition-all')}
                 >
                   <Icon />
                 </a>
@@ -83,13 +92,23 @@ const Footer: React.FC = () => {
 
           {/* Platform */}
           <div className="space-y-6">
-            <h5 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">{t('Platform')}</h5>
+            <h5 className={label}>{t('Platform')}</h5>
             <ul className="space-y-3">
               {PLATFORM_LINKS.map(({ label, path }) => (
                 <li key={label}>
-                  <Link to={path} className="text-gray-500 hover:text-brand-green text-sm transition-colors">
+                  <Link to={path} className={c('font-display text-[15px] text-white/75 transition-colors hover:text-brand-green', 'text-gray-500 hover:text-brand-green text-sm transition-colors')}>
                     {t(label)}
                   </Link>
+                </li>
+              ))}
+            </ul>
+            <h5 className={`${label} pt-4`}>{t('Cenner tools')}</h5>
+            <ul className="space-y-3">
+              {TOOL_LINKS.map(({ label, href }) => (
+                <li key={label}>
+                  <a href={href} className={c('font-display text-[15px] text-white/75 transition-colors hover:text-brand-green', 'text-gray-500 hover:text-brand-green text-sm transition-colors')}>
+                    {label}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -97,11 +116,11 @@ const Footer: React.FC = () => {
 
           {/* Company */}
           <div className="space-y-6">
-            <h5 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">{t('Company')}</h5>
+            <h5 className={label}>{t('Company')}</h5>
             <ul className="space-y-3">
               {COMPANY_LINKS.map(({ label, path }) => (
                 <li key={label}>
-                  <Link to={path} className="text-gray-500 hover:text-brand-pink text-sm transition-colors">
+                  <Link to={path} className={c('font-display text-[15px] text-white/75 transition-colors hover:text-brand-green', 'text-gray-500 hover:text-brand-pink text-sm transition-colors')}>
                     {t(label)}
                   </Link>
                 </li>
@@ -111,11 +130,11 @@ const Footer: React.FC = () => {
 
           {/* Resources */}
           <div className="space-y-6">
-            <h5 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">{t('Resources')}</h5>
+            <h5 className={label}>{t('Resources')}</h5>
             <ul className="space-y-3">
               {RESOURCE_LINKS.map(({ label, path }) => (
                 <li key={label}>
-                  <Link to={path} className="text-gray-500 hover:text-brand-green text-sm transition-colors">
+                  <Link to={path} className={c('font-display text-[15px] text-white/75 transition-colors hover:text-brand-green', 'text-gray-500 hover:text-brand-green text-sm transition-colors')}>
                     {t(label)}
                   </Link>
                 </li>
@@ -124,14 +143,17 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center py-10 border-t border-white/5 gap-6">
-          <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
+        <div className={c('flex flex-col items-center justify-between gap-6 py-10 md:flex-row', 'flex flex-col md:flex-row justify-between items-center py-10 border-t border-white/5 gap-6')}>
+          <p className={c('font-display text-[14px] text-white/70', 'text-[10px] font-black text-gray-600 uppercase tracking-widest')}>
             © {new Date().getFullYear()} Cenner. {t('All rights reserved.')}
+            <span className={`mt-1.5 block normal-case tracking-normal ${c('font-normal', 'text-[11px] font-medium text-gray-400')}`}>
+              {COMPANY.legalName} · {companyAddress} · OIB {COMPANY.oib}
+            </span>
           </p>
           <div className="flex space-x-8">
-            <Link to="/privacy" className="text-[10px] font-bold text-gray-500 hover:text-white uppercase tracking-widest">{t('Privacy')}</Link>
-            <Link to="/terms"   className="text-[10px] font-bold text-gray-500 hover:text-white uppercase tracking-widest">{t('Terms')}</Link>
-            <Link to="/cookies" className="text-[10px] font-bold text-gray-500 hover:text-white uppercase tracking-widest">{t('Cookies')}</Link>
+            <Link to="/privacy" className={small}>{t('Privacy')}</Link>
+            <Link to="/terms"   className={small}>{t('Terms')}</Link>
+            <Link to="/cookies" className={small}>{t('Cookies')}</Link>
           </div>
         </div>
       </div>

@@ -38,15 +38,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/subscription" />
   </url>
   <url>
-    <loc>https://cenner.hr/technology</loc>
-    <lastmod>2026-09-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/technology" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/technology" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/technology" />
-  </url>
-  <url>
     <loc>https://cenner.hr/blog</loc>
     <lastmod>2026-09-12</lastmod>
     <changefreq>daily</changefreq>
@@ -63,24 +54,6 @@
     <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/about" />
     <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/about" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/about" />
-  </url>
-  <url>
-    <loc>https://cenner.hr/contact</loc>
-    <lastmod>2026-09-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/contact" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/contact" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/contact" />
-  </url>
-  <url>
-    <loc>https://cenner.hr/auth</loc>
-    <lastmod>2026-09-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/auth" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/auth" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/auth" />
   </url>
   <url>
     <loc>https://cenner.hr/privacy</loc>

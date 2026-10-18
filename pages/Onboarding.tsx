@@ -25,14 +25,14 @@ const Onboarding: React.FC = () => {
 
       {/* Hero */}
       <div className="mb-12">
-        <div className="inline-block px-3 py-1 rounded-full bg-brand-green/10 text-brand-green text-[10px] font-black uppercase tracking-widest mb-6">
+        <div className="inline-block px-3 py-1 bg-leaf/10 text-leaf text-[12px] font-black uppercase tracking-widest mb-6">
           {t('Vodič za početak', 'Getting Started')}
         </div>
-        <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-[1.05] mb-6">
+        <h1 className="text-4xl md:text-6xl font-black text-ink tracking-tight leading-[1.05] mb-6">
           {t('Prije nego započneš', 'Before you start working')}{' '}
-          <span className="text-brand-pink">{t('rad na Cenneru.', 'on Cenner.')}</span>
+          <span className="text-sky">{t('rad na Cenneru.', 'on Cenner.')}</span>
         </h1>
-        <p className="text-lg md:text-xl text-gray-400 leading-relaxed max-w-3xl">
+        <p className="text-lg md:text-xl text-slate leading-relaxed max-w-3xl">
           {t(
             'Da bi mogao zakonito naplatiti svoj rad u Hrvatskoj, moraš biti registriran kao pravni subjekt. Najjednostavniji oblik za freelancere je paušalni obrt.',
             'To legally invoice your work in Croatia, you must be registered as a legal entity. The simplest form for freelancers is a paušalni obrt (flat-rate sole trader).'
@@ -41,14 +41,14 @@ const Onboarding: React.FC = () => {
       </div>
 
       {/* Disclaimer — prominent */}
-      <div className="mb-14 p-6 rounded-2xl border border-yellow-500/30 bg-yellow-500/5">
+      <div className="mb-14 p-6 border border-ink bg-ink/5">
         <div className="flex items-start gap-4">
-          <AlertTriangle size={22} className="text-yellow-400 shrink-0 mt-0.5" />
+          <AlertTriangle size={22} className="text-ink shrink-0 mt-0.5" />
           <div>
-            <p className="text-yellow-400 text-xs font-black uppercase tracking-widest mb-2">
+            <p className="text-ink text-xs font-black uppercase tracking-widest mb-2">
               {t('Pravna napomena', 'Legal disclaimer')}
             </p>
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <p className="text-ink text-sm leading-relaxed">
               {t(
                 'Ova stranica služi isključivo u informativne svrhe i ne predstavlja pravni, porezni ili računovodstveni savjet. Pragovi, stope i postupci mogu se mijenjati. Prije bilo kakve odluke obavezno se posavjetuj s ovlaštenim računovođom ili Poreznom upravom.',
                 'This page is for informational purposes only and is not legal, tax, or accounting advice. Thresholds, rates, and procedures may change. Always consult a licensed accountant or the Croatian Tax Administration before acting.'
@@ -88,7 +88,7 @@ const Onboarding: React.FC = () => {
             'A paušalni obrt is a simplified form of self-employment for smaller freelancers. Instead of bookkeeping income and expenses, you pay a fixed flat-rate tax based on your annual revenue tier.'
           )}
         </p>
-        <ul className="mt-4 space-y-2 text-gray-400">
+        <ul className="mt-4 space-y-2 text-slate">
           <Bullet>
             {t(
               'Prikladno za freelancere s godišnjim prometom ispod određenog praga (orijentacijski oko 60.000 €, ali provjeri trenutno važeći iznos).',
@@ -166,7 +166,7 @@ const Onboarding: React.FC = () => {
             'Amounts change yearly. Always verify current figures on porezna.hr or with an accountant.'
           )}
         </p>
-        <ul className="space-y-2 text-gray-400">
+        <ul className="space-y-2 text-slate">
           <Bullet>{t('Otvaranje obrta: niži dvocifreni iznos u eurima.', 'Opening the obrt: a low double-digit amount in euros.')}</Bullet>
           <Bullet>{t('Mjesečni doprinosi: orijentacijski od 100 do 150 € (HZMO + HZZO).', 'Monthly contributions: roughly €100–€150 (HZMO + HZZO).')}</Bullet>
           <Bullet>{t('Paušalni porez i prirez: ovisi o razredu godišnjeg prometa i mjestu prebivališta.', 'Flat-rate tax and surtax: depends on revenue tier and your municipality.')}</Bullet>
@@ -179,17 +179,17 @@ const Onboarding: React.FC = () => {
         icon={<Receipt size={20} />}
         title={t('Alternative paušalnom obrtu', 'Alternatives to paušalni obrt')}
       >
-        <ul className="space-y-3 text-gray-400">
+        <ul className="space-y-3 text-slate">
           <Bullet>
-            <strong className="text-white">{t('Redovni obrt: ', 'Regular obrt: ')}</strong>
+            <strong className="text-ink">{t('Redovni obrt: ', 'Regular obrt: ')}</strong>
             {t('za veće prihode ili djelatnosti koje ne mogu biti paušalne. Vodi knjige, plaća porez na dohodak.', 'for higher revenue or activities that cannot be paušalni. Requires bookkeeping; income tax applies.')}
           </Bullet>
           <Bullet>
-            <strong className="text-white">{t('J.d.o.o.: ', 'J.d.o.o.: ')}</strong>
+            <strong className="text-ink">{t('J.d.o.o.: ', 'J.d.o.o.: ')}</strong>
             {t('jednostavno društvo s ograničenom odgovornošću. Niska osnivačka glavnica, ali kompleksnije od paušalnog obrta.', 'simple limited liability company. Low founding capital but more complex than paušalni obrt.')}
           </Bullet>
           <Bullet>
-            <strong className="text-white">{t('D.o.o.: ', 'D.o.o.: ')}</strong>
+            <strong className="text-ink">{t('D.o.o.: ', 'D.o.o.: ')}</strong>
             {t('klasični LLC, primjereniji kada zapošljavaš ljude i imaš značajne troškove.', 'classic LLC, better suited when employing people or carrying significant expenses.')}
           </Bullet>
         </ul>
@@ -210,12 +210,12 @@ const Onboarding: React.FC = () => {
       </Section>
 
       {/* CTA */}
-      <div className="mt-16 p-10 rounded-3xl bg-gradient-to-br from-brand-green/20 to-brand-pink/20 border border-white/10 backdrop-blur-md text-center">
-        <Shield size={32} className="text-brand-green mx-auto mb-4" />
-        <h3 className="text-2xl md:text-3xl font-black text-white mb-3 tracking-tight">
+      <div className="mt-16 p-10 border-2 border-ink text-center">
+        <Shield size={32} className="text-leaf mx-auto mb-4" />
+        <h3 className="text-2xl md:text-3xl font-black text-ink mb-3 tracking-tight">
           {t('Kada budeš spreman, mi te čekamo.', 'When you are ready, we are waiting.')}
         </h3>
-        <p className="text-gray-400 text-sm mb-6 max-w-xl mx-auto">
+        <p className="text-slate text-sm mb-6 max-w-xl mx-auto">
           {t(
             'Nakon što otvoriš obrt, dovrši profil, pošalji KYC i objavi prvu uslugu.',
             'Once your obrt is open, complete your profile, submit KYC, and publish your first listing.'
@@ -223,7 +223,7 @@ const Onboarding: React.FC = () => {
         </p>
         <Link
           to="/auth"
-          className="inline-flex items-center gap-2 px-8 py-3.5 bg-brand-green text-brand-black rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform"
+          className="inline-flex items-center gap-2 px-8 py-3.5 bg-sky text-white text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform"
         >
           {t('Otvori račun', 'Create account')} <ArrowRight size={14} />
         </Link>
@@ -235,26 +235,26 @@ const Onboarding: React.FC = () => {
 const Section: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
   <section className="mb-12">
     <div className="flex items-center gap-3 mb-5">
-      <div className="w-10 h-10 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center">{icon}</div>
-      <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">{title}</h2>
+      <div className="w-10 h-10 bg-leaf/10 text-leaf flex items-center justify-center">{icon}</div>
+      <h2 className="text-2xl md:text-3xl font-black text-ink tracking-tight">{title}</h2>
     </div>
-    <div className="text-gray-400 text-base leading-relaxed pl-1">{children}</div>
+    <div className="text-slate text-base leading-relaxed pl-1">{children}</div>
   </section>
 );
 
 const Bullet: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <li className="flex items-start gap-2.5">
-    <CheckCircle2 size={16} className="text-brand-green shrink-0 mt-1" />
+    <CheckCircle2 size={16} className="text-leaf shrink-0 mt-1" />
     <span>{children}</span>
   </li>
 );
 
 const Step: React.FC<{ n: number; title: string; children: React.ReactNode }> = ({ n, title, children }) => (
   <li className="flex gap-4">
-    <div className="w-9 h-9 rounded-xl bg-brand-pink/10 text-brand-pink font-black flex items-center justify-center shrink-0">{n}</div>
+    <div className="w-9 h-9 bg-sky/10 text-sky font-black flex items-center justify-center shrink-0">{n}</div>
     <div>
-      <h3 className="text-white font-bold text-base mb-1">{title}</h3>
-      <p className="text-gray-400 text-sm leading-relaxed">{children}</p>
+      <h3 className="text-ink font-bold text-base mb-1">{title}</h3>
+      <p className="text-slate text-sm leading-relaxed">{children}</p>
     </div>
   </li>
 );
@@ -265,7 +265,7 @@ const ResourceLink: React.FC<{ href: string; label: string }> = ({ href, label }
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 text-brand-green hover:underline text-sm font-bold"
+      className="inline-flex items-center gap-2 text-leaf hover:underline text-sm font-bold"
     >
       {label} <ExternalLink size={12} />
     </a>

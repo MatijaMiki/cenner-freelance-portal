@@ -7,7 +7,6 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import { useNotify } from '../contexts/NotifyContext';
-import NeuralBackground from '../components/NeuralBackground';
 import AvatarImg from '../components/Avatar';
 import SEO from '../components/SEO';
 import MilestoneFundModal from '../components/MilestoneFundModal';
@@ -33,16 +32,16 @@ interface Contract {
 
 function MilestoneStatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    PENDING:   'text-gray-400 bg-gray-400/10',
-    FUNDED:    'text-blue-400 bg-blue-400/10',
-    SUBMITTED: 'text-yellow-400 bg-yellow-400/10',
-    APPROVED:  'text-brand-green bg-brand-green/10',
-    RELEASED:  'text-brand-green bg-brand-green/10',
-    DISPUTED:  'text-red-400 bg-red-400/10',
-    REFUNDED:  'text-gray-400 bg-gray-400/10',
+    PENDING:   'text-slate bg-ink/5',
+    FUNDED:    'text-sky bg-ink/5',
+    SUBMITTED: 'text-ink bg-ink/5',
+    APPROVED:  'text-leaf bg-leaf/10',
+    RELEASED:  'text-leaf bg-leaf/10',
+    DISPUTED:  'text-red-700 bg-red-50',
+    REFUNDED:  'text-slate bg-ink/5',
   };
   return (
-    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${map[status] || 'text-gray-400 bg-gray-400/10'}`}>
+    <span className={`text-[12px] font-bold uppercase tracking-wider px-2 py-0.5 ${map[status] || 'text-slate bg-ink/5'}`}>
       {status.toLowerCase()}
     </span>
   );
@@ -52,7 +51,7 @@ function StarRating({ rating, max = 5 }: { rating: number; max?: number }) {
   return (
     <div className="flex gap-0.5">
       {Array.from({ length: max }, (_, i) => (
-        <Star key={i} size={14} className={i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-700'} />
+        <Star key={i} size={14} className={i < rating ? 'text-ink fill-ink' : 'text-slate'} />
       ))}
     </div>
   );
@@ -147,8 +146,8 @@ const ContractDetail: React.FC = () => {
     }
   }
 
-  if (loading) return <div className="min-h-screen bg-brand-black flex items-center justify-center text-gray-500">Loading…</div>;
-  if (!contract) return <div className="min-h-screen bg-brand-black flex items-center justify-center text-gray-500">{error || 'Not found'}</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-slate">Loading…</div>;
+  if (!contract) return <div className="min-h-screen flex items-center justify-center text-slate">{error || 'Not found'}</div>;
 
   const other = isClient ? contract.freelancer : contract.client;
 
@@ -160,42 +159,41 @@ const ContractDetail: React.FC = () => {
   return (
     <div className="relative min-h-screen">
       <SEO title={contract.title} canonical={`/contracts/${contract.id}`} description="Contract details" />
-      <NeuralBackground parallax={false} />
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-10">
-        <button onClick={() => navigate('/contracts')} className="flex items-center gap-2 text-gray-500 hover:text-white mb-6 transition-colors text-sm">
+        <button onClick={() => navigate('/contracts')} className="flex items-center gap-2 text-slate hover:text-ink mb-6 transition-colors text-sm">
           <ArrowLeft size={16} /> Back to contracts
         </button>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">{error}</div>
+          <div className="mb-4 p-3 bg-red-50 border border-red-700 text-red-700 text-sm">{error}</div>
         )}
 
         {/* Header */}
-        <div className="bg-brand-grey/70 border border-white/5 rounded-2xl p-6 mb-4">
+        <div className="bg-white border-2 border-ink p-6 mb-4">
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h1 className="text-xl font-black text-white mb-1">{contract.title}</h1>
-              {contract.description && <p className="text-gray-400 text-sm">{contract.description}</p>}
+              <h1 className="text-xl font-black text-ink mb-1">{contract.title}</h1>
+              {contract.description && <p className="text-slate text-sm">{contract.description}</p>}
             </div>
             <div className="text-right">
-              <p className="text-2xl font-black text-white">€{contract.totalAmount.toFixed(2)}</p>
-              <p className="text-gray-600 text-xs">total value</p>
+              <p className="text-2xl font-black text-ink">€{contract.totalAmount.toFixed(2)}</p>
+              <p className="text-slate text-xs">total value</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <AvatarImg src={other.avatar} name={other.name} size={40} className="rounded-full" />
+            <AvatarImg src={other.avatar} name={other.name} size={40} className="" />
             <div>
-              <p className="text-white font-bold text-sm">{other.name}</p>
+              <p className="text-ink font-bold text-sm">{other.name}</p>
               {other.avgRating != null && (
                 <div className="flex items-center gap-1 mt-0.5">
                   <StarRating rating={Math.round(other.avgRating)} />
-                  <span className="text-gray-500 text-xs">{other.avgRating.toFixed(1)} ({other.reviewCount})</span>
+                  <span className="text-slate text-xs">{other.avgRating.toFixed(1)} ({other.reviewCount})</span>
                 </div>
               )}
             </div>
             <button
               onClick={() => navigate('/messages')}
-              className="ml-auto flex items-center gap-1.5 px-3 py-1.5 border border-white/10 rounded-xl text-gray-400 hover:text-white hover:border-white/20 transition-all text-xs font-bold"
+              className="ml-auto flex items-center gap-1.5 px-3 py-1.5 border-2 border-ink text-slate hover:text-ink hover:border-ink transition-all text-xs font-bold"
             >
               <MessageCircle size={13} /> Message
             </button>
@@ -204,13 +202,13 @@ const ContractDetail: React.FC = () => {
 
         {/* Incoming offer banner — accept or decline */}
         {isOfferRecipient && (
-          <div className="bg-yellow-400/5 border border-yellow-400/20 rounded-2xl p-5 mb-4">
+          <div className="bg-ink/5 border border-ink p-5 mb-4">
             <div className="flex items-start justify-between mb-3">
               <div>
-                <p className="text-yellow-400 font-bold text-sm">Contract offer pending your response</p>
-                <p className="text-gray-500 text-xs mt-0.5">Review the milestones below, then accept or decline.</p>
+                <p className="text-ink font-bold text-sm">Contract offer pending your response</p>
+                <p className="text-slate text-xs mt-0.5">Review the milestones below, then accept or decline.</p>
                 {offerExpiryDays !== null && (
-                  <p className={`text-xs mt-1 font-bold ${offerExpiryDays <= 1 ? 'text-red-400' : 'text-yellow-500'}`}>
+                  <p className={`text-xs mt-1 font-bold ${offerExpiryDays <= 1 ? 'text-red-700' : 'text-ink'}`}>
                     {offerExpiryDays <= 0 ? 'Expires today' : `Expires in ${offerExpiryDays} day${offerExpiryDays !== 1 ? 's' : ''}`}
                   </p>
                 )}
@@ -220,7 +218,7 @@ const ContractDetail: React.FC = () => {
               <button
                 onClick={() => doAction(() => API.acceptContract(contract.id), 'accept')}
                 disabled={!!actionLoading}
-                className="flex-1 px-4 py-2.5 bg-brand-green text-brand-black font-black rounded-xl text-sm hover:scale-105 transition-all disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 bg-sky text-white font-black text-sm hover:scale-105 transition-all disabled:opacity-50"
               >
                 {actionLoading === 'accept' ? 'Accepting…' : 'Accept contract'}
               </button>
@@ -235,7 +233,7 @@ const ContractDetail: React.FC = () => {
                   if (ok) doAction(() => API.declineContract(contract.id), 'decline');
                 }}
                 disabled={!!actionLoading}
-                className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 text-gray-300 font-bold rounded-xl text-sm hover:bg-white/10 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 bg-ink/5 border-2 border-ink text-ink font-bold text-sm hover:bg-ink/10 transition-colors disabled:opacity-50"
               >
                 {actionLoading === 'decline' ? 'Declining…' : 'Decline'}
               </button>
@@ -245,9 +243,9 @@ const ContractDetail: React.FC = () => {
 
         {/* Sent offer banner — waiting for other party */}
         {contract.status === 'DRAFT' && !isOfferRecipient && (
-          <div className="bg-blue-400/5 border border-blue-400/20 rounded-2xl p-4 mb-4">
-            <p className="text-blue-400 font-bold text-sm">Offer sent, awaiting response</p>
-            <p className="text-gray-500 text-xs mt-0.5">
+          <div className="bg-ink/5 border border-ink p-4 mb-4">
+            <p className="text-sky font-bold text-sm">Offer sent, awaiting response</p>
+            <p className="text-slate text-xs mt-0.5">
               Waiting for {other.name} to accept or decline.
               {offerExpiryDays !== null && ` Offer expires in ${Math.max(0, offerExpiryDays)} day${offerExpiryDays !== 1 ? 's' : ''}.`}
             </p>
@@ -255,21 +253,21 @@ const ContractDetail: React.FC = () => {
         )}
 
         {/* Milestones */}
-        <div className="bg-brand-grey/70 border border-white/5 rounded-2xl p-6 mb-4">
-          <h2 className="text-white font-black mb-4 flex items-center gap-2">
-            <ShieldCheck size={18} className="text-brand-green" /> Milestones
+        <div className="bg-white border-2 border-ink p-6 mb-4">
+          <h2 className="text-ink font-black mb-4 flex items-center gap-2">
+            <ShieldCheck size={18} className="text-leaf" /> Milestones
           </h2>
           <div className="space-y-3">
             {contract.milestones.map(m => (
-              <div key={m.id} className="border border-white/5 rounded-xl p-4">
+              <div key={m.id} className="border-2 border-ink p-4">
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-bold text-sm">{m.title}</p>
-                    {m.description && <p className="text-gray-500 text-xs mt-0.5">{m.description}</p>}
-                    {m.dueDate && <p className="text-gray-600 text-xs mt-1">Due {new Date(m.dueDate).toLocaleDateString()}</p>}
+                    <p className="text-ink font-bold text-sm">{m.title}</p>
+                    {m.description && <p className="text-slate text-xs mt-0.5">{m.description}</p>}
+                    {m.dueDate && <p className="text-slate text-xs mt-1">Due {new Date(m.dueDate).toLocaleDateString()}</p>}
                   </div>
                   <div className="text-right flex-shrink-0 ml-3">
-                    <p className="text-white font-black">€{m.amount.toFixed(2)}</p>
+                    <p className="text-ink font-black">€{m.amount.toFixed(2)}</p>
                     <MilestoneStatusBadge status={m.status} />
                   </div>
                 </div>
@@ -291,7 +289,7 @@ const ContractDetail: React.FC = () => {
                     <button
                       onClick={() => setFundTarget(m)}
                       disabled={!!actionLoading}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg text-xs font-bold hover:bg-blue-500/20 transition-all disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-ink/5 border border-ink text-sky text-xs font-bold hover:bg-ink/5 transition-all disabled:opacity-50"
                     >
                       <DollarSign size={12} />
                       Fund milestone
@@ -301,7 +299,7 @@ const ContractDetail: React.FC = () => {
                     <button
                       onClick={() => doAction(() => API.submitMilestone(m.id), `submit-${m.id}`)}
                       disabled={!!actionLoading}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 rounded-lg text-xs font-bold hover:bg-yellow-400/20 transition-all disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-ink/5 border border-ink text-ink text-xs font-bold hover:bg-ink/5 transition-all disabled:opacity-50"
                     >
                       <Send size={12} />
                       {actionLoading === `submit-${m.id}` ? 'Submitting…' : 'Submit work'}
@@ -311,7 +309,7 @@ const ContractDetail: React.FC = () => {
                     <button
                       onClick={() => doAction(() => API.approveMilestone(m.id), `approve-${m.id}`)}
                       disabled={!!actionLoading}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-green/10 border border-brand-green/20 text-brand-green rounded-lg text-xs font-bold hover:bg-brand-green/20 transition-all disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-leaf/10 border border-ink text-leaf text-xs font-bold hover:bg-leaf/20 transition-all disabled:opacity-50"
                     >
                       <CheckCircle2 size={12} />
                       {actionLoading === `approve-${m.id}` ? 'Approving…' : 'Approve & release payment'}
@@ -326,7 +324,7 @@ const ContractDetail: React.FC = () => {
                         doAction(() => API.disputeMilestone(m.id, reason), `dispute-${m.id}`);
                       }}
                       disabled={!!actionLoading}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-400/10 border border-red-400/20 text-red-400 rounded-lg text-xs font-bold hover:bg-red-400/20 transition-all disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 border border-red-700 text-red-700 text-xs font-bold hover:bg-red-50 transition-all disabled:opacity-50"
                     >
                       <AlertTriangle size={12} />
                       Dispute
@@ -344,7 +342,7 @@ const ContractDetail: React.FC = () => {
                         if (ok) doAction(() => API.refundMilestone(m.id), `refund-${m.id}`);
                       }}
                       disabled={!!actionLoading}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-400/10 border border-orange-400/20 text-orange-400 rounded-lg text-xs font-bold hover:bg-orange-400/20 transition-all disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-ink/5 border border-ink text-ink text-xs font-bold hover:bg-ink/5 transition-all disabled:opacity-50"
                     >
                       <DollarSign size={12} />
                       {actionLoading === `refund-${m.id}` ? 'Refunding…' : 'Request refund'}
@@ -358,14 +356,14 @@ const ContractDetail: React.FC = () => {
 
         {/* Review section */}
         {hasReleased && !alreadyReviewed && !reviewSent && (
-          <div className="bg-brand-grey/70 border border-white/5 rounded-2xl p-6 mb-4">
-            <h2 className="text-white font-black mb-4 flex items-center gap-2">
-              <Star size={18} className="text-yellow-400" /> Leave a review
+          <div className="bg-white border-2 border-ink p-6 mb-4">
+            <h2 className="text-ink font-black mb-4 flex items-center gap-2">
+              <Star size={18} className="text-ink" /> Leave a review
             </h2>
             <div className="flex gap-1 mb-4">
               {[1, 2, 3, 4, 5].map(n => (
                 <button key={n} onClick={() => setReviewRating(n)}>
-                  <Star size={28} className={n <= reviewRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-700'} />
+                  <Star size={28} className={n <= reviewRating ? 'text-ink fill-ink' : 'text-slate'} />
                 </button>
               ))}
             </div>
@@ -374,12 +372,12 @@ const ContractDetail: React.FC = () => {
               onChange={e => setReviewComment(e.target.value)}
               placeholder="Share your experience (optional)"
               rows={3}
-              className="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-white text-sm resize-none outline-none placeholder-gray-600 focus:border-brand-green/40 transition-colors mb-3"
+              className="w-full bg-paper border-2 border-ink px-4 py-3 text-ink text-sm resize-none outline-none placeholder:text-slate focus:border-sky transition-colors mb-3"
             />
             <button
               onClick={submitReview}
               disabled={!!actionLoading}
-              className="px-5 py-2.5 bg-brand-green text-brand-black font-black rounded-xl text-sm hover:scale-105 transition-all disabled:opacity-50"
+              className="px-5 py-2.5 bg-sky text-white font-black text-sm hover:scale-105 transition-all disabled:opacity-50"
             >
               {actionLoading === 'review' ? 'Submitting…' : 'Submit review'}
             </button>
@@ -388,17 +386,17 @@ const ContractDetail: React.FC = () => {
 
         {/* Existing reviews */}
         {contract.reviews.length > 0 && (
-          <div className="bg-brand-grey/70 border border-white/5 rounded-2xl p-6 mb-4">
-            <h2 className="text-white font-black mb-4">Reviews</h2>
+          <div className="bg-white border-2 border-ink p-6 mb-4">
+            <h2 className="text-ink font-black mb-4">Reviews</h2>
             <div className="space-y-3">
               {contract.reviews.map(r => (
-                <div key={r.id} className="border border-white/5 rounded-xl p-4">
+                <div key={r.id} className="border-2 border-ink p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <AvatarImg src={r.reviewer.avatar} name={r.reviewer.name} size={28} className="rounded-full" />
-                    <span className="text-white font-bold text-sm">{r.reviewer.name}</span>
+                    <AvatarImg src={r.reviewer.avatar} name={r.reviewer.name} size={28} className="" />
+                    <span className="text-ink font-bold text-sm">{r.reviewer.name}</span>
                     <StarRating rating={r.rating} />
                   </div>
-                  {r.comment && <p className="text-gray-400 text-sm">{r.comment}</p>}
+                  {r.comment && <p className="text-slate text-sm">{r.comment}</p>}
                 </div>
               ))}
             </div>
@@ -419,7 +417,7 @@ const ContractDetail: React.FC = () => {
                 if (ok) doAction(() => API.cancelContract(contract.id), 'cancel');
               }}
               disabled={!!actionLoading}
-              className="flex items-center gap-1.5 mx-auto text-gray-600 hover:text-red-400 text-xs transition-colors"
+              className="flex items-center gap-1.5 mx-auto text-slate hover:text-red-700 text-xs transition-colors"
             >
               <XCircle size={13} /> Cancel contract
             </button>

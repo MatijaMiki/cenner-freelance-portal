@@ -58,19 +58,19 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, onSucce
       />
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm">
+        <div className="bg-red-50 border border-red-700 px-4 py-3 text-red-700 text-sm">
           {error}
         </div>
       )}
 
-      <div className="pt-4 border-t border-white/5">
-        <div className="bg-brand-green/5 border border-brand-green/10 rounded-2xl p-5 flex items-start space-x-4 mb-6">
-          <ShieldCheck className="text-brand-green shrink-0 mt-0.5" size={20} />
+      <div className="pt-4 border-t border-ink/15">
+        <div className="bg-leaf/10 border border-ink p-5 flex items-start space-x-4 mb-6">
+          <ShieldCheck className="text-leaf shrink-0 mt-0.5" size={20} />
           <div>
-            <h4 className="text-brand-green font-bold text-sm">Secure Payment Protection</h4>
-            <p className="text-gray-500 text-xs leading-relaxed mt-1">
+            <h4 className="text-leaf font-bold text-sm">Secure Payment Protection</h4>
+            <p className="text-slate text-xs leading-relaxed mt-1">
               Processed securely by Stripe. Cenner never stores your card details.
-              <span className="text-white font-bold"> {listing.freelancerName}</span> will be notified immediately.
+              <span className="text-ink font-bold"> {listing.freelancerName}</span> will be notified immediately.
             </p>
           </div>
         </div>
@@ -78,7 +78,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ listing, totalAmount, onSucce
         <button
           disabled={isProcessing || !stripe || !elements}
           type="submit"
-          className="w-full py-5 bg-brand-green text-brand-black font-black text-lg rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-brand-green/20 flex items-center justify-center space-x-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="w-full py-5 bg-sky text-white font-black text-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center space-x-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
           {isProcessing ? (
             <><Loader2 className="animate-spin" size={20} /><span>Processing Securely...</span></>
@@ -142,9 +142,9 @@ const Checkout: React.FC = () => {
   if (!user) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-4">
-        <h2 className="text-3xl font-bold text-white mb-4">Sign in to complete your purchase</h2>
-        <p className="text-gray-400 mb-6">You need to be logged in to buy this service.</p>
-        <Link to="/auth" className="px-8 py-3 bg-brand-green text-brand-black font-black rounded-xl">
+        <h2 className="text-3xl font-bold text-ink mb-4">Sign in to complete your purchase</h2>
+        <p className="text-slate mb-6">You need to be logged in to buy this service.</p>
+        <Link to="/auth" className="px-8 py-3 bg-sky text-white font-black">
           Log In / Register
         </Link>
       </div>
@@ -154,8 +154,8 @@ const Checkout: React.FC = () => {
   if (!listing) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-4">
-        <h2 className="text-3xl font-bold text-white mb-4">Service not found</h2>
-        <Link to="/marketplace" className="text-brand-green font-bold">Back to Marketplace</Link>
+        <h2 className="text-3xl font-bold text-ink mb-4">Service not found</h2>
+        <Link to="/marketplace" className="text-leaf font-bold">Back to Marketplace</Link>
       </div>
     );
   }
@@ -189,36 +189,36 @@ const Checkout: React.FC = () => {
       <SEO noIndex />
       <button
         onClick={() => navigate(-1)}
-        className="inline-flex items-center space-x-2 text-gray-500 hover:text-white mb-12 transition-colors"
+        className="inline-flex items-center space-x-2 text-slate hover:text-ink mb-12 transition-colors"
       >
         <ArrowLeft size={18} />
         <span className="text-sm font-medium">Back to Service</span>
       </button>
 
-      <h1 className="text-4xl font-extrabold text-white mb-10 tracking-tight flex items-center space-x-4">
-        <ShoppingBag className="text-brand-green" />
+      <h1 className="text-4xl font-extrabold text-ink mb-10 tracking-tight flex items-center space-x-4">
+        <ShoppingBag className="text-leaf" />
         <span>Secure Checkout</span>
       </h1>
 
       <div className="grid lg:grid-cols-3 gap-12 items-start">
         {/* Left: Payment Form */}
         <div className="lg:col-span-2">
-          <section className="bg-brand-grey/90 border border-white/10 rounded-[2.5rem] p-8 shadow-xl">
+          <section className="bg-white border-2 border-ink p-8">
             <div className="flex items-center space-x-3 mb-6">
-              <Lock size={14} className="text-gray-500" />
-              <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Powered by Stripe</span>
+              <Lock size={14} className="text-slate" />
+              <span className="text-xs text-slate font-bold uppercase tracking-widest">Powered by Stripe</span>
             </div>
 
             {loadingIntent ? (
-              <div className="flex items-center justify-center py-16 text-gray-400">
+              <div className="flex items-center justify-center py-16 text-slate">
                 <Loader2 className="animate-spin mr-3" size={24} />
                 <span>Initialising payment...</span>
               </div>
             ) : intentError ? (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-6 text-red-400 text-sm text-center">
+              <div className="bg-red-50 border border-red-700 px-4 py-6 text-red-700 text-sm text-center">
                 <p className="font-bold mb-2">Could not load payment</p>
-                <p className="text-xs text-gray-500">{intentError}</p>
-                <button onClick={() => navigate(-1)} className="mt-4 text-xs text-brand-green underline">
+                <p className="text-xs text-slate">{intentError}</p>
+                <button onClick={() => navigate(-1)} className="mt-4 text-xs text-leaf underline">
                   Go back
                 </button>
               </div>
@@ -264,54 +264,54 @@ const Checkout: React.FC = () => {
 
         {/* Right: Summary */}
         <div className="lg:col-span-1 sticky top-24">
-          <div className="bg-brand-grey/90 border border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-xl shadow-2xl">
+          <div className="bg-white border-2 border-ink overflow-hidden">
             <div className="p-8">
-              <h3 className="text-xl font-bold text-white mb-8">Order Summary</h3>
+              <h3 className="text-xl font-bold text-ink mb-8">Order Summary</h3>
 
-              <div className="flex items-start space-x-4 mb-8 pb-8 border-b border-white/5">
-                <img src={listing.imageUrl} alt={listing.title} className="w-20 h-20 rounded-2xl object-cover border border-white/10" />
+              <div className="flex items-start space-x-4 mb-8 pb-8 border-b border-ink/15">
+                <img src={listing.imageUrl} alt={listing.title} className="w-20 h-20 object-cover border-2 border-ink" />
                 <div>
-                  <h4 className="text-white font-bold text-sm line-clamp-2 mb-1">{listing.title}</h4>
-                  <p className="text-gray-500 text-xs font-medium">By {listing.freelancerName}</p>
+                  <h4 className="text-ink font-bold text-sm line-clamp-2 mb-1">{listing.title}</h4>
+                  <p className="text-slate text-xs font-medium">By {listing.freelancerName}</p>
                 </div>
               </div>
 
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-400 font-bold uppercase tracking-tighter">Subtotal</span>
-                  <span className="text-white font-black">€{listing.price.toFixed(2)}</span>
+                  <span className="text-slate font-bold uppercase tracking-tighter">Subtotal</span>
+                  <span className="text-ink font-black">€{listing.price.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-400 font-bold uppercase tracking-tighter">Service fee ({serverRate ?? BUYER_FEE_RATE}%)</span>
-                  <span className="text-white font-black">€{(serverFee ?? serviceFee).toFixed(2)}</span>
+                  <span className="text-slate font-bold uppercase tracking-tighter">Service fee ({serverRate ?? BUYER_FEE_RATE}%)</span>
+                  <span className="text-ink font-black">€{(serverFee ?? serviceFee).toFixed(2)}</span>
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-white/10 mb-8">
+              <div className="pt-6 border-t-2 border-ink mb-8">
                 <div className="flex justify-between items-center">
-                  <span className="text-white font-black text-lg uppercase tracking-tighter">Total Amount</span>
-                  <span className="text-brand-pink font-black text-2xl">€{(serverTotal ?? totalAmount).toFixed(2)}</span>
+                  <span className="text-ink font-black text-lg uppercase tracking-tighter">Total Amount</span>
+                  <span className="text-sky font-black text-2xl">€{(serverTotal ?? totalAmount).toFixed(2)}</span>
                 </div>
-                <p className="text-[10px] text-gray-500 mt-2 uppercase tracking-widest font-black">
+                <p className="text-[12px] text-slate mt-2 uppercase tracking-widest font-black">
                   {(serverRate ?? BUYER_FEE_RATE) === 0 ? 'No service fee on this listing' : `Includes a ${serverRate ?? BUYER_FEE_RATE}% service fee`}
                 </p>
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center space-x-3 text-xs text-gray-500 font-bold uppercase tracking-tighter">
-                  <ShieldCheck size={14} className="text-brand-green" />
+                <div className="flex items-center space-x-3 text-xs text-slate font-bold uppercase tracking-tighter">
+                  <ShieldCheck size={14} className="text-leaf" />
                   <span>Money Back Guarantee</span>
                 </div>
-                <div className="flex items-center space-x-3 text-xs text-gray-500 font-bold uppercase tracking-tighter">
-                  <Lock size={14} className="text-brand-green" />
+                <div className="flex items-center space-x-3 text-xs text-slate font-bold uppercase tracking-tighter">
+                  <Lock size={14} className="text-leaf" />
                   <span>End-to-End Encryption</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 bg-brand-black text-center border-t border-white/5">
-              <p className="text-[10px] text-gray-600 leading-tight font-bold uppercase tracking-widest">
-                By completing this order, you agree to the Cenner Marketplace <Link to="/terms" className="text-brand-pink hover:underline">Terms of Service</Link>.
+            <div className="p-6 bg-paper text-center border-t border-ink/15">
+              <p className="text-[12px] text-slate leading-tight font-bold uppercase tracking-widest">
+                By completing this order, you agree to the Cenner Marketplace <Link to="/terms" className="text-sky hover:underline">Terms of Service</Link>.
               </p>
             </div>
           </div>

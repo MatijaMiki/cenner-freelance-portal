@@ -1,167 +1,140 @@
-
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Target, Eye, ArrowRight, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import SEO from '../components/SEO';
+import ContactForm from '../components/ContactForm';
 import { useT } from '../i18n';
-import { useAuth } from '../contexts/AuthContext';
+import { COMPANY, companyAddress } from '../lib/company';
+
+/*
+ * About and Contact, one page (Contact had nothing else; About had no way to reach us): what
+ * Cenner is, how to get in touch (#kontakt) and who runs it (#tvrtka, the one place the company's
+ * registered details live, from lib/company). In the homepage's look.
+ */
 
 const About: React.FC = () => {
   const t = useT();
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const h2 = 'font-display text-[clamp(2.25rem,1.3rem+3.8vw,5rem)] font-extrabold leading-[0.95] tracking-[-0.04em]';
+  const lead = 'text-[clamp(1.0625rem,1rem+0.25vw,1.1875rem)] leading-[1.55]';
+  const subjects = [t('General Inquiry'), t('Support Request'), t('Billing Question'), t('Become a Partner')];
+
+  const rows: [string, React.ReactNode][] = [
+    [t('Company'), COMPANY.legalName],
+    [t('Address'), `${companyAddress}, ${COMPANY.country}`],
+    ['OIB', COMPANY.oib],
+    ['MB', COMPANY.mb],
+    [t('Activity'), COMPANY.activity],
+  ];
+
   return (
-    <div className="pt-16 pb-24 max-w-7xl mx-auto px-4">
+    <div className="font-text text-ink">
       <SEO
-        title="O Nama: Freelance Platforma Hrvatska"
+        title="O nama i kontakt"
         canonical="/about"
-        description="Cenner je hrvatska freelance platforma osnovana s misijom povezivanja tvrtki s najboljim slobodnim radnicima iz Hrvatske i EU. Saznaj više o nama i našoj viziji."
-        keywords="o cenner platformi, freelance platforma hrvatska priča, tko je cenner, hrvatska startup freelance"
+        description="Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i automatizacije. Kontakt, adresa i podaci o tvrtki."
+        keywords="o cenneru, cenner kontakt, freelance platforma hrvatska, cenner obrt"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: COMPANY.brand,
+          legalName: COMPANY.legalName,
+          url: 'https://cenner.hr',
+          logo: 'https://cenner.hr/favicon.svg',
+          email: COMPANY.email,
+          telephone: COMPANY.phone,
+          taxID: COMPANY.oib,
+          foundingDate: COMPANY.founded,
+          founder: { '@type': 'Person', name: COMPANY.owner },
+          address: { '@type': 'PostalAddress', streetAddress: COMPANY.street, postalCode: COMPANY.postcode, addressLocality: COMPANY.city, addressCountry: COMPANY.countryCode },
+          contactPoint: [{ '@type': 'ContactPoint', contactType: 'customer support', email: COMPANY.supportEmail, telephone: COMPANY.phone, availableLanguage: ['hr', 'en'] }],
+        }}
       />
-      {/* Hero Section */}
-      <div className="max-w-4xl mb-32">
-        <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-8 tracking-tight leading-[1.1]">
-          {t('The High-Fidelity Freelance Standard.').split('Freelance')[0]} <br />
-          <span className="text-brand-pink">Freelance {t('The High-Fidelity Freelance Standard.').split('Freelance')[1]}</span>
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-400 leading-relaxed max-w-3xl">
-          Cenner was founded on a simple idea: finding great talent should be easy. We've built a platform where skilled creators and ambitious clients can connect, work together, and get things done.
-        </p>
-      </div>
 
-      {/* Philosophy Section */}
-      <div className="grid lg:grid-cols-2 gap-24 mb-40 items-center">
-        <div className="relative">
-          <div className="aspect-[4/5] rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
-            <img src="https://picsum.photos/seed/vision/1200/1600" alt="Visionary Thinking" className="w-full h-full object-cover" />
-          </div>
-          <div className="absolute -bottom-10 -right-10 bg-brand-green text-brand-black p-8 rounded-3xl font-black text-2xl rotate-3 shadow-xl">
-            {t('BUILT BY PROS').split(' ').slice(0,2).join(' ')} <br /> {t('BUILT BY PROS').split(' ').slice(2).join(' ')}
-          </div>
-        </div>
-        <div className="space-y-10">
-          <div className="inline-block px-4 py-1 rounded-full bg-brand-green/10 text-brand-green text-xs font-black uppercase tracking-widest">{t('Our Philosophy')}</div>
-          <h2 className="text-5xl font-bold text-white tracking-tight">{t("Quality is not a luxury. It's the baseline.")}</h2>
-          <p className="text-gray-400 text-lg leading-relaxed">
-            In a world of commoditized labor, Cenner stands apart as a sanctuary for craftsmanship. We believe that the best work happens when the friction of bureaucracy is removed, allowing visionaries to communicate directly with masters.
-          </p>
-          <p className="text-gray-400 text-lg leading-relaxed">
-            Our smart matching ensures that you're not just finding a freelancer, but the right partner who understands your industry and the specifics of your project.
-          </p>
-          <div className="grid grid-cols-2 gap-8 pt-6">
-            <div>
-              <h4 className="text-white font-bold text-xl mb-2">{t('Vetted for Mastery')}</h4>
-              <p className="text-gray-500 text-sm">Every pro on Cenner passes a rigorous 4-stage technical and soft-skill assessment.</p>
-            </div>
-            <div>
-              <h4 className="text-white font-bold text-xl mb-2">{t('Human-Centric Tech')}</h4>
-              <p className="text-gray-500 text-sm">We use AI to facilitate connection, not to replace the human creative spark.</p>
+      {/* Header */}
+      <section className="relative overflow-hidden px-4 pb-14 pt-10 md:px-8 md:pb-20 md:pt-16">
+        <div className="relative z-10 mx-auto max-w-[1500px]">
+          <h1 className="font-display text-[clamp(2.75rem,9vw,8.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em]">
+            {t('About Cenner')}
+          </h1>
+          <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:items-end">
+            <p className="max-w-[52ch] text-[clamp(1.25rem,1.1rem+0.7vw,1.625rem)] leading-snug lg:col-span-8">
+              {t('Cenner is a Croatian freelance marketplace and a small in-house studio. On the marketplace, businesses hire verified freelancers with the price agreed upfront and the money held until the work is delivered. In the studio, we build websites, apps and automations ourselves.')}
+            </p>
+            <div className="lg:col-span-4 lg:text-right">
+              <a href="#kontakt" className="inline-flex items-center gap-2 font-display text-[15px] font-bold hover:text-sky">
+                {t('Contact')} <ArrowRight size={17} />
+              </a>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Mission & Vision Section */}
-      <section className="mb-40 grid md:grid-cols-2 gap-8">
-        <div className="p-12 bg-brand-grey/40 border border-white/5 rounded-[3.5rem] relative overflow-hidden group hover:border-brand-green/30 transition-all shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/5 rounded-full blur-[100px] -mr-32 -mt-32 group-hover:bg-brand-green/10 transition-all"></div>
-          <div className="relative z-10">
-            <div className="w-16 h-16 bg-brand-green/10 rounded-2xl flex items-center justify-center text-brand-green mb-8 shadow-inner">
-              <Target size={32} />
-            </div>
-            <h3 className="text-3xl font-black text-white mb-6 tracking-tight uppercase">{t('Our Mission')}</h3>
-            <p className="text-gray-400 text-lg leading-relaxed font-medium">
-              To remove the barriers between talented people and great projects. We aim to make it simple for the right freelancer and the right client to find each other and do their best work.
+      {/* The two halves of Cenner */}
+      <section className="relative overflow-hidden bg-paper2 px-4 py-16 md:px-8 md:py-24">
+        <div className="relative z-10 mx-auto grid max-w-[1500px] gap-4 md:grid-cols-2">
+          <article className="flex flex-col border-2 border-ink bg-white p-7 md:p-10">
+            <h2 className="font-display text-[clamp(1.75rem,1.2rem+2vw,3rem)] font-extrabold leading-tight tracking-[-0.03em]">{t('The marketplace')}</h2>
+            <p className={`${lead} mt-4`}>{t('Verified freelancers for web, design, marketing and development. Every identity is checked, the price is agreed upfront, and the payment waits until the work is delivered.')}</p>
+            <Link to="/marketplace" className="mt-auto inline-flex items-center gap-2 pt-8 font-display text-[15px] font-bold hover:text-sky">
+              {t('Browse the marketplace')} <ArrowRight size={17} />
+            </Link>
+          </article>
+          <article className="flex flex-col border-2 border-ink bg-white p-7 md:p-10">
+            <h2 className="font-display text-[clamp(1.75rem,1.2rem+2vw,3rem)] font-extrabold leading-tight tracking-[-0.03em]">{t('The studio')}</h2>
+            <p className={`${lead} mt-4`}>{t('Websites, SaaS, CRM systems, automations, design, ads and servers, built in-house by Matija Mikulinec, who runs Cenner.')}</p>
+            <Link to="/services" className="mt-auto inline-flex items-center gap-2 pt-8 font-display text-[15px] font-bold hover:text-sky">
+              {t('See services and work')} <ArrowRight size={17} />
+            </Link>
+          </article>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="kontakt" aria-labelledby="kontakt-title" className="scroll-mt-24 px-4 py-16 md:px-8 md:py-24">
+        <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <h2 id="kontakt-title" className={h2}>{t('Contact')}</h2>
+            <dl className="mt-8 space-y-5 text-[1.0625rem]">
+              <div>
+                <dt className="font-display text-[15px] font-bold">{t('Email')}</dt>
+                <dd className="mt-1">
+                  <a href={`mailto:${COMPANY.email}`} className="underline underline-offset-2 hover:text-sky">{COMPANY.email}</a>
+                  <span className="text-slate"> · {t('support')}: </span>
+                  <a href={`mailto:${COMPANY.supportEmail}`} className="underline underline-offset-2 hover:text-sky">{COMPANY.supportEmail}</a>
+                </dd>
+              </div>
+              <div>
+                <dt className="font-display text-[15px] font-bold">{t('Phone')}</dt>
+                <dd className="mt-1"><a href={COMPANY.phoneHref} className="underline underline-offset-2 hover:text-sky">{COMPANY.phone}</a></dd>
+              </div>
+              <div>
+                <dt className="font-display text-[15px] font-bold">{t('Address')}</dt>
+                <dd className="mt-1">{companyAddress}, {COMPANY.country}</dd>
+              </div>
+            </dl>
+            <p className="mt-8 text-[1rem]">
+              {t('Need a quote for a project?')}{' '}
+              <Link to="/services#upit" className="font-bold underline underline-offset-2 hover:text-sky">{t('Request a Quote')}</Link>
             </p>
           </div>
-        </div>
-
-        <div className="p-12 bg-brand-grey/40 border border-white/5 rounded-[3.5rem] relative overflow-hidden group hover:border-brand-pink/30 transition-all shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-pink/5 rounded-full blur-[100px] -mr-32 -mt-32 group-hover:bg-brand-pink/10 transition-all"></div>
-          <div className="relative z-10">
-            <div className="w-16 h-16 bg-brand-pink/10 rounded-2xl flex items-center justify-center text-brand-pink mb-8 shadow-inner">
-              <Eye size={32} />
-            </div>
-            <h3 className="text-3xl font-black text-white mb-6 tracking-tight uppercase">{t('Our Vision')}</h3>
-            <p className="text-gray-400 text-lg leading-relaxed font-medium">
-              To become the go-to platform for the global digital economy. We envision a world where the most complex problems are solved by talented people from everywhere, working together seamlessly through Cenner.
-            </p>
+          <div className="lg:col-span-7">
+            <ContactForm idPrefix="kontakt" subjects={subjects} messagePlaceholder={t('How can we help you today?')} />
           </div>
         </div>
       </section>
 
-      {/* Technology teaser */}
-      <section className="mb-40">
-        <div className="bg-gradient-to-br from-brand-grey/60 to-brand-black border border-white/5 rounded-[3rem] p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-green mb-3">{t('Our Stack')}</p>
-            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-3">{t('Technology We Work With')}</h2>
-            <p className="text-gray-500 max-w-lg">From React and n8n to server setup and Affinity Design. See every tool we bring to the table.</p>
-          </div>
-          <Link
-            to="/technology"
-            className="shrink-0 flex items-center gap-3 px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-brand-green/10 text-sm uppercase tracking-widest"
-          >
-            {t('View Stack')} <Zap size={16} />
-          </Link>
-        </div>
-      </section>
-
-      {/* Previous Projects teaser */}
-      <section id="projects" className="mb-40 scroll-mt-24">
-        <div className="bg-gradient-to-br from-brand-grey/60 to-brand-black border border-white/5 rounded-[3rem] p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-pink mb-3">{t('Delivered Work')}</p>
-            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-3">{t('Previous Projects')}</h2>
-            <p className="text-gray-500 max-w-lg">Real client work delivered through the Cenner network. See the live sites and what was built.</p>
-          </div>
-          <Link
-            to="/projects"
-            className="shrink-0 flex items-center gap-3 px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-brand-green/10 text-sm uppercase tracking-widest"
-          >
-            {t('View Projects')} <ArrowRight size={16} />
-          </Link>
-        </div>
-      </section>
-
-      {/* ranwhat teaser */}
-      <section id="ranwhat" className="mb-40 scroll-mt-24">
-        <div className="bg-gradient-to-br from-brand-grey/60 to-brand-black border border-white/5 rounded-[3rem] p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-green mb-3">{t('Also from Cenner')}</p>
-            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-3">ranwhat</h2>
-            <p className="text-gray-500 max-w-lg">A flight recorder for AI coding agents, and a scanner for the authority they hold. Built and run by Cenner.</p>
-          </div>
-          <Link
-            to="/ranwhat"
-            className="shrink-0 flex items-center gap-3 px-8 py-4 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-brand-green/10 text-sm uppercase tracking-widest"
-          >
-            {t('About ranwhat')} <ArrowRight size={16} />
-          </Link>
-        </div>
-      </section>
-
-      {/* Final Call to Action */}
-      <section className="bg-gradient-to-br from-brand-grey to-brand-black border border-white/10 rounded-[4rem] p-12 md:p-24 text-center relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-green/10 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-pink/10 rounded-full blur-[120px]"></div>
-        <h2 className="text-5xl md:text-6xl font-black text-white mb-8 tracking-tighter">{t('Ready to get started?')}</h2>
-        <p className="text-gray-400 max-w-2xl mx-auto mb-16 text-xl leading-relaxed">
-          {t("Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.")}
-        </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-6">
-          <button
-            onClick={() => user ? navigate('/profile?create=1') : navigate('/marketplace')}
-            className="px-12 py-5 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl"
-          >
-            {t('Start a Project')}
-          </button>
-          <button
-            onClick={() => user ? navigate('/profile') : navigate('/auth')}
-            className="px-12 py-5 bg-white/5 text-white border border-white/10 font-black rounded-2xl hover:bg-white/10 transition-all"
-          >
-            {t('Join the Network')}
-          </button>
+      {/* Who runs it */}
+      <section id="tvrtka" aria-labelledby="tvrtka-title" className="relative overflow-hidden scroll-mt-24 bg-ink px-4 py-16 text-white md:px-8 md:py-20">
+        <div className="relative z-10 mx-auto grid max-w-[1500px] gap-8 lg:grid-cols-12">
+          <h2 id="tvrtka-title" className="font-display text-[clamp(1.75rem,1.2rem+2vw,3rem)] font-extrabold leading-tight tracking-[-0.03em] lg:col-span-5">{t('Company details')}</h2>
+          <dl className="grid gap-x-8 gap-y-4 text-[1rem] sm:grid-cols-[auto_1fr] lg:col-span-7">
+            {rows.map(([k, v]) => (
+              <React.Fragment key={String(k)}>
+                <dt className="font-display font-bold text-white/70">{k}</dt>
+                <dd>{v}</dd>
+              </React.Fragment>
+            ))}
+          </dl>
         </div>
       </section>
     </div>

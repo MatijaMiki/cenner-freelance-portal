@@ -40,8 +40,8 @@ const OrderSuccess: React.FC = () => {
 
   const headline = isSubscription ? 'Subscription Active!' : 'Order Confirmed!';
   const subtitle = isSubscription
-    ? <>Your account has been upgraded{planTitle ? <> to <span className="text-brand-green font-bold">{planTitle}</span></> : ''}. You now have full access to everything included in your plan.</>
-    : <>Your payment{state.amount || amountParam ? <> of <span className="text-brand-pink font-bold">€{state.amount ?? amountParam}</span></> : ''} has been processed securely.{state.freelancerName ? <> <span className="text-brand-green font-bold">{state.freelancerName}</span> has been notified and will start working on your project immediately.</> : ' Your freelancer has been notified and will start working on your project immediately.'}</>;
+    ? <>Your account has been upgraded{planTitle ? <> to <span className="text-leaf font-bold">{planTitle}</span></> : ''}. You now have full access to everything included in your plan.</>
+    : <>Your payment{state.amount || amountParam ? <> of <span className="text-sky font-bold">€{state.amount ?? amountParam}</span></> : ''} has been processed securely.{state.freelancerName ? <> <span className="text-leaf font-bold">{state.freelancerName}</span> has been notified and will start working on your project immediately.</> : ' Your freelancer has been notified and will start working on your project immediately.'}</>;
 
   return (
     <>
@@ -50,55 +50,55 @@ const OrderSuccess: React.FC = () => {
         description="Thank you for your purchase on Cenner."
       />
       <div className="pt-24 pb-32 max-w-2xl mx-auto px-4 text-center">
-        <div className="w-24 h-24 bg-brand-green/20 rounded-full flex items-center justify-center text-brand-green mx-auto mb-8 animate-in zoom-in duration-500">
+        <div className="w-24 h-24 bg-leaf/20 flex items-center justify-center text-leaf mx-auto mb-8 animate-in zoom-in duration-500">
           <CheckCircle2 size={48} />
         </div>
-        <h1 className="text-5xl font-extrabold text-white mb-4 tracking-tight">{headline}</h1>
-        <p className="text-gray-400 text-lg mb-12">{subtitle}</p>
+        <h1 className="text-5xl font-extrabold text-ink mb-4 tracking-tight">{headline}</h1>
+        <p className="text-slate text-lg mb-12">{subtitle}</p>
 
         {isSubscription ? (
-          <div className="bg-brand-grey/90 border border-white/10 rounded-3xl p-8 mb-12 text-left shadow-2xl">
-            <h3 className="text-white font-bold mb-4 uppercase text-xs tracking-widest">Subscription Summary</h3>
+          <div className="bg-white border-2 border-ink p-8 mb-12 text-left">
+            <h3 className="text-ink font-bold mb-4 uppercase text-xs tracking-widest">Subscription Summary</h3>
             {planTitle && (
-              <div className="flex justify-between items-center py-3 border-b border-white/5">
-                <span className="text-gray-500 text-sm">Plan</span>
-                <span className="text-brand-green font-black text-sm uppercase">{planTitle}</span>
+              <div className="flex justify-between items-center py-3 border-b border-ink/15">
+                <span className="text-slate text-sm">Plan</span>
+                <span className="text-leaf font-black text-sm uppercase">{planTitle}</span>
               </div>
             )}
-            <div className="flex justify-between items-center py-3 border-b border-white/5">
-              <span className="text-gray-500 text-sm">Billing Cycle</span>
-              <span className="text-white font-bold text-sm">Monthly</span>
+            <div className="flex justify-between items-center py-3 border-b border-ink/15">
+              <span className="text-slate text-sm">Billing Cycle</span>
+              <span className="text-ink font-bold text-sm">Monthly</span>
             </div>
             <div className="flex justify-between items-center py-3">
-              <span className="text-gray-500 text-sm">Manage / Cancel</span>
-              <span className="text-gray-400 text-sm">Profile → Settings → Billing</span>
+              <span className="text-slate text-sm">Manage / Cancel</span>
+              <span className="text-slate text-sm">Profile → Settings → Billing</span>
             </div>
           </div>
         ) : (state.listingTitle || state.paymentId || state.amount || amountParam) ? (
-          <div className="bg-brand-grey/90 border border-white/10 rounded-3xl p-8 mb-12 text-left shadow-2xl">
-            <h3 className="text-white font-bold mb-4 uppercase text-xs tracking-widest">Order Details</h3>
+          <div className="bg-white border-2 border-ink p-8 mb-12 text-left">
+            <h3 className="text-ink font-bold mb-4 uppercase text-xs tracking-widest">Order Details</h3>
             {state.paymentId && (
-              <div className="flex justify-between items-center py-3 border-b border-white/5">
-                <span className="text-gray-500 text-sm">Payment ID</span>
-                <span className="text-white font-mono text-xs">{state.paymentId.slice(0, 24)}…</span>
+              <div className="flex justify-between items-center py-3 border-b border-ink/15">
+                <span className="text-slate text-sm">Payment ID</span>
+                <span className="text-ink font-mono text-xs">{state.paymentId.slice(0, 24)}…</span>
               </div>
             )}
             {state.listingTitle && (
-              <div className="flex justify-between items-center py-3 border-b border-white/5">
-                <span className="text-gray-500 text-sm">Project</span>
-                <span className="text-white font-bold text-sm">{state.listingTitle}</span>
+              <div className="flex justify-between items-center py-3 border-b border-ink/15">
+                <span className="text-slate text-sm">Project</span>
+                <span className="text-ink font-bold text-sm">{state.listingTitle}</span>
               </div>
             )}
             {(state.amount || amountParam) && (
-              <div className="flex justify-between items-center py-3 border-b border-white/5">
-                <span className="text-gray-500 text-sm">Amount Paid</span>
-                <span className="text-brand-pink font-black text-sm">€{state.amount ?? amountParam}</span>
+              <div className="flex justify-between items-center py-3 border-b border-ink/15">
+                <span className="text-slate text-sm">Amount Paid</span>
+                <span className="text-sky font-black text-sm">€{state.amount ?? amountParam}</span>
               </div>
             )}
             {state.deliveryTime && (
               <div className="flex justify-between items-center py-3">
-                <span className="text-gray-500 text-sm">Estimated Delivery</span>
-                <span className="text-brand-pink font-bold text-sm">{state.deliveryTime}</span>
+                <span className="text-slate text-sm">Estimated Delivery</span>
+                <span className="text-sky font-bold text-sm">{state.deliveryTime}</span>
               </div>
             )}
           </div>
@@ -109,7 +109,7 @@ const OrderSuccess: React.FC = () => {
             href={state.receiptUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center space-x-2 text-brand-green font-bold text-sm mb-8 hover:underline"
+            className="flex items-center justify-center space-x-2 text-leaf font-bold text-sm mb-8 hover:underline"
           >
             <ArrowLeft size={14} className="rotate-[-90deg]" />
             <span>Download Stripe Receipt</span>
@@ -119,19 +119,19 @@ const OrderSuccess: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           {isSubscription ? (
             <>
-              <Link to="/profile" className="px-10 py-4 bg-brand-green text-brand-black font-black rounded-xl hover:scale-105 transition-all shadow-lg shadow-brand-green/20">
+              <Link to="/profile" className="px-10 py-4 bg-sky text-white font-black hover:scale-105 transition-all">
                 Go to My Profile
               </Link>
-              <Link to="/marketplace" className="px-10 py-4 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all">
+              <Link to="/marketplace" className="px-10 py-4 border-2 border-ink text-ink font-bold hover:bg-ink/10 transition-all">
                 Browse Marketplace
               </Link>
             </>
           ) : (
             <>
-              <Link to="/orders" className="px-10 py-4 bg-brand-green text-brand-black font-black rounded-xl hover:scale-105 transition-all shadow-lg shadow-brand-green/20">
+              <Link to="/orders" className="px-10 py-4 bg-sky text-white font-black hover:scale-105 transition-all">
                 Go to My Orders
               </Link>
-              <Link to="/marketplace" className="px-10 py-4 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all">
+              <Link to="/marketplace" className="px-10 py-4 border-2 border-ink text-ink font-bold hover:bg-ink/10 transition-all">
                 Continue Shopping
               </Link>
             </>

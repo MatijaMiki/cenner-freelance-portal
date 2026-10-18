@@ -19,13 +19,13 @@ interface Order {
 }
 
 const STATUS_CONFIG: Record<OrderStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  PENDING:     { label: 'Pending',     color: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20', icon: <Clock size={12} /> },
-  PAID:        { label: 'Paid',        color: 'text-blue-400 bg-blue-500/10 border-blue-500/20',       icon: <CheckCircle2 size={12} /> },
-  IN_PROGRESS: { label: 'In Progress', color: 'text-brand-green bg-brand-green/10 border-brand-green/20', icon: <Briefcase size={12} /> },
-  DELIVERED:   { label: 'Delivered',   color: 'text-purple-400 bg-purple-500/10 border-purple-500/20', icon: <Truck size={12} /> },
-  COMPLETED:   { label: 'Completed',   color: 'text-gray-400 bg-white/5 border-white/10',             icon: <CheckCircle2 size={12} /> },
-  CANCELLED:   { label: 'Cancelled',   color: 'text-red-400 bg-red-500/10 border-red-500/20',         icon: <XCircle size={12} /> },
-  REFUNDED:    { label: 'Refunded',    color: 'text-orange-400 bg-orange-500/10 border-orange-500/20', icon: <RefreshCw size={12} /> },
+  PENDING:     { label: 'Pending',     color: 'text-ink bg-ink/5 border-ink', icon: <Clock size={12} /> },
+  PAID:        { label: 'Paid',        color: 'text-sky bg-ink/5 border-ink',       icon: <CheckCircle2 size={12} /> },
+  IN_PROGRESS: { label: 'In Progress', color: 'text-leaf bg-leaf/10 border-ink', icon: <Briefcase size={12} /> },
+  DELIVERED:   { label: 'Delivered',   color: 'text-sky bg-ink/5 border-ink', icon: <Truck size={12} /> },
+  COMPLETED:   { label: 'Completed',   color: 'text-slate bg-ink/5 border-ink',             icon: <CheckCircle2 size={12} /> },
+  CANCELLED:   { label: 'Cancelled',   color: 'text-red-700 bg-red-50 border-red-700',         icon: <XCircle size={12} /> },
+  REFUNDED:    { label: 'Refunded',    color: 'text-ink bg-ink/5 border-ink', icon: <RefreshCw size={12} /> },
 };
 
 const Orders: React.FC = () => {
@@ -92,15 +92,15 @@ const Orders: React.FC = () => {
     <div className="max-w-4xl mx-auto px-4 pt-8 pb-24">
       <SEO title="Orders" />
       <div className="mb-8">
-        <h1 className="text-3xl font-extrabold text-white">Orders</h1>
-        <p className="text-gray-500 text-sm mt-1">Track your purchases and sales.</p>
+        <h1 className="text-3xl font-extrabold text-ink">Orders</h1>
+        <p className="text-slate text-sm mt-1">Track your purchases and sales.</p>
       </div>
 
       <div className="flex gap-2 mb-8">
         {(['buyer', 'seller'] as const).map(r => (
           <button key={r} onClick={() => setRole(r)}
-            className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-              role === r ? 'bg-brand-green text-brand-black' : 'bg-zinc-900 border border-white/10 text-gray-500 hover:text-white'
+            className={`px-5 py-2.5 text-xs font-black uppercase tracking-widest transition-all ${
+              role === r ? 'bg-sky text-white' : 'bg-white border-2 border-ink text-slate hover:text-ink'
             }`}>
             {r === 'buyer' ? 'Purchases' : 'Sales'}
           </button>
@@ -109,16 +109,16 @@ const Orders: React.FC = () => {
 
       {loading ? (
         <div className="min-h-[40vh] flex items-center justify-center">
-          <Loader2 className="animate-spin text-gray-500" size={32} />
+          <Loader2 className="animate-spin text-slate" size={32} />
         </div>
       ) : orders.length === 0 ? (
-        <div className="bg-zinc-900/80 border border-white/10 rounded-2xl p-16 text-center">
-          <Package size={40} className="text-gray-700 mx-auto mb-5" />
-          <h3 className="text-white font-bold text-xl mb-2">No orders yet</h3>
-          <p className="text-gray-500 text-sm max-w-sm mx-auto mb-8">
+        <div className="bg-white border-2 border-ink p-16 text-center">
+          <Package size={40} className="text-slate mx-auto mb-5" />
+          <h3 className="text-ink font-bold text-xl mb-2">No orders yet</h3>
+          <p className="text-slate text-sm max-w-sm mx-auto mb-8">
             {role === 'seller' ? 'Orders from buyers will appear here.' : 'Purchase a service to see your orders.'}
           </p>
-          <Link to="/marketplace" className="inline-flex items-center gap-2 px-8 py-3 bg-brand-green text-brand-black font-bold rounded-xl hover:scale-105 transition-all">
+          <Link to="/marketplace" className="inline-flex items-center gap-2 px-8 py-3 bg-sky text-white font-bold hover:scale-105 transition-all">
             Explore Marketplace <ArrowRight size={14} />
           </Link>
         </div>
@@ -128,24 +128,24 @@ const Orders: React.FC = () => {
             const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.PENDING;
             const counterparty = role === 'buyer' ? order.listing?.freelancer?.name : order.buyer?.name;
             return (
-              <div key={order.id} className="bg-zinc-900/80 border border-white/10 rounded-2xl p-6 flex items-center justify-between gap-4 hover:border-white/20 transition-colors">
+              <div key={order.id} className="bg-white border-2 border-ink p-6 flex items-center justify-between gap-4 hover:border-ink transition-colors">
                 <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-12 h-12 bg-brand-green/10 rounded-xl flex items-center justify-center text-brand-green shrink-0">
+                  <div className="w-12 h-12 bg-leaf/10 flex items-center justify-center text-leaf shrink-0">
                     <Briefcase size={20} />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-white font-bold text-sm truncate">{order.listing?.title || 'Order'}</h3>
-                    <p className="text-gray-500 text-xs mt-0.5">
+                    <h3 className="text-ink font-bold text-sm truncate">{order.listing?.title || 'Order'}</h3>
+                    <p className="text-slate text-xs mt-0.5">
                       {counterparty || 'Unknown'} · {formatDate(order.createdAt)}
                       {order.deliveryDueAt && order.status !== 'COMPLETED' && order.status !== 'CANCELLED' && (
-                        <span className="ml-2 text-brand-pink">· Due {formatDate(order.deliveryDueAt)}</span>
+                        <span className="ml-2 text-sky">· Due {formatDate(order.deliveryDueAt)}</span>
                       )}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-white font-black">&euro;{Number(order.amount).toFixed(2)}</span>
-                  <span className={`flex items-center gap-1.5 px-3 py-1 border rounded-full text-[10px] font-black uppercase tracking-widest ${cfg.color}`}>
+                  <span className="text-ink font-black">&euro;{Number(order.amount).toFixed(2)}</span>
+                  <span className={`flex items-center gap-1.5 px-3 py-1 border text-[12px] font-black uppercase tracking-widest ${cfg.color}`}>
                     {cfg.icon} {cfg.label}
                   </span>
 
@@ -153,7 +153,7 @@ const Orders: React.FC = () => {
                     <button
                       onClick={() => markComplete(order.id)}
                       disabled={actionId === order.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-green/10 border border-brand-green/20 text-brand-green rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-brand-green/20 transition-all disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-leaf/10 border border-ink text-leaf text-[12px] font-black uppercase tracking-widest hover:bg-leaf/20 transition-all disabled:opacity-50"
                     >
                       <CheckCircle2 size={12} />
                       {actionId === order.id ? '…' : 'Complete'}
@@ -163,7 +163,7 @@ const Orders: React.FC = () => {
                     <button
                       onClick={() => refundOrder(order.id)}
                       disabled={actionId === order.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-400/10 border border-orange-400/20 text-orange-400 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-400/20 transition-all disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-ink/5 border border-ink text-ink text-[12px] font-black uppercase tracking-widest hover:bg-ink/5 transition-all disabled:opacity-50"
                     >
                       <DollarSign size={12} />
                       {actionId === order.id ? '…' : 'Refund'}
@@ -175,7 +175,7 @@ const Orders: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Download R1 invoice"
-                    className="p-2 rounded-xl border border-white/10 text-gray-500 hover:text-brand-green hover:border-brand-green/30 transition-colors"
+                    className="p-2 border-2 border-ink text-slate hover:text-leaf hover:border-ink transition-colors"
                   >
                     <FileText size={14} />
                   </a>

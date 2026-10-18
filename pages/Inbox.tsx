@@ -230,30 +230,30 @@ const MessagingHub: React.FC = () => {
   );
 
   return (
-    <div className="flex h-[calc(100vh-80px)] bg-brand-black overflow-hidden">
+    <div className="flex h-[calc(100vh-80px)] bg-paper overflow-hidden">
       <SEO title="Messages" canonical="/messages" description="Your messages on Cenner" />
 
       {/* ── LEFT: Conversation list ───────────────────────────────── */}
       {/* On mobile: hidden when a conversation is active */}
-      <div className={`w-72 flex-shrink-0 border-r border-white/5 flex flex-col ${activeConvId ? 'hidden md:flex' : 'flex'}`}>
+      <div className={`w-72 flex-shrink-0 border-r border-ink/15 flex flex-col ${activeConvId ? 'hidden md:flex' : 'flex'}`}>
         {/* Header */}
-        <div className="px-4 pt-5 pb-3 border-b border-white/5 flex-shrink-0">
+        <div className="px-4 pt-5 pb-3 border-b border-ink/15 flex-shrink-0">
           <div className="flex items-center gap-2 mb-3">
-            <MessageCircle className="text-brand-green" size={18} />
-            <span className="text-white font-black text-base tracking-tight">Messages</span>
+            <MessageCircle className="text-leaf" size={18} />
+            <span className="text-ink font-black text-base tracking-tight">Messages</span>
             {(conversations ?? []).reduce((s, c) => s + (c.unread ?? 0), 0) > 0 && (
-              <span className="ml-auto min-w-[20px] h-5 px-1.5 bg-brand-green rounded-full text-brand-black text-[10px] font-black flex items-center justify-center">
+              <span className="ml-auto min-w-[20px] h-5 px-1.5 bg-sky text-white text-[12px] font-black flex items-center justify-center">
                 {(conversations ?? []).reduce((s, c) => s + (c.unread ?? 0), 0)}
               </span>
             )}
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={13} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate" size={13} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search..."
-              className="w-full bg-white/5 border border-white/8 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-brand-green/30 transition-colors"
+              className="w-full bg-ink/5 border-2 border-ink pl-8 pr-3 py-2 text-xs text-ink placeholder:text-slate focus:outline-none focus:border-sky transition-colors"
             />
           </div>
         </div>
@@ -264,18 +264,18 @@ const MessagingHub: React.FC = () => {
             <div className="p-4 space-y-3">
               {[1,2,3].map(i => (
                 <div key={i} className="flex gap-3 animate-pulse">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 shrink-0" />
+                  <div className="w-10 h-10 bg-ink/5 shrink-0" />
                   <div className="flex-1 space-y-2 pt-1">
-                    <div className="h-2.5 bg-white/5 rounded w-1/2" />
-                    <div className="h-2 bg-white/5 rounded w-3/4" />
+                    <div className="h-2.5 bg-ink/5 w-1/2" />
+                    <div className="h-2 bg-ink/5 w-3/4" />
                   </div>
                 </div>
               ))}
             </div>
           ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center py-12 px-4 text-center">
-              <MessageCircle className="text-gray-700 mb-3" size={32} />
-              <p className="text-gray-500 text-xs">{search ? 'No results' : 'No conversations yet'}</p>
+              <MessageCircle className="text-slate mb-3" size={32} />
+              <p className="text-slate text-xs">{search ? 'No results' : 'No conversations yet'}</p>
             </div>
           ) : (
             filtered.map(conv => {
@@ -286,26 +286,26 @@ const MessagingHub: React.FC = () => {
                   onClick={() => navigate(`/messages/${conv.id}`)}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors border-l-2 ${
                     isActive
-                      ? 'bg-brand-green/8 border-brand-green'
-                      : 'border-transparent hover:bg-white/3'
+                      ? 'bg-leaf/10 border-ink'
+                      : 'border-transparent hover:bg-ink/5'
                   }`}
                 >
                   <div className="relative shrink-0">
-                    <AvatarImg src={conv.other?.avatar} name={conv.other?.name} size={40} className="rounded-xl" />
+                    <AvatarImg src={conv.other?.avatar} name={conv.other?.name} size={40} className="" />
                     {conv.unread > 0 && (
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-brand-green rounded-full flex items-center justify-center text-brand-black text-[9px] font-black">
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-sky flex items-center justify-center text-white text-[12px] font-black">
                         {conv.unread > 9 ? '9+' : conv.unread}
                       </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <span className={`text-xs font-bold truncate ${conv.unread > 0 ? 'text-white' : 'text-gray-300'}`}>
+                      <span className={`text-xs font-bold truncate ${conv.unread > 0 ? 'text-ink' : 'text-ink'}`}>
                         {conv.other?.name ?? 'Unknown'}
                       </span>
-                      <span className="text-gray-600 text-[10px] shrink-0 ml-1">{timeAgo(conv.lastMessageAt)}</span>
+                      <span className="text-slate text-[12px] shrink-0 ml-1">{timeAgo(conv.lastMessageAt)}</span>
                     </div>
-                    <p className={`text-[11px] truncate mt-0.5 ${conv.unread > 0 ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p className={`text-[12px] truncate mt-0.5 ${conv.unread > 0 ? 'text-slate' : 'text-slate'}`}>
                       {conv.lastMessage || 'No messages yet'}
                     </p>
                   </div>
@@ -320,62 +320,62 @@ const MessagingHub: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0">
         {!activeConvId ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center px-8">
-            <div className="w-16 h-16 rounded-full bg-brand-green/5 border border-brand-green/10 flex items-center justify-center mb-4">
+            <div className="w-16 h-16 bg-leaf/10 border border-ink flex items-center justify-center mb-4">
               <MessageCircle className="text-brand-green/30" size={28} />
             </div>
-            <p className="text-white font-bold mb-1">Select a conversation</p>
-            <p className="text-gray-600 text-sm">or start one from a freelancer's profile</p>
+            <p className="text-ink font-bold mb-1">Select a conversation</p>
+            <p className="text-slate text-sm">or start one from a freelancer's profile</p>
           </div>
         ) : (
           <>
             {/* Chat header */}
-            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/5 bg-brand-grey/40 flex-shrink-0">
+            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-ink/15 bg-white flex-shrink-0">
               {/* Back to list — mobile only */}
               <button
                 onClick={() => navigate('/messages')}
-                className="md:hidden flex-shrink-0 w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                className="md:hidden flex-shrink-0 w-8 h-8 bg-ink/5 flex items-center justify-center text-slate hover:text-ink transition-colors"
                 aria-label="Back to conversations"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
               </button>
-              <AvatarImg src={otherProfile?.avatar} name={otherProfile?.name} size={32} className="rounded-xl flex-shrink-0" />
+              <AvatarImg src={otherProfile?.avatar} name={otherProfile?.name} size={32} className="flex-shrink-0" />
               <div className="min-w-0">
-                <span className="font-bold text-white text-sm truncate block">{otherProfile?.name}</span>
+                <span className="font-bold text-ink text-sm truncate block">{otherProfile?.name}</span>
                 {typingUsers.size > 0 && (
-                  <p className="text-[11px] text-brand-green animate-pulse">typing…</p>
+                  <p className="text-[12px] text-leaf animate-pulse">typing…</p>
                 )}
               </div>
               <div className="ml-auto flex-shrink-0 relative">
                 <button
                   onClick={() => setShowPaymentSafetyPopout(v => !v)}
-                  className="hidden sm:flex items-center gap-1 text-[10px] text-gray-500 hover:text-gray-300 bg-white/3 border border-white/5 hover:border-white/10 rounded-lg px-2.5 py-1.5 transition-colors"
+                  className="hidden sm:flex items-center gap-1 text-[12px] text-slate hover:text-ink bg-ink/5 border-2 border-ink hover:border-ink px-2.5 py-1.5 transition-colors"
                 >
-                  <ShieldCheck size={10} className="text-brand-green" />
+                  <ShieldCheck size={10} className="text-leaf" />
                   Keep payments on Cenner
                 </button>
                 {showPaymentSafetyPopout && (
-                  <div className="absolute top-full right-0 mt-2 w-96 bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl p-6 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <div className="absolute top-full right-0 mt-2 w-96 bg-white border-2 border-ink p-6 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
                     <div className="flex items-center gap-3 mb-4">
-                      <ShieldCheck size={20} className="text-brand-green flex-shrink-0" />
-                      <p className="text-base font-bold text-white">Why keep payments on Cenner?</p>
+                      <ShieldCheck size={20} className="text-leaf flex-shrink-0" />
+                      <p className="text-base font-bold text-ink">Why keep payments on Cenner?</p>
                     </div>
-                    <ul className="space-y-4 text-sm text-gray-400 leading-relaxed">
-                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Payments are processed through Cenner's milestone system. Funds are only released to the freelancer once you approve the delivered work.</span></li>
-                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Dispute resolution is available for all platform payments. Off-platform transactions are not covered.</span></li>
-                      <li className="flex gap-3"><span className="text-brand-green mt-0.5 font-black">✓</span><span>Paying outside Cenner violates our Terms of Service and removes all buyer and seller protections.</span></li>
+                    <ul className="space-y-4 text-sm text-slate leading-relaxed">
+                      <li className="flex gap-3"><span className="text-leaf mt-0.5 font-black">✓</span><span>Payments are processed through Cenner's milestone system. Funds are only released to the freelancer once you approve the delivered work.</span></li>
+                      <li className="flex gap-3"><span className="text-leaf mt-0.5 font-black">✓</span><span>Dispute resolution is available for all platform payments. Off-platform transactions are not covered.</span></li>
+                      <li className="flex gap-3"><span className="text-leaf mt-0.5 font-black">✓</span><span>Paying outside Cenner violates our Terms of Service and removes all buyer and seller protections.</span></li>
                     </ul>
-                    <button onClick={() => setShowPaymentSafetyPopout(false)} className="mt-5 w-full text-xs font-black text-gray-600 hover:text-white transition-colors uppercase tracking-widest">Got it</button>
+                    <button onClick={() => setShowPaymentSafetyPopout(false)} className="mt-5 w-full text-xs font-black text-slate hover:text-ink transition-colors uppercase tracking-widest">Got it</button>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Off-platform safety notice — pinned at the top of every thread */}
-            <div className="flex-shrink-0 flex items-start gap-2.5 mx-6 mt-4 bg-brand-green/5 border border-brand-green/15 rounded-xl px-4 py-3">
-              <ShieldCheck size={15} className="text-brand-green shrink-0 mt-0.5" />
-              <p className="text-[11px] text-gray-400 leading-relaxed">
+            <div className="flex-shrink-0 flex items-start gap-2.5 mx-6 mt-4 bg-leaf/10 border border-ink px-4 py-3">
+              <ShieldCheck size={15} className="text-leaf shrink-0 mt-0.5" />
+              <p className="text-[12px] text-slate leading-relaxed">
                 Keep all communication and payments on Cenner. Sharing personal contact details or taking the deal off-platform to avoid fees violates our{' '}
-                <button onClick={() => navigate('/terms')} className="text-brand-green hover:underline font-semibold">Terms of Service</button>
+                <button onClick={() => navigate('/terms')} className="text-leaf hover:underline font-semibold">Terms of Service</button>
                 {' '}and voids buyer and seller protection.
               </p>
             </div>
@@ -384,10 +384,10 @@ const MessagingHub: React.FC = () => {
             <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
               {messagesLoading ? (
                 <div className="flex justify-center pt-20">
-                  <Loader2 className="animate-spin text-gray-600" size={22} />
+                  <Loader2 className="animate-spin text-slate" size={22} />
                 </div>
               ) : messages.length === 0 ? (
-                <div className="text-center text-gray-600 text-sm pt-20">Say hello 👋</div>
+                <div className="text-center text-slate text-sm pt-20">Say hello 👋</div>
               ) : (
                 messages.map(msg => {
                   const isMe = msg.senderId === user?.id;
@@ -397,24 +397,24 @@ const MessagingHub: React.FC = () => {
                   if (reviewReq) {
                     return (
                       <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                        <div className="max-w-[70%] bg-brand-grey border border-brand-green/20 rounded-2xl p-4 flex flex-col gap-3">
+                        <div className="max-w-[70%] bg-white border border-ink p-4 flex flex-col gap-3">
                           <div className="flex items-center gap-2">
-                            <Star size={14} className="text-yellow-400 fill-yellow-400" />
-                            <span className="text-white text-xs font-bold">Review Request</span>
+                            <Star size={14} className="text-ink fill-ink" />
+                            <span className="text-ink text-xs font-bold">Review Request</span>
                           </div>
-                          <p className="text-gray-400 text-[11px] leading-relaxed">
+                          <p className="text-slate text-[12px] leading-relaxed">
                             {isMe ? 'You asked' : `${msg.sender?.name ?? 'They'} asked`} for a review on:<br />
-                            <span className="text-white font-semibold">{reviewReq.contractTitle}</span>
+                            <span className="text-ink font-semibold">{reviewReq.contractTitle}</span>
                           </p>
                           {!isMe && (
                             <button
                               onClick={() => { setReviewContractId(reviewReq!.contractId); setShowReviewModal(true); }}
-                              className="py-2 bg-brand-green text-brand-black text-xs font-black rounded-xl hover:opacity-90 transition-opacity"
+                              className="py-2 bg-sky text-white text-xs font-black hover:opacity-90 transition-opacity"
                             >
                               Leave a Review
                             </button>
                           )}
-                          <span className="text-[10px] text-gray-600">{formatTime(msg.createdAt)}</span>
+                          <span className="text-[12px] text-slate">{formatTime(msg.createdAt)}</span>
                         </div>
                       </div>
                     );
@@ -422,26 +422,26 @@ const MessagingHub: React.FC = () => {
                   return (
                     <div key={msg.id} className={`flex items-end gap-2.5 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
                       {!isMe && (
-                        <AvatarImg src={msg.sender?.avatar} name={msg.sender?.name} size={28} className="rounded-xl shrink-0 mb-4" />
+                        <AvatarImg src={msg.sender?.avatar} name={msg.sender?.name} size={28} className="shrink-0 mb-4" />
                       )}
                       <div className={`flex flex-col gap-1 max-w-[65%] ${isMe ? 'items-end' : 'items-start'}`}>
                         {msg.flagged && (
-                          <div className="flex items-center gap-1 text-yellow-500/70 text-[10px] px-1">
+                          <div className="flex items-center gap-1 text-yellow-500/70 text-[12px] px-1">
                             <AlertTriangle size={9} />
                             Keep communication on Cenner for payment protection
                           </div>
                         )}
-                        <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                        <div className={`px-4 py-2.5 text-sm leading-relaxed ${
                           isMe
-                            ? 'bg-brand-green text-brand-black font-medium rounded-br-sm'
-                            : 'bg-brand-grey border border-white/5 text-gray-200 rounded-bl-sm'
+                            ? 'bg-sky text-white font-medium'
+                            : 'bg-white border-2 border-ink text-ink'
                         }`}>
                           {msg.content}
                         </div>
-                        <span className="text-[10px] text-gray-600 px-1">{formatTime(msg.createdAt)}</span>
+                        <span className="text-[12px] text-slate px-1">{formatTime(msg.createdAt)}</span>
                       </div>
                       {isMe && (
-                        <AvatarImg src={user?.avatar} name={user?.name} size={28} className="rounded-xl shrink-0 mb-4" />
+                        <AvatarImg src={user?.avatar} name={user?.name} size={28} className="shrink-0 mb-4" />
                       )}
                     </div>
                   );
@@ -451,21 +451,21 @@ const MessagingHub: React.FC = () => {
             </div>
 
             {/* Input */}
-            <div className="flex-shrink-0 px-5 py-4 border-t border-white/5">
-              <div className="flex items-end gap-3 bg-brand-grey border border-white/8 rounded-2xl px-4 py-2.5 focus-within:border-brand-green/30 transition-colors">
+            <div className="flex-shrink-0 px-5 py-4 border-t border-ink/15">
+              <div className="flex items-end gap-3 bg-white border-2 border-ink px-4 py-2.5 focus-within:border-sky transition-colors">
                 <textarea
                   value={input}
                   onChange={handleTyping}
                   onKeyDown={handleKeyDown}
                   placeholder="Write a message…"
                   rows={1}
-                  className="flex-1 bg-transparent text-white text-sm resize-none outline-none placeholder-gray-600 py-1 max-h-32"
+                  className="flex-1 bg-transparent text-ink text-sm resize-none outline-none placeholder:text-slate py-1 max-h-32"
                   style={{ scrollbarWidth: 'none' }}
                 />
                 <button
                   onClick={sendMessage}
                   disabled={!input.trim() || sending}
-                  className="shrink-0 w-8 h-8 bg-brand-green rounded-xl flex items-center justify-center text-brand-black hover:scale-105 transition-all disabled:opacity-30 disabled:scale-100"
+                  className="shrink-0 w-8 h-8 bg-sky flex items-center justify-center text-white hover:scale-105 transition-all disabled:opacity-30 disabled:scale-100"
                 >
                   <Send size={14} />
                 </button>
@@ -476,55 +476,55 @@ const MessagingHub: React.FC = () => {
       </div>
 
       {/* ── RIGHT: Profile + Reviews ──────────────────────────────── */}
-      <div className="hidden lg:flex w-64 flex-shrink-0 border-l border-white/5 flex-col overflow-y-auto">
+      <div className="hidden lg:flex w-64 flex-shrink-0 border-l border-ink/15 flex-col overflow-y-auto">
         {otherProfile ? (
           <div className="p-5 space-y-5">
 
             {/* ── Profile summary ── */}
             <div className="flex flex-col items-center text-center pt-2">
               <div className="relative mb-3">
-                <AvatarImg src={otherProfile.avatar} name={otherProfile.name} size={80} className="rounded-2xl border-2 border-brand-green/20" />
+                <AvatarImg src={otherProfile.avatar} name={otherProfile.name} size={80} className="border-2 border-ink" />
                 {otherProfile.kycVerified && (
                   <div className="absolute -bottom-2 -right-2">
                     <BadgeCheck size={22} className="text-amber-400 drop-shadow-[0_0_4px_rgba(251,191,36,0.8)]" fill="#1a1a1a" strokeWidth={1.5} />
                   </div>
                 )}
               </div>
-              <h3 className="text-white font-bold text-sm">{otherProfile.name}</h3>
+              <h3 className="text-ink font-bold text-sm">{otherProfile.name}</h3>
               {(otherProfile.avgRating ?? 0) > 0 && (
                 <div className="flex items-center gap-1 mt-1">
-                  <Star size={11} className="text-yellow-400 fill-yellow-400" />
-                  <span className="text-gray-400 text-xs font-medium">{otherProfile.avgRating!.toFixed(1)}</span>
-                  <span className="text-gray-600 text-xs">({otherProfile.reviewCount})</span>
+                  <Star size={11} className="text-ink fill-ink" />
+                  <span className="text-slate text-xs font-medium">{otherProfile.avgRating!.toFixed(1)}</span>
+                  <span className="text-slate text-xs">({otherProfile.reviewCount})</span>
                 </div>
               )}
             </div>
 
             {/* Verifications */}
             <div className="space-y-1.5">
-              <div className={`flex items-center gap-2 text-xs ${otherProfile.kycVerified ? 'text-brand-green' : 'text-gray-600'}`}>
-                <BadgeCheck size={13} className={otherProfile.kycVerified ? 'text-amber-400' : 'text-gray-700'} />
+              <div className={`flex items-center gap-2 text-xs ${otherProfile.kycVerified ? 'text-leaf' : 'text-slate'}`}>
+                <BadgeCheck size={13} className={otherProfile.kycVerified ? 'text-ink' : 'text-slate'} />
                 Identity {otherProfile.kycVerified ? 'verified' : 'not verified'}
               </div>
-              <div className={`flex items-center gap-2 text-xs ${otherProfile.emailVerified ? 'text-brand-green' : 'text-gray-600'}`}>
+              <div className={`flex items-center gap-2 text-xs ${otherProfile.emailVerified ? 'text-leaf' : 'text-slate'}`}>
                 <Mail size={13} />
                 Email {otherProfile.emailVerified ? 'verified' : 'not verified'}
               </div>
-              <div className={`flex items-center gap-2 text-xs ${otherProfile.mobileVerified ? 'text-brand-green' : 'text-gray-600'}`}>
+              <div className={`flex items-center gap-2 text-xs ${otherProfile.mobileVerified ? 'text-leaf' : 'text-slate'}`}>
                 <Phone size={13} />
                 Phone {otherProfile.mobileVerified ? 'verified' : 'not verified'}
               </div>
             </div>
 
             {otherProfile.bio && (
-              <p className="text-gray-500 text-[11px] leading-relaxed border-t border-white/5 pt-4">{otherProfile.bio}</p>
+              <p className="text-slate text-[12px] leading-relaxed border-t border-ink/15 pt-4">{otherProfile.bio}</p>
             )}
 
             {/* ── Reviews — only shown after a deal exists ── */}
             {(completedContracts.length > 0 || reviews.length > 0) && (
               <>
-                <div className="border-t border-white/5 pt-4">
-                  <p className="text-[10px] text-gray-600 uppercase tracking-widest font-bold mb-3">Reviews</p>
+                <div className="border-t border-ink/15 pt-4">
+                  <p className="text-[12px] text-slate uppercase tracking-widest font-bold mb-3">Reviews</p>
 
                   {/* Request review — visible to freelancer only */}
                   {completedContracts.length > 0 && (
@@ -533,34 +533,34 @@ const MessagingHub: React.FC = () => {
                         <button
                           key={c.id}
                           onClick={() => sendReviewRequest(c)}
-                          className="w-full text-left px-3 py-2.5 bg-brand-green/5 border border-brand-green/20 rounded-xl hover:border-brand-green/40 transition-colors group"
+                          className="w-full text-left px-3 py-2.5 bg-leaf/10 border border-ink hover:border-ink transition-colors group"
                         >
                           <div className="flex items-center gap-2">
-                            <Star size={11} className="text-brand-green shrink-0" />
-                            <span className="text-xs text-white font-medium truncate group-hover:text-brand-green transition-colors">{c.title}</span>
+                            <Star size={11} className="text-leaf shrink-0" />
+                            <span className="text-xs text-ink font-medium truncate group-hover:text-leaf transition-colors">{c.title}</span>
                           </div>
-                          <p className="text-[10px] text-gray-600 mt-0.5 ml-[19px]">Tap to send review request</p>
+                          <p className="text-[12px] text-slate mt-0.5 ml-[19px]">Tap to send review request</p>
                         </button>
                       ))}
                     </div>
                   )}
 
                   {reviews.length === 0 ? (
-                    <p className="text-gray-600 text-xs">No reviews yet</p>
+                    <p className="text-slate text-xs">No reviews yet</p>
                   ) : (
                     <div className="space-y-3">
                       {reviews.map(r => (
-                        <div key={r.id} className="bg-white/3 border border-white/5 rounded-xl p-3">
+                        <div key={r.id} className="bg-ink/5 border-2 border-ink p-3">
                           <div className="flex items-center gap-2 mb-1.5">
-                            <AvatarImg src={r.reviewer.avatar} name={r.reviewer.name} size={24} className="rounded-lg" />
-                            <span className="text-white text-[11px] font-bold truncate flex-1">{r.reviewer.name}</span>
+                            <AvatarImg src={r.reviewer.avatar} name={r.reviewer.name} size={24} className="" />
+                            <span className="text-ink text-[12px] font-bold truncate flex-1">{r.reviewer.name}</span>
                             <div className="flex gap-0.5 shrink-0">
                               {[1,2,3,4,5].map(s => (
-                                <Star key={s} size={8} className={s <= r.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-700'} />
+                                <Star key={s} size={8} className={s <= r.rating ? 'text-ink fill-ink' : 'text-slate'} />
                               ))}
                             </div>
                           </div>
-                          {r.comment && <p className="text-gray-400 text-[11px] leading-relaxed">{r.comment}</p>}
+                          {r.comment && <p className="text-slate text-[12px] leading-relaxed">{r.comment}</p>}
                         </div>
                       ))}
                     </div>
@@ -571,33 +571,33 @@ const MessagingHub: React.FC = () => {
 
             <button
               onClick={() => navigate(`/freelancer/${otherProfile.id}`)}
-              className="w-full py-2.5 border border-white/10 rounded-xl text-gray-400 text-xs font-bold hover:border-brand-green/30 hover:text-brand-green transition-colors"
+              className="w-full py-2.5 border-2 border-ink text-slate text-xs font-bold hover:border-ink hover:text-leaf transition-colors"
             >
               View full profile
             </button>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center flex-1 p-6 text-center">
-            <MessageCircle className="text-gray-700 mb-2" size={24} />
-            <p className="text-gray-600 text-xs">Select a conversation</p>
+            <MessageCircle className="text-slate mb-2" size={24} />
+            <p className="text-slate text-xs">Select a conversation</p>
           </div>
         )}
       </div>
 
       {/* ── Review submission modal ───────────────────────────────── */}
       {showReviewModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-ink/70 flex items-center justify-center p-4">
+          <div className="bg-white border-2 border-ink p-6 w-full max-w-sm">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-white font-black text-base">Leave a Review</h3>
-              <button onClick={() => setShowReviewModal(false)} className="text-gray-500 hover:text-white transition-colors">
+              <h3 className="text-ink font-black text-base">Leave a Review</h3>
+              <button onClick={() => setShowReviewModal(false)} className="text-slate hover:text-ink transition-colors">
                 <X size={18} />
               </button>
             </div>
             <div className="flex justify-center gap-3 mb-5">
               {[1,2,3,4,5].map(s => (
                 <button key={s} onClick={() => setReviewRating(s)}>
-                  <Star size={32} className={s <= reviewRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-600'} />
+                  <Star size={32} className={s <= reviewRating ? 'text-ink fill-ink' : 'text-slate'} />
                 </button>
               ))}
             </div>
@@ -606,12 +606,12 @@ const MessagingHub: React.FC = () => {
               onChange={e => setReviewComment(e.target.value)}
               placeholder="Share your experience (optional)..."
               rows={4}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 resize-none outline-none focus:border-brand-green/40 transition-colors mb-4"
+              className="w-full bg-ink/5 border-2 border-ink px-4 py-3 text-ink text-sm placeholder:text-slate resize-none outline-none focus:border-sky transition-colors mb-4"
             />
             <button
               onClick={submitReview}
               disabled={reviewRating === 0 || reviewSubmitting}
-              className="w-full py-3 bg-brand-green text-brand-black font-black text-sm rounded-xl hover:opacity-90 transition-opacity disabled:opacity-40"
+              className="w-full py-3 bg-sky text-white font-black text-sm hover:opacity-90 transition-opacity disabled:opacity-40"
             >
               {reviewSubmitting ? 'Submitting…' : 'Submit Review'}
             </button>

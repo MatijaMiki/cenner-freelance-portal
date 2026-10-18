@@ -23,15 +23,11 @@ const STATIC_ROUTES = [
   { path: '/',             priority: '1.0', changefreq: 'weekly'  },
   { path: '/marketplace',  priority: '0.95', changefreq: 'daily'  },
   { path: '/services',     priority: '0.9',  changefreq: 'weekly' },
-  // '/match' is deliberately absent: pages/Match.tsx renders <SEO noIndex />, so
-  // submitting it here would ask Google to index a page that forbids indexing.
+  // '/match' is absent: it redirects to the Marketplace's AI matching waitlist (#ai-matching).
   { path: '/subscription', priority: '0.85', changefreq: 'weekly' },
-  { path: '/technology',   priority: '0.8',  changefreq: 'monthly'},
   { path: '/blog',         priority: '0.8',  changefreq: 'daily'  },
   { path: '/about',        priority: '0.75', changefreq: 'monthly'},
   { path: '/ranwhat',      priority: '0.6',  changefreq: 'monthly'},
-  { path: '/contact',      priority: '0.7',  changefreq: 'monthly'},
-  { path: '/auth',         priority: '0.5',  changefreq: 'yearly' },
   { path: '/privacy',      priority: '0.3',  changefreq: 'yearly' },
   { path: '/terms',        priority: '0.3',  changefreq: 'yearly' },
   { path: '/cookies',      priority: '0.3',  changefreq: 'yearly' },

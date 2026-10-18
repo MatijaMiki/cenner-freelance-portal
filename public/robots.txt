@@ -10,26 +10,21 @@ Allow: /usluge/
 Allow: /freelanceri/
 Allow: /blog
 Allow: /about
-Allow: /contact
 Allow: /subscription
-Allow: /match
-Allow: /technology
-Allow: /auth
 
 # Private / authenticated pages — do not index
 Disallow: /profile
 Disallow: /dashboard
 Disallow: /orders
 Disallow: /messages
-Disallow: /projects
 Disallow: /checkout/
 Disallow: /checkout-subscription/
 Disallow: /creator-onboarding
-Disallow: /earnings
 Disallow: /saved
 Disallow: /contracts
 Disallow: /reset-password
 Disallow: /invoices/
+Disallow: /admin
 
 # AI training bots — opt out
 User-agent: GPTBot

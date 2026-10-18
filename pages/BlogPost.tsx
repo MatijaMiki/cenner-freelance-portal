@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import SEO from '../components/SEO';
 import AvatarImg from '../components/Avatar';
+import BlogCover from '../components/BlogCover';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -57,7 +58,7 @@ const BlogPost: React.FC = () => {
   const canonical = slug ? `/blog/${slug}` : '/blog';
 
   return (
-    <div className="min-h-screen bg-brand-black pt-12 pb-24">
+    <div className="relative min-h-screen font-text text-ink">
       {post ? (
         <SEO
           title={post.title}
@@ -102,74 +103,81 @@ const BlogPost: React.FC = () => {
         <SEO title="Loading…" canonical={canonical} noIndex />
       )}
 
-      <article className="max-w-3xl mx-auto px-4 lg:px-12">
+      <article className="relative z-10 mx-auto max-w-[1500px] px-4 pb-24 pt-10 md:px-8 md:pt-14">
         <Link
           to="/blog"
-          className="inline-flex items-center gap-2 text-gray-500 hover:text-white text-xs font-black uppercase tracking-widest mb-8 transition-colors"
+          data-calm
+          className="mb-10 inline-flex items-center gap-2 font-display text-[15px] font-bold hover:text-sky"
         >
-          <ArrowLeft size={14} /> Back to Blog
+          <ArrowLeft size={16} aria-hidden="true" /> Back to Blog
         </Link>
 
-        {loading && <div className="text-gray-500 text-sm">Loading…</div>}
-        {!loading && error && <div className="text-red-400 text-sm">{error}</div>}
+        {loading && <div className="text-[1rem] text-slate">Loading…</div>}
+        {!loading && error && <div className="border-2 border-ink bg-white p-6 font-display font-bold" role="alert">{error}</div>}
 
         {post && (
           <>
-            <header className="mb-10">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-[1.05] mb-6">
+            <header data-calm className="mb-10 max-w-[62rem]">
+              <h1 className="font-display text-[clamp(2.25rem,1.2rem+4.6vw,5.25rem)] font-extrabold leading-[0.98] tracking-[-0.035em]">
                 {post.title}
               </h1>
               {post.excerpt && (
-                <p className="text-xl text-gray-400 leading-relaxed mb-8">{post.excerpt}</p>
+                <p className="mt-8 max-w-[46ch] text-[clamp(1.125rem,1.05rem+0.5vw,1.375rem)] leading-snug">{post.excerpt}</p>
               )}
-              <div className="flex items-center justify-between flex-wrap gap-3 text-sm">
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-y-2 border-ink py-4 text-[15px]">
                 <div className="flex items-center gap-3">
-                  <AvatarImg src={post.authorAvatar} name={post.author} size={32} className="rounded-full" />
-                  <span className="font-bold text-gray-300">{post.author}</span>
+                  <AvatarImg src={post.authorAvatar} name={post.author} size={32} className="rounded-none border-2 border-ink" />
+                  <span className="font-display font-bold">{post.author}</span>
                 </div>
-                <div className="flex items-center gap-4 text-gray-500">
+                <div className="flex items-center gap-5 text-slate">
                   {post.publishedAt && (
                     <div className="flex items-center gap-1.5">
-                      <Calendar size={14} />
+                      <Calendar size={15} aria-hidden="true" />
                       <span>{fmtDate(post.publishedAt)}</span>
                     </div>
                   )}
                   {isAdmin && post.id && (
                     <Link
-                      to={`/blog-admin/${post.id}`}
-                      className="flex items-center gap-1.5 text-gray-400 hover:text-white"
+                      to={`/admin/blog/${post.id}`}
+                      className="flex items-center gap-1.5 font-display font-bold text-ink hover:text-sky"
                     >
-                      <Edit2 size={14} /> Edit
+                      <Edit2 size={15} aria-hidden="true" /> Edit
                     </Link>
                   )}
                 </div>
               </div>
             </header>
 
+            {/* An uploaded image is part of the article. Without one, the page background (PageBackdrop)
+                carries the post's art, so no generated cover is repeated here. */}
             {post.coverImage && (
-              <div className="rounded-2xl overflow-hidden mb-10 bg-black/40">
+              <div className="mb-12 overflow-hidden border-2 border-ink bg-paper2">
                 <img src={post.coverImage} alt={post.title} className="w-full" />
               </div>
             )}
 
-            <div className="blog-content text-gray-300 leading-relaxed space-y-5 text-lg">
+            <div data-calm className="blog-content max-w-[46rem] space-y-6 text-[1.1875rem] leading-[1.7] text-ink/90">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  h1: ({ node, ...p }) => <h2 className="text-3xl font-black text-white mt-10 mb-4 tracking-tight" {...p} />,
-                  h2: ({ node, ...p }) => <h2 className="text-3xl font-black text-white mt-10 mb-4 tracking-tight" {...p} />,
-                  h3: ({ node, ...p }) => <h3 className="text-2xl font-black text-white mt-8 mb-3 tracking-tight" {...p} />,
-                  h4: ({ node, ...p }) => <h4 className="text-xl font-black text-white mt-6 mb-3" {...p} />,
-                  p:  ({ node, ...p }) => <p className="text-gray-300 leading-relaxed" {...p} />,
-                  a:  ({ node, ...p }) => <a className="text-brand-pink underline underline-offset-2 hover:text-brand-pink/80" target="_blank" rel="noopener noreferrer" {...p} />,
-                  ul: ({ node, ...p }) => <ul className="list-disc list-outside pl-6 space-y-2" {...p} />,
-                  ol: ({ node, ...p }) => <ol className="list-decimal list-outside pl-6 space-y-2" {...p} />,
-                  li: ({ node, ...p }) => <li className="text-gray-300" {...p} />,
-                  blockquote: ({ node, ...p }) => <blockquote className="border-l-4 border-brand-pink pl-5 italic text-gray-400" {...p} />,
-                  code: ({ node, ...p }) => <code className="bg-white/10 text-brand-green px-1.5 py-0.5 rounded text-sm font-mono" {...p} />,
-                  pre:  ({ node, ...p }) => <pre className="bg-white/5 border border-white/10 p-4 rounded-xl overflow-x-auto text-sm" {...p} />,
-                  hr:   () => <hr className="border-white/10 my-10" />,
-                  img:  ({ node, ...p }) => <img className="rounded-xl my-6 w-full" loading="lazy" {...p} />,
+                  h1: ({ node, ...p }) => <h2 className="mb-4 mt-14 border-t-2 border-ink pt-5 font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.5rem)] font-extrabold leading-[1.05] tracking-[-0.025em] text-ink" {...p} />,
+                  h2: ({ node, ...p }) => <h2 className="mb-4 mt-14 border-t-2 border-ink pt-5 font-display text-[clamp(1.75rem,1.3rem+1.6vw,2.5rem)] font-extrabold leading-[1.05] tracking-[-0.025em] text-ink" {...p} />,
+                  h3: ({ node, ...p }) => <h3 className="mb-3 mt-10 font-display text-[1.625rem] font-extrabold leading-tight tracking-[-0.02em] text-ink" {...p} />,
+                  h4: ({ node, ...p }) => <h4 className="mb-3 mt-8 font-display text-[1.25rem] font-extrabold text-ink" {...p} />,
+                  p:  ({ node, ...p }) => <p className="leading-[1.7]" {...p} />,
+                  a:  ({ node, ...p }) => <a className="text-sky underline underline-offset-[3px] hover:text-ink" target="_blank" rel="noopener noreferrer" {...p} />,
+                  strong: ({ node, ...p }) => <strong className="font-bold text-ink" {...p} />,
+                  ul: ({ node, ...p }) => <ul className="list-outside list-disc space-y-2 pl-6 marker:text-ink" {...p} />,
+                  ol: ({ node, ...p }) => <ol className="list-outside list-decimal space-y-2 pl-6 marker:font-bold marker:text-ink" {...p} />,
+                  li: ({ node, ...p }) => <li {...p} />,
+                  blockquote: ({ node, ...p }) => <blockquote className="border-l-4 border-sky pl-5 font-display text-[1.25rem] font-medium leading-snug text-ink" {...p} />,
+                  code: ({ node, ...p }) => <code className="bg-paper2 px-1.5 py-0.5 font-mono text-[0.9em] text-ink" {...p} />,
+                  pre:  ({ node, ...p }) => <pre className="overflow-x-auto border-2 border-ink bg-ink p-4 text-[0.9rem] text-white [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-white" {...p} />,
+                  hr:   () => <hr className="my-12 border-t-2 border-ink" />,
+                  img:  ({ node, ...p }) => <img className="my-8 w-full border-2 border-ink" loading="lazy" {...p} />,
+                  table: ({ node, ...p }) => <div className="overflow-x-auto"><table className="w-full border-2 border-ink text-[1rem]" {...p} /></div>,
+                  th: ({ node, ...p }) => <th className="border-2 border-ink bg-paper2 px-3 py-2 text-left font-display font-bold" {...p} />,
+                  td: ({ node, ...p }) => <td className="border-2 border-ink px-3 py-2" {...p} />,
                 }}
               >
                 {post.content}
@@ -179,32 +187,36 @@ const BlogPost: React.FC = () => {
         )}
 
         {relatedPosts.length > 0 && (
-          <aside className="mt-20 pt-10 border-t border-white/10">
-            <div className="flex items-center gap-2 text-brand-green text-xs font-black uppercase tracking-widest mb-6">
-              <BookOpen size={14} />
+          <aside data-calm className="mt-20 border-t-2 border-ink pt-8">
+            <div className="mb-6 flex items-center gap-2 font-display text-[13px] font-extrabold uppercase tracking-[0.12em] text-slate">
+              <BookOpen size={15} aria-hidden="true" />
               <span>Više s bloga</span>
             </div>
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-3">
               {relatedPosts.map(r => (
                 <Link
                   key={r.slug}
                   to={`/blog/${r.slug}`}
-                  className="group block bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-green/30 rounded-2xl p-4 transition-all"
+                  className="group flex flex-col border-2 border-ink bg-white transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#0b0c0e] focus-visible:-translate-x-1 focus-visible:-translate-y-1 focus-visible:shadow-[6px_6px_0_0_#002ca5] focus-visible:outline-none"
                 >
-                  {r.coverImage && (
+                  {r.coverImage ? (
                     <img
                       src={r.coverImage}
                       alt={r.title}
-                      className="w-full h-28 object-cover rounded-xl mb-3"
+                      className="h-36 w-full border-b-2 border-ink object-cover"
                       loading="lazy"
                     />
+                  ) : (
+                    <BlogCover seed={r.slug} className="h-36 w-full border-b-2 border-ink object-cover" />
                   )}
-                  <p className="text-sm font-bold text-white group-hover:text-brand-green transition-colors leading-snug line-clamp-2">
-                    {r.title}
-                  </p>
-                  {r.excerpt && (
-                    <p className="text-xs text-gray-500 mt-1.5 line-clamp-2">{r.excerpt}</p>
-                  )}
+                  <div className="p-5">
+                    <p className="line-clamp-2 font-display text-[1.125rem] font-extrabold leading-snug transition-colors group-hover:text-sky">
+                      {r.title}
+                    </p>
+                    {r.excerpt && (
+                      <p className="mt-2 line-clamp-2 text-[0.95rem] text-slate">{r.excerpt}</p>
+                    )}
+                  </div>
                 </Link>
               ))}
             </div>

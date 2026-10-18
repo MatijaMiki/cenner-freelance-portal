@@ -22,6 +22,56 @@
       ],
       "destination": "https://cenner.hr/:path*",
       "permanent": true
+    },
+    {
+      "source": "/match",
+      "destination": "/marketplace#ai-matching",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/profile",
+      "permanent": true
+    },
+    {
+      "source": "/saved",
+      "destination": "/profile?tab=saved",
+      "permanent": true
+    },
+    {
+      "source": "/blog-admin",
+      "destination": "/admin/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog-admin/:id",
+      "destination": "/admin/blog/:id",
+      "permanent": true
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin/blog",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/about#kontakt",
+      "permanent": true
+    },
+    {
+      "source": "/projects",
+      "destination": "/services#radovi",
+      "permanent": true
+    },
+    {
+      "source": "/technology",
+      "destination": "/services#alati",
+      "permanent": true
+    },
+    {
+      "source": "/earnings",
+      "destination": "/profile?tab=earnings",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -38,15 +88,15 @@
       "destination": "/api/render?type=blog&id=:slug"
     },
     {
-      "source": "/(profile|creator-onboarding|blog-admin|banned|dashboard|orders|messages|contracts|projects|reset-password|earnings|saved|onboarding|order-success|referral)",
+      "source": "/(profile|creator-onboarding|banned|orders|messages|contracts|reset-password|onboarding|order-success|referral)",
       "destination": "/api/render?type=private"
     },
     {
-      "source": "/admin/bans",
+      "source": "/admin/:path*",
       "destination": "/api/render?type=private"
     },
     {
-      "source": "/(blog-admin|messages|contracts|checkout|checkout-subscription)/:id",
+      "source": "/(messages|contracts|checkout|checkout-subscription)/:id",
       "destination": "/api/render?type=private"
     },
     {
@@ -55,6 +105,11 @@
     }
   ],
   "headers": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "staging.cenner.hr" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
     {
       "source": "/usluge/(.*)",
       "headers": [
@@ -70,6 +125,15 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/video/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },

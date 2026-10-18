@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Starts TRUE: the localStorage value above is a cache, not an answer, and on a
   // cold load there may be none at all. Consumers that gate on `loading` — the
-  // admin guards on /admin/bans and /blog-admin — read it on first render, so
+  // admin guards on /admin/bans and /admin/blog — read it on first render, so
   // starting false told them "auth resolved, no user" while /auth/me was still in
   // flight and bounced a signed-in admin to the homepage every time.
   const [loading, setLoading] = useState(true);

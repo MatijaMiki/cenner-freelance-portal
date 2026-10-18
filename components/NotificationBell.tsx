@@ -21,7 +21,8 @@ function timeAgo(dateStr: string) {
   return `${Math.floor(s / 86400)}d ago`;
 }
 
-const NotificationBell: React.FC = () => {
+/** `className`: the bell's colours (the light homepage-style nav and the dark classic one differ). */
+const NotificationBell: React.FC<{ className?: string }> = ({ className = 'text-slate hover:text-ink' }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -60,38 +61,38 @@ const NotificationBell: React.FC = () => {
 
   return (
     <div className="relative" ref={ref}>
-      <button onClick={() => setOpen(!open)} className="relative p-2 text-gray-400 hover:text-white transition-colors">
+      <button onClick={() => setOpen(!open)} className={`relative p-2 transition-colors ${className}`}>
         <Bell size={20} />
         {unread > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+          <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-[12px] font-bold flex items-center justify-center">
             {unread > 9 ? '9+' : unread}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-80 max-h-[420px] bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
-            <h3 className="text-white font-bold text-sm">Notifications</h3>
+        <div className="absolute right-0 top-full mt-2 w-80 max-h-[420px] bg-white border-2 border-ink overflow-hidden z-50">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-ink/15">
+            <h3 className="text-ink font-bold text-sm">Notifications</h3>
             {unread > 0 && (
-              <button onClick={markAllRead} className="text-xs text-brand-green font-medium flex items-center gap-1 hover:underline">
+              <button onClick={markAllRead} className="text-xs text-leaf font-medium flex items-center gap-1 hover:underline">
                 <Check size={12} /> Mark all read
               </button>
             )}
           </div>
           <div className="overflow-y-auto max-h-[340px]">
             {notifications.length === 0 ? (
-              <p className="text-gray-500 text-sm text-center py-8">No notifications</p>
+              <p className="text-slate text-sm text-center py-8">No notifications</p>
             ) : (
               notifications.slice(0, 20).map(n => (
                 <button key={n.id} onClick={() => handleClick(n)}
-                  className={`w-full text-left px-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors ${!n.read ? 'bg-white/[0.02]' : ''}`}>
+                  className={`w-full text-left px-4 py-3 border-b border-ink/15 hover:bg-ink/5 transition-colors ${!n.read ? 'bg-ink/5' : ''}`}>
                   <div className="flex items-start gap-2">
                     {!n.read && <span className="w-2 h-2 bg-brand-green rounded-full mt-1.5 shrink-0" />}
                     <div className={!n.read ? '' : 'ml-4'}>
-                      <p className="text-white text-sm font-medium leading-tight">{n.title}</p>
-                      <p className="text-gray-500 text-xs mt-0.5 line-clamp-2">{n.body}</p>
-                      <p className="text-gray-600 text-[10px] mt-1">{timeAgo(n.createdAt)}</p>
+                      <p className="text-ink text-sm font-medium leading-tight">{n.title}</p>
+                      <p className="text-slate text-xs mt-0.5 line-clamp-2">{n.body}</p>
+                      <p className="text-slate text-[12px] mt-1">{timeAgo(n.createdAt)}</p>
                     </div>
                   </div>
                 </button>

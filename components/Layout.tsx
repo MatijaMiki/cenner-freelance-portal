@@ -1,7 +1,15 @@
 
+import Logo from './Logo';
+import PageBackdrop from './PageBackdrop';
+import ProjectDots from './ProjectDots';
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, User as UserIcon, LogOut, ChevronDown, MessageSquare, UserCheck, FileText, ShoppingBag, Briefcase, Tag, UserPlus, BookOpen, Users, Mail, Info, Gift } from 'lucide-react';
+// the nav's icons are the pixel set (drawn on the same grid as the pixel lettering)
+import {
+  PxMenu as Menu, PxClose as X, PxUser as UserIcon, PxLogout as LogOut, PxChevronDown as ChevronDown, PxMessage as MessageSquare,
+  PxUser as UserCheck, PxFileText as FileText, PxShoppingBag as ShoppingBag, PxInfoBox as Info, PxGift as Gift,
+  PxShield as Shield,
+} from './PixelIcon';
 import AvatarImg from './Avatar';
 import NotificationBell from './NotificationBell';
 import ChatWidget from './ChatWidget';
@@ -11,25 +19,36 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage, useT } from '../i18n';
 import { API } from '../lib/api';
 import { connectSocket, disconnectSocket } from '../hooks/useSocket';
+import { LANGUAGES, useSiteNav } from './siteNav';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const LANGUAGES = [
-  { code: 'EN', flag: '🇬🇧', name: 'English' },
-  { code: 'HR', flag: '🇭🇷', name: 'Hrvatski' },
-  { code: 'DE', flag: '🇩🇪', name: 'Deutsch' },
-  { code: 'FR', flag: '🇫🇷', name: 'Français' },
-  { code: 'ES', flag: '🇪🇸', name: 'Español' },
-  { code: 'IT', flag: '🇮🇹', name: 'Italiano' },
-];
+// The homepage nav is a plain bar on the page's grey ground; every other page
+// keeps the classic dark bar until its own sections are redesigned. These two helpers are the
+// only places the two looks differ structurally (the class-level differences live in Layout).
+const NavShell: React.FC<{ glass: boolean; children: React.ReactNode }> = ({ glass, children }) =>
+  glass ? (
+    <div className="w-full px-4 md:px-8 lg:px-10">{children}</div>
+  ) : (
+    <div className="w-full px-6 lg:px-10">{children}</div>
+  );
+
+const Panel: React.FC<{ glass: boolean; className: string; rounded?: string; children: React.ReactNode }> = ({
+  glass, className, rounded = 'rounded-2xl', children,
+}) =>
+  glass ? (
+    <div className={`${className} ${rounded} overflow-hidden bg-ink shadow-[0_24px_48px_-20px_rgba(11,12,14,0.55)]`}>{children}</div>
+  ) : (
+    <div className={`${className} bg-brand-grey border border-white/10 ${rounded} shadow-2xl overflow-hidden`}>{children}</div>
+  );
+
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen]         = useState(false);
   const [isLangOpen, setIsLangOpen]         = useState(false);
   const [isAboutOpen, setIsAboutOpen]       = useState(false);
-  const [isMarketOpen, setIsMarketOpen]     = useState(false);
   const [isProfileOpen, setIsProfileOpen]   = useState(false);
   const { lang, setLang } = useLanguage();
   const t = useT();
@@ -41,7 +60,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const langRefDesktop  = useRef<HTMLDivElement>(null);
   const langRefMobile   = useRef<HTMLDivElement>(null);
   const aboutRef   = useRef<HTMLDivElement>(null);
-  const marketRef  = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,7 +70,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         (langRefMobile.current  && langRefMobile.current.contains(target));
       if (!insideLang) setIsLangOpen(false);
       if (aboutRef.current   && !aboutRef.current.contains(target))   setIsAboutOpen(false);
-      if (marketRef.current  && !marketRef.current.contains(target))  setIsMarketOpen(false);
       if (profileRef.current && !profileRef.current.contains(target)) setIsProfileOpen(false);
     };
     document.addEventListener('mousedown', handler);
@@ -103,81 +120,62 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const currentLang = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
 
-  const navLinks = [
-    { name: t('Services'),   path: '/services',     icon: Briefcase },
-    { name: t('Pricing'),    path: '/subscription', icon: Tag },
-    { name: t('Onboarding'), path: '/onboarding',   icon: UserPlus },
-    { name: t('Blog'),       path: '/blog',         icon: BookOpen },
-    { name: t('Community'),  path: '/community',    icon: Users },
-    { name: t('Refer & Win'), path: '/referral',    icon: Gift },
-    { name: t('Contact'),    path: '/contact',      icon: Mail },
-  ];
+  // Shared with the homepage desktop's Start menu (components/siteNav.ts).
+  const siteNav = useSiteNav();
+  const navLinks = siteNav.links.map(l => ({ name: l.label, path: l.path, icon: l.icon }));
+  const market = siteNav.market[0];
+  const aboutDropdownItems = siteNav.about;
+  const isAdmin = user?.role === 'admin';
 
-  const marketDropdownItems = [
-    { label: t('Marketplace'), path: '/marketplace', desc: t('Browse all freelancer listings') },
-    { label: t('Job Matching'), path: '/match',       desc: t('Coming Soon') },
-  ];
+  const isMarketActive = location.pathname === market.path;
+  const isAboutActive  = location.pathname === '/about';
 
-  const aboutDropdownItems = [
-    { label: t('About Us'),          path: '/about',       desc: t('Our mission & story') },
-    { label: t('Previous Projects'), path: '/projects',    desc: t("Work we've delivered") },
-    { label: t('Technology'),        path: '/technology',  desc: t('The stack powering Cenner') },
-  ];
-
-  const isMarketActive = ['/marketplace', '/match'].includes(location.pathname);
-  const isAboutActive  = ['/about', '/projects', '/technology'].includes(location.pathname);
+  // Homepage = plain bar on the grey ground; elsewhere the classic bar (strings unchanged).
+  // Pages already in the new look (homepage design): plain bar, solid menus, `Footer home`.
+  // Every page is in the new look except the admin tools and /ranwhat, which keep the classic dark chrome.
+  const isHome = !['/admin', '/blog-admin', '/ranwhat'].some(p => location.pathname === p || location.pathname.startsWith(p + '/'));
+  const navItem = (active: boolean) => isHome
+    ? `group/navicon relative flex items-center whitespace-nowrap border-2 font-display text-[14px] font-bold transition-[background-color,color,box-shadow,transform] duration-100 lg:p-2 2xl:px-2.5 2xl:py-1.5 ${active ? 'border-ink bg-ink text-white' : 'border-transparent text-ink/70 hover:-translate-x-px hover:-translate-y-px hover:border-ink hover:bg-white hover:text-ink hover:shadow-[3px_3px_0_0_#0b0c0e] focus-visible:border-ink focus-visible:outline-none'}`
+    : `group/navicon relative flex items-center whitespace-nowrap text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 2xl:p-0 2xl:rounded-none 2xl:hover:bg-transparent ${active ? 'text-brand-green' : 'text-gray-400'}`;
+  const tip = isHome
+    ? 'pointer-events-none absolute top-full mt-3 left-1/2 -translate-x-1/2 bg-ink text-white text-[10px] font-medium tracking-wide rounded-full px-3 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50'
+    : 'pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50';
+  const subText = isHome ? 'text-white/60' : 'text-gray-600';
 
   return (
-    <div className="min-h-screen flex flex-col relative transition-colors duration-300 bg-brand-black text-white">
-      <ChatWidget />
+    <div className={`min-h-screen flex flex-col relative isolate ${isHome ? 'bg-paper font-text text-ink' : 'bg-brand-black text-white'}`}>
+      {/* Every new-look page but the homepage gets the full-page dot background (components/PageBackdrop). */}
+      {isHome && location.pathname !== '/' && location.pathname !== '/v3' && <PageBackdrop seed={location.pathname} />}
+      <ChatWidget bubble={location.pathname !== '/'} />
 
       {/* Navbar */}
-      <nav className="sticky top-0 z-50 bg-brand-black/80 backdrop-blur-xl border-b border-white/10">
-        <div className="w-full px-6 lg:px-10">
-          <div className="flex justify-between h-20 items-center">
-            <Link to="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-brand-green to-brand-pink rounded-xl flex items-center justify-center font-black text-brand-black group-hover:rotate-12 transition-transform">C</div>
-              <span className="text-2xl font-black tracking-tighter text-white">CENNER</span>
+      <nav className={isHome
+        ? 'sticky top-0 z-50 bg-paper'
+        : 'sticky top-0 z-50 bg-brand-black/80 backdrop-blur-xl border-b border-white/10'}>
+        <NavShell glass={isHome}>
+          <div className={isHome ? 'flex h-[4.5rem] items-center justify-between' : 'flex justify-between h-20 items-center'}>
+            <Link to="/" aria-label="Cenner" className="group flex items-center focus-visible:outline-none focus-visible:underline">
+              <Logo tone={isHome ? 'light' : 'dark'} />
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center lg:space-x-1 2xl:space-x-8">
+            <div className={`hidden lg:flex items-center lg:space-x-1 ${isHome ? '2xl:space-x-0.5' : '2xl:space-x-6'}`}>
 
-              {/* Marketplace Dropdown */}
-              <div ref={marketRef} className="relative">
-                <button
-                  onClick={() => setIsMarketOpen(v => !v)}
-                  className={`group/navicon relative flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 2xl:p-0 2xl:rounded-none 2xl:hover:bg-transparent ${isMarketActive ? 'text-brand-green' : 'text-gray-400'}`}
-                >
-                  <ShoppingBag size={18} className="2xl:hidden" />
-                  <span className="hidden 2xl:flex items-center gap-1">
-                    {t('Marketplace')}
-                    <ChevronDown size={12} className={`transition-transform duration-200 ${isMarketOpen ? 'rotate-180' : ''}`} />
-                  </span>
-                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50">
-                    {t('Marketplace')}
-                  </span>
-                </button>
-                {isMarketOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-brand-grey border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-200">
-                    {marketDropdownItems.map(item => (
-                      <Link key={item.label} to={item.path} onClick={() => setIsMarketOpen(false)} className="block px-5 py-3.5 hover:bg-white/5 transition-colors group/item">
-                        <div className="text-xs font-bold text-white group-hover/item:text-brand-green transition-colors">{item.label}</div>
-                        <div className="text-[10px] text-gray-600 mt-0.5">{item.desc}</div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* Marketplace (AI job matching's waitlist is a block on it) */}
+              <Link to={market.path} className={navItem(isMarketActive)}>
+                <ShoppingBag size={24} className="2xl:hidden" />
+                <span className="hidden 2xl:block">{market.label}</span>
+                <span className={tip}>{market.label}</span>
+              </Link>
 
               {/* Plain links */}
               {navLinks.map((link) => (
                 <Link key={link.name} to={link.path}
-                  className={`group/navicon relative flex items-center text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 2xl:p-0 2xl:rounded-none 2xl:hover:bg-transparent ${location.pathname === link.path ? 'text-brand-green' : 'text-gray-400'}`}
+                  className={navItem(location.pathname === link.path)}
                 >
-                  <link.icon size={18} className="2xl:hidden" />
+                  <link.icon size={24} className="2xl:hidden" />
                   <span className="hidden 2xl:block">{link.name}</span>
-                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50">
+                  <span className={tip}>
                     {link.name}
                   </span>
                 </Link>
@@ -187,68 +185,70 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div ref={aboutRef} className="relative">
                 <button
                   onClick={() => setIsAboutOpen(v => !v)}
-                  className={`group/navicon relative flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.25em] transition-all hover:text-brand-green lg:p-2 lg:rounded-lg lg:hover:bg-white/10 2xl:p-0 2xl:rounded-none 2xl:hover:bg-transparent ${isAboutActive ? 'text-brand-green' : 'text-gray-400'}`}
+                  className={`${navItem(isAboutActive)} gap-1`}
                 >
-                  <Info size={18} className="2xl:hidden" />
+                  <Info size={24} className="2xl:hidden" />
                   <span className="hidden 2xl:flex items-center gap-1">
                     {t('About')}
                     <ChevronDown size={12} className={`transition-transform duration-200 ${isAboutOpen ? 'rotate-180' : ''}`} />
                   </span>
-                  <span className="pointer-events-none absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-brand-grey border border-white/10 text-white text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-1 opacity-0 group-hover/navicon:opacity-100 transition-opacity whitespace-nowrap 2xl:hidden z-50">
+                  <span className={tip}>
                     {t('About')}
                   </span>
                 </button>
                 {isAboutOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-brand-grey border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <Panel glass={isHome} className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
                     {aboutDropdownItems.map(item => (
                       <Link key={item.label} to={item.path} onClick={() => setIsAboutOpen(false)} className="block px-5 py-3.5 hover:bg-white/5 transition-colors group/about">
                         <div className="text-xs font-bold text-white group-hover/about:text-brand-green transition-colors">{item.label}</div>
-                        <div className="text-[10px] text-gray-600 mt-0.5">{item.desc}</div>
+                        <div className={`text-[10px] ${subText} mt-0.5`}>{item.desc}</div>
                       </Link>
                     ))}
-                  </div>
+                  </Panel>
                 )}
               </div>
 
-              <div className="h-6 w-px bg-white/10 mx-2" />
+              {isHome ? <div className="mx-1" /> : <div className="h-6 w-px mx-2 bg-white/10" />}
 
               {/* Language + Currency pill — always visible */}
               <div ref={langRefDesktop} className="relative">
                 <button
                   onClick={() => setIsLangOpen(v => !v)}
-                  className="flex items-center gap-0 rounded-xl border border-white/10 hover:border-white/20 transition-colors text-gray-400 hover:text-white text-[10px] font-black uppercase tracking-widest overflow-hidden"
+                  className={isHome
+                    ? 'flex h-11 items-stretch border-2 border-ink bg-white font-display text-[14px] font-bold text-ink transition-colors hover:bg-paper2'
+                    : 'flex items-center gap-0 rounded-xl border border-white/10 hover:border-white/20 transition-colors text-gray-400 hover:text-white text-[10px] font-black uppercase tracking-widest overflow-hidden'}
                 >
-                  <span className="flex items-center gap-1.5 px-3 py-2">
+                  <span className={`flex items-center gap-1.5 px-3 ${isHome ? '' : 'py-2'}`}>
                     <span className="text-[13px] leading-none">{currentLang.flag}</span>
                     <span>{currentLang.code}</span>
-                    <ChevronDown size={10} className={`transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown size={12} className={`transition-transform duration-200 ${isLangOpen ? 'rotate-180' : ''}`} />
                   </span>
-                  <span className="w-px h-5 bg-white/10" />
-                  <span className="flex items-center gap-1 px-3 py-2 text-gray-500">
+                  {isHome ? <span aria-hidden="true" className="w-0.5 bg-ink" /> : <span className="w-px h-5 bg-white/10" />}
+                  <span className={`flex items-center gap-1 px-3 ${isHome ? 'text-ink' : 'py-2 text-gray-500'}`}>
                     <span>€</span>
                     <span>EUR</span>
                   </span>
                 </button>
                 {isLangOpen && (
-                  <div className="absolute top-full right-0 mt-3 w-40 bg-brand-grey border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <Panel glass={isHome} className="absolute top-full right-0 mt-3 w-40 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
                     {LANGUAGES.map(l => (
                       <button key={l.code} onClick={() => handleLangSelect(l.code)}
                         className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors ${lang === l.code ? 'text-brand-green' : 'text-gray-300'}`}>
                         <span className="text-base">{l.flag}</span>
                         <div>
                           <div className="text-[10px] font-black uppercase tracking-widest">{l.code}</div>
-                          <div className="text-[10px] text-gray-600">{l.name}</div>
+                          <div className={`text-[10px] ${subText}`}>{l.name}</div>
                         </div>
                       </button>
                     ))}
-                  </div>
+                  </Panel>
                 )}
               </div>
 
               {/* Conditional: profile avatar or login button */}
               {user ? (
                 <>
-                <NotificationBell />
+                <NotificationBell className={isHome ? 'text-ink/65 hover:text-ink' : 'text-gray-400 hover:text-white'} />
                 <div ref={profileRef} className="relative">
                   <button
                     onClick={() => setIsProfileOpen(v => !v)}
@@ -283,11 +283,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       {/* Menu items */}
                       <div className="py-1">
                         <Link to="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                          <UserCheck size={15} className="text-gray-500" />
+                          <UserCheck size={18} className="text-gray-500" />
                           {t('Profile')}
                         </Link>
                         <Link to="/messages" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                          <MessageSquare size={15} className="text-gray-500" />
+                          <MessageSquare size={18} className="text-gray-500" />
                           <span className="flex-1">{t('Messages')}</span>
                           {unread > 0 && (
                             <span className="w-5 h-5 bg-brand-green rounded-full flex items-center justify-center text-brand-black text-[10px] font-black">
@@ -296,13 +296,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                           )}
                         </Link>
                         <Link to="/contracts" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                          <FileText size={15} className="text-gray-500" />
+                          <FileText size={18} className="text-gray-500" />
                           {t('Contracts')}
                         </Link>
                         <Link to="/referral" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                          <Gift size={15} className="text-brand-green" />
+                          <Gift size={18} className="text-brand-green" />
                           {t('Refer & Win')}
                         </Link>
+                        {isAdmin && (
+                          <Link to="/admin" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+                            <Shield size={18} className="text-gray-500" />
+                            Admin
+                          </Link>
+                        )}
                       </div>
 
                       <div className="border-t border-white/10" />
@@ -310,7 +316,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       {/* Sign out */}
                       <div className="py-1">
                         <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-brand-pink hover:bg-white/5 transition-colors">
-                          <LogOut size={15} className="text-gray-500" />
+                          <LogOut size={18} className="text-gray-500" />
                           {t('Sign out')}
                         </button>
                       </div>
@@ -319,21 +325,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
                 </>
               ) : (
-                <Link to="/auth" className="px-8 py-3 rounded-xl bg-white text-brand-black font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
-                  {t('Login / Signup')}
-                </Link>
+                isHome ? (
+                  <Link to="/auth" className="inline-flex h-11 items-center whitespace-nowrap border-2 border-ink bg-sky px-5 font-display text-[15px] font-bold text-white transition-[transform,box-shadow,background-color] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#0b0c0e] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none focus-visible:bg-ink focus-visible:outline-none">
+                    {t('Login / Signup')}
+                  </Link>
+                ) : (
+                  <Link to="/auth" className="whitespace-nowrap px-8 py-3 rounded-xl bg-white text-brand-black font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
+                    {t('Login / Signup')}
+                  </Link>
+                )
               )}
             </div>
 
             {/* Mobile Toggle */}
             <div className="lg:hidden flex items-center gap-3">
               <div ref={langRefMobile} className="relative">
-                <button onClick={() => setIsLangOpen(v => !v)} className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/10 text-gray-400">
+                <button onClick={() => setIsLangOpen(v => !v)} className={isHome
+                  ? 'flex items-center gap-1 border-2 border-ink bg-white px-2.5 py-1 font-display text-ink'
+                  : 'flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-white/10 text-gray-400'}>
                   <span className="text-sm">{currentLang.flag}</span>
                   <span className="text-[10px] font-black">{currentLang.code}</span>
                 </button>
                 {isLangOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-36 bg-brand-grey border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50">
+                  <Panel glass={isHome} rounded="rounded-xl" className="absolute top-full right-0 mt-2 w-36 z-50">
                     {LANGUAGES.map(l => (
                       <button key={l.code} onClick={() => handleLangSelect(l.code)}
                         className={`w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-white/5 ${lang === l.code ? 'text-brand-green' : 'text-gray-300'}`}>
@@ -341,49 +355,91 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         <span className="text-[10px] font-bold">{l.name}</span>
                       </button>
                     ))}
-                  </div>
+                  </Panel>
                 )}
               </div>
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white">
-                {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              <button type="button" aria-label={t('Menu')} aria-expanded={isMenuOpen} onClick={() => setIsMenuOpen(!isMenuOpen)} className={isHome ? 'text-ink' : 'text-white'}>
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
           </div>
-        </div>
+        </NavShell>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden bg-brand-black border-b border-white/10 pb-8 px-6 space-y-1">
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-700 pt-5 pb-1">{t('Marketplace')}</p>
-            {marketDropdownItems.map(item => (
-              <Link key={item.label} to={item.path} onClick={() => setIsMenuOpen(false)} className="block py-2.5 text-base font-bold text-white border-b border-white/5 pl-2">{item.label}</Link>
+        {/* Mobile menu, new look: a compact Start-menu panel under the button, tiles instead of a list, no scrolling */}
+        {isMenuOpen && isHome && (() => {
+          const close = () => setIsMenuOpen(false);
+          const tiles = [market, ...siteNav.links, ...siteNav.about];
+          return (
+            <div className="lg:hidden absolute right-3 top-full z-50 mt-1 w-[min(23rem,calc(100vw-1.5rem))] border-2 border-ink bg-white shadow-[6px_6px_0_0_#0b0c0e] animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="grid grid-cols-2 gap-1.5 p-2.5">
+                {tiles.map(item => {
+                  const Icon = item.icon;
+                  const active = location.pathname === item.path.split('#')[0] && !item.path.includes('#');
+                  return (
+                    <Link key={item.path + item.label} to={item.path} onClick={close}
+                      className={`flex items-center gap-2.5 border-2 px-2.5 py-2 font-display text-[13px] font-bold leading-tight transition-[background-color,box-shadow,transform] duration-100 ${active ? 'border-ink bg-ink text-white' : 'border-transparent text-ink hover:-translate-x-px hover:-translate-y-px hover:border-ink hover:bg-paper hover:shadow-[2px_2px_0_0_#0b0c0e]'}`}>
+                      <span className={`flex h-7 w-7 shrink-0 items-center justify-center border-2 ${active ? 'border-white/80' : 'border-ink bg-paper2'}`}><Icon size={14} /></span>
+                      <span className="min-w-0 truncate">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+              <div className="flex items-center gap-2 border-t-2 border-ink bg-ink px-2.5 py-2 text-white">
+                {user ? (
+                  <>
+                    <Link to="/profile" onClick={close} className="flex min-w-0 flex-1 items-center gap-2">
+                      {user.avatar
+                        ? <img src={user.avatar} alt={user.name || 'User avatar'} className="h-8 w-8 border-2 border-white/80" />
+                        : <span className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-white/80 bg-white/10"><UserIcon size={16} /></span>}
+                      <span className="min-w-0 truncate font-display text-[13px] font-bold">{user.name}</span>
+                    </Link>
+                    <Link to="/messages" onClick={close} aria-label={t('Messages')} className="relative flex h-8 w-8 items-center justify-center border-2 border-white/30 hover:border-white">
+                      <MessageSquare size={15} />
+                      {unread > 0 && <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center bg-brand-green px-0.5 text-[9px] font-black text-ink">{unread > 9 ? '9+' : unread}</span>}
+                    </Link>
+                    <Link to="/contracts" onClick={close} aria-label={t('Contracts')} className="flex h-8 w-8 items-center justify-center border-2 border-white/30 hover:border-white"><FileText size={15} /></Link>
+                    {isAdmin && <Link to="/admin" onClick={close} aria-label="Admin" className="flex h-8 w-8 items-center justify-center border-2 border-white/30 hover:border-white"><Shield size={15} /></Link>}
+                    <button type="button" onClick={handleLogout} aria-label={t('Sign out')} className="flex h-8 w-8 items-center justify-center border-2 border-white/30 hover:border-white"><LogOut size={15} /></button>
+                  </>
+                ) : (
+                  <Link to="/auth" onClick={close} className="flex-1 border-2 border-white bg-white py-2 text-center font-display text-[13px] font-bold text-ink hover:bg-paper">{t('Login / Signup')}</Link>
+                )}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Mobile Menu (classic look) */}
+        {isMenuOpen && !isHome && (
+          <div className={isHome
+            ? 'lg:hidden mx-3 mb-3 max-h-[78svh] overflow-y-auto overscroll-contain border-2 border-ink bg-white pb-5 px-5 space-y-0 shadow-[6px_6px_0_0_#0b0c0e]'
+            : 'lg:hidden max-h-[calc(100svh-5rem)] overflow-y-auto overscroll-contain bg-brand-black border-b border-white/10 pb-8 px-6 space-y-1'}>
+            <div className="pt-3" />
+            {[{ name: market.label, path: market.path }, ...navLinks].map(link => (
+              <Link key={link.name} to={link.path} onClick={() => setIsMenuOpen(false)} className={isHome ? 'block border-b-2 border-ink/10 py-3 font-display text-lg font-bold text-ink hover:text-sky' : 'block py-3 text-lg font-bold text-white border-b border-white/5'}>{link.name}</Link>
             ))}
-            {navLinks.map(link => (
-              <Link key={link.name} to={link.path} onClick={() => setIsMenuOpen(false)} className="block py-3 text-lg font-bold text-white border-b border-white/5">{link.name}</Link>
-            ))}
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-700 pt-4 pb-1">{t('Company')}</p>
+            <p className={`text-[9px] font-black uppercase tracking-[0.3em] pt-4 pb-1 ${isHome ? 'text-slate' : 'text-gray-700'}`}>{t('Company')}</p>
             {aboutDropdownItems.map(item => (
-              <Link key={item.label} to={item.path} onClick={() => setIsMenuOpen(false)} className="block py-2.5 text-base font-semibold text-gray-300 pl-2">{item.label}</Link>
+              <Link key={item.label} to={item.path} onClick={() => setIsMenuOpen(false)} className={isHome ? 'block py-2.5 pl-2 font-display text-base font-semibold text-ink/80 hover:text-sky' : 'block py-2.5 text-base font-semibold text-gray-300 pl-2'}>{item.label}</Link>
             ))}
-            <div className="pt-3 border-t border-white/5">
+            <div className={isHome ? 'mt-3 border-t-2 border-ink pt-3' : 'pt-3 border-t border-white/5'}>
               {user ? (
                 <>
                   <div className="flex items-center gap-3 py-3">
                     {user.avatar ? (
-                      <img src={user.avatar} alt={user.name || 'User avatar'} className="w-8 h-8 rounded-full border border-brand-green" />
+                      <img src={user.avatar} alt={user.name || 'User avatar'} className={isHome ? 'h-8 w-8 border-2 border-ink' : 'w-8 h-8 rounded-full border border-brand-green'} />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-brand-grey border border-brand-green flex items-center justify-center text-brand-green">
+                      <div className={isHome ? 'flex h-8 w-8 items-center justify-center border-2 border-ink bg-paper2 text-ink' : 'w-8 h-8 rounded-full bg-brand-grey border border-brand-green flex items-center justify-center text-brand-green'}>
                         <UserIcon size={16} />
                       </div>
                     )}
                     <div>
-                      <p className="text-sm font-bold text-white">{user.name}</p>
-                      <p className="text-[10px] text-gray-500">{user.email}</p>
+                      <p className={`text-sm font-bold ${isHome ? 'text-ink' : 'text-white'}`}>{user.name}</p>
+                      <p className={`text-[10px] ${isHome ? 'text-slate' : 'text-gray-500'}`}>{user.email}</p>
                     </div>
                   </div>
-                  <Link to="/profile"   onClick={() => setIsMenuOpen(false)} className="block py-2.5 text-base font-bold text-white">{t('Profile')}</Link>
-                  <Link to="/dashboard" onClick={() => setIsMenuOpen(false)} className="block py-2.5 text-base font-bold text-brand-green">{t('Dashboard')}</Link>
-                  <Link to="/messages"   onClick={() => setIsMenuOpen(false)} className="flex items-center justify-between py-2.5 text-base font-bold text-white">
+                  <Link to="/profile"   onClick={() => setIsMenuOpen(false)} className={isHome ? 'block py-2.5 font-display text-base font-bold text-ink' : 'block py-2.5 text-base font-bold text-white'}>{t('Profile')}</Link>
+                  <Link to="/messages"   onClick={() => setIsMenuOpen(false)} className={isHome ? 'flex items-center justify-between py-2.5 font-display text-base font-bold text-ink' : 'flex items-center justify-between py-2.5 text-base font-bold text-white'}>
                     <span>{t('Messages')}</span>
                     {unread > 0 && (
                       <span className="w-5 h-5 bg-brand-green rounded-full flex items-center justify-center text-brand-black text-[10px] font-black">
@@ -391,12 +447,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       </span>
                     )}
                   </Link>
-                  <Link to="/contracts" onClick={() => setIsMenuOpen(false)} className="block py-2.5 text-base font-bold text-white">{t('Contracts')}</Link>
-                  <Link to="/referral" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 py-2.5 text-base font-bold text-white"><Gift size={16} className="text-brand-green" />{t('Refer & Win')}</Link>
-                  <button onClick={handleLogout} className="block py-2.5 text-base font-bold text-brand-pink w-full text-left">{t('Sign out')}</button>
+                  <Link to="/contracts" onClick={() => setIsMenuOpen(false)} className={isHome ? 'block py-2.5 font-display text-base font-bold text-ink' : 'block py-2.5 text-base font-bold text-white'}>{t('Contracts')}</Link>
+                  <Link to="/referral" onClick={() => setIsMenuOpen(false)} className={isHome ? 'flex items-center gap-2 py-2.5 font-display text-base font-bold text-ink' : 'flex items-center gap-2 py-2.5 text-base font-bold text-white'}><Gift size={16} className="text-brand-green" />{t('Refer & Win')}</Link>
+                  {isAdmin && <Link to="/admin" onClick={() => setIsMenuOpen(false)} className={isHome ? 'flex items-center gap-2 py-2.5 font-display text-base font-bold text-ink' : 'flex items-center gap-2 py-2.5 text-base font-bold text-white'}><Shield size={16} className="text-gray-400" />Admin</Link>}
+                  <button onClick={handleLogout} className={isHome ? 'block w-full py-2.5 text-left font-display text-base font-bold text-red-600' : 'block py-2.5 text-base font-bold text-brand-pink w-full text-left'}>{t('Sign out')}</button>
                 </>
               ) : (
-                <Link to="/auth" onClick={() => setIsMenuOpen(false)} className="block py-3 text-lg font-bold text-brand-pink">{t('Login / Signup')}</Link>
+                <Link to="/auth" onClick={() => setIsMenuOpen(false)} className={isHome ? 'block py-3 font-display text-lg font-bold text-sky' : 'block py-3 text-lg font-bold text-brand-pink'}>{t('Login / Signup')}</Link>
               )}
             </div>
           </div>
@@ -404,7 +461,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </nav>
 
       <main className="flex-grow">{children}</main>
-      {!location.pathname.startsWith('/messages') && <Footer />}
+      {!location.pathname.startsWith('/messages') && (isHome
+        ? <div className="relative text-white">
+          {/* The footer's ink and the top-right footer animation sit on layers behind all content (the root isolates its stacking), so cards and footer text always draw over the dots (dots keep clear of the text). */}
+          <div aria-hidden="true" className="absolute inset-0 -z-[6] bg-ink" />
+          <ProjectDots
+            avoid={'footer a:not([aria-label="Cenner"]), footer p, footer h3, footer h4, footer h5, footer li, footer small, footer button, footer input, footer span:not(a[aria-label="Cenner"] span)'}
+            reach={80}
+            focus={{ x: 1, y: 0.18, rx: 1, ry: 0.85 }}
+            palette={['#0b0c0e', '#ffffff', '#cfd4dc', '#8c93a0', '#eef0f3']}
+            className="pointer-events-none absolute right-0 top-0 -z-[5] h-[20rem] w-[19rem] md:h-[28rem] md:w-[30rem]"
+          />
+          {/* and a second, all white, growing out of the bottom-left corner on wide screens */}
+          <ProjectDots
+            avoid={'footer a:not([aria-label="Cenner"]), footer p, footer h3, footer h4, footer h5, footer li, footer small, footer button, footer input, footer span:not(a[aria-label="Cenner"] span)'}
+            reach={70}
+            focus={{ x: 0, y: 1, rx: 1.35, ry: 1.5 }}
+            intensity={1.45}
+            palette={['#0b0c0e', '#ffffff', '#cfd4dc', '#8c93a0', '#eef0f3']}
+            className="pointer-events-none absolute bottom-0 left-0 -z-[5] h-[17rem] w-[26rem] md:h-[20rem] md:w-[46rem]"
+          />
+          <Footer home />
+        </div>
+        : <Footer />)}
       <ConsentModal />
     </div>
   );

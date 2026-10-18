@@ -126,9 +126,9 @@ const ServiceDetails: React.FC = () => {
   if (!listing) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-4">
-        <h2 className="text-3xl font-bold text-white mb-4">Listing not found</h2>
-        <p className="text-gray-500 mb-8">This node may have been disconnected.</p>
-        <Link to="/marketplace" className="text-brand-green font-bold hover:underline">Back to Marketplace</Link>
+        <h2 className="mb-4 font-display text-3xl font-extrabold">Listing not found</h2>
+        <p className="mb-8 text-slate">This node may have been disconnected.</p>
+        <Link to="/marketplace" className="font-display font-bold text-sky underline underline-offset-4 hover:text-ink">Back to Marketplace</Link>
       </div>
     );
   }
@@ -202,7 +202,7 @@ const ServiceDetails: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="mx-auto max-w-[1500px] px-4 pb-24 pt-10 font-text md:px-8 md:pt-14">
       <SEO
         title={`${listing.title}, ${listing.freelancerName} | Freelancer Hrvatska`}
         canonical={`/service/${listing.id}`}
@@ -212,19 +212,19 @@ const ServiceDetails: React.FC = () => {
         jsonLd={[serviceJsonLd, breadcrumbJsonLd]}
       />
       
-      <Link to="/marketplace" className="inline-flex items-center space-x-2 text-gray-400 hover:text-white mb-8 transition-colors">
-        <ArrowLeft size={18} />
-        <span className="text-sm font-medium">Back to Results</span>
+      <Link to="/marketplace" className="mb-8 inline-flex items-center gap-2 font-display text-[15px] font-bold hover:text-sky">
+        <ArrowLeft size={18} aria-hidden="true" />
+        <span>Back to Results</span>
       </Link>
 
       {isEditing ? (
         <input
           value={editTitle}
           onChange={e => setEditTitle(e.target.value)}
-          className="w-full text-4xl font-extrabold text-white mb-10 leading-tight tracking-tight bg-white/5 border border-brand-green/30 rounded-xl px-4 py-2 focus:outline-none focus:border-brand-green"
+          className="mb-10 w-full border-2 border-ink bg-white px-4 py-2 font-display text-4xl font-extrabold leading-tight tracking-tight focus:border-sky focus:outline-none"
         />
       ) : (
-        <h1 className="text-4xl font-extrabold text-white mb-10 leading-tight tracking-tight">{listing.title}</h1>
+        <h1 className="mb-10 max-w-[24ch] font-display text-[clamp(2.25rem,1.2rem+4.4vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.035em]">{listing.title}</h1>
       )}
 
       <div className="grid lg:grid-cols-3 gap-12 items-start">
@@ -232,15 +232,15 @@ const ServiceDetails: React.FC = () => {
         <div className="lg:col-span-2 space-y-12">
           <section>
             <div className="flex items-center space-x-4 mb-8">
-              <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="w-10 h-10 rounded-full border-2 border-brand-green/50" />
+              <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="h-10 w-10 rounded-none border-2 border-ink" />
               <div>
                 <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                  <span className="text-white font-bold">{listing.freelancerName}</span>
+                  <span className="font-display font-bold">{listing.freelancerName}</span>
                   {listing.freelancerTier && listing.freelancerTier !== 'free' && (
-                    <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold ${
+                    <span className={`px-2 py-0.5 font-display text-[11px] font-bold uppercase text-white ${
                       listing.freelancerTier === 'ultra' || listing.freelancerTier === 'enterprise'
-                        ? 'bg-brand-pink/10 text-brand-pink'
-                        : 'bg-brand-green/10 text-brand-green'
+                        ? 'bg-sky'
+                        : 'bg-ink'
                     }`}>
                       {listing.freelancerTier === 'ultra' || listing.freelancerTier === 'enterprise' ? 'Ultra' : 'Pro'}
                     </span>
@@ -248,28 +248,28 @@ const ServiceDetails: React.FC = () => {
                   {isOwner && !isEditing && (
                     <button
                       onClick={startEdit}
-                      className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded border border-white/10 text-gray-400 hover:text-white hover:border-white/30 transition-colors uppercase font-bold"
+                      className="flex items-center gap-1 border-2 border-ink px-2 py-0.5 font-display text-[11px] font-bold uppercase transition-colors hover:bg-ink hover:text-white"
                     >
                       <Edit2 size={10} /> Edit
                     </button>
                   )}
                   {isOwner && isEditing && (
                     <div className="flex gap-1">
-                      <button onClick={saveEdit} disabled={saving} className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-brand-green/10 border border-brand-green/30 text-brand-green hover:border-brand-green/60 transition-colors uppercase font-bold disabled:opacity-50">
+                      <button onClick={saveEdit} disabled={saving} className="flex items-center gap-1 border-2 border-ink bg-brand-green px-2 py-0.5 font-display text-[11px] font-bold uppercase text-ink transition-colors hover:bg-white disabled:opacity-50">
                         {saving ? <Loader2 size={10} className="animate-spin" /> : <Save size={10} />} Save
                       </button>
-                      <button onClick={() => setIsEditing(false)} className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded border border-white/10 text-gray-400 hover:text-white transition-colors uppercase font-bold">
+                      <button onClick={() => setIsEditing(false)} className="flex items-center gap-1 border-2 border-ink px-2 py-0.5 font-display text-[11px] font-bold uppercase transition-colors hover:bg-ink hover:text-white">
                         <X size={10} /> Cancel
                       </button>
                     </div>
                   )}
                 </div>
                 <div className="flex items-center space-x-2 text-sm">
-                  <div className="flex items-center text-yellow-400">
+                  <div className="flex items-center">
                     <Star size={14} fill="currentColor" />
                     <span className="ml-1 font-bold">{listing.rating}</span>
                   </div>
-                  <span className="text-gray-500">({listing.reviewsCount} reviews)</span>
+                  <span className="text-slate">({listing.reviewsCount} reviews)</span>
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@ const ServiceDetails: React.FC = () => {
             {/* Gallery */}
             {isEditing ? (
               <div className="mb-8">
-                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Gallery Images (up to 5). First is the cover</p>
+                <p className="mb-3 font-display text-[12px] font-extrabold uppercase tracking-wide text-slate">Gallery Images (up to 5). First is the cover</p>
                 <input
                   ref={galleryInputRef}
                   type="file"
@@ -301,14 +301,14 @@ const ServiceDetails: React.FC = () => {
                 <div className="flex flex-wrap gap-2">
                   {editGallery.map((url, i) => (
                     <div key={i} className="relative group/img">
-                      <div className={`rounded-2xl overflow-hidden border-2 ${i === 0 ? 'w-48 h-32 border-brand-green' : 'w-24 h-16 border-white/10'}`}>
+                      <div className={`overflow-hidden border-2 ${i === 0 ? 'h-32 w-48 border-sky' : 'h-16 w-24 border-ink/30'}`}>
                         <img src={url} alt={`Gallery image ${i + 1}`} className="w-full h-full object-cover" />
                       </div>
-                      {i === 0 && <span className="absolute bottom-1 left-1 text-[9px] font-black bg-brand-green text-brand-black px-1.5 py-0.5 rounded-md">Cover</span>}
+                      {i === 0 && <span className="absolute bottom-1 left-1 bg-sky px-1.5 py-0.5 font-display text-[10px] font-bold text-white">Cover</span>}
                       <button
                         type="button"
                         onClick={() => setEditGallery(prev => prev.filter((_, j) => j !== i))}
-                        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-brand-black border border-white/20 rounded-full flex items-center justify-center text-gray-400 hover:text-white opacity-0 group-hover/img:opacity-100 transition-opacity"
+                        className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center border-2 border-ink bg-white text-ink opacity-0 transition-opacity hover:bg-ink hover:text-white group-hover/img:opacity-100"
                       >
                         <X size={10} />
                       </button>
@@ -319,7 +319,7 @@ const ServiceDetails: React.FC = () => {
                       type="button"
                       disabled={uploadingImg}
                       onClick={() => galleryInputRef.current?.click()}
-                      className="w-24 h-16 rounded-2xl border border-dashed border-white/20 flex flex-col items-center justify-center gap-1 text-gray-500 hover:border-brand-green/50 hover:text-brand-green transition-colors disabled:opacity-50"
+                      className="flex h-16 w-24 flex-col items-center justify-center gap-1 border-2 border-dashed border-ink/40 text-slate transition-colors hover:border-ink hover:text-ink disabled:opacity-50"
                     >
                       {uploadingImg ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
                       <span className="text-[9px] font-bold">Add</span>
@@ -338,16 +338,16 @@ const ServiceDetails: React.FC = () => {
                 return (
                   <div className="mb-8">
                     {/* Main image with arrow navigation */}
-                    <div className="relative rounded-3xl overflow-hidden border border-white/10 aspect-video bg-brand-black shadow-2xl group">
+                    <div className="group relative aspect-video overflow-hidden border-2 border-ink bg-paper2">
                       {/* Skeleton shown while image loads */}
                       {!imgLoaded && !imgError && (
-                        <div className="absolute inset-0 z-10 bg-brand-grey/60 animate-pulse flex items-center justify-center">
-                          <div className="w-10 h-10 rounded-full border-2 border-brand-green/30 border-t-brand-green animate-spin" />
+                        <div className="absolute inset-0 z-10 flex animate-pulse items-center justify-center bg-paper2">
+                          <div className="h-10 w-10 animate-spin rounded-full border-2 border-ink/20 border-t-ink" />
                         </div>
                       )}
                       {/* Broken image fallback */}
                       {imgError && (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-gray-600">
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-slate">
                           <Upload size={32} className="opacity-30" />
                           <span className="text-xs font-bold uppercase tracking-widest opacity-40">Image unavailable</span>
                         </div>
@@ -366,19 +366,19 @@ const ServiceDetails: React.FC = () => {
                           <button
                             onClick={() => setActiveImage(i => Math.max(0, i - 1))}
                             disabled={!hasPrev}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-brand-green flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 disabled:opacity-0 hover:scale-110 active:scale-95"
+                            className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center border-2 border-ink bg-white text-ink opacity-0 transition-[opacity,background-color,color] duration-200 hover:bg-ink hover:text-white disabled:opacity-0 group-hover:opacity-100"
                           >
-                            <ChevronLeft size={22} className="text-brand-black" strokeWidth={2.5} />
+                            <ChevronLeft size={22} strokeWidth={2.5} />
                           </button>
                           <button
                             onClick={() => setActiveImage(i => Math.min(allImages.length - 1, i + 1))}
                             disabled={!hasNext}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-brand-green flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 disabled:opacity-0 hover:scale-110 active:scale-95"
+                            className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center border-2 border-ink bg-white text-ink opacity-0 transition-[opacity,background-color,color] duration-200 hover:bg-ink hover:text-white disabled:opacity-0 group-hover:opacity-100"
                           >
-                            <ChevronRight size={22} className="text-brand-black" strokeWidth={2.5} />
+                            <ChevronRight size={22} strokeWidth={2.5} />
                           </button>
                           {/* Image counter pill */}
-                          <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
+                          <div className="absolute bottom-3 right-3 border-2 border-ink bg-white px-2.5 py-1 font-display text-[11px] font-bold text-ink">
                             {activeImage + 1} / {allImages.length}
                           </div>
                         </>
@@ -391,10 +391,10 @@ const ServiceDetails: React.FC = () => {
                           <button
                             key={i}
                             onClick={() => setActiveImage(i)}
-                            className={`w-16 h-12 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                            className={`h-12 w-16 flex-shrink-0 overflow-hidden border-2 transition-all ${
                               i === activeImage
-                                ? 'border-brand-green scale-105 shadow-[0_0_12px_rgba(74,222,128,0.4)]'
-                                : 'border-white/10 hover:border-white/30 opacity-60 hover:opacity-100'
+                                ? 'border-sky'
+                                : 'border-ink/30 opacity-70 hover:border-ink hover:opacity-100'
                             }`}
                           >
                             <img src={url} alt={`Service image ${i + 1}`} className="w-full h-full object-cover" />
@@ -407,28 +407,28 @@ const ServiceDetails: React.FC = () => {
               })()
             )}
 
-            <div className="prose prose-invert max-w-none">
-              <h3 className="text-xl font-bold text-white mb-4">About This Service</h3>
+            <div className="max-w-none">
+              <h3 className="mb-4 border-t-2 border-ink pt-5 font-display text-[1.75rem] font-extrabold tracking-[-0.02em]">About This Service</h3>
               {isEditing ? (
                 <textarea
                   value={editDescription}
                   onChange={e => setEditDescription(e.target.value)}
                   rows={6}
-                  className="w-full text-gray-300 leading-relaxed bg-white/5 border border-brand-green/30 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-green resize-none"
+                  className="w-full resize-none border-2 border-ink bg-white px-4 py-3 leading-relaxed focus:border-sky focus:outline-none"
                 />
               ) : (
-                <p className="text-gray-400 leading-relaxed">{listing.description}</p>
+                <p className="max-w-[60ch] text-[1.0625rem] leading-[1.7] text-ink/90">{listing.description}</p>
               )}
             </div>
           </section>
 
           {listing.includes && listing.includes.length > 0 && (
-            <section className="bg-brand-grey/50 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
-              <h3 className="text-xl font-bold text-white mb-6">What's included</h3>
+            <section className="border-2 border-ink bg-white p-8">
+              <h3 className="mb-6 font-display text-[1.5rem] font-extrabold tracking-[-0.02em]">What's included</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {listing.includes.map((item, i) => (
-                  <div key={i} className="flex items-center space-x-3 text-gray-300">
-                    <CheckCircle size={18} className="text-brand-green flex-shrink-0" />
+                  <div key={i} className="flex items-center gap-3">
+                    <CheckCircle size={18} className="flex-shrink-0 text-leaf" />
                     <span>{item}</span>
                   </div>
                 ))}
@@ -437,36 +437,36 @@ const ServiceDetails: React.FC = () => {
           )}
 
           <section>
-            <h3 className="text-xl font-bold text-white mb-8">About the Freelancer</h3>
-            <div className="p-8 bg-brand-grey/50 border border-white/10 rounded-3xl flex flex-col md:flex-row gap-8 backdrop-blur-md">
-              <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="w-10 h-10 rounded-full border-2 border-brand-green/50" />
+            <h3 className="mb-6 border-t-2 border-ink pt-5 font-display text-[1.75rem] font-extrabold tracking-[-0.02em]">About the Freelancer</h3>
+            <div className="flex flex-col gap-8 border-2 border-ink bg-white p-8 md:flex-row">
+              <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="h-10 w-10 rounded-none border-2 border-ink" />
               <div className="flex-grow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                   <div>
-                    <h4 className="text-xl font-bold text-white">{listing.freelancerName}</h4>
+                    <h4 className="font-display text-xl font-extrabold">{listing.freelancerName}</h4>
                   </div>
                   <button
                     onClick={handleContactClick}
                     disabled={contacting}
-                    className="px-6 py-2 border border-white/20 rounded-xl text-sm font-bold hover:bg-white/10 transition-colors disabled:opacity-50"
+                    className="border-2 border-ink px-6 py-2 font-display text-sm font-bold transition-colors hover:bg-ink hover:text-white disabled:opacity-50"
                   >
                     {contacting ? 'Opening…' : 'Contact Me'}
                   </button>
                 </div>
                 {listing.freelancerBio && (
-                  <p className="text-gray-400 text-sm leading-relaxed mb-6">{listing.freelancerBio}</p>
+                  <p className="mb-6 text-[1rem] leading-relaxed text-ink/90">{listing.freelancerBio}</p>
                 )}
-                <div className="flex flex-wrap gap-6 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                <div className="flex flex-wrap gap-6 font-display text-[12px] font-bold uppercase tracking-wide text-slate">
                   {listing.freelancerLocation && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-gray-600">From</span>
-                      <span className="text-white">{listing.freelancerLocation}</span>
+                      <span className="text-slate">From</span>
+                      <span className="text-ink">{listing.freelancerLocation}</span>
                     </div>
                   )}
                   {listing.freelancerCreatedAt && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-gray-600">Member Since</span>
-                      <span className="text-white">{new Date(listing.freelancerCreatedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                      <span className="text-slate">Member Since</span>
+                      <span className="text-ink">{new Date(listing.freelancerCreatedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
                     </div>
                   )}
                 </div>
@@ -478,40 +478,40 @@ const ServiceDetails: React.FC = () => {
         {/* Purchase Sidebar */}
         <div className="lg:col-span-1 sticky top-24">
           <div className="space-y-6">
-            <div className="bg-brand-grey/80 border border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-xl shadow-2xl">
-              <div className="p-8 border-b border-white/5">
+            <div className="overflow-hidden border-2 border-ink bg-white">
+              <div className="border-b-2 border-ink p-8">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-black text-white">{listing.title}</h3>
+                  <h3 className="font-display text-xl font-extrabold leading-snug">{listing.title}</h3>
                   {isEditing ? (
                     <div className="flex items-center gap-1">
-                      <span className="text-brand-green font-black text-lg">€</span>
-                      <input value={editPrice} onChange={e => setEditPrice(e.target.value)} type="number" min="0" className="w-24 text-right text-brand-green font-black text-xl bg-white/5 border border-brand-green/30 rounded-lg px-2 py-1 focus:outline-none focus:border-brand-green" />
+                      <span className="font-display text-lg font-extrabold">€</span>
+                      <input value={editPrice} onChange={e => setEditPrice(e.target.value)} type="number" min="0" className="w-24 border-2 border-ink bg-white px-2 py-1 text-right font-display text-xl font-extrabold focus:border-sky focus:outline-none" />
                     </div>
                   ) : (
-                    <span className="text-2xl font-black text-brand-green">€{listing.price}</span>
+                    <span className="font-display text-[2.25rem] font-extrabold leading-none">€{listing.price}</span>
                   )}
                 </div>
-                <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+                <p className="mb-6 text-[0.95rem] leading-relaxed text-ink/80">
                   Best for high-stakes professional projects that require absolute attention to detail and precision.
                 </p>
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center text-gray-500">
-                      <Clock size={16} className="mr-2 opacity-50" />
-                      <span className="font-bold uppercase tracking-tighter">Delivery Time</span>
+                    <div className="flex items-center text-slate">
+                      <Clock size={16} className="mr-2" aria-hidden="true" />
+                      <span className="font-display font-bold uppercase tracking-wide">Delivery Time</span>
                     </div>
                     {isEditing ? (
-                      <input value={editDelivery} onChange={e => setEditDelivery(e.target.value)} className="w-28 text-right text-white font-black bg-white/5 border border-brand-green/30 rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-brand-green" />
+                      <input value={editDelivery} onChange={e => setEditDelivery(e.target.value)} className="w-28 border-2 border-ink bg-white px-2 py-1 text-right font-display text-sm font-extrabold focus:border-sky focus:outline-none" />
                     ) : (
-                      <span className="text-white font-black">{listing.deliveryTime}</span>
+                      <span className="font-display font-extrabold">{listing.deliveryTime}</span>
                     )}
                   </div>
                   {isEditing && (
                     <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center text-gray-500">
-                        <span className="font-bold uppercase tracking-tighter ml-6">Category</span>
+                      <div className="flex items-center text-slate">
+                        <span className="ml-6 font-display font-bold uppercase tracking-wide">Category</span>
                       </div>
-                      <select value={editCategory} onChange={e => setEditCategory(e.target.value)} className="text-right text-white font-black bg-white/5 border border-brand-green/30 rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-brand-green">
+                      <select value={editCategory} onChange={e => setEditCategory(e.target.value)} className="border-2 border-ink bg-white px-2 py-1 text-right font-display text-sm font-extrabold focus:border-sky focus:outline-none">
                         {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </div>
@@ -522,22 +522,22 @@ const ServiceDetails: React.FC = () => {
                   <div className="space-y-2">
                     {isEditing ? (
                       <div className="flex gap-2">
-                        <button onClick={saveEdit} disabled={saving} className="flex-1 py-4 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-brand-green/20 disabled:opacity-50 flex items-center justify-center gap-2">
+                        <button onClick={saveEdit} disabled={saving} className="flex flex-1 items-center justify-center gap-2 bg-sky py-4 font-display font-bold text-white transition-colors hover:bg-ink disabled:opacity-50">
                           {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} Save Changes
                         </button>
-                        <button onClick={() => setIsEditing(false)} className="py-4 px-5 border border-white/10 text-gray-400 font-bold rounded-2xl hover:border-white/30 transition-all">
+                        <button onClick={() => setIsEditing(false)} className="border-2 border-ink px-5 py-4 font-bold transition-colors hover:bg-ink hover:text-white">
                           <X size={16} />
                         </button>
                       </div>
                     ) : (
-                      <button onClick={startEdit} className="w-full py-4 border border-white/10 text-gray-300 font-black rounded-2xl hover:border-brand-green/40 hover:text-brand-green transition-all flex items-center justify-center gap-2">
+                      <button onClick={startEdit} className="flex w-full items-center justify-center gap-2 border-2 border-ink py-4 font-display font-bold transition-colors hover:bg-ink hover:text-white">
                         <Edit2 size={16} /> Edit Listing
                       </button>
                     )}
                     <button
                       onClick={handleDelete}
                       disabled={deleting}
-                      className="w-full py-3 border border-brand-pink/20 text-brand-pink/60 font-bold rounded-2xl hover:border-brand-pink/60 hover:text-brand-pink transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-40"
+                      className="flex w-full items-center justify-center gap-2 border-2 border-red-700 py-3 text-sm font-bold text-red-700 transition-colors hover:bg-red-700 hover:text-white disabled:opacity-40"
                     >
                       {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                       {deleting ? 'Deleting…' : 'Delete Listing'}
@@ -547,14 +547,14 @@ const ServiceDetails: React.FC = () => {
                   <>
                     <button
                       onClick={handleContinue}
-                      className="w-full py-4 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all mb-4 shadow-lg shadow-brand-green/20"
+                      className="mb-4 w-full bg-sky py-4 font-display font-bold text-white transition-colors hover:bg-ink"
                     >
                       Confirm & Buy (€{listing.price})
                     </button>
                     <button
                       onClick={handleContactClick}
                       disabled={contacting}
-                      className="w-full py-3 border border-brand-pink text-brand-pink font-bold rounded-2xl hover:bg-brand-pink/5 transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+                      className="flex w-full items-center justify-center gap-2 border-2 border-ink py-3 font-display font-bold transition-colors hover:bg-ink hover:text-white disabled:opacity-50"
                     >
                       <MessageSquare size={18} />
                       <span>{contacting ? 'Opening…' : 'Contact Freelancer'}</span>
@@ -562,25 +562,25 @@ const ServiceDetails: React.FC = () => {
                   </>
                 )}
               </div>
-              <div className="p-6 bg-brand-black/50 text-center">
-                <div className="flex items-center justify-center space-x-2 text-[10px] font-black text-gray-500 uppercase mb-2">
-                  <ShieldCheck size={14} className="text-brand-green" />
+              <div className="bg-paper2 p-6 text-center">
+                <div className="mb-2 flex items-center justify-center gap-2 font-display text-[12px] font-extrabold uppercase">
+                  <ShieldCheck size={14} className="text-leaf" />
                   <span>Secure Payment</span>
                 </div>
-                <p className="text-[10px] text-gray-600 px-4 leading-tight">
+                <p className="px-4 text-[12px] leading-snug text-slate">
                   Your payment is processed securely through Cenner's protected payment system.
                 </p>
               </div>
             </div>
 
             <div className="flex justify-between px-4">
-              <button onClick={handleShare} className="flex items-center space-x-2 text-gray-500 hover:text-white transition-colors">
+              <button onClick={handleShare} className="flex items-center gap-2 text-slate transition-colors hover:text-ink">
                 <Share2 size={18} />
-                <span className="text-xs font-black uppercase tracking-widest">Share</span>
+                <span className="font-display text-[13px] font-bold uppercase tracking-wide">Share</span>
               </button>
-              <button onClick={() => setSaved(s => !s)} className={`flex items-center space-x-2 transition-colors ${saved ? 'text-brand-pink' : 'text-gray-500 hover:text-brand-pink'}`}>
+              <button onClick={() => setSaved(s => !s)} className={`flex items-center gap-2 transition-colors ${saved ? 'text-sky' : 'text-slate hover:text-sky'}`}>
                 <Heart size={18} fill={saved ? 'currentColor' : 'none'} />
-                <span className="text-xs font-black uppercase tracking-widest">{saved ? 'Saved' : 'Save'}</span>
+                <span className="font-display text-[13px] font-bold uppercase tracking-wide">{saved ? 'Saved' : 'Save'}</span>
               </button>
             </div>
           </div>

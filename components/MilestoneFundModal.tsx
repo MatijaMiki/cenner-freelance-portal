@@ -63,26 +63,26 @@ const PayForm: React.FC<{ amount: number; serviceFee: number; total: number; fee
       <PaymentElement options={{ layout: 'tabs', wallets: { applePay: 'auto', googlePay: 'auto' } }} />
 
       <div className="space-y-2 text-sm">
-        <div className="flex justify-between text-gray-400"><span>Milestone amount</span><span className="text-white font-bold">€{amount.toFixed(2)}</span></div>
-        <div className="flex justify-between text-gray-400"><span>Service fee ({feeRate}%)</span><span className="text-white font-bold">€{serviceFee.toFixed(2)}</span></div>
-        <div className="flex justify-between pt-2 border-t border-white/10"><span className="text-white font-black uppercase tracking-tighter">Total</span><span className="text-brand-green font-black">€{total.toFixed(2)}</span></div>
+        <div className="flex justify-between text-slate"><span>Milestone amount</span><span className="text-ink font-bold">€{amount.toFixed(2)}</span></div>
+        <div className="flex justify-between text-slate"><span>Service fee ({feeRate}%)</span><span className="text-ink font-bold">€{serviceFee.toFixed(2)}</span></div>
+        <div className="flex justify-between pt-2 border-t-2 border-ink"><span className="text-ink font-black uppercase tracking-tighter">Total</span><span className="text-leaf font-black">€{total.toFixed(2)}</span></div>
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm">{error}</div>
+        <div className="bg-red-50 border border-red-700 px-4 py-3 text-red-700 text-sm">{error}</div>
       )}
 
-      <div className="bg-brand-green/5 border border-brand-green/10 rounded-2xl p-4 flex items-start gap-3">
-        <ShieldCheck className="text-brand-green shrink-0 mt-0.5" size={18} />
-        <p className="text-gray-400 text-xs leading-relaxed">
-          Funds are <span className="text-white font-bold">held in escrow</span> by Stripe and only released to the freelancer once you approve the delivered work (or 72h after submission).
+      <div className="bg-leaf/10 border border-ink p-4 flex items-start gap-3">
+        <ShieldCheck className="text-leaf shrink-0 mt-0.5" size={18} />
+        <p className="text-slate text-xs leading-relaxed">
+          Funds are <span className="text-ink font-bold">held in escrow</span> by Stripe and only released to the freelancer once you approve the delivered work (or 72h after submission).
         </p>
       </div>
 
       <button
         disabled={processing || !stripe || !elements}
         type="submit"
-        className="w-full py-4 bg-brand-green text-brand-black font-black rounded-2xl hover:scale-[1.01] active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
+        className="w-full py-4 bg-sky text-white font-black hover:scale-[1.01] active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
       >
         {processing ? (
           <><Loader2 className="animate-spin" size={18} /><span>Authorising…</span></>
@@ -144,28 +144,28 @@ const MilestoneFundModal: React.FC<Props> = ({ milestoneId, milestoneTitle, amou
   } : null;
 
   return (
-    <div className="fixed inset-0 z-[120] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-4 overflow-y-auto" onClick={onClose}>
+    <div className="fixed inset-0 z-[120] bg-ink/70 flex items-end sm:items-center justify-center p-4 overflow-y-auto" onClick={onClose}>
       <div
-        className="bg-brand-grey border border-white/10 rounded-3xl max-w-md w-full p-6 shadow-2xl my-auto"
+        className="bg-white border-2 border-ink max-w-md w-full p-6 my-auto"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between mb-5">
           <div>
-            <h3 className="text-white font-black text-lg">Fund milestone</h3>
-            <p className="text-gray-500 text-xs mt-0.5 truncate">{milestoneTitle}</p>
+            <h3 className="text-ink font-black text-lg">Fund milestone</h3>
+            <p className="text-slate text-xs mt-0.5 truncate">{milestoneTitle}</p>
           </div>
-          <button onClick={onClose} className="p-2 -m-2 text-gray-500 hover:text-white">
+          <button onClick={onClose} className="p-2 -m-2 text-slate hover:text-ink">
             <X size={20} />
           </button>
         </div>
 
         {loadError ? (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-6 text-red-400 text-sm text-center">
+          <div className="bg-red-50 border border-red-700 px-4 py-6 text-red-700 text-sm text-center">
             <p className="font-bold mb-1">Could not start payment</p>
-            <p className="text-xs text-gray-500">{loadError}</p>
+            <p className="text-xs text-slate">{loadError}</p>
           </div>
         ) : !clientSecret || !stripe || !elementsOptions ? (
-          <div className="flex items-center justify-center py-12 text-gray-500">
+          <div className="flex items-center justify-center py-12 text-slate">
             <Loader2 className="animate-spin mr-2" size={18} />
             <span className="text-sm">Preparing payment…</span>
           </div>

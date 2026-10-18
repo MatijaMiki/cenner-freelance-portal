@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ShieldCheck, ShieldAlert, Loader2, CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ShieldCheck, ShieldAlert, Loader2, CheckCircle2 } from 'lucide-react';
 import SEO from '../components/SEO';
+import AdminTabs from '../components/AdminTabs';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -72,11 +73,8 @@ const AdminBans: React.FC = () => {
       <SEO title="Ban management" canonical="/admin/bans" noIndex />
 
       <div className="max-w-5xl mx-auto px-4 lg:px-12">
-        <div className="flex items-center justify-between mb-8">
-          <Link to="/blog-admin" className="inline-flex items-center gap-2 text-gray-500 hover:text-white text-xs font-black uppercase tracking-widest">
-            <ArrowLeft size={14} /> Admin
-          </Link>
-          <h1 className="text-2xl font-black text-white tracking-tighter">Bans</h1>
+        <div className="mb-8">
+          <AdminTabs />
         </div>
 
         <div className="flex items-center gap-2 mb-6 flex-wrap">

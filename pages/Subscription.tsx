@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, Zap, Globe, Cpu, Crown, Star, Rocket, Sparkles } from 'lucide-react';
-import NeuralBackground from '../components/NeuralBackground';
+import { Zap, Globe, Crown } from 'lucide-react';
 import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
@@ -172,7 +171,7 @@ const Subscription: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="font-text text-ink">
       <SEO
         title="Pricing & Plans"
         canonical="/subscription"
@@ -213,180 +212,143 @@ const Subscription: React.FC = () => {
           },
         ]}
       />
-      <NeuralBackground parallax={true} />
-
-      <div className="relative z-10 max-w-[1600px] mx-auto px-4 py-16 lg:py-20">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
-          <div className="inline-flex items-center space-x-2 bg-brand-green/10 border border-brand-green/20 rounded-full px-4 py-1.5 mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-brand-green">
-            <Cpu size={14} />
-            <span>{t('Pricing')}</span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-4 tracking-tighter leading-none">
-            {t('Simple, Honest Pricing.').split(',')[0]}, <br />
-            <span className="text-brand-pink">{t('Simple, Honest Pricing.').split(',').slice(1).join(',').trim()}</span>
+      <div className="relative z-10 mx-auto max-w-[1500px] px-4 pb-24 pt-10 md:px-8 md:pt-16">
+        {/* Header: the claim at poster scale, then the promise. */}
+        <header>
+          <h1 className="max-w-[16ch] font-display text-[clamp(2.5rem,7.5vw,7rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.035em]">
+            {t('Simple, Honest Pricing.')}
           </h1>
-          <p className="text-gray-400 text-base md:text-lg font-medium leading-relaxed">
+          <p className="mt-8 max-w-[46ch] text-[clamp(1.125rem,1.05rem+0.5vw,1.375rem)] leading-snug">
             {t('Pick the plan that fits where you are. Upgrade or downgrade any time.')}
           </p>
-        </div>
+        </header>
 
         {/* Pricing Grid */}
-        <div className="grid lg:grid-cols-3 gap-4 items-start">
-          {tiers.map((tier) => (
-            <div
-              key={tier.id}
-              className={`relative group bg-brand-grey/70 border transition-all duration-500 rounded-[2rem] p-7 flex flex-col shadow-2xl overflow-hidden ${
-                tier.highlight
-                  ? 'border-brand-green/50 ring-4 ring-brand-green/5 bg-brand-green/[0.02]'
-                  : tier.special
-                  ? 'border-brand-pink/50 ring-4 ring-brand-pink/5 bg-brand-pink/[0.02]'
-                  : 'border-white/5 hover:border-white/20'
-              }`}
-            >
-              {tier.special  && <div className="absolute top-0 right-0 w-64 h-64 bg-brand-pink/10  rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none" />}
-              {tier.highlight && <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/10 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none" />}
-
-              {tier.highlight && (
-                <div className="absolute top-6 right-6 px-3 py-1 bg-brand-green text-brand-black text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg">
-                  {t('Recommended')}
-                </div>
-              )}
-
-              {/* Tier header */}
-              <div className="mb-6 relative">
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 border ${
-                  tier.highlight ? 'bg-brand-green/10 border-brand-green/20' :
-                  tier.special  ? 'bg-brand-pink/10 border-brand-pink/20' :
-                  'bg-white/5 border-white/10'
-                }`}>
-                  {React.cloneElement(tier.icon as React.ReactElement<{ size?: number }>, { size: 20 })}
-                </div>
-                <h3 className="text-2xl font-black text-white mb-1 tracking-tight">{t(tier.name)}</h3>
-                <p className={`text-xs font-black uppercase tracking-widest ${
-                  tier.highlight ? 'text-brand-green' : tier.special ? 'text-brand-pink' : 'text-gray-500'
-                }`}>{t(tier.description)}</p>
-              </div>
-
-              {/* Price */}
-              <div className="mb-4 relative">
-                <div className="flex items-baseline space-x-1">
-                  <span className="text-4xl font-black text-white tracking-tighter">{tier.price}</span>
-                  <span className="text-gray-600 font-black uppercase text-[10px] tracking-widest">/ {t(tier.period)}</span>
-                </div>
-              </div>
-
-              {/* Commission rate — a subtle bold callout, not a big badge */}
-              {(() => {
-                const feeRate = { free: 15, pro: 10, ultra: 5 }[tier.id] ?? 15;
-                const accent = tier.highlight ? 'text-brand-green' : tier.special ? 'text-brand-pink' : 'text-white';
-                return (
-                  <p className="mb-6 relative text-sm font-medium text-gray-500">
-                    <span className={`font-black ${accent}`}>{feeRate}% {t('platform fee')}</span>
-                    <span className="text-gray-600"> · {t('you keep')} {100 - feeRate}%</span>
-                  </p>
-                );
-              })()}
-
-              {/* CTA */}
-              <button
-                onClick={() => handlePlanSelection(tier.id)}
-                className={`w-full py-3 rounded-xl font-black text-xs transition-all mb-7 relative ${
-                  tier.highlight
-                    ? 'bg-brand-green text-brand-black hover:scale-105 shadow-xl shadow-brand-green/20'
+        <div className="mt-12 grid items-stretch gap-6 md:mt-16 lg:grid-cols-3">
+          {tiers.map((tier) => {
+            const feeRate = ({ free: 15, pro: 10, ultra: 5 } as Record<string, number>)[tier.id] ?? 15;
+            const dark = !!tier.highlight;   // Pro: the recommended plan is the inverted card
+            const muted = dark ? 'text-white/70' : 'text-slate';
+            return (
+              <div
+                key={tier.id}
+                className={`relative flex flex-col border-2 p-7 transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 md:p-8 ${
+                  dark
+                    ? 'border-ink bg-ink text-white hover:shadow-[8px_8px_0_0_#4ade80]'
                     : tier.special
-                    ? 'bg-brand-pink text-white hover:scale-105 shadow-xl shadow-brand-pink/20'
-                    : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'
+                    ? 'border-sky bg-white shadow-[6px_6px_0_0_#002ca5] hover:shadow-[10px_10px_0_0_#002ca5]'
+                    : 'border-ink bg-white hover:shadow-[8px_8px_0_0_#0b0c0e]'
                 }`}
               >
-                {t(tier.cta)}
-              </button>
+                {tier.highlight && (
+                  <span className="absolute -top-4 left-6 bg-brand-green px-3 py-1 font-display text-[12px] font-extrabold uppercase tracking-wide text-ink">
+                    {t('Recommended')}
+                  </span>
+                )}
 
-              {/* Features with detail */}
-              <div className="space-y-4 relative">
-                <p className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-600 mb-2">
-                  {t("What's included")}
+                <h2 className="font-display text-[1.75rem] font-extrabold leading-none tracking-[-0.02em]">{t(tier.name)}</h2>
+                <p className={`mt-2 font-display text-[14px] font-bold ${dark ? 'text-brand-green' : tier.special ? 'text-sky' : 'text-slate'}`}>{t(tier.description)}</p>
+
+                <div className="mt-8 flex items-baseline gap-2">
+                  <span className="font-display text-[4rem] font-extrabold leading-none tracking-[-0.04em]">{tier.price}</span>
+                  <span className={`text-[14px] ${muted}`}>/ {t(tier.period)}</span>
+                </div>
+
+                <p className={`mt-3 text-[15px] ${muted}`}>
+                  <span className={`font-display font-extrabold ${dark ? 'text-white' : 'text-ink'}`}>{feeRate}% {t('platform fee')}</span>
+                  {' · '}{t('you keep')} {100 - feeRate}%
                 </p>
-                {tier.features.map((feature, i) => (
-                  <div key={i} className="flex items-start gap-2.5">
-                    <Check
-                      className={`mt-0.5 shrink-0 ${
-                        tier.highlight ? 'text-brand-green' : tier.special ? 'text-brand-pink' : 'text-gray-600'
-                      }`}
-                      size={14}
-                    />
-                    <div>
-                      <p className="text-[13px] font-bold text-white leading-snug">{feature.name}</p>
-                      <p className="text-[11px] text-gray-400 mt-0.5 leading-relaxed">{feature.detail}</p>
-                    </div>
-                  </div>
-                ))}
+
+                <button
+                  onClick={() => handlePlanSelection(tier.id)}
+                  className={`mt-7 w-full px-6 py-4 font-display text-[15px] font-bold transition-colors focus-visible:outline-none focus-visible:underline focus-visible:underline-offset-4 ${
+                    dark
+                      ? 'bg-brand-green text-ink hover:bg-white'
+                      : tier.special
+                      ? 'bg-sky text-white hover:bg-ink'
+                      : 'bg-ink text-white hover:bg-sky'
+                  }`}
+                >
+                  {t(tier.cta)}
+                </button>
+
+                <div className={`mt-8 border-t-2 pt-6 ${dark ? 'border-white/80' : 'border-ink'}`}>
+                  <p className={`font-display text-[12px] font-extrabold uppercase tracking-[0.12em] ${muted}`}>
+                    {t("What's included")}
+                  </p>
+                  <ul className="mt-4 space-y-4">
+                    {tier.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span aria-hidden="true" className={`mt-[0.55em] h-1.5 w-1.5 shrink-0 ${dark ? 'bg-brand-green' : tier.special ? 'bg-sky' : 'bg-ink'}`} />
+                        <div>
+                          <p className="font-display text-[15px] font-bold leading-snug">{feature.name}</p>
+                          <p className={`mt-0.5 text-[14px] leading-relaxed ${muted}`}>{feature.detail}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Fee transparency note */}
-        <p className="text-center text-gray-500 text-xs font-medium mt-6 mb-2">
-          {t('Commission shown is deducted from the freelancer’s payout. Buyers pay a flat')} <span className="text-white font-black">5%</span> {t('service fee at checkout.')}{' '}
+        <p className="mt-8 max-w-[72ch] text-[14px] leading-relaxed text-slate">
+          {t('Commission shown is deducted from the freelancer’s payout. Buyers pay a flat')} <span className="font-bold text-ink">5%</span> {t('service fee at checkout.')}{' '}
           {t('Enterprise sellers pay 0% commission, and their buyers pay no service fee.')}
         </p>
 
         {/* Enterprise */}
-        <div className="mt-4 relative bg-brand-grey/70 border border-white/10 rounded-[2rem] p-7 lg:p-8 flex flex-col lg:flex-row lg:items-center gap-6 shadow-2xl overflow-hidden">
-          <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-[100px] -ml-32 -mt-32 pointer-events-none" />
-          <div className="flex-1 relative">
-            <div className="flex items-center gap-3 mb-2 flex-wrap">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white/5 border border-white/10">
-                <Rocket className="text-white" size={20} />
-              </div>
-              <h3 className="text-2xl font-black text-white tracking-tight">{t('Enterprise')}</h3>
-              <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 border border-white/10 rounded-full px-2 py-1">{t('Our best plan, everything included')}</span>
+        <div className="mt-8 grid gap-8 border-2 border-ink bg-brand-green p-7 transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[8px_8px_0_0_#0b0c0e] md:p-10 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-8">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="font-display text-[clamp(1.75rem,1.2rem+2vw,3rem)] font-extrabold leading-none tracking-[-0.03em]">{t('Enterprise')}</h2>
+              <span className="border-2 border-ink px-2.5 py-1 font-display text-[12px] font-bold">{t('Our best plan, everything included')}</span>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-2xl">
+            <p className="mt-5 max-w-[60ch] text-[1.0625rem] leading-relaxed">
               {t('Keep 100% of every sale: 0% commission, and your clients pay no service fee either. Plus the highest marketplace ranking above every tier, Trusted status, homepage spotlight, 30 monthly boosts, and priority support with ~1-hour response time.')}
             </p>
-            <p className="text-brand-green text-xs font-bold mt-2">
+            <p className="mt-3 font-display text-[15px] font-bold">
               {t('Pays for itself above €800 in monthly sales. Above that, every euro saved is yours.')}
             </p>
           </div>
-          <div className="relative shrink-0 flex flex-col items-stretch lg:items-end gap-2">
-            <div className="text-center lg:text-right mb-1">
-              <span className="text-3xl font-black text-white">€99</span>
-              <span className="text-gray-500 text-sm font-medium"> / {t('per month').replace('per ', '')}</span>
+          <div className="flex flex-col items-start gap-3 lg:col-span-4 lg:items-end">
+            <div className="lg:text-right">
+              <span className="font-display text-[3.5rem] font-extrabold leading-none tracking-[-0.04em]">€99</span>
+              <span className="text-[15px]"> / {t('per month').replace('per ', '')}</span>
             </div>
             <button
               onClick={() => handlePlanSelection('enterprise')}
-              className="w-full lg:w-auto px-8 py-3 rounded-xl font-black text-xs bg-white text-brand-black hover:scale-105 transition-all shadow-xl"
+              className="bg-ink px-8 py-4 font-display text-[15px] font-bold text-white transition-colors hover:bg-sky focus-visible:outline-none focus-visible:underline focus-visible:underline-offset-4"
             >
               {t('Get Enterprise')}
             </button>
             <button
-              onClick={() => navigate('/contact')}
-              className="w-full lg:w-auto text-[11px] font-bold text-gray-500 hover:text-white transition-colors"
+              onClick={() => navigate('/about#kontakt')}
+              className="font-display text-[14px] font-bold underline underline-offset-4 hover:text-sky"
             >
               {t('Custom needs? Contact sales')}
             </button>
           </div>
         </div>
 
-        {/* Trust strip */}
-        <section className="mt-20 py-16 text-center">
-          <h2 className="text-3xl font-black text-white mb-12 tracking-tighter">{t('Why upgrade?')}</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+        {/* Why upgrade */}
+        <section className="mt-20 md:mt-28" aria-labelledby="why-upgrade">
+          <h2 id="why-upgrade" className="font-display text-[clamp(2.25rem,1.3rem+3.8vw,5rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">{t('Why upgrade?')}</h2>
+          <ol className="mt-10 grid gap-8 md:grid-cols-3">
             {[
-              { icon: <Star />, title: t('Protected Payments'), desc: 'Every transaction is processed securely through Cenner. Your payments and earnings are always protected.' },
-              { icon: <Rocket />, title: t('More Visibility'), desc: 'Higher tiers rank you above free users. Clients searching for your skills will see you before the competition.' },
-              { icon: <Sparkles />, title: t('Lower Fees'), desc: 'Going from Free to Ultra cuts your commission from 15% down to 5%. On €5,000 a month that is €500 extra in your pocket.' },
+              { title: t('Protected Payments'), desc: 'Every transaction is processed securely through Cenner. Your payments and earnings are always protected.' },
+              { title: t('More Visibility'), desc: 'Higher tiers rank you above free users. Clients searching for your skills will see you before the competition.' },
+              { title: t('Lower Fees'), desc: 'Going from Free to Ultra cuts your commission from 15% down to 5%. On €5,000 a month that is €500 extra in your pocket.' },
             ].map((item, i) => (
-              // bg + blur lift the copy off the animated NeuralBackground (matches pricing cards above)
-              <div key={i} className="space-y-4 bg-brand-grey/70 backdrop-blur-sm border border-white/10 rounded-[2rem] p-7 shadow-2xl">
-                <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 text-brand-green">{item.icon}</div>
-                <h4 className="text-xl font-bold text-white">{item.title}</h4>
-                <p className="text-gray-400 text-sm max-w-xs mx-auto leading-relaxed">{item.desc}</p>
-              </div>
+              <li key={i} className="border-t-2 border-ink pt-5">
+                <p className="font-display text-[1rem] font-bold text-sky">0{i + 1}</p>
+                <h3 className="mt-2 font-display text-[1.5rem] font-extrabold leading-tight">{item.title}</h3>
+                <p className="mt-3 max-w-[38ch] text-[1rem] leading-relaxed">{item.desc}</p>
+              </li>
             ))}
-          </div>
+          </ol>
         </section>
       </div>
     </div>

@@ -4,11 +4,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
+import RedirectTo from './components/RedirectTo';
 import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
 import { NotifyProvider } from './contexts/NotifyContext';
 
 const Home = lazy(() => import('./pages/Home'));
+// LOCAL COMPARISON ONLY: the saved pass-3 homepage. Remove before shipping.
+const HomeV3 = lazy(() => import('./pages/HomeV3'));
 const Marketplace = lazy(() => import('./pages/Marketplace'));
 const Services = lazy(() => import('./pages/Services'));
 const ServiceDetails = lazy(() => import('./pages/ServiceDetails'));
@@ -17,7 +20,6 @@ const SubscriptionCheckout = lazy(() => import('./pages/SubscriptionCheckout'));
 const Auth = lazy(() => import('./pages/Auth'));
 const Profile = lazy(() => import('./pages/Profile'));
 const About = lazy(() => import('./pages/About'));
-const Contact = lazy(() => import('./pages/Contact'));
 const CreatorOnboarding = lazy(() => import('./pages/CreatorOnboarding'));
 const Community = lazy(() => import('./pages/Community'));
 const Blog = lazy(() => import('./pages/Blog'));
@@ -29,19 +31,13 @@ const Subscription = lazy(() => import('./pages/Subscription'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Cookies = lazy(() => import('./pages/Cookies'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
 const FreelancerProfile = lazy(() => import('./pages/FreelancerProfile'));
 const Orders = lazy(() => import('./pages/Orders'));
 const Inbox = lazy(() => import('./pages/Inbox'));
 const Contracts = lazy(() => import('./pages/Contracts'));
 const ContractDetail = lazy(() => import('./pages/ContractDetail'));
-const Projects = lazy(() => import('./pages/Projects'));
-const Technology = lazy(() => import('./pages/Technology'));
 const Ranwhat = lazy(() => import('./pages/Ranwhat'));
-const Match = lazy(() => import('./pages/Match'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
-const Earnings = lazy(() => import('./pages/Earnings'));
-const SavedListings = lazy(() => import('./pages/SavedListings'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
 const Referral = lazy(() => import('./pages/Referral'));
@@ -68,6 +64,7 @@ const App: React.FC = () => {
               <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050505' }} />}>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/v3" element={<HomeV3 />} />
                   <Route path="/marketplace" element={<Marketplace />} />
                   <Route path="/subscription" element={<Subscription />} />
                   <Route path="/services" element={<Services />} />
@@ -79,33 +76,39 @@ const App: React.FC = () => {
                   <Route path="/creator-onboarding" element={<CreatorOnboarding />} />
                   <Route path="/community" element={<Community />} />
                   <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog-admin" element={<BlogEditor />} />
-                  <Route path="/blog-admin/:id" element={<BlogEditor />} />
                   <Route path="/blog/:slug" element={<BlogPost />} />
                   <Route path="/banned" element={<Banned />} />
+                  {/* the admin area: one place, a tab per screen */}
+                  <Route path="/admin" element={<RedirectTo to="/admin/blog" />} />
+                  <Route path="/admin/blog" element={<BlogEditor />} />
+                  <Route path="/admin/blog/:id" element={<BlogEditor />} />
                   <Route path="/admin/bans" element={<AdminBans />} />
                   <Route path="/about" element={<About />} />
-                  <Route path="/contact" element={<Contact />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/cookies" element={<Cookies />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/freelancer/:id" element={<FreelancerProfile />} />
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/messages" element={<Inbox />} />
                   <Route path="/messages/:id" element={<Inbox />} />
                   <Route path="/contracts" element={<Contracts />} />
                   <Route path="/contracts/:id" element={<ContractDetail />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/technology" element={<Technology />} />
                   <Route path="/ranwhat" element={<Ranwhat />} />
-                  <Route path="/match" element={<Match />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
-                  <Route path="/earnings" element={<Earnings />} />
-                  <Route path="/saved" element={<SavedListings />} />
                   <Route path="/onboarding" element={<Onboarding />} />
                   <Route path="/order-success" element={<OrderSuccess />} />
                   <Route path="/referral" element={<Referral />} />
+                  {/* Pages folded into others: the old URLs land on their new home (vercel.json
+                      redirects the same paths on a full page load) */}
+                  <Route path="/match" element={<RedirectTo to="/marketplace#ai-matching" />} />
+                  <Route path="/dashboard" element={<RedirectTo to="/profile" />} />
+                  <Route path="/saved" element={<RedirectTo to="/profile?tab=saved" />} />
+                  <Route path="/blog-admin" element={<RedirectTo to="/admin/blog" />} />
+                  <Route path="/blog-admin/:id" element={<RedirectTo to="/admin/blog/:id" />} />
+                  <Route path="/contact" element={<RedirectTo to="/about#kontakt" />} />
+                  <Route path="/projects" element={<RedirectTo to="/services#radovi" />} />
+                  <Route path="/technology" element={<RedirectTo to="/services#alati" />} />
+                  <Route path="/earnings" element={<RedirectTo to="/profile?tab=earnings" />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

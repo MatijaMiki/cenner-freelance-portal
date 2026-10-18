@@ -9,7 +9,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';
 import { useNotify } from '../contexts/NotifyContext';
 import { API } from '../lib/api';
-import NeuralBackground from '../components/NeuralBackground';
 import SEO from '../components/SEO';
 
 // ── Types (mirror the API response shapes) ──────────────────────────────────
@@ -185,23 +184,22 @@ const Referral: React.FC = () => {
     }
   };
 
-  const card = 'bg-brand-grey/30 border border-white/5 rounded-3xl p-8';
+  const card = 'bg-white border-2 border-ink p-8';
 
   return (
     <div className="relative min-h-screen pt-12 pb-24 px-4 overflow-hidden">
       <SEO noIndex title="Refer & Win" description="Refer friends to Cenner and win free Enterprise months plus listing boosts." />
-      <NeuralBackground parallax={false} />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* ── Winner banner ── */}
         {data && data.wins.length > 0 && (
-          <div className="mb-10 p-6 bg-gradient-to-r from-brand-green/15 via-brand-grey/30 to-brand-pink/15 border border-brand-green/30 rounded-3xl flex items-center gap-4">
-            <PartyPopper size={28} className="text-brand-green shrink-0" />
+          <div className="mb-10 p-6 border border-ink flex items-center gap-4">
+            <PartyPopper size={28} className="text-leaf shrink-0" />
             <div>
-              <p className="text-white font-black text-lg tracking-tight">
+              <p className="text-ink font-black text-lg tracking-tight">
                 You won {ordinal(data.wins[0].place)} place!
               </p>
-              <p className="text-gray-400 text-sm mt-0.5">
+              <p className="text-slate text-sm mt-0.5">
                 {data.wins[0].enterpriseMonths} months of Enterprise and a {data.wins[0].boostMonths}-month boost from {data.wins[0].campaign.name}.
               </p>
             </div>
@@ -210,29 +208,29 @@ const Referral: React.FC = () => {
 
         {/* ── Hero ── */}
         <div className="mb-12">
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-green mb-2 flex items-center gap-2">
+          <p className="text-[12px] font-black uppercase tracking-[0.3em] text-leaf mb-2 flex items-center gap-2">
             <Gift size={13} /> Refer &amp; Win
           </p>
           {loading ? (
-            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-3">Loading contest…</h1>
+            <h1 className="text-4xl md:text-5xl font-black text-ink tracking-tighter mb-3">Loading contest…</h1>
           ) : !campaign ? (
             <>
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-3">No active contest right now</h1>
-              <p className="text-gray-500 font-medium max-w-2xl">
+              <h1 className="text-4xl md:text-5xl font-black text-ink tracking-tighter mb-3">No active contest right now</h1>
+              <p className="text-slate font-medium max-w-2xl">
                 There is no referral contest running at the moment. Check back soon. Your referral link below still works and counts toward the next round.
               </p>
             </>
           ) : !campaign.active ? (
             <>
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-3">{campaign.name}</h1>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-gray-400 text-xs font-black uppercase tracking-widest">
+              <h1 className="text-4xl md:text-5xl font-black text-ink tracking-tighter mb-3">{campaign.name}</h1>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-ink/5 border-2 border-ink text-slate text-xs font-black uppercase tracking-widest">
                 <Clock size={14} /> Contest ended {fmtDate(campaign.endsAt) && `· ${fmtDate(campaign.endsAt)}`}
               </div>
             </>
           ) : (
             <>
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">{campaign.name}</h1>
-              <p className="text-gray-500 font-medium mb-5">Ends {fmtDate(campaign.endsAt)}</p>
+              <h1 className="text-4xl md:text-5xl font-black text-ink tracking-tighter mb-4">{campaign.name}</h1>
+              <p className="text-slate font-medium mb-5">Ends {fmtDate(campaign.endsAt)}</p>
               {countdown && (
                 <div className="flex flex-wrap gap-3">
                   {[
@@ -241,9 +239,9 @@ const Referral: React.FC = () => {
                     { v: countdown.minutes, l: 'Min' },
                     { v: countdown.seconds, l: 'Sec' },
                   ].map((c) => (
-                    <div key={c.l} className="bg-brand-grey/40 border border-white/10 rounded-2xl px-5 py-3 text-center min-w-[76px]">
-                      <div className="text-2xl md:text-3xl font-black text-white tabular-nums">{String(c.v).padStart(2, '0')}</div>
-                      <div className="text-[9px] font-black uppercase tracking-widest text-gray-600 mt-1">{c.l}</div>
+                    <div key={c.l} className="bg-white border-2 border-ink px-5 py-3 text-center min-w-[76px]">
+                      <div className="text-2xl md:text-3xl font-black text-ink tabular-nums">{String(c.v).padStart(2, '0')}</div>
+                      <div className="text-[12px] font-black uppercase tracking-widest text-slate mt-1">{c.l}</div>
                     </div>
                   ))}
                 </div>
@@ -254,7 +252,7 @@ const Referral: React.FC = () => {
 
         {/* ── Prize podium ── */}
         <div className="mb-12">
-          <h2 className="text-xs font-black text-gray-600 uppercase tracking-[0.2em] mb-5">Prizes</h2>
+          <h2 className="text-xs font-black text-slate uppercase tracking-[0.2em] mb-5">Prizes</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
             {PRIZES.map((p) => {
               const first = p.place === 1;
@@ -264,26 +262,26 @@ const Referral: React.FC = () => {
                   key={p.place}
                   className={
                     first
-                      ? 'relative bg-gradient-to-b from-brand-green/15 to-brand-grey/30 border border-brand-green/40 rounded-3xl p-8 md:-mt-3 shadow-[0_0_40px_-12px_rgba(74,222,128,0.35)]'
+                      ? 'relative border-2 border-ink bg-brand-green p-6 shadow-[6px_6px_0_0_#0b0c0e] md:-mt-3'
                       : `${card}`
                   }
                 >
                   {first && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-brand-green text-brand-black text-[9px] font-black uppercase tracking-widest rounded-full flex items-center gap-1">
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap border-2 border-ink px-3 py-0.5 bg-ink text-white text-[12px] font-black uppercase tracking-widest flex items-center gap-1">
                       <Sparkles size={11} /> Grand Prize
                     </div>
                   )}
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${first ? 'bg-brand-green/20 text-brand-green' : p.place === 2 ? 'bg-brand-pink/15 text-brand-pink' : 'bg-white/5 text-gray-400'}`}>
+                  <div className={`w-12 h-12 flex items-center justify-center mb-5 ${first ? 'bg-white border-2 border-ink text-ink' : p.place === 2 ? 'bg-sky/10 text-sky' : 'bg-ink/5 text-slate'}`}>
                     <Icon size={24} />
                   </div>
-                  <div className={`text-lg font-black tracking-tight mb-4 ${first ? 'text-brand-green' : 'text-white'}`}>{p.label}</div>
+                  <div className={`text-lg font-black tracking-tight mb-4 text-ink`}>{p.label}</div>
                   <div className="space-y-2">
-                    <div className="flex items-start gap-2 text-sm text-gray-300">
-                      <Zap size={15} className="text-brand-green shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-2 text-sm text-ink">
+                      <Zap size={15} className="text-leaf shrink-0 mt-0.5" />
                       <span>{p.enterprise}</span>
                     </div>
-                    <div className="flex items-start gap-2 text-sm text-gray-300">
-                      <TrendingUp size={15} className="text-brand-pink shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-2 text-sm text-ink">
+                      <TrendingUp size={15} className="text-sky shrink-0 mt-0.5" />
                       <span>{p.boost}</span>
                     </div>
                   </div>
@@ -295,25 +293,25 @@ const Referral: React.FC = () => {
 
         {/* ── Boost claim panel ── */}
         {data && data.pendingBoostMonths > 0 && (
-          <div className="mb-12 p-8 bg-gradient-to-r from-brand-pink/15 to-brand-grey/30 border border-brand-pink/30 rounded-3xl">
+          <div className="mb-12 p-8 border border-ink">
             <div className="flex items-center gap-3 mb-4">
-              <Sparkles size={22} className="text-brand-pink" />
-              <h2 className="text-xl font-black text-white tracking-tight">
+              <Sparkles size={22} className="text-sky" />
+              <h2 className="text-xl font-black text-ink tracking-tight">
                 You won a {data.pendingBoostMonths}-month boost!
               </h2>
             </div>
-            <p className="text-gray-400 text-sm mb-5">Pick one of your listings to apply the boost to. It will be featured for the full duration.</p>
+            <p className="text-slate text-sm mb-5">Pick one of your listings to apply the boost to. It will be featured for the full duration.</p>
             {myListings.length === 0 ? (
-              <p className="text-gray-500 text-sm">
+              <p className="text-slate text-sm">
                 You don&apos;t have any listings yet.{' '}
-                <Link to="/profile" className="text-brand-green font-bold hover:underline">Create one</Link> to apply your boost.
+                <Link to="/profile" className="text-leaf font-bold hover:underline">Create one</Link> to apply your boost.
               </p>
             ) : (
               <div className="flex flex-col sm:flex-row gap-3">
                 <select
                   value={selectedListing}
                   onChange={(e) => setSelectedListing(e.target.value)}
-                  className="flex-1 bg-brand-black/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white font-medium focus:border-brand-pink/50 focus:outline-none"
+                  className="flex-1 bg-paper2 border-2 border-ink px-4 py-3 text-sm text-ink font-medium focus:border-sky focus:outline-none"
                 >
                   <option value="">Select a listing…</option>
                   {myListings.map((l) => (
@@ -323,7 +321,7 @@ const Referral: React.FC = () => {
                 <button
                   onClick={handleClaim}
                   disabled={!selectedListing || claiming}
-                  className="px-6 py-3 bg-brand-pink text-brand-black font-black rounded-xl text-xs uppercase tracking-widest hover:scale-105 transition-all disabled:opacity-40 disabled:hover:scale-100"
+                  className="px-6 py-3 bg-sky text-ink font-black text-xs uppercase tracking-widest hover:scale-105 transition-all disabled:opacity-40 disabled:hover:scale-100"
                 >
                   {claiming ? 'Applying…' : 'Apply boost'}
                 </button>
@@ -334,65 +332,65 @@ const Referral: React.FC = () => {
 
         {/* ── Referral link + share ── */}
         <div className={`${card} mb-12`}>
-          <h2 className="text-xs font-black text-gray-600 uppercase tracking-[0.2em] mb-5">Your referral link</h2>
+          <h2 className="text-xs font-black text-slate uppercase tracking-[0.2em] mb-5">Your referral link</h2>
           <div className="flex flex-col sm:flex-row gap-3 mb-5">
             <input
               type="text"
               readOnly
               value={shareUrl}
               onFocus={(e) => e.currentTarget.select()}
-              className="flex-1 bg-brand-black/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 font-mono select-all"
+              className="flex-1 bg-paper2 border-2 border-ink px-4 py-3 text-sm text-ink font-mono select-all"
             />
             <button
               onClick={handleCopy}
-              className="flex items-center justify-center gap-2 px-6 py-3 font-black rounded-xl text-xs uppercase tracking-widest border transition-all border-white/10 hover:border-white/20 hover:bg-white/5 text-white"
+              className="flex items-center justify-center gap-2 px-6 py-3 font-black text-xs uppercase tracking-widest border-2 transition-all border-ink hover:border-ink hover:bg-ink/5 text-ink"
             >
-              {copied ? <><Check size={15} className="text-brand-green" /> Copied!</> : <><Copy size={15} /> Copy</>}
+              {copied ? <><Check size={15} className="text-leaf" /> Copied!</> : <><Copy size={15} /> Copy</>}
             </button>
           </div>
           <div className="flex flex-wrap gap-3">
             <a href={waHref} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2.5 font-black rounded-xl text-[11px] uppercase tracking-widest border border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-300 transition-all">
-              <MessageCircle size={15} className="text-brand-green" /> WhatsApp
+              className="flex items-center gap-2 px-4 py-2.5 font-black text-[12px] uppercase tracking-widest border-2 border-ink hover:border-ink hover:bg-ink/5 text-ink transition-all">
+              <MessageCircle size={15} className="text-leaf" /> WhatsApp
             </a>
             <a href={mailHref}
-              className="flex items-center gap-2 px-4 py-2.5 font-black rounded-xl text-[11px] uppercase tracking-widest border border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-300 transition-all">
-              <Mail size={15} className="text-brand-pink" /> Email
+              className="flex items-center gap-2 px-4 py-2.5 font-black text-[12px] uppercase tracking-widest border-2 border-ink hover:border-ink hover:bg-ink/5 text-ink transition-all">
+              <Mail size={15} className="text-sky" /> Email
             </a>
             <a href={xHref} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2.5 font-black rounded-xl text-[11px] uppercase tracking-widest border border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-300 transition-all">
-              <Twitter size={15} className="text-brand-green" /> X
+              className="flex items-center gap-2 px-4 py-2.5 font-black text-[12px] uppercase tracking-widest border-2 border-ink hover:border-ink hover:bg-ink/5 text-ink transition-all">
+              <Twitter size={15} className="text-leaf" /> X
             </a>
             <button onClick={handleNativeShare}
-              className="flex items-center gap-2 px-4 py-2.5 font-black rounded-xl text-[11px] uppercase tracking-widest border border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-300 transition-all">
-              <Share2 size={15} className="text-brand-pink" /> Share
+              className="flex items-center gap-2 px-4 py-2.5 font-black text-[12px] uppercase tracking-widest border-2 border-ink hover:border-ink hover:bg-ink/5 text-ink transition-all">
+              <Share2 size={15} className="text-sky" /> Share
             </button>
           </div>
         </div>
 
         {/* ── Your standing ── */}
         <div className="mb-12">
-          <h2 className="text-xs font-black text-gray-600 uppercase tracking-[0.2em] mb-5">Your standing</h2>
+          <h2 className="text-xs font-black text-slate uppercase tracking-[0.2em] mb-5">Your standing</h2>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-brand-grey/60 border border-white/5 rounded-2xl p-6 backdrop-blur-xl">
-              <div className="text-brand-green mb-4"><Users size={18} /></div>
-              <div className="text-2xl font-black text-white mb-1">{data?.referralCount ?? '—'}</div>
-              <div className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Referrals</div>
+            <div className="bg-white border-2 border-ink p-6">
+              <div className="text-leaf mb-4"><Users size={18} /></div>
+              <div className="text-2xl font-black text-ink mb-1">{data?.referralCount ?? '—'}</div>
+              <div className="text-[12px] font-bold text-slate uppercase tracking-widest">Referrals</div>
             </div>
-            <div className="bg-brand-grey/60 border border-white/5 rounded-2xl p-6 backdrop-blur-xl">
-              <div className="text-brand-pink mb-4"><Trophy size={18} /></div>
-              <div className="text-2xl font-black text-white mb-1">
+            <div className="bg-white border-2 border-ink p-6">
+              <div className="text-sky mb-4"><Trophy size={18} /></div>
+              <div className="text-2xl font-black text-ink mb-1">
                 {data && data.rank > 0 ? `#${data.rank}` : '—'}
                 {data && data.totalParticipants > 0 && (
-                  <span className="text-sm font-bold text-gray-500"> of {data.totalParticipants}</span>
+                  <span className="text-sm font-bold text-slate"> of {data.totalParticipants}</span>
                 )}
               </div>
-              <div className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Your rank</div>
+              <div className="text-[12px] font-bold text-slate uppercase tracking-widest">Your rank</div>
             </div>
-            <div className="bg-brand-grey/60 border border-white/5 rounded-2xl p-6 backdrop-blur-xl col-span-2 lg:col-span-1">
-              <div className="text-brand-green mb-4"><Sparkles size={18} /></div>
-              <div className="text-2xl font-black text-white mb-1">{data?.pendingBoostMonths ? `${data.pendingBoostMonths} mo` : '—'}</div>
-              <div className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Boost to claim</div>
+            <div className="bg-white border-2 border-ink p-6 col-span-2 lg:col-span-1">
+              <div className="text-leaf mb-4"><Sparkles size={18} /></div>
+              <div className="text-2xl font-black text-ink mb-1">{data?.pendingBoostMonths ? `${data.pendingBoostMonths} mo` : '—'}</div>
+              <div className="text-[12px] font-bold text-slate uppercase tracking-widest">Boost to claim</div>
             </div>
           </div>
         </div>
@@ -400,22 +398,22 @@ const Referral: React.FC = () => {
         {/* ── Leaderboard ── */}
         <div className={card}>
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xs font-black text-gray-600 uppercase tracking-[0.2em]">Leaderboard</h2>
+            <h2 className="text-xs font-black text-slate uppercase tracking-[0.2em]">Leaderboard</h2>
             {board?.campaign && (
-              <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">{board.campaign.name}</span>
+              <span className="text-[12px] font-bold text-slate uppercase tracking-widest">{board.campaign.name}</span>
             )}
           </div>
           {!board || board.leaders.length === 0 ? (
             <div className="text-center py-10">
-              <Users size={32} className="text-gray-700 mx-auto mb-4" />
-              <p className="text-gray-600 font-bold text-sm">No referrals yet</p>
-              <p className="text-gray-700 text-xs mt-1">Be the first to climb the board. Share your link above.</p>
+              <Users size={32} className="text-slate mx-auto mb-4" />
+              <p className="text-slate font-bold text-sm">No referrals yet</p>
+              <p className="text-slate text-xs mt-1">Be the first to climb the board. Share your link above.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="text-[10px] font-black uppercase tracking-widest text-gray-600 border-b border-white/5">
+                  <tr className="text-[12px] font-black uppercase tracking-widest text-slate border-b border-ink/15">
                     <th className="py-3 pr-4 font-black">Rank</th>
                     <th className="py-3 pr-4 font-black">Referrer</th>
                     <th className="py-3 text-right font-black">Referrals</th>
@@ -427,24 +425,24 @@ const Referral: React.FC = () => {
                     return (
                       <tr
                         key={leader.rank}
-                        className={`border-b border-white/5 last:border-0 ${isMe ? 'bg-brand-green/5' : ''}`}
+                        className={`border-b border-ink/15 last:border-0 ${isMe ? 'bg-leaf/10' : ''}`}
                       >
                         <td className="py-3.5 pr-4">
-                          <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-black ${
-                            leader.rank === 1 ? 'bg-brand-green/20 text-brand-green'
-                              : leader.rank === 2 ? 'bg-brand-pink/15 text-brand-pink'
-                              : leader.rank === 3 ? 'bg-white/10 text-gray-300'
-                              : 'text-gray-500'
+                          <span className={`inline-flex items-center justify-center w-8 h-8 text-sm font-black ${
+                            leader.rank === 1 ? 'bg-leaf/20 text-leaf'
+                              : leader.rank === 2 ? 'bg-sky/10 text-sky'
+                              : leader.rank === 3 ? 'bg-ink/10 text-ink'
+                              : 'text-slate'
                           }`}>
                             {leader.rank}
                           </span>
                         </td>
                         <td className="py-3.5 pr-4">
-                          <span className={`font-bold text-sm ${isMe ? 'text-brand-green' : 'text-white'}`}>
-                            {leader.name}{isMe && <span className="text-gray-500 font-medium"> (you)</span>}
+                          <span className={`font-bold text-sm ${isMe ? 'text-leaf' : 'text-ink'}`}>
+                            {leader.name}{isMe && <span className="text-slate font-medium"> (you)</span>}
                           </span>
                         </td>
-                        <td className="py-3.5 text-right font-black text-white tabular-nums">{leader.referralCount}</td>
+                        <td className="py-3.5 text-right font-black text-ink tabular-nums">{leader.referralCount}</td>
                       </tr>
                     );
                   })}

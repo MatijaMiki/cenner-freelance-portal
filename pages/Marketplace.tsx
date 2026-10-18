@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import {
-  Search, Filter, Star, Clock, Tag, ChevronDown,
+  Search, Filter, Star, Clock, ChevronDown,
   X, SlidersHorizontal, ArrowUpDown, Briefcase,
   Zap, Users, FileText, TrendingUp, AlertCircle, Loader2, Plus
 } from 'lucide-react';
@@ -14,11 +14,13 @@ import { API } from '../lib/api';
 import { useT } from '../i18n';
 import AvatarImg from '../components/Avatar';
 import FreelancerHeatmap from '../components/FreelancerHeatmap';
+import { GlassLayers } from '../components/LiquidGlass';
+import MatchWaitlist from '../components/MatchWaitlist';
 
 type MarketplaceMode = 'freelancers' | 'clients';
 
 const Marketplace: React.FC = () => {
-  const { listings: allListings, jobs } = useData();
+  const { listings: allListings, jobs, loading: dataLoading } = useData();
   const { user } = useAuth();
   const navigate = useNavigate();
   const t = useT();
@@ -133,30 +135,24 @@ const Marketplace: React.FC = () => {
     }).sort((a, b) => b.id.localeCompare(a.id));
   }, [jobs, searchTerm, selectedCategory]);
 
+  const catBtn = (active: boolean) =>
+    `w-full text-left px-3 py-2.5 font-display text-[14px] font-bold transition-colors focus-visible:outline-none focus-visible:underline ${
+      active ? 'bg-ink text-white' : 'text-ink/75 hover:bg-ink/[0.06] hover:text-ink'
+    }`;
+
   const SidebarContent = () => (
     <div className="space-y-10">
       <div>
-        <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center space-x-3">
-          <Filter size={14} className="text-brand-pink" />
+        <h3 className="mb-4 flex items-center gap-2.5 border-b-2 border-ink pb-3 font-display text-[13px] font-extrabold uppercase tracking-[0.12em]">
+          <Filter size={15} aria-hidden="true" />
           <span>Categories</span>
         </h3>
-        <div className="space-y-1 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">
-          <button
-            onClick={() => setSelectedCategory('All')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-              selectedCategory === 'All' ? 'bg-brand-green text-brand-black shadow-lg shadow-brand-green/20' : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
-            }`}
-          >
+        <div data-calm className="max-h-[400px] space-y-0.5 overflow-y-auto custom-scrollbar pr-2">
+          <button onClick={() => setSelectedCategory('All')} className={catBtn(selectedCategory === 'All')}>
             {t('All Specializations')}
           </button>
           {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                selectedCategory === cat ? 'bg-brand-green text-brand-black shadow-lg shadow-brand-green/20' : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
-              }`}
-            >
+            <button key={cat} onClick={() => setSelectedCategory(cat)} className={catBtn(selectedCategory === cat)}>
               {cat}
             </button>
           ))}
@@ -164,11 +160,11 @@ const Marketplace: React.FC = () => {
       </div>
 
       {mode === 'freelancers' && (
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xs font-black text-white uppercase tracking-[0.2em]">{t('Budget Threshold')}</h3>
-            <div className="flex items-center bg-brand-black border border-white/10 rounded-lg focus-within:border-brand-green transition-colors">
-              <span className="text-gray-500 text-sm font-bold pl-2.5 select-none">€</span>
+        <div data-calm>
+          <div className="mb-4 flex items-center justify-between gap-3 border-b-2 border-ink pb-3">
+            <h3 className="font-display text-[13px] font-extrabold uppercase tracking-[0.12em]">{t('Budget Threshold')}</h3>
+            <div className="flex items-center border-2 border-ink bg-white focus-within:border-sky">
+              <span className="select-none pl-2.5 font-display text-sm font-bold text-slate">€</span>
               <input
                 ref={priceInputRef}
                 type="number"
@@ -178,7 +174,7 @@ const Marketplace: React.FC = () => {
                 defaultValue={priceRange}
                 onChange={handlePriceNumberChange}
                 aria-label={t('Budget Threshold')}
-                className="w-20 bg-transparent text-brand-green font-black text-sm py-1.5 px-2 text-right focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-20 bg-transparent px-2 py-1.5 text-right font-display text-sm font-extrabold text-ink focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
           </div>
@@ -192,24 +188,16 @@ const Marketplace: React.FC = () => {
               defaultValue={priceRange}
               onInput={handleSliderInput}
               aria-label={t('Budget Threshold')}
-              className="cenner-slider w-full cursor-pointer"
+              className="cenner-slider-paper w-full cursor-pointer"
             />
           </div>
-          <div className="flex justify-between text-[10px] font-bold text-gray-600 uppercase">
+          <div className="flex justify-between font-display text-[12px] font-bold text-slate">
             <span>€50</span>
             <span>€5000+</span>
           </div>
         </div>
       )}
 
-      <div className="p-8 rounded-[2rem] bg-gradient-to-br from-brand-pink/20 to-brand-green/20 border border-white/10 backdrop-blur-md hidden lg:block">
-        <Tag size={24} className="text-white mb-4" />
-        <h4 className="text-white font-black text-lg mb-2">{t('Priority Matching')}</h4>
-        <p className="text-gray-400 text-xs leading-relaxed mb-6 font-medium">{t('Skip the search and get matched with a verified freelancer within 2 hours.')}</p>
-        <button disabled className="w-full py-3.5 bg-white/20 text-gray-400 rounded-xl text-xs font-black uppercase tracking-widest cursor-not-allowed">
-          {t('Coming Soon')}
-        </button>
-      </div>
     </div>
   );
 
@@ -241,8 +229,19 @@ const Marketplace: React.FC = () => {
     },
   ];
 
+  const chip = (active: boolean) =>
+    `flex-shrink-0 border-2 border-ink px-4 py-2 font-display text-[13px] font-bold transition-colors focus-visible:outline-none focus-visible:underline ${
+      active ? 'bg-ink text-white' : 'bg-white text-ink hover:bg-paper2'
+    }`;
+  const tab = (active: boolean) =>
+    `flex flex-1 items-center justify-center gap-2.5 px-4 py-3.5 text-center font-display text-[15px] font-bold transition-colors focus-visible:outline-none focus-visible:underline sm:flex-none sm:px-6 ${
+      active ? 'bg-ink text-white' : 'bg-white text-ink hover:bg-paper2'
+    }`;
+  const btn = 'inline-flex items-center justify-center gap-2.5 bg-sky px-7 py-4 font-display text-[15px] font-bold text-white transition-colors hover:bg-ink focus-visible:bg-ink focus-visible:outline-none focus-visible:underline focus-visible:underline-offset-4';
+
   return (
-    <div className="pt-12 pb-24 px-4 max-w-[1600px] mx-auto">
+    <div className="font-text text-ink">
+      <div className="relative z-10 w-full px-4 pb-24 pt-10 md:px-10 md:pt-16 2xl:px-14">
       <SEO
         title="Marketplace: Freelanceri Hrvatska"
         canonical="/marketplace"
@@ -253,83 +252,76 @@ const Marketplace: React.FC = () => {
       {/* Mobile Filter Drawer */}
       {isFilterDrawerOpen && (
         <div className="fixed inset-0 z-[200] lg:hidden animate-in fade-in duration-300">
-          <div className="absolute inset-0 bg-brand-black/95 backdrop-blur-xl" onClick={() => setIsFilterDrawerOpen(false)} />
-          <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-brand-grey border-l border-white/10 p-8 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-500">
-            <div className="flex justify-between items-center mb-10">
-              <h2 className="text-2xl font-black text-white tracking-tighter">{t('Node Filters')}</h2>
-              <button onClick={() => setIsFilterDrawerOpen(false)} className="p-2 text-gray-500 hover:text-white">
+          <div className="absolute inset-0 bg-ink/60" onClick={() => setIsFilterDrawerOpen(false)} />
+          <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm overflow-y-auto border-l-2 border-ink bg-paper p-6 animate-in slide-in-from-right duration-500">
+            <div className="mb-8 flex items-center justify-between">
+              <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">{t('Node Filters')}</h2>
+              <button onClick={() => setIsFilterDrawerOpen(false)} aria-label="Close" className="p-2 hover:text-sky">
                 <X size={24} />
               </button>
             </div>
             {SidebarContent()}
-            <button
-              onClick={() => setIsFilterDrawerOpen(false)}
-              className="w-full mt-10 py-5 bg-brand-green text-brand-black font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg shadow-brand-green/20"
-            >
+            <button onClick={() => setIsFilterDrawerOpen(false)} className={`${btn} mt-10 w-full`}>
               Sync Results
             </button>
           </div>
         </div>
       )}
 
-      {/* Header & Main Mode Toggle */}
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-10 mb-16">
-        <div>
-          <h1 className="text-5xl font-black text-white mb-3 tracking-tighter">{t('Marketplace')}</h1>
-          <p className="text-gray-500 font-medium">{t("The world's most advanced hub for digital synchronization.")}</p>
+      {/* Header: the page name at poster scale, then what you can do here. */}
+      <header>
+        <h1 className="font-display text-[clamp(2.75rem,9vw,8.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em]">
+          {t('Marketplace')}
+        </h1>
+        <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:items-end">
+          <p className="max-w-[46ch] text-[clamp(1.125rem,1.05rem+0.5vw,1.375rem)] leading-snug lg:col-span-6">
+            {t("The world's most advanced hub for digital synchronization.")}
+          </p>
+          <div className="flex flex-wrap items-center gap-4 lg:col-span-6 lg:justify-end">
+            {user && (
+              <button
+                onClick={() => navigate('/profile?tab=selling&section=listings&create=1')}
+                className={btn}
+              >
+                <Plus size={17} aria-hidden="true" />
+                <span>{t('Post a Service')}</span>
+              </button>
+            )}
+            <div role="group" aria-label="Marketplace mode" className="flex w-full items-stretch border-2 border-ink sm:w-auto">
+              <button
+                onClick={() => { setMode('freelancers'); setSelectedCategory('All'); }}
+                aria-pressed={mode === 'freelancers'}
+                className={tab(mode === 'freelancers')}
+              >
+                <Users size={17} aria-hidden="true" />
+                <span>{t('Find Experts')}</span>
+              </button>
+              <button
+                onClick={() => { setMode('clients'); setSelectedCategory('All'); }}
+                aria-pressed={mode === 'clients'}
+                className={`${tab(mode === 'clients')} border-l-2 border-ink`}
+              >
+                <Briefcase size={17} aria-hidden="true" />
+                <span>{t('Open Requests')}</span>
+              </button>
+            </div>
+          </div>
         </div>
-
-        <div className="flex items-center gap-4">
-        {user && (
-          <button
-            onClick={() => navigate('/profile?tab=selling&section=listings&create=1')}
-            className="px-6 py-3.5 bg-brand-pink text-white rounded-2xl text-xs font-black uppercase tracking-widest flex items-center space-x-2 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-pink/20"
-          >
-            <Plus size={16} />
-            <span>{t('Post a Service')}</span>
-          </button>
-        )}
-
-        {/* High-Fidelity Mode Toggle */}
-        <div className="bg-brand-grey/50 border border-white/10 p-1.5 rounded-2xl flex items-center shadow-inner">
-          <button 
-            onClick={() => { setMode('freelancers'); setSelectedCategory('All'); }}
-            className={`px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center space-x-3 ${
-              mode === 'freelancers' 
-              ? 'bg-brand-green text-brand-black shadow-lg shadow-brand-green/10' 
-              : 'text-gray-500 hover:text-white'
-            }`}
-          >
-            <Users size={16} />
-            <span>{t('Find Experts')}</span>
-          </button>
-          <button
-            onClick={() => { setMode('clients'); setSelectedCategory('All'); }}
-            className={`px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center space-x-3 ${
-              mode === 'clients'
-              ? 'bg-brand-pink text-white shadow-lg shadow-brand-pink/10'
-              : 'text-gray-500 hover:text-white'
-            }`}
-          >
-            <Briefcase size={16} />
-            <span>{t('Open Requests')}</span>
-          </button>
-        </div>
-        </div>
-      </div>
+      </header>
 
       {/* Search & Mobile Filter Trigger */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-4">
-        <div className="relative flex-grow">
+      <div className="mb-4 mt-12 flex flex-col gap-4 sm:flex-row">
+        <div className="relative flex-grow border-2 border-ink bg-white transition-shadow focus-within:shadow-[5px_5px_0_0_#002ca5]">
           {searching ? (
-            <Loader2 className="absolute left-5 top-1/2 -translate-y-1/2 text-brand-green animate-spin" size={18} />
+            <Loader2 className="absolute left-5 top-1/2 -translate-y-1/2 animate-spin text-sky" size={18} />
           ) : (
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate" size={18} aria-hidden="true" />
           )}
           <input
             type="text"
             placeholder={mode === 'freelancers' ? t('Search for services (UI/UX, Dev, AI...)') : t('Search for project requests...')}
-            className="w-full bg-brand-grey/50 border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-white focus:outline-none focus:border-brand-green transition-all placeholder:text-gray-600 shadow-2xl"
+            aria-label={mode === 'freelancers' ? t('Search for services (UI/UX, Dev, AI...)') : t('Search for project requests...')}
+            className="w-full bg-transparent py-4 pl-14 pr-6 font-display text-[16px] font-medium text-ink placeholder:text-slate focus:outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -337,16 +329,16 @@ const Marketplace: React.FC = () => {
 
         <button
           onClick={() => setIsFilterDrawerOpen(true)}
-          className="lg:hidden flex items-center justify-center space-x-3 bg-brand-grey border border-white/10 rounded-2xl py-5 px-8 text-white font-bold text-sm hover:border-brand-pink transition-all active:scale-95 shadow-2xl"
+          className="flex items-center justify-center gap-3 border-2 border-ink bg-white px-8 py-4 font-display text-[15px] font-bold transition-colors hover:bg-paper2 lg:hidden"
         >
-          <SlidersHorizontal size={18} className="text-brand-pink" />
+          <SlidersHorizontal size={18} aria-hidden="true" />
           <span>{t('Filters')}</span>
         </button>
       </div>
 
       {/* Sort row — under search bar so users don't have to open the filters drawer */}
-      <div className="flex items-center gap-3 mb-12 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
-        <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] flex-shrink-0">{t('Sort')}:</span>
+      <div className="-mx-1 mb-12 flex items-center gap-2 overflow-x-auto px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <span className="flex-shrink-0 pr-1 font-display text-[12px] font-extrabold uppercase tracking-[0.12em] text-slate">{t('Sort')}:</span>
         {[
           { label: t('Recently Added'), val: 'newest' },
           { label: t('Price: Low to High'), val: 'price-asc' },
@@ -356,105 +348,109 @@ const Marketplace: React.FC = () => {
           <button
             key={opt.val}
             onClick={() => setSortBy(opt.val as any)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold border transition-all ${
-              sortBy === opt.val
-                ? 'border-brand-pink/60 text-brand-pink bg-brand-pink/10 shadow-md shadow-brand-pink/10'
-                : 'border-white/10 text-gray-400 hover:text-white hover:border-white/30 bg-brand-grey/40'
-            }`}
+            aria-pressed={sortBy === opt.val}
+            className={chip(sortBy === opt.val)}
           >
             {opt.label}
           </button>
         ))}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-10">
+      <div className="flex flex-col gap-10 lg:flex-row">
         {/* Desktop Filters Sidebar */}
-        <aside className="hidden lg:block w-56 flex-shrink-0">
+        <aside className="hidden w-56 flex-shrink-0 lg:block">
           <div className="sticky top-24">
             {SidebarContent()}
           </div>
         </aside>
 
         {/* Main Content Area */}
-        <div className="flex-grow min-w-0">
+        <div className="min-w-0 flex-grow">
           {mode === 'freelancers' ? (
             /* Service Listings Grid */
             filteredServices.length > 0 ? (
-              <div className="grid sm:grid-cols-2 2xl:grid-cols-3 gap-8 animate-in fade-in duration-500">
-                {filteredServices.map((listing) => (
+              <div className="grid gap-6 animate-in fade-in duration-500 sm:grid-cols-2 2xl:grid-cols-3">
+                {filteredServices.map((listing) => {
+                  // Liquid Glass is the premium look: sponsored listings and Pro, Ultra and Enterprise freelancers
+                  const glass = !!listing.isSponsored || ['pro', 'ultra', 'enterprise'].includes(listing.freelancerTier ?? '');
+                  return (
                   <Link
                     key={listing.id}
                     to={`/service/${listing.id}`}
-                    className={`group bg-brand-grey/90 border rounded-[2.5rem] overflow-hidden hover:border-brand-green/50 transition-all flex flex-col h-full shadow-xl ${
-                      listing.isSponsored
-                        ? 'border-amber-400/40 shadow-amber-400/5 shadow-2xl'
-                        : 'border-white/10'
-                    }`}
+                    className={glass
+                      ? 'group lg lg--clear relative flex h-full flex-col rounded-[28px] transition-transform duration-200 hover:-translate-y-1 focus-visible:outline-none [&_*]:[text-shadow:none]'
+                      : `group flex h-full flex-col border-2 bg-white transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#0b0c0e] focus-visible:-translate-x-1 focus-visible:-translate-y-1 focus-visible:shadow-[6px_6px_0_0_#002ca5] focus-visible:outline-none ${
+                        listing.isSponsored ? 'border-sky' : 'border-ink'
+                      }`}
                   >
-                    <div className="relative aspect-[16/10] overflow-hidden">
+                    {glass && <GlassLayers refract={{ bezel: 22, shift: 14 }} />}
+                    <div className={glass
+                      ? 'relative z-[1] m-2 aspect-[16/10] overflow-hidden rounded-[22px]'
+                      : `relative aspect-[16/10] overflow-hidden border-b-2 ${listing.isSponsored ? 'border-sky' : 'border-ink'}`}>
                       <img
                         src={listing.imageUrl}
                         alt={listing.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       {listing.isSponsored && (
-                        <div className="absolute top-5 right-5">
-                          <span className="bg-amber-400/90 backdrop-blur-md text-black px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
-                            <Zap size={9} />Sponsored
+                        <div className="absolute right-3 top-3">
+                          <span className="flex items-center gap-1 bg-sky px-2.5 py-1 font-display text-[11px] font-bold uppercase tracking-wide text-white">
+                            <Zap size={11} aria-hidden="true" />Sponsored
                           </span>
                         </div>
                       )}
-                      <div className="absolute top-5 left-5">
-                        <span className="bg-brand-black/90 backdrop-blur-md text-brand-green px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10">
+                      <div className="absolute left-3 top-3">
+                        <span className="border-2 border-ink bg-paper px-2.5 py-1 font-display text-[11px] font-bold uppercase tracking-wide text-ink">
                           {listing.category}
                         </span>
                       </div>
                     </div>
-                    
-                    <div className="p-8 flex flex-col flex-grow bg-brand-black/20">
-                      <div className="flex items-center space-x-3 mb-6">
-                        <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="rounded-full border-2 border-brand-green" />
-                        <div className="flex-grow min-w-0">
-                          <p className="text-white text-sm font-bold truncate">{listing.freelancerName}</p>
-                          <div className="flex items-center gap-1.5">
+
+                    <div className={`flex flex-grow flex-col p-5 ${glass ? 'relative z-[1]' : ''}`}>
+                      <div className="mb-5 flex items-center gap-3">
+                        <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="rounded-none border-2 border-ink" />
+                        <div className="min-w-0 flex-grow">
+                          <p className="truncate font-display text-[15px] font-bold">{listing.freelancerName}</p>
+                          <div className="flex items-center gap-2 font-display text-[12px] font-bold">
                             {listing.freelancerTier === 'ultra' || listing.freelancerTier === 'enterprise' ? (
-                              <p className="text-brand-pink text-[10px] font-black uppercase tracking-tighter">Ultra</p>
+                              <span className="text-sky">Ultra</span>
                             ) : listing.freelancerTier === 'pro' ? (
-                              <p className="text-brand-green text-[10px] font-black uppercase tracking-tighter">Pro</p>
+                              <span className="text-leaf">Pro</span>
                             ) : (
-                              <p className="text-gray-600 text-[10px] font-black uppercase tracking-tighter">Free</p>
+                              <span className="text-slate">Free</span>
                             )}
                             {listing.freelancerTrusted && (
-                              <span title="Trusted freelancer" className="text-yellow-400 text-[9px] font-black uppercase tracking-tighter">★ Trusted</span>
+                              <span title="Trusted freelancer">★ Trusted</span>
                             )}
                             {listing.freelancerKycVerified && !listing.freelancerTrusted && (
-                              <span title="KYC verified" className="text-brand-green text-[9px] font-bold">✓ Verified</span>
+                              <span title="KYC verified" className="text-leaf">✓ Verified</span>
                             )}
                           </div>
                         </div>
-                        <div className="flex items-center space-x-1.5 text-yellow-400">
-                          <Star size={14} fill="currentColor" />
-                          <span className="text-xs font-black">{listing.rating}</span>
+                        <div className="flex items-center gap-1.5">
+                          <Star size={15} fill="currentColor" aria-hidden="true" />
+                          <span className="font-display text-sm font-extrabold">{listing.rating}</span>
                         </div>
                       </div>
 
-                      <h3 className="text-lg font-bold text-white mb-4 group-hover:text-brand-green transition-colors leading-snug line-clamp-2">
+                      <h3 className="line-clamp-2 font-display text-[1.25rem] font-extrabold leading-snug tracking-[-0.01em] transition-colors group-hover:text-sky">
                         {listing.title}
                       </h3>
-                      
-                      <div className="mt-auto pt-6 border-t border-white/10 flex items-center justify-between">
-                        <div className="flex items-center text-gray-400 text-xs font-bold uppercase tracking-wider">
-                          <Clock size={16} className="mr-2 opacity-50" />
+
+                      <div className="mt-auto flex items-end justify-between border-t-2 border-ink pt-4">
+                        <div className="flex items-center gap-2 text-[14px] text-slate">
+                          <Clock size={16} aria-hidden="true" />
                           <span>{listing.deliveryTime}</span>
                         </div>
                         <div className="text-right">
-                          <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-0.5">{t('Starting at')}</p>
-                          <p className="text-2xl font-black text-white">€{listing.price}</p>
+                          <p className="text-[13px] text-slate">{t('Starting at')}</p>
+                          <p className="font-display text-[1.75rem] font-extrabold leading-none">€{listing.price}</p>
                         </div>
                       </div>
                     </div>
                   </Link>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <EmptyState
@@ -466,49 +462,49 @@ const Marketplace: React.FC = () => {
           ) : (
             /* Job Request Board */
             filteredJobs.length > 0 ? (
-              <div className="space-y-6 animate-in fade-in duration-500">
+              <div className="space-y-5 animate-in fade-in duration-500">
                 {filteredJobs.map((job) => (
-                  <div 
-                    key={job.id} 
-                    className="group bg-brand-grey/90 border border-white/10 rounded-[2.5rem] p-8 hover:border-brand-pink/50 transition-all shadow-xl flex flex-col md:flex-row md:items-center gap-8"
+                  <div
+                    key={job.id}
+                    className="flex flex-col gap-8 border-2 border-ink bg-white p-6 transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#0b0c0e] md:flex-row md:items-center md:p-8"
                   >
-                    <div className="flex-grow min-w-0">
-                      <div className="flex flex-wrap items-center gap-4 mb-4">
-                        <span className="bg-brand-pink/10 text-brand-pink px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-brand-pink/20">
+                    <div className="min-w-0 flex-grow">
+                      <div className="mb-4 flex flex-wrap items-center gap-3">
+                        <span className="border-2 border-ink bg-paper px-2.5 py-1 font-display text-[11px] font-bold uppercase tracking-wide">
                           {job.category}
                         </span>
                         {job.urgency === 'high' && (
-                          <span className="flex items-center space-x-2 text-brand-pink animate-pulse">
-                            <Zap size={14} />
-                            <span className="text-[10px] font-black uppercase tracking-widest">{t('High Priority')}</span>
+                          <span className="flex items-center gap-1.5 font-display text-[12px] font-extrabold uppercase tracking-wide text-sky">
+                            <Zap size={14} aria-hidden="true" />
+                            <span>{t('High Priority')}</span>
                           </span>
                         )}
-                        <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">Posted {job.postedAt}</span>
+                        <span className="text-[13px] text-slate">Posted {job.postedAt}</span>
                       </div>
-                      
-                      <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-brand-pink transition-colors">
+
+                      <h3 className="mb-3 font-display text-[1.75rem] font-extrabold leading-tight tracking-[-0.02em]">
                         {job.title}
                       </h3>
-                      <p className="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-2">{job.description}</p>
-                      
+                      <p className="mb-6 line-clamp-2 text-[1rem] leading-relaxed text-ink/80">{job.description}</p>
+
                       <div className="flex flex-wrap items-center gap-6">
-                        <div className="flex items-center space-x-3">
-                          <AvatarImg src={job.clientAvatar} name={job.clientName} size={32} className="rounded-full border border-white/10" />
-                          <span className="text-xs font-bold text-gray-300">{job.clientName}</span>
+                        <div className="flex items-center gap-3">
+                          <AvatarImg src={job.clientAvatar} name={job.clientName} size={32} className="rounded-none border-2 border-ink" />
+                          <span className="font-display text-[14px] font-bold">{job.clientName}</span>
                         </div>
-                        <div className="flex items-center space-x-2 text-xs font-black uppercase tracking-widest text-gray-500">
-                          <FileText size={16} className="text-brand-green" />
+                        <div className="flex items-center gap-2 font-display text-[13px] font-bold text-slate">
+                          <FileText size={16} aria-hidden="true" />
                           <span>{job.proposalsCount} {t('Proposals Syncing')}</span>
                         </div>
                       </div>
                     </div>
-                    
-                    <div className="md:text-right flex-shrink-0 flex flex-col justify-between h-full">
-                      <div className="mb-6">
-                        <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-1">{t('Budget Allocation')}</p>
-                        <p className="text-2xl font-black text-white">{job.budgetRange}</p>
+
+                    <div className="flex flex-shrink-0 flex-col justify-between gap-6 md:text-right">
+                      <div>
+                        <p className="text-[13px] text-slate">{t('Budget Allocation')}</p>
+                        <p className="font-display text-[1.75rem] font-extrabold leading-tight">{job.budgetRange}</p>
                       </div>
-                      <button className="w-full md:w-auto px-10 py-4 bg-brand-pink text-white font-black rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-pink/20 uppercase tracking-widest text-xs">
+                      <button className={btn}>
                         {t('Sync Proposal')}
                       </button>
                     </div>
@@ -523,42 +519,47 @@ const Marketplace: React.FC = () => {
               />
             )
           )}
+          {/* AI job matching's waitlist (where /match lands): under the results at every width. The
+              #ai-matching anchor appears only once the listings are in, so a /match visit scrolls
+              to where it finally sits, not to where it was before the cards pushed it down. */}
+          <MatchWaitlist id={dataLoading ? undefined : 'ai-matching'} className="mt-12 max-w-xl" />
         </div>
 
         {/* Right column — Talent density heatmap (freelancer mode only) */}
         {mode === 'freelancers' && (
-          <aside className="hidden xl:block w-[360px] flex-shrink-0">
+          <aside className="hidden w-[360px] flex-shrink-0 xl:block">
             <div className="sticky top-24">
               <FreelancerHeatmap listings={listings} />
             </div>
           </aside>
         )}
       </div>
+      </div>
     </div>
   );
 };
 
 const EmptyState: React.FC<{ onReset: () => void, mode: 'freelancers' | 'jobs', t: (k: string) => string }> = ({ onReset, mode, t }) => (
-  <div className="text-center py-32 bg-brand-grey/20 rounded-[3rem] border-2 border-dashed border-white/5 animate-in fade-in zoom-in duration-500">
-    <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-600">
-      <Search size={36} />
+  <div className="animate-in fade-in border-2 border-dashed border-ink/40 bg-white px-6 py-24 text-center duration-500">
+    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center border-2 border-ink text-ink">
+      <Search size={30} aria-hidden="true" />
     </div>
-    <h3 className="text-2xl font-black text-white mb-3">
+    <h3 className="mb-3 font-display text-[1.75rem] font-extrabold tracking-[-0.02em]">
       {mode === 'freelancers' ? t('No Freelancers Found') : t('No Jobs Posted Yet')}
     </h3>
-    <p className="text-gray-500 font-medium max-w-sm mx-auto">
+    <p className="mx-auto max-w-sm text-[1rem] text-slate">
       {t('Nothing here yet. Be the first to post.')}
     </p>
-    <div className="mt-8 flex justify-center gap-4">
+    <div className="mt-8 flex flex-wrap justify-center gap-4">
       <button
         onClick={onReset}
-        className="px-8 py-3 bg-white/5 text-white font-black rounded-xl hover:bg-white/10 transition-all border border-white/10"
+        className="border-2 border-ink bg-white px-7 py-3.5 font-display text-[15px] font-bold transition-colors hover:bg-paper2"
       >
         {t('Clear Filters')}
       </button>
       <Link
         to="/profile"
-        className="px-8 py-3 bg-brand-green text-brand-black font-black rounded-xl hover:scale-105 transition-all shadow-lg"
+        className="inline-flex items-center bg-sky px-7 py-3.5 font-display text-[15px] font-bold text-white transition-colors hover:bg-ink"
       >
         {mode === 'freelancers' ? t('Create Listing') : t('Post a Job')}
       </Link>
