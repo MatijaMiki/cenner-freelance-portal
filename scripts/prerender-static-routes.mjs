@@ -58,6 +58,27 @@ const ROUTES = [
     title: 'ranwhat: AI Agent Security by Cenner | Cenner',
     description:
       'ranwhat is a flight recorder for AI coding agents and a scanner for the authority they hold. Built and operated by Cenner, Zagreb.',
+    // The page's own text, so the first byte already says what the page says (keep in step with pages/Ranwhat.tsx).
+    body: `<main style="max-width:1024px;margin:0 auto;padding:80px 24px;font-family:Inter,sans-serif;color:#0b0c0e;">
+        <p style="font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#1b7a3e;margin:0 0 16px;">A Cenner product</p>
+        <h1 style="font-size:56px;font-weight:800;line-height:1.05;margin:0 0 24px;">ranwhat</h1>
+        <p style="font-size:20px;line-height:1.6;color:#5d6470;max-width:760px;margin:0 0 32px;">A flight recorder for AI agents, and a scanner for the authority they hold. ranwhat reads what coding agents such as Claude Code actually ran on your machine and surfaces the irreversible actions worth knowing about: credentials read, bulk deletions, force pushes, packages published.</p>
+        <p style="margin:0 0 56px;"><a href="https://ranwhat.com" style="display:inline-block;background:#002ca5;color:#fff;padding:14px 28px;text-decoration:none;font-weight:800;">ranwhat.com</a></p>
+        <h2 style="font-size:30px;font-weight:800;margin:0 0 24px;">Pricing</h2>
+        <h3 style="font-size:20px;margin:0;">Free</h3><p style="margin:4px 0 8px;font-weight:700;color:#1b7a3e;">Free, forever</p><p style="margin:0 0 24px;color:#5d6470;">The open-source scanner and watcher (MIT licence). Runs on one machine, no account, no telemetry, nothing sent to us.</p>
+        <h3 style="font-size:20px;margin:0;">Plus</h3><p style="margin:4px 0 8px;font-weight:700;color:#1b7a3e;">€12 / month or €120 / year</p><p style="margin:0 0 24px;color:#5d6470;">Subscription to the capability catalogue feed at feed.ranwhat.com, so the scanner knows the scopes providers have added since your version shipped. One flat price per organisation, VAT included.</p>
+        <h3 style="font-size:20px;margin:0;">Team</h3><p style="margin:4px 0 8px;font-weight:700;color:#1b7a3e;">Annual, on request</p><p style="margin:0 0 24px;color:#5d6470;">Tamper-evident records and long-term retention. Being built, not available yet.</p>
+        <p style="margin:0 0 56px;color:#5d6470;">Full details on <a href="https://ranwhat.com/pricing" style="color:#002ca5;">ranwhat.com/pricing</a>.</p>
+        <h2 style="font-size:24px;font-weight:800;margin:0 0 16px;">Billing, cancellation and refunds</h2>
+        <ul style="color:#5d6470;line-height:1.7;margin:0 0 56px;padding-left:20px;">
+          <li>Payments are processed by Stripe through its Link checkout; Stripe issues receipts and invoices and collects any VAT.</li>
+          <li>Plus renews automatically each month or year and can be cancelled any time; it then runs to the end of the paid period.</li>
+          <li>Full refund on request within 14 days of the first payment, no reason needed. Renewals after that are not refunded.</li>
+        </ul>
+        <h2 style="font-size:24px;font-weight:800;margin:0 0 16px;">Who runs it</h2>
+        <p style="color:#5d6470;line-height:1.7;margin:0 0 12px;">Cenner, obrt za računalno programiranje i ostale usluge, vl. Matija Mikulinec<br />Mikulinci 8, 10010 Zagreb, Croatia<br />OIB 23152585818 · MB 99210363</p>
+        <p style="color:#5d6470;line-height:1.7;margin:0;"><a href="mailto:hello@ranwhat.com" style="color:#002ca5;">hello@ranwhat.com</a><br /><a href="tel:+385993525500" style="color:#002ca5;">+385 99 352 5500</a></p>
+      </main>`,
   },
   {
     path: '/blog',
@@ -195,6 +216,11 @@ function buildRouteHtml(shell, route) {
   ].join('\n    ');
 
   html = replaceTag(html, /<meta name="robots" content="[\s\S]*?"\s*\/>/, head, 'robots meta', route.path);
+
+  // Routes that have their own page text swap the shell's homepage copy for it (same words the page renders).
+  if (route.body) {
+    html = replaceTag(html, /<main style="max-width:1100px[\s\S]*?<\/main>/, route.body, 'shell <main>', route.path);
+  }
 
   return html;
 }
