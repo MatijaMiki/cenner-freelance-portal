@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import ProjectDots from '../components/ProjectDots';
 import MeadowBackdrop from '../components/MeadowBackdrop';
+import { frameLoop } from '../lib/motion';
 // the desktop's chrome (desktop icons, window buttons, taskbar, Start menu, the pocket device) wears the pixel icon set
 import {
   PxShoppingBag, PxBriefcase, PxFolder, PxMessage, PxChevronUp, PxChevronRight, PxBell, PxCheck, PxUser, PxFileText,
@@ -97,7 +98,7 @@ function usePin(ref: React.RefObject<HTMLElement>, onP: (p: number, stageW: numb
   cb.current = onP;
   React.useEffect(() => {
     if (!enabled) return;
-    let raf = 0;
+    let raf = 0, near = true;
     const tick = () => {
       raf = 0;
       const el = ref.current;
@@ -107,11 +108,16 @@ function usePin(ref: React.RefObject<HTMLElement>, onP: (p: number, stageW: numb
       const p = clamp((NAV_H - r.top) / Math.max(1, r.height - stageH));
       cb.current(p, el.clientWidth, stageH);
     };
-    const req = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    const req = () => { if (near && !raf) raf = requestAnimationFrame(tick); };
     tick();
     window.addEventListener('scroll', req, { passive: true });
     window.addEventListener('resize', req);
-    return () => { window.removeEventListener('scroll', req); window.removeEventListener('resize', req); cancelAnimationFrame(raf); };
+    // Only follow the scroll while the section is within a screen of the window. Moving out of that
+    // range runs one last tick, which leaves it at its end (p at 0 or 1), as every later one would.
+    const io = typeof IntersectionObserver === 'undefined' || !ref.current ? null
+      : new IntersectionObserver(([e]) => { near = e.isIntersecting; if (!raf) raf = requestAnimationFrame(tick); }, { rootMargin: '100% 0px' });
+    if (io && ref.current) io.observe(ref.current);
+    return () => { window.removeEventListener('scroll', req); window.removeEventListener('resize', req); cancelAnimationFrame(raf); io?.disconnect(); };
   }, [ref, enabled]);
 }
 
@@ -135,8 +141,11 @@ const CSS = `
 html,body{overflow-x:clip}
 .cn-scan{background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px)}
 .cn-glow{text-shadow:0 0 12px rgba(74,222,128,.55)}
-@keyframes cn-escrow{0%{width:4%}70%,100%{width:100%}}
-.cn-escrow{animation:cn-escrow 4s cubic-bezier(.6,0,.3,1) infinite}
+/* the escrow bar fills by scaling (on the compositor), not by animating its width (a layout every frame) */
+@keyframes cn-escrow{0%{transform:scaleX(.04)}70%,100%{transform:scaleX(1)}}
+.cn-escrow{width:100%;transform-origin:0 50%;animation:cn-escrow 4s cubic-bezier(.6,0,.3,1) infinite}
+/* a section scrolled out of view stops its CSS animations (Home marks it data-off) */
+[data-off] *,[data-off] *::before,[data-off] *::after{animation-play-state:paused!important}
 @keyframes cn-blink{50%{opacity:0}}
 .cn-caret{animation:cn-blink 1s steps(1) infinite}
 @keyframes cn-toast{from{transform:translate3d(0,24px,0);opacity:0}to{transform:none;opacity:1}}
@@ -154,9 +163,11 @@ html,body{overflow-x:clip}
 .cn-marquee{animation:cn-marquee linear infinite;will-change:transform}
 .cn-marquee-row:hover .cn-marquee{animation-play-state:paused}
 @media (prefers-reduced-motion:reduce){.cn-marquee{animation:none}}
-/* the monitor's power light: a slow standby blink with a soft glow */
-@keyframes cn-led{0%,100%{opacity:1;box-shadow:0 0 6px 1px rgba(74,222,128,.9)}50%{opacity:.35;box-shadow:0 0 1px 0 rgba(74,222,128,.3)}}
-.cn-led{animation:cn-led 1.8s ease-in-out infinite}
+/* the monitor's power light: a slow standby blink with a soft glow (the glow dims with the light: only
+   opacity animates, which runs on the compositor; an animated box-shadow repainted every frame) */
+@keyframes cn-led{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes cn-led-glow{0%,100%{opacity:1}50%{opacity:.3}}
+@media (prefers-reduced-motion:no-preference){.cn-led{animation:cn-led 1.8s ease-in-out infinite}.cn-led::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 6px 1px rgba(74,222,128,.9);animation:cn-led-glow 1.8s ease-in-out infinite}}
 .cn-pda{--pz:.6;--pt:calc(104px*var(--pz));--ps:calc(41px*var(--pz));--pb:calc(255px*var(--pz))}
 @media (min-width:640px){.cn-pda{--pz:.85}}
 @media (max-height:520px){.cn-pda{--pz:.42}}
@@ -230,7 +241,7 @@ html.cn-desk-gap [data-desktop]:not(.cn-pda-ground)::before{content:"";position:
     repeating-conic-gradient(#040826 0 25%,#0000 0 50%) 0 12px/12px 12px repeat-x,
     conic-gradient(#0000 0 25%,#040826 0) 0 24px/12px 12px repeat-x,
     linear-gradient(#040826,#040826) 0 36px/100% 24px no-repeat}
-@media (prefers-reduced-motion:reduce){.cn-escrow,.cn-caret,.cn-toast{animation:none}.cn-escrow{width:66%}.cn-press:hover,.cn-press:active{transform:none}}
+@media (prefers-reduced-motion:reduce){.cn-escrow,.cn-caret,.cn-toast{animation:none}.cn-escrow{transform:scaleX(.66)}.cn-press:hover,.cn-press:active{transform:none}}
 `;
 
 /** A short CRT "switch" flash: a white line opens to the full screen and fades out. One flash
@@ -299,7 +310,8 @@ function pushNav(sec: HTMLElement) {
     k = Math.max(k, span(p, 0.6, 0.68));
   }
   const push = k * NAV_H;
-  root.style.setProperty('--nav-push', String(Math.round(push * 10) / 10));
+  // on the nav itself: set on <html>, the property is inherited by (and restyles) the whole page every scrolled frame
+  document.querySelector<HTMLElement>('nav.sticky')?.style.setProperty('--nav-push', String(Math.round(push * 10) / 10));
   root.classList.toggle('cn-nav-push', push > 0);
   root.classList.toggle('cn-nav-hidden', push >= NAV_H - 0.5);
   // a device resting just short of the top: its own ground fills the gap above it (see the CSS)
@@ -308,7 +320,7 @@ function pushNav(sec: HTMLElement) {
 function releaseNav() {
   const root = document.documentElement;
   root.classList.remove('cn-nav-push', 'cn-nav-hidden', 'cn-desk-gap');
-  root.style.removeProperty('--nav-push');
+  document.querySelector<HTMLElement>('nav.sticky')?.style.removeProperty('--nav-push');
 }
 function glideTo(to: number, done?: () => void, opts?: { ms?: number; ease?: (x: number) => number }) {
   if (deskGliding) return;
@@ -455,6 +467,26 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
   React.useEffect(() => () => window.clearTimeout(idle.current), []);
   React.useEffect(() => () => { if (staticTimer.current) window.clearTimeout(staticTimer.current); }, []);
   const [narrow, setNarrow] = React.useState<boolean | null>(null); // null until the clips may load
+  // The meadow film only plays while it can be seen: from the push-in on (p .5) the clips cover the whole
+  // stage. Its grain only shows until p .1 (it hands over to the screen-sized grain below).
+  const [meadowOn, setMeadowOn] = React.useState(true);
+  const [meadowGrain, setMeadowGrain] = React.useState(true);
+  const meadowRef = React.useRef({ on: true, grain: true });
+  // Scrolled past the hero (the desktop, the FAQ, the outro), none of its clips can be seen: they stop
+  // decoding, and the first scroll back in starts whichever is showing again (see show()).
+  const onScreen = React.useRef(true);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (reduce || !el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => {
+      onScreen.current = e.isIntersecting;
+      if (e.isIntersecting) { window.dispatchEvent(new Event('scroll')); return; }
+      if (idle.current) { window.clearTimeout(idle.current); idle.current = 0; }
+      [hold.current, push.current, card.current].forEach(v => { if (v && !v.paused) v.pause(); });
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [reduce]);
 
   // The clips are only fetched once the page has loaded and the browser is idle.
   React.useEffect(() => {
@@ -490,12 +522,20 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
       // screen-sized grain layer below, which covers the still and the clips too.
       film.current.style.setProperty('--mh-grain-opacity', String(0.88 * (1 - span(p, 0.015, 0.1))));
     }
-    if (grain.current) grain.current.style.opacity = String(span(p, 0.015, 0.1) * (1 - span(p, 0.95, 1)));
+    // (only when they flip: React keeps every setState call queued, even an unchanged one)
+    if (meadowRef.current.on !== p < 0.5) { meadowRef.current.on = p < 0.5; setMeadowOn(p < 0.5); }
+    if (meadowRef.current.grain !== p < 0.1) { meadowRef.current.grain = p < 0.1; setMeadowGrain(p < 0.1); }
+    if (grain.current) {
+      const g = span(p, 0.015, 0.1) * (1 - span(p, 0.95, 1));
+      grain.current.style.opacity = String(g);
+      grain.current.style.display = g > 0 ? '' : 'none';   // an invisible grain would still animate 25 times a second
+    }
     // The Higgsfield still (graded to the film's colours) fades in slowly as the scroll starts,
     // a touch soft at first like the film, sharpening as the camera moves in. The glitch loop
     // sits on its monitor (it is a crop of the same picture) and plays from the first moment.
     const appear = smooth(span(p, 0.005, 0.16));
-    const soft = `blur(${(1.1 * (1 - smooth(span(p, 0.005, 0.25)))).toFixed(2)}px)`;
+    const blur = 1.1 * (1 - smooth(span(p, 0.005, 0.25)));
+    const soft = blur >= 0.005 ? `blur(${blur.toFixed(2)}px)` : 'none';   // blur(0px) still costs a filter pass
     const place = (el: HTMLElement | null, r: { x: number; y: number; w: number; h: number }) => {
       if (!el) return;
       el.style.left = `${fx(r.x)}px`;
@@ -513,7 +553,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     const show = (el: HTMLVideoElement | null, o: number) => {
       if (!el) return;
       el.style.opacity = String(o);
-      if (o > 0 && el.loop && el.paused) el.play().catch(() => {});
+      if (o > 0 && el.loop && el.paused && onScreen.current) el.play().catch(() => {});
       if (o === 0 && el.loop && !el.paused) el.pause();
     };
     if (appear > 0.6 && !staticOn.current && staticTimer.current === null) {
@@ -592,7 +632,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     <section ref={ref} className={reduce ? 'relative' : 'relative h-[380vh]'}>
       <div className={`${reduce ? 'relative h-[calc(100svh-4.5rem)]' : 'sticky top-[4.5rem] h-[calc(100svh-4.5rem)]'} overflow-hidden bg-sky`}>
         <div ref={film} className="absolute inset-0 will-change-transform">
-          <MeadowBackdrop variant="frame" controls={false} />
+          <MeadowBackdrop variant="frame" controls={false} active={reduce || meadowOn} grain={reduce || meadowGrain} />
           {!reduce && (
             <img
               ref={still}
@@ -1047,19 +1087,24 @@ function useScreensaver(ref: React.RefObject<HTMLElement>) {
     const el = logo.current;
     const box = (el?.offsetParent as HTMLElement | null) ?? ref.current; // the screen it is drawn on, not the whole bezel
     if (!box || !el) return;
-    let x = 40, y = 40, vx = 2.4, vy = 1.9, c = 0, raf = 0;
-    const step = () => {
-      const W = box.clientWidth - el.offsetWidth, H = box.clientHeight - el.offsetHeight;
-      x += vx; y += vy;
+    // ~60 fps, moved by the clock (px/s), so it bounces at the same speed on a 60 or a 120 Hz screen;
+    // the bounds are measured once and on resize, not read back every frame
+    let W = 0, H = 0;
+    const measure = () => { W = box.clientWidth - el.offsetWidth; H = box.clientHeight - el.offsetHeight; };
+    measure();
+    window.addEventListener('resize', measure);
+    let x = 40, y = 40, vx = 144, vy = 114, c = 0, last = performance.now();
+    const loop = frameLoop(now => {
+      const dt = Math.min(0.1, Math.max(0, now - last) / 1000);
+      last = now;
+      x += vx * dt; y += vy * dt;
       let hit = false;
       if (x <= 0 || x >= W) { vx = -vx; x = clamp(x, 0, W); hit = true; }
       if (y <= 0 || y >= H) { vy = -vy; y = clamp(y, 0, H); hit = true; }
       if (hit) { c = (c + 1) % SAVER_COLOURS.length; el.style.color = SAVER_COLOURS[c]; }
       el.style.transform = `translate3d(${x}px,${y}px,0)`;
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    }, 12, 12);
+    return () => { loop.stop(); window.removeEventListener('resize', measure); };
   }, [on, ref]);
 
   if (!on) return null;
@@ -2150,6 +2195,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
         fixedForm="wave"
         intensity={0.5}
         pace={0.3}
+        paused={saver !== null || (wide && screen === 'dark')}
         className="absolute inset-0 h-full w-full"
       />
       {crt && <div aria-hidden="true" className="cn-scan pointer-events-none absolute inset-0 opacity-40" />}
@@ -2352,7 +2398,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
             ].map(({ Icon, led }, i) => (
               <span key={i} className="flex items-center gap-[calc(9px*var(--lz))] text-[#6b707a]">
                 <Icon strokeWidth={2.25} style={{ width: 'calc(30px * var(--lz))', height: 'calc(30px * var(--lz))' }} />
-                <span className={`rounded-full ${led}`} style={{ width: 'calc(13px * var(--lz))', height: 'calc(13px * var(--lz))' }} />
+                <span className={`relative rounded-full ${led}`} style={{ width: 'calc(13px * var(--lz))', height: 'calc(13px * var(--lz))' }} />
               </span>
             ))}
           </div>
@@ -2660,6 +2706,8 @@ const ZoomOut: React.FC<{ reduce: boolean }> = ({ reduce }) => {
   const grainFx = React.useRef<HTMLDivElement>(null);
   const [src, setSrc] = React.useState<string | null>(null);
   const [clipSrc, setClipSrc] = React.useState<string | null>(null);
+  const [outGrain, setOutGrain] = React.useState(false);
+  const outGrainRef = React.useRef(false);
   const t = useT();
 
   const [power, setPower] = React.useState<'on' | 'safe' | 'play' | 'off'>(reduce ? 'off' : 'on');
@@ -2699,7 +2747,8 @@ const ZoomOut: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     powerTimers.current.forEach(id => window.clearTimeout(id));
     powerTimers.current = [];
     const v = clip.current;
-    if (v) { v.pause(); v.currentTime = 0; }
+    // (this runs on every scrolled frame above the outro: setting currentTime always seeks, even to where it is)
+    if (v && (!v.paused || v.currentTime !== 0)) { v.pause(); v.currentTime = 0; }
     if (powerRef.current !== 'on') setPower('on');
   };
   React.useEffect(() => () => { powerTimers.current.forEach(id => window.clearTimeout(id)); window.clearTimeout(rateTimer.current); }, []);
@@ -2733,19 +2782,28 @@ const ZoomOut: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     return () => window.removeEventListener('wheel', brake);
   }, [reduce]);
 
-  // The clips only load (and the static only plays) once the outro is near.
+  // The clips only load once the outro is near, and the static only plays from the moment the power-off
+  // clip (opaque, over it) starts: before that nobody can see it, and by the time the clip has gone it is running.
+  const outroNear = React.useRef(false);
+  const syncStatic = () => {
+    const v = screenOff.current;
+    if (!v) return;
+    const on = powerRef.current === 'play' || powerRef.current === 'off';
+    if (outroNear.current && on) v.play().catch(() => {}); else if (!v.paused) v.pause();
+  };
   React.useEffect(() => {
     const el = ref.current;
     if (reduce || !el || typeof IntersectionObserver === 'undefined') return;
     const io = new IntersectionObserver(entries => { const e = entries[entries.length - 1];
       const narrow = window.matchMedia('(max-width: 767px)').matches ? 1 : 0;
       if (e.isIntersecting) { setSrc(s => s ?? DARK_STATIC[narrow]); setClipSrc(s => s ?? POWER_OFF[narrow]); }
-      const v = screenOff.current;
-      if (v) { if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }
+      outroNear.current = e.isIntersecting;
+      syncStatic();
     }, { rootMargin: '100% 0px' });
     io.observe(el);
     return () => io.disconnect();
   }, [reduce, src]);
+  React.useEffect(() => { if (!reduce) syncStatic(); }, [power, reduce]);
 
   usePin(ref, (p, W, H) => {
     curP.current = p;
@@ -2775,7 +2833,8 @@ const ZoomOut: React.FC<{ reduce: boolean }> = ({ reduce }) => {
       film.current.style.transform = `translate3d(${(W / 2 - cx) * z}px,${(H / 2 - cy) * z}px,0) scale(${Math.pow(camEnd, z)})`;
       film.current.style.setProperty('--mh-grain-opacity', String(0.88 * (1 - z)));
     }
-    if (grainFx.current) grainFx.current.style.opacity = String(z);
+    if (grainFx.current) { grainFx.current.style.opacity = String(z); grainFx.current.style.display = z > 0 ? '' : 'none'; }
+    if (outGrainRef.current !== p > 0.12) { outGrainRef.current = p > 0.12; setOutGrain(p > 0.12); }   // the film's own grain shows from here on (--mh-grain-opacity)
     // CENNER returns once the camera is out: a timed fade (CSS), not tied to the scroll
     if (mark.current) mark.current.dataset.on = p >= 0.7 ? '1' : '0';
   }, !reduce);
@@ -2784,7 +2843,9 @@ const ZoomOut: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     <section ref={ref} data-outro aria-hidden="true" className={reduce ? 'relative' : 'relative h-[300vh]'}>
       <div className={`${reduce ? 'relative' : 'sticky top-[4.5rem]'} h-[calc(100svh-4.5rem)] overflow-hidden bg-sky`}>
         <div ref={film} className="absolute inset-0 will-change-transform">
-          <MeadowBackdrop variant="frame" controls={false} />
+          {/* the film starts as the power-off clip (opaque, over it) plays, so it is buffered and running by
+              the time the clip has gone (iOS only fetches a paused video's data once it plays) */}
+          <MeadowBackdrop variant="frame" controls={false} active={reduce || power === 'play' || power === 'off'} grain={reduce || outGrain} />
           {!reduce && (
             <>
               <img
@@ -2871,8 +2932,21 @@ const Home: React.FC = () => {
     return () => { history.scrollRestoration = 'auto'; cancelGlide(); };
   }, []);
 
+  // A section more than 200px out of view pauses its CSS animations (see [data-off]): carets, the
+  // marquee, the grain, the LEDs. An animation nobody can see still makes the browser draw every frame.
+  const page = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    const root = page.current;
+    if (!root || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) e.target.removeAttribute('data-off'); else e.target.setAttribute('data-off', '');
+    }), { rootMargin: '200px 0px' });
+    Array.from(root.children).forEach(el => { if (el.tagName !== 'STYLE') io.observe(el); });
+    return () => io.disconnect();
+  }, [wideHero]);
+
   return (
-    <div className="relative bg-ink font-text text-ink">
+    <div ref={page} className="relative bg-ink font-text text-ink">
       <style>{CSS}</style>
       <SEO
         title="Freelance Hrvatska: Pronađi Freelancera"

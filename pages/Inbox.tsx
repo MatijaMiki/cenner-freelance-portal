@@ -393,7 +393,8 @@ const MessagingHub: React.FC = () => {
                   const isMe = msg.senderId === user?.id;
                   // Review request card
                   let reviewReq: { _type: string; contractId: string; contractTitle: string } | null = null;
-                  try { const p = JSON.parse(msg.content); if (p._type === 'review_request') reviewReq = p; } catch {}
+                  // (only a JSON body can be one: plain text would throw, for every message on every render)
+                  if (msg.content?.trimStart().startsWith('{')) { try { const p = JSON.parse(msg.content); if (p?._type === 'review_request') reviewReq = p; } catch {} }
                   if (reviewReq) {
                     return (
                       <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>

@@ -28,14 +28,19 @@ const NotificationBell: React.FC<{ className?: string }> = ({ className = 'text-
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  const lastFetch = useRef(0);
   const fetch = useCallback(() => {
+    lastFetch.current = Date.now();
     API.getNotifications().then(setNotifications).catch(() => {});
   }, []);
 
   useEffect(() => {
     fetch();
-    const id = setInterval(fetch, 30000);
-    return () => clearInterval(id);
+    // every 30 s while the tab is in front; a background tab asks for nothing and catches up when it is back
+    const id = setInterval(() => { if (!document.hidden) fetch(); }, 30000);
+    const onVis = () => { if (!document.hidden && Date.now() - lastFetch.current >= 30000) fetch(); };   // only if it has gone stale
+    document.addEventListener('visibilitychange', onVis);
+    return () => { clearInterval(id); document.removeEventListener('visibilitychange', onVis); };
   }, [fetch]);
 
   useEffect(() => {

@@ -98,7 +98,7 @@ export const NotifyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             <div
               key={t.id}
               style={{ animation: 'notifySlideIn 0.25s cubic-bezier(0.16,1,0.3,1) both' }}
-              className={`pointer-events-auto flex items-start gap-3 px-4 py-3.5 rounded-2xl border bg-[#1a1a1a] backdrop-blur-xl shadow-2xl ${STYLE[t.type]}`}
+              className={`pointer-events-auto flex items-start gap-3 px-4 py-3.5 rounded-2xl border bg-[#1a1a1a] shadow-2xl ${STYLE[t.type]}`}
             >
               <Icon size={16} className="mt-0.5 flex-shrink-0" />
               <p className="text-sm text-gray-200 font-medium leading-snug flex-1">{t.message}</p>

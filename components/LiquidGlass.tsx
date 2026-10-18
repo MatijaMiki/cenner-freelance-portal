@@ -90,7 +90,19 @@ export type Refract = {
  * quadratically towards the edge. The backdrop there is sampled from further inside, which
  * magnifies it like the rim of a lens.
  */
+// The maps by size: a grid of same-size cards (the marketplace) builds and PNG-encodes one, not one per card.
+const LENS_MAPS = new Map<string, string>();
 function lensMap(w: number, h: number, radius: number, bezel: number): string {
+  const key = `${w}x${h}r${radius}b${bezel}`;
+  const hit = LENS_MAPS.get(key);
+  if (hit) return hit;
+  const url = drawLensMap(w, h, radius, bezel);
+  if (LENS_MAPS.size > 48) LENS_MAPS.delete(LENS_MAPS.keys().next().value as string);
+  LENS_MAPS.set(key, url);
+  return url;
+}
+
+function drawLensMap(w: number, h: number, radius: number, bezel: number): string {
   const canvas = document.createElement('canvas');
   canvas.width = w;
   canvas.height = h;

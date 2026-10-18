@@ -64,9 +64,13 @@ interface MeadowBackdropProps {
   variant?: 'cover' | 'frame';
   /** Show the pause/play button (off when the film is scaled, e.g. the zoom-in hero). */
   controls?: boolean;
+  /** false while something opaque covers the film: it pauses (on its current frame) until it can be seen. */
+  active?: boolean;
+  /** false while the grain can't be seen (its opacity is 0): it is taken out instead of animating unseen. */
+  grain?: boolean;
 }
 
-const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', controls = true }) => {
+const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', controls = true, active = true, grain = true }) => {
   const t = useT();
   const wrapRef = React.useRef<HTMLDivElement>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -119,7 +123,7 @@ const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', cont
     if (!v || !src) return;
     v.muted = true; // React sets the property late; autoplay policies want it first
     const sync = () => {
-      if (inView && !paused && !document.hidden) {
+      if (inView && active && !paused && !document.hidden) {
         v.play().then(() => setBlocked(false)).catch((err: unknown) => {
           // AbortError just means a pause() raced the play(); only NotAllowedError is a refusal.
           if ((err as { name?: string })?.name === 'NotAllowedError') setBlocked(true);
@@ -131,7 +135,7 @@ const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', cont
     sync();
     document.addEventListener('visibilitychange', sync);
     return () => document.removeEventListener('visibilitychange', sync);
-  }, [src, inView, paused]);
+  }, [src, inView, paused, active]);
 
   const playing = !paused && !blocked;
   const toggle = () => {
@@ -178,7 +182,8 @@ const MeadowBackdrop: React.FC<MeadowBackdropProps> = ({ variant = 'cover', cont
               className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`}
             />
           )}
-          <div className="mh-grain"><span className="mh-grain-tile" /></div>
+          {/* (the grain jitters 25 times a second over a masked, screen-sized layer: only while it shows) */}
+          {grain && active && inView && <div className="mh-grain"><span className="mh-grain-tile" /></div>}
         </div>
       </div>
 

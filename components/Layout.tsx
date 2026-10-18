@@ -88,13 +88,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   useEffect(() => {
     if (!user) { setUnread(0); return; }
+    let last = 0;
     const fetchUnread = () => {
+      last = Date.now();
       API.getUnreadCount()
         .then((data: any) => setUnread(data?.count ?? 0))
         .catch(() => {});
     };
     fetchUnread();
-    const interval = setInterval(fetchUnread, 30000);
+    // every 30 s while the tab is in front (a background tab asks for nothing and catches up when it is back)
+    const interval = setInterval(() => { if (!document.hidden) fetchUnread(); }, 30000);
+    const onVis = () => { if (!document.hidden && Date.now() - last >= 30000) fetchUnread(); };   // only if it has gone stale
+    document.addEventListener('visibilitychange', onVis);
 
     // Real-time: bump count immediately when a new message arrives
     const socket = connectSocket();
@@ -102,9 +107,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     socket.on('new_message', onNew);
     return () => {
       clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVis);
       socket.off('new_message', onNew);
     };
-  }, [user]);
+  }, [user?.id]);
 
   const handleLogout = () => {
     setIsProfileOpen(false);
@@ -145,7 +151,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className={`min-h-screen flex flex-col relative isolate ${isHome ? 'bg-paper font-text text-ink' : 'bg-brand-black text-white'}`}>
       {/* Every new-look page but the homepage gets the full-page dot background (components/PageBackdrop). */}
-      {isHome && location.pathname !== '/' && location.pathname !== '/v3' && <PageBackdrop seed={location.pathname} />}
+      {/* (not behind the inbox: it fills the window with an opaque panel, so the dots could never be seen) */}
+      {isHome && location.pathname !== '/' && location.pathname !== '/v3' && !location.pathname.startsWith('/messages') && <PageBackdrop seed={location.pathname} />}
       <ChatWidget bubble={location.pathname !== '/'} />
 
       {/* Navbar */}

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { dotGradient, hash, pickHue } from '../lib/dotColour';
+import { frameLoop } from '../lib/motion';
 
 /**
  * The full-page dot background for every page except the homepage: a faint halftone grid across
@@ -61,7 +62,7 @@ export const PageBackdrop: React.FC<{ seed: string }> = ({ seed }) => {
 
     const h = hash(seed);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let vw = 0, vh = 0, raf = 0, last = 0;
+    let vw = 0, vh = 0;
 
     // The hotspots, as fractions of the page's content height, each with a colour of its own.
     const count = 5;
@@ -222,23 +223,6 @@ export const PageBackdrop: React.FC<{ seed: string }> = ({ seed }) => {
       ctx.globalAlpha = 1;
     };
 
-    let lastSy = -1;
-    // After 20 s with no input the blobs drift at ~2 fps (a tab left open costs next to nothing);
-    // any movement, scroll or key brings the normal rate straight back.
-    let lastInput = performance.now();
-    const onInput = () => { lastInput = performance.now(); };
-    const inputEvents = ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart'] as const;
-    inputEvents.forEach(e => window.addEventListener(e, onInput, { passive: true }));
-    const tick = (now: number) => {
-      raf = requestAnimationFrame(tick);
-      if (document.hidden) return;
-      const sy = window.scrollY;
-      // while the page is scrolling, redraw every frame so the dots travel with the content; otherwise a gentle ~10fps
-      if (sy === lastSy && now - last < (now - lastInput > 20000 ? 500 : 100)) return;
-      lastSy = sy; last = now;
-      draw(now);
-    };
-
     const onResize = () => { size(); win = null; draw(performance.now()); };
 
     size();
@@ -246,14 +230,16 @@ export const PageBackdrop: React.FC<{ seed: string }> = ({ seed }) => {
     // the page grows once its text and images are in: draw again when it has settled
     const settle = window.setTimeout(() => { win = null; draw(performance.now()); }, 700);
     window.addEventListener('resize', onResize);
-    if (reduce) window.addEventListener('scroll', onResize, { passive: true });
-    else raf = requestAnimationFrame(tick);
+    // A gentle ~10 fps (2 fps after 20 s with no input, so a tab left open costs next to nothing); while
+    // the page scrolls, every scroll event asks for the next frame, so the dots travel with the content.
+    const loop = reduce ? null : frameLoop(draw, 100, 500);
+    const onScroll = reduce ? onResize : () => loop?.wake();
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.clearTimeout(settle);
-      if (raf) cancelAnimationFrame(raf);
+      loop?.stop();
       window.removeEventListener('resize', onResize);
-      window.removeEventListener('scroll', onResize);
-      inputEvents.forEach(e => window.removeEventListener(e, onInput));
+      window.removeEventListener('scroll', onScroll);
     };
   }, [seed]);
 

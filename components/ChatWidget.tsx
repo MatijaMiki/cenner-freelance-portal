@@ -20,20 +20,25 @@ const ChatWidget: React.FC<{ bubble?: boolean }> = ({ bubble = true }) => {
   // The bubble sits 24px above the bottom of the screen, but never goes into the footer: once the footer
   // scrolls into view the bubble stops a little above it.
   const [lift, setLift] = useState(0);
+  const showing = bubble && !isOpen && !bubbleHidden;
   React.useEffect(() => {
+    if (!showing) return;            // no bubble on screen (the homepage, chat open): nothing to keep clear
     let raf = 0;
     const update = () => {
       raf = 0;
       const f = document.querySelector('footer');
       const over = f ? window.innerHeight - f.getBoundingClientRect().top : 0;
-      setLift(over > 0 ? over : 0);
+      setLift(over > 0 ? Math.round(over) : 0);
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
     update();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); if (raf) cancelAnimationFrame(raf); };
-  }, []);
+    // the page can grow or shrink without a scroll (a list loading in after a route change): measure again then too
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(onScroll);
+    ro?.observe(document.body);
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); ro?.disconnect(); if (raf) cancelAnimationFrame(raf); };
+  }, [showing]);
 
   return (
     <>
