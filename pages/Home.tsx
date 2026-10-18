@@ -1903,7 +1903,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
           {people.slice(0, 6).map(p => (
             <li key={p.id}>
               <Link to={`/freelancer/${p.id}`} className="block text-center">
-                <Avatar src={p.avatar} name={p.name} size={72} className="mx-auto h-16 w-16 rounded-full object-cover" />
+                <Avatar src={p.avatar} name={p.name} size={72} className="mx-auto h-16 w-16 border-2 border-ink object-cover" />
                 <p className="mt-1 truncate text-[13px] font-bold">{p.name}</p>
                 {p.avgRating > 0 && <p className="flex items-center justify-center gap-1 text-[13px]"><Star size={11} fill="currentColor" className="text-sky" />{p.avgRating.toFixed(1)}</p>}
               </Link>

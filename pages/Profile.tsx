@@ -717,11 +717,11 @@ const Profile: React.FC = () => {
   const avatarFileRef = useRef<HTMLInputElement>(null);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
 
-  // Image crop state — fixed circle, movable/zoomable image
+  // Image crop state — a fixed square frame (profile pictures are square), movable/zoomable image
   const CROP_SIZE = 360;   // canvas px (square)
-  const CROP_R    = 160;   // circle radius
-  const CROP_CX   = 180;   // circle center x
-  const CROP_CY   = 180;   // circle center y
+  const CROP_R    = 160;   // half the side of the crop square
+  const CROP_CX   = 180;   // square centre x
+  const CROP_CY   = 180;   // square centre y
 
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const cropCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -745,22 +745,20 @@ const Profile: React.FC = () => {
     const iY = CROP_CY - iH / 2 + imgPan.y;
     ctx.clearRect(0, 0, CROP_SIZE, CROP_SIZE);
     ctx.drawImage(img, iX, iY, iW, iH);
-    // Darken outside circle
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    // Darken outside the square
+    ctx.fillStyle = 'rgba(11,12,14,0.6)';
     ctx.fillRect(0, 0, CROP_SIZE, CROP_SIZE);
-    // Reveal image inside circle
+    // Reveal the image inside the square
     ctx.save();
     ctx.beginPath();
-    ctx.arc(CROP_CX, CROP_CY, CROP_R, 0, Math.PI * 2);
+    ctx.rect(CROP_CX - CROP_R, CROP_CY - CROP_R, CROP_R * 2, CROP_R * 2);
     ctx.clip();
     ctx.drawImage(img, iX, iY, iW, iH);
     ctx.restore();
-    // Circle border
-    ctx.strokeStyle = '#22c55e';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(CROP_CX, CROP_CY, CROP_R, 0, Math.PI * 2);
-    ctx.stroke();
+    // Square frame, in the site's ink
+    ctx.strokeStyle = '#0b0c0e';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(CROP_CX - CROP_R, CROP_CY - CROP_R, CROP_R * 2, CROP_R * 2);
   }, [imgPan, imgZoom, imgBaseScale]);
 
   React.useEffect(() => {
@@ -769,7 +767,7 @@ const Profile: React.FC = () => {
     canvas.width  = CROP_SIZE;
     canvas.height = CROP_SIZE;
     const img = cropImageRef.current;
-    // Base scale: short side fills circle diameter
+    // Base scale: short side fills the crop square
     setImgBaseScale((CROP_R * 2) / Math.min(img.naturalWidth, img.naturalHeight));
     setImgZoom(1);
     setImgPan({ x: 0, y: 0 });
@@ -811,17 +809,14 @@ const Profile: React.FC = () => {
     const iH = img.naturalHeight * totalScale;
     const iX = CROP_CX - iW / 2 + imgPan.x;
     const iY = CROP_CY - iH / 2 + imgPan.y;
-    // Map circle bounds back to source image coords
+    // Map the crop square back to source image coords
     const srcX    = (CROP_CX - CROP_R - iX) / totalScale;
     const srcY    = (CROP_CY - CROP_R - iY) / totalScale;
     const srcSize = (CROP_R * 2)            / totalScale;
     const out = document.createElement('canvas');
     out.width = 512; out.height = 512;
     const ctx = out.getContext('2d')!;
-    ctx.beginPath();
-    ctx.arc(256, 256, 256, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.drawImage(img, srcX, srcY, srcSize, srcSize, 0, 0, 512, 512);
+    ctx.drawImage(img, srcX, srcY, srcSize, srcSize, 0, 0, 512, 512);   // square, edge to edge
     out.toBlob(async (blob) => {
       if (!blob) return;
       setCropSrc(null);
@@ -2033,10 +2028,10 @@ const Profile: React.FC = () => {
         <div className="fixed inset-0 z-[200] bg-ink/90 flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white border-2 border-ink p-8 flex flex-col items-center gap-6 max-w-sm w-full">
             <h3 className="text-lg font-black text-ink tracking-tighter self-start">Crop Image</h3>
-            <p className="text-xs text-slate self-start -mt-4">Drag the circle to position. Use the slider to resize.</p>
+            <p className="text-xs text-slate self-start -mt-4">Drag the image to position it in the square. Use the slider to resize.</p>
             <canvas
               ref={cropCanvasRef}
-              style={{ width: '100%', borderRadius: '1rem', cursor: cropDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
+              style={{ width: '100%', cursor: cropDragging ? 'grabbing' : 'grab', touchAction: 'none' }}
               onMouseDown={handleCropMouseDown}
               onMouseMove={handleCropMouseMove}
               onMouseUp={handleCropMouseUp}
@@ -2084,8 +2079,8 @@ const Profile: React.FC = () => {
                 className="border-4 border-ink p-1 group-hover:scale-105 transition-transform duration-500"
               />
               {canCreateListings && (
-                <div className="absolute bottom-1 right-1 w-8 h-8 flex items-center justify-center drop-shadow-lg">
-                  <BadgeCheck size={32} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]" fill="#1a1a1a" strokeWidth={1.5} />
+                <div className="absolute bottom-0 right-0 flex h-10 w-10 translate-x-1/2 translate-y-1/2 items-center justify-center" title="Identity Verified">
+                  <BadgeCheck size={38} className="text-ink" fill="#4ade80" strokeWidth={1.75} />
                 </div>
               )}
             </div>

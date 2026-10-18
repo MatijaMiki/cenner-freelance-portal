@@ -63,7 +63,8 @@ const Avatar: React.FC<AvatarProps> = ({ src, name, size = 40, className = '' })
       alt={name || 'User avatar'}
       width={size}
       height={size}
-      className={className}
+      // square by default: the picture fills its square, cropped rather than stretched
+      className={`object-cover ${className}`}
       onError={() => setError(true)}
     />
   );

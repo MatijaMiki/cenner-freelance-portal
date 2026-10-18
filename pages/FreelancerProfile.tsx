@@ -356,7 +356,7 @@ const FreelancerProfile: React.FC = () => {
             <div className="relative shrink-0">
               <AvatarImg src={profile.avatar} name={profile.name} size={112} className="rounded-none border-2 border-ink" />
               {isVerified && (
-                <div className="absolute -bottom-2 -right-2 w-9 h-9 flex items-center justify-center" title="Identity Verified">
+                <div className="absolute bottom-0 right-0 flex h-9 w-9 translate-x-1/2 translate-y-1/2 items-center justify-center" title="Identity Verified">
                   <BadgeCheck size={36} className="text-ink" fill="#4ade80" strokeWidth={1.75} />
                 </div>
               )}
