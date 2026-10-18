@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { LanguageProvider } from './i18n';
+import './index.css';   // the site's styles + Tailwind, compiled at build time
 
 class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
   constructor(props: { children: React.ReactNode }) {

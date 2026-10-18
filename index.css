@@ -1,0 +1,129 @@
+/*
+ * The site's stylesheet: its own rules first, then Tailwind (compiled at build time by
+ * tailwind.config.js). The order matches the Play CDN setup it replaces, where these rules sat in an
+ * inline <style> and the CDN's generated sheet came after them, so the cascade is unchanged.
+ */
+
+:root {
+  --transition-speed: 0.3s;
+}
+
+@keyframes notifySlideIn {
+  0%   { opacity: 0; transform: translateX(16px) scale(0.97); }
+  100% { opacity: 1; transform: translateX(0)    scale(1); }
+}
+
+html, body {
+  font-family: 'Inter', sans-serif;
+  background-color: #eef0f3;
+  color: #0b0c0e;
+  margin: 0;
+  /* clip, not hidden: hidden turns body into a scroll container, which stops the sticky
+     nav from sticking; clip still stops sideways scrolling (hidden stays as the fallback
+     for browsers without clip) */
+  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #eef0f3;
+}
+::-webkit-scrollbar-thumb {
+  background: #0b0c0e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4ade80;
+}
+
+.animate-gradient {
+  background-size: 200% auto;
+}
+
+/* Custom slider — Cenner Budget Threshold */
+.cenner-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 32px;
+  background: transparent;
+  outline: none;
+  border: none;
+  /* Claim the gesture so the browser doesn't try to scroll the page when dragging. */
+  touch-action: none;
+  -ms-touch-action: none;
+  margin: 0;
+  padding: 0;
+}
+.cenner-slider::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #4ade80 var(--slider-pct, 50%), #1a1a1a var(--slider-pct, 50%));
+}
+.cenner-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -11px;
+  border-radius: 50%;
+  background: #4ade80;
+  cursor: grab;
+  box-shadow: 0 0 0 4px rgba(74,222,128,0.15), 0 2px 8px rgba(0,0,0,0.5);
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.cenner-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 8px rgba(74,222,128,0.2), 0 2px 12px rgba(0,0,0,0.6);
+  transform: scale(1.08);
+}
+.cenner-slider:active::-webkit-slider-thumb,
+.cenner-slider:focus::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.15);
+  box-shadow: 0 0 0 10px rgba(74,222,128,0.25), 0 2px 16px rgba(0,0,0,0.6);
+}
+.cenner-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #4ade80 var(--slider-pct, 50%), #1a1a1a var(--slider-pct, 50%));
+  border: none;
+}
+.cenner-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #4ade80;
+  cursor: grab;
+  border: none;
+  box-shadow: 0 0 0 4px rgba(74,222,128,0.15), 0 2px 8px rgba(0,0,0,0.5);
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.cenner-slider:active::-moz-range-thumb,
+.cenner-slider:focus::-moz-range-thumb {
+  cursor: grabbing;
+  transform: scale(1.15);
+  box-shadow: 0 0 0 10px rgba(74,222,128,0.25), 0 2px 16px rgba(0,0,0,0.6);
+}
+/* Paper slider: the marketplace budget filter in the light theme (ink track, sky fill, square thumb). */
+/* The logo (components/Logo): a dithered wash behind the wordmark that is always running. It sweeps in from the tile on load, is
+   crisp at the top and bottom and open at the right end, and its squares stream through it from left to right like horizontal rain */
+.lm-track { animation: lm-sweep .9s cubic-bezier(.3,.8,.25,1) both; }
+@keyframes lm-sweep { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 -60px 0 0); } }
+@media (prefers-reduced-motion: reduce) { .lm-track { animation: none !important; } .lm-track { clip-path: inset(0 -60px 0 0); } }
+.cenner-slider-paper { -webkit-appearance: none; appearance: none; width: 100%; height: 32px; background: transparent; outline: none; border: none; touch-action: none; -ms-touch-action: none; margin: 0; padding: 0; }
+.cenner-slider-paper::-webkit-slider-runnable-track { -webkit-appearance: none; height: 8px; border: 2px solid #0b0c0e; background: linear-gradient(to right, #002ca5 var(--slider-pct, 50%), #ffffff var(--slider-pct, 50%)); }
+.cenner-slider-paper::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; margin-top: -9px; border: 2px solid #0b0c0e; border-radius: 0; background: #ffffff; cursor: grab; box-shadow: 3px 3px 0 0 #0b0c0e; }
+.cenner-slider-paper:active::-webkit-slider-thumb { cursor: grabbing; background: #002ca5; }
+.cenner-slider-paper:focus-visible::-webkit-slider-thumb { background: #002ca5; }
+.cenner-slider-paper::-moz-range-track { height: 8px; border: 2px solid #0b0c0e; background: linear-gradient(to right, #002ca5 var(--slider-pct, 50%), #ffffff var(--slider-pct, 50%)); }
+.cenner-slider-paper::-moz-range-thumb { width: 18px; height: 18px; border: 2px solid #0b0c0e; border-radius: 0; background: #ffffff; cursor: grab; box-shadow: 3px 3px 0 0 #0b0c0e; }
+.cenner-slider-paper:active::-moz-range-thumb, .cenner-slider-paper:focus-visible::-moz-range-thumb { cursor: grabbing; background: #002ca5; }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
