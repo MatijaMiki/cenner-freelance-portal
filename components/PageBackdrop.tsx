@@ -19,6 +19,7 @@ import { dotGradient, hash, pickHue } from '../lib/dotColour';
  */
 
 const GAP = 14;
+const WOB_N = 64;   // angle steps in the per-frame wobble table
 const PAPER = '#eef0f3';
 const FLOOR = 0.1;
 /** Soft edges for the quiet zones: two passes of a small box blur over the dot grid. */
@@ -84,7 +85,7 @@ export const PageBackdrop: React.FC<{ seed: string }> = ({ seed }) => {
     });
 
     const size = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = 1;   // one canvas pixel per CSS pixel: the dots are soft, and 2x meant 4x the pixels every frame
       vw = window.innerWidth; vh = window.innerHeight;
       canvas.width = Math.round(vw * dpr); canvas.height = Math.round(vh * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -151,7 +152,7 @@ export const PageBackdrop: React.FC<{ seed: string }> = ({ seed }) => {
       ctx.clearRect(0, 0, vw, vh);
       const sy = window.scrollY;
       const t = reduce ? 0 : now;
-      if (!win || sy < win.top + MARGIN * 0.4 || sy + vh > win.top + win.rows * GAP - MARGIN * 0.4 || now - win.at > 500) buildMask(sy, now);
+      if (!win || sy < win.top + MARGIN * 0.4 || sy + vh > win.top + win.rows * GAP - MARGIN * 0.4 || now - win.at > 1000) buildMask(sy, now);
       const w = win!;
       const C = cols();
 
@@ -165,53 +166,75 @@ export const PageBackdrop: React.FC<{ seed: string }> = ({ seed }) => {
           y: w.mainTop + sp.fy * w.mainH + Math.cos(t * 0.00014 + sp.phase) * 36,
           rad: sp.rad * (0.94 + 0.06 * Math.sin(t * 0.0003 + sp.phase)),
           c: Math.cos(th), s: Math.sin(th), el, ph: sp.phase, grad: sp.grad,
+          // the edge's wobble by angle, tabulated once a frame (a dot then looks it up, no sin() per dot)
+          wob: Float32Array.from({ length: WOB_N }, (_, a) => {
+            const ang = (a / WOB_N) * 2 * Math.PI - Math.PI;
+            const wv = 1 + 0.2 * Math.sin(3 * ang + t * 0.00033 + sp.phase) + 0.1 * Math.sin(2 * ang - t * 0.00027 + sp.phase * 1.7);
+            return 1 / (wv * wv);
+          }),
         };
       });
 
       const j0 = Math.floor(sy / GAP) - 1, j1 = Math.ceil((sy + vh) / GAP) + 1;
       const i1 = Math.ceil(vw / GAP) + 1;
-      const base = new Path2D();
+      // Coloured dots are batched: one path per blob and strength step, filled once each, instead of a
+      // fill() (and a new colour string) per dot. The faint grey grid is a CSS pattern (see the return).
+      const STEPS = 10;
+      const paths = live.map(() => Array.from({ length: STEPS }, () => null as Path2D | null));
       for (let j = j0; j <= j1; j++) {
         const yp = j * GAP, y = yp - sy;
         const row = j - w.top / GAP;
         for (let i = -1; i <= i1; i++) {
           const x = i * GAP + GAP * 0.5;
-          let v = 0, best: (typeof live)[number] | null = null;
-          for (const s of live) {
+          let v = 0, bi = -1;
+          for (let k = 0; k < live.length; k++) {
+            const s = live[k];
             const dx = x - s.x, dy = yp - s.y;
             if (dx * dx + dy * dy > s.rad * s.rad * 6) continue;
             const u = (dx * s.c + dy * s.s) / (s.rad * s.el), q = (-dx * s.s + dy * s.c) / (s.rad / s.el);
-            const ang = Math.atan2(q, u);
-            const wob = 1 + 0.2 * Math.sin(3 * ang + t * 0.00033 + s.ph) + 0.1 * Math.sin(2 * ang - t * 0.00027 + s.ph * 1.7);
-            const d = Math.exp(-(u * u + q * q) / (wob * wob));
-            if (d > v) { v = d; best = s; }
+            const a = ((Math.atan2(q, u) + Math.PI) * WOB_N / (2 * Math.PI)) | 0;
+            const d = Math.exp(-(u * u + q * q) * s.wob[a < WOB_N ? a : 0]);
+            if (d > v) { v = d; bi = k; }
           }
+          if (bi < 0) continue;
           const ci = Math.min(w.rows - 1, Math.max(0, row)) * C + Math.min(C - 1, Math.max(0, i));
           const m = w.calm[ci];
           // the colour fades out over the last stretch of the page, so nothing sits behind the footer's own animation
           const tail = Math.min(1, Math.max(0, (w.mainTop + w.mainH - yp) / 340));
           const vm = v * m * tail * tail * (3 - 2 * tail) * 0.88;
-          if (best && vm > 0.04) {
-            ctx.globalAlpha = Math.min(0.75, 0.12 + vm * 0.7);
-            ctx.fillStyle = best.grad(vm);
-            ctx.beginPath(); ctx.arc(x, y, 0.9 + vm * 3.3, 0, 6.2832); ctx.fill();
-          } else if (m > 0.3) {
-            base.moveTo(x + 0.9, y); base.arc(x, y, 0.9, 0, 6.2832);
-          }
+          if (vm <= 0.04) continue;
+          const st = Math.min(STEPS - 1, Math.floor(vm * STEPS));
+          const r = 0.9 + ((st + 0.5) / STEPS) * 3.3;
+          const path = paths[bi][st] || (paths[bi][st] = new Path2D());
+          path.moveTo(x + r, y); path.arc(x, y, r, 0, 6.2832);
+        }
+      }
+      for (let k = 0; k < live.length; k++) {
+        for (let st = 0; st < STEPS; st++) {
+          const path = paths[k][st];
+          if (!path) continue;
+          const vm = (st + 0.5) / STEPS;
+          ctx.globalAlpha = Math.min(0.75, 0.12 + vm * 0.7);
+          ctx.fillStyle = live[k].grad(vm);
+          ctx.fill(path);
         }
       }
       ctx.globalAlpha = 1;
-      ctx.fillStyle = 'rgba(11,12,14,0.03)';
-      ctx.fill(base);
     };
 
     let lastSy = -1;
+    // After 20 s with no input the blobs drift at ~2 fps (a tab left open costs next to nothing);
+    // any movement, scroll or key brings the normal rate straight back.
+    let lastInput = performance.now();
+    const onInput = () => { lastInput = performance.now(); };
+    const inputEvents = ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart'] as const;
+    inputEvents.forEach(e => window.addEventListener(e, onInput, { passive: true }));
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
       if (document.hidden) return;
       const sy = window.scrollY;
-      // while the page is scrolling, redraw every frame so the dots travel with the content; otherwise a gentle ~15fps
-      if (sy === lastSy && now - last < 66) return;
+      // while the page is scrolling, redraw every frame so the dots travel with the content; otherwise a gentle ~10fps
+      if (sy === lastSy && now - last < (now - lastInput > 20000 ? 500 : 100)) return;
       lastSy = sy; last = now;
       draw(now);
     };
@@ -230,10 +253,26 @@ export const PageBackdrop: React.FC<{ seed: string }> = ({ seed }) => {
       if (raf) cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('scroll', onResize);
+      inputEvents.forEach(e => window.removeEventListener(e, onInput));
     };
   }, [seed]);
 
-  return <canvas ref={ref} aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 h-full w-full" />;
+  return (
+    <>
+      {/* the faint grey dot grid: a CSS pattern on the page itself, so it costs nothing per frame. Its dot
+          centres (x = 7 + 14i, y = 14j) match the canvas grid, where the coloured dots are drawn over it. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(11,12,14,0.035) 0.9px, transparent 1.3px)',
+          backgroundSize: `${GAP}px ${GAP}px`,
+          backgroundPosition: `0 -${GAP / 2}px`,
+        }}
+      />
+      <canvas ref={ref} aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 h-full w-full" />
+    </>
+  );
 };
 
 export default PageBackdrop;
