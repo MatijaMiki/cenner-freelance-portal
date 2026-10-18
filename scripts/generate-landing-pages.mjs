@@ -4,6 +4,7 @@
 //
 // Run: node scripts/generate-landing-pages.mjs
 
+import { readFileSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,19 +13,29 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = join(__dirname, '..', 'public');
 const BASE = 'https://cenner.hr';
 const OG = `${BASE}/og-image.png`;
+// The site's mark (the halftone orb), inlined from the favicon so these pages always match it.
+const MARK = readFileSync(join(PUBLIC_DIR, 'favicon.svg'), 'utf8')
+  .trim().replace('<svg ', '<svg width="36" height="36" aria-hidden="true" ');
 
 // ---- service landing pages ----
 const services = [
   {
     slug: 'izrada-web-stranica',
-    title: 'Izrada Web Stranica | Profesionalni Web Developeri | Cenner',
-    keyword: 'izrada web stranica',
+    title: 'Profesionalna Izrada Web Stranica u Hrvatskoj | Cenner',
+    keyword: 'izrada web stranica, profesionalna izrada web stranica, izrada internet stranica',
     description:
-      'Usluge profesionalnih web developera: izrada web stranica u Hrvatskoj od 300 €. Najbolji web developeri s portfoliom, ocjenama i verifikacijom. Bez agencijskih marži.',
-    h1: 'Izrada Web Stranica: Usluge Profesionalnih Web Developera',
+      'Profesionalna izrada web stranica za firme, obrte i male tvrtke u Hrvatskoj. Provjereni web developeri, više ponuda, cijene od 300 €. Bez agencijskih marži.',
+    h1: 'Profesionalna Izrada Web Stranica u Hrvatskoj',
     intro:
-      'Tražiš profesionalnu izradu web stranice po pristupačnoj cijeni? Cenner povezuje hrvatske tvrtke i poduzetnike s provjerenim web developerima koji rade brzo, kvalitetno i bez skupih agencijskih marži.',
+      'Tražiš profesionalnu izradu web stranice ili internet stranice za svoju firmu po pristupačnoj cijeni? Cenner povezuje hrvatske tvrtke, obrte i poduzetnike s provjerenim web developerima koji rade brzo, kvalitetno i bez skupih agencijskih marži.',
     sections: [
+      {
+        h2: 'Izrada web stranica za male firme i obrtnike',
+        body: [
+          'Mala firma ili obrt rijetko treba kompliciran sustav. Najčešće je dovoljna <strong>responzivna web stranica od 5 do 8 podstranica</strong>: početna, usluge, o nama, reference i kontakt, uz osnovnu SEO postavku i Google Business profil. Takva izrada web stranice obično staje u <strong>300 € do 800 €</strong> i gotova je za 1 do 3 tjedna.',
+          'Za ugostitelje, agencije za nekretnine, obrtnike i servise freelanceri na Cenneru rade i stranice s <strong>upitnicima, rezervacijama i prikazom ponude</strong> (npr. oglasi za nekretnine), a po potrebi i web shop s online plaćanjem.',
+        ],
+      },
       {
         h2: 'Koliko košta izrada web stranice u Hrvatskoj?',
         body: [
@@ -47,20 +58,19 @@ const services = [
         ],
       },
       {
-        h2: 'Najbolji web developeri u Hrvatskoj: po čemu ih prepoznati?',
-        body: [
-          'Najbolji web developeri u Hrvatskoj nisu nužno oni s najglasnijim oglasom, nego oni koje možeš provjeriti. Na Cenneru uz svakog developera vidiš <strong>portfolio, ocjene prijašnjih klijenata, tehnologije kojima radi i potvrđen identitet</strong> (KYC), pa uspoređuješ stvarne radove, a ne obećanja.',
-          'Za profesionalnu izradu web stranice traži jasan opseg, rok isporuke i fiksnu cijenu unaprijed. Kod nas ih dogovaraš izravno s developerom, a novac ostaje u escrowu dok ne potvrdiš isporuku.',
-        ],
-      },
-      {
         h2: 'Kako pronaći pravog web developera?',
         body: [
           'Klikni na "Pronađi freelancera" ispod, opiši svoj projekt u par rečenica, i naš AI matching će ti predložiti 3–5 najprikladnijih kandidata u roku od minute. Pregledaj njihove portfolije, ocjene i prethodne projekte, pa odaberi najboljeg.',
         ],
       },
+      {
+        h2: 'Želiš da Cenner tim napravi projekt umjesto tebe?',
+        body: [
+          'Uz marketplace s nezavisnim freelancerima, Cenner tim i sam izrađuje web stranice po fiksnoj cijeni. Ako ne želiš uspoređivati ponude, <a href="/services">pogledaj što Cenner tim radi</a> i javi se izravno.',
+        ],
+      },
     ],
-    related: ['programiranje', 'seo-optimizacija', 'wordpress-izrada'],
+    related: ['web-developeri', 'seo-optimizacija', 'wordpress-izrada'],
   },
   {
     slug: 'dizajn-loga',
@@ -95,32 +105,32 @@ const services = [
   },
   {
     slug: 'seo-optimizacija',
-    title: 'SEO Optimizacija: Cijena i Usluge SEO Stručnjaka | Cenner',
-    keyword: 'seo optimizacija',
+    title: 'SEO Optimizacija: Cijene i Usluge u Hrvatskoj | Cenner',
+    keyword: 'seo optimizacija, seo optimizacija cijena, usluge seo optimizacije, seo stručnjak',
     description:
-      'Cijena SEO optimizacije od 200 € (audit) i 300 €/mj. Usluge SEO optimizacije u Hrvatskoj: Zagreb, Split i cijela zemlja. Audit, on-page, link building, SEO marketing.',
-    h1: 'SEO Optimizacija: Usluge i Cijena u Hrvatskoj',
+      'Usluge SEO optimizacije u Hrvatskoj (Zagreb, Split i cijela zemlja): cijena audita od 200 €, mjesečni paketi od 300 €. SEO marketing i lokalni SEO.',
+    h1: 'SEO Optimizacija: Cijene i Usluge u Hrvatskoj',
     intro:
-      'Ako te kupci ne mogu pronaći na Googleu, ne postojiš. Cenner povezuje hrvatske tvrtke s SEO stručnjacima koji znaju kako tehnički, sadržajno i autoritativno postaviti web stranicu da rangira za prave ključne riječi.',
+      'Ako te kupci ne mogu pronaći na Googleu, ne postojiš. Ovdje je pregled što SEO optimizacija stvarno košta u Hrvatskoj i što uključuje, a Cenner te povezuje sa SEO stručnjacima koji znaju kako tehnički, sadržajno i autoritativno postaviti web stranicu da rangira za prave ključne riječi.',
     sections: [
       {
-        h2: 'Što uključuje SEO optimizacija?',
+        h2: 'SEO optimizacija cijena: koliko košta SEO u Hrvatskoj?',
         body: [
-          'Profesionalna SEO usluga obuhvaća: <strong>tehnički audit</strong> (brzina, indeksabilnost, struktura), <strong>keyword research</strong> za hrvatsko tržište, <strong>on-page optimizaciju</strong> (title, meta, headings, internal linking), <strong>strukturirane podatke</strong> (Schema.org), <strong>link building</strong> i <strong>kontinuirano izvještavanje</strong> kroz Google Search Console i Analytics.',
-        ],
-      },
-      {
-        h2: 'Koliko košta SEO optimizacija? Cijena SEO usluga u Hrvatskoj',
-        body: [
-          'Jednokratni SEO audit s preporukama kreće od <strong>200 € do 600 €</strong>. Mjesečni paket optimizacije za malu web stranicu ide od <strong>300 € do 800 € mjesečno</strong>. Veći e-commerce projekti i nacionalne kampanje kreću od <strong>1.000 € mjesečno</strong> i više.',
+          'Jednokratni SEO audit s preporukama kreće od <strong>200 € do 600 €</strong>. Mjesečni paket optimizacije za malu web stranicu ide od <strong>300 € do 800 € mjesečno</strong>. Veći e-commerce projekti i nacionalne kampanje kreću od <strong>1.000 € mjesečno</strong> i više. Ako te zanima cijena SEO optimizacije za tvoju konkretnu stranicu, objavi projekt i usporedi ponude više freelancera.',
           'Za razliku od plaćenih oglasa, SEO daje <strong>dugoročne rezultate</strong>. Jednom kad rangiraš, dolazi besplatan promet mjesecima.',
         ],
       },
       {
-        h2: 'SEO optimizacija u Zagrebu, Splitu i cijeloj Hrvatskoj',
+        h2: 'Lokalni SEO: Zagreb, Split, Rijeka, Osijek i manji gradovi',
         body: [
-          'SEO se radi na daljinu, pa ne moraš birati stručnjaka samo iz svog grada. Na Cenneru nalaziš SEO stručnjake i za <strong>SEO optimizaciju u Zagrebu</strong> i za <strong>SEO optimizaciju u Splitu</strong>, ali i za manja mjesta i lokalne obrte, uz isti pregled portfolija, ocjena i cijena.',
-          'Uz klasičnu optimizaciju web stranice dobivaš i <strong>SEO marketing</strong>: sadržaj, lokalni SEO (Google Business profil) i izvještavanje o rezultatima, s cijenom koju dogovoriš unaprijed.',
+          'Lokalna SEO optimizacija radi za tvrtke koje prodaju u jednom gradu ili regiji: <strong>Google Business profil</strong>, NAP podaci, lokalne ključne riječi (npr. "frizer Split", "odvjetnik Osijek"), recenzije i lokalni linkovi. Naši SEO freelanceri rade za klijente u Zagrebu, Splitu, Rijeci i Osijeku, ali i u manjim mjestima gdje je konkurencija znatno slabija, pa se rezultati vide brže.',
+          'Tražiš <strong>SEO optimizaciju u Zagrebu</strong> ili u Splitu? SEO se radi na daljinu, pa biraš stručnjaka po rezultatima, a ne po adresi. Uz optimizaciju same stranice dobivaš i <strong>SEO marketing</strong>: sadržaj, Google Business profil i mjesečno izvještavanje, uz cijenu koju dogovoriš unaprijed.',
+        ],
+      },
+      {
+        h2: 'Što uključuje SEO optimizacija?',
+        body: [
+          'Profesionalna SEO usluga obuhvaća: <strong>tehnički audit</strong> (brzina, indeksabilnost, struktura), <strong>keyword research</strong> za hrvatsko tržište, <strong>on-page optimizaciju</strong> (title, meta, headings, internal linking), <strong>strukturirane podatke</strong> (Schema.org), <strong>link building</strong> i <strong>kontinuirano izvještavanje</strong> kroz Google Search Console i Analytics.',
         ],
       },
       {
@@ -192,15 +202,65 @@ const services = [
           'Ako trebaš stranicu koju će klijent moći sam ažurirati i kojoj treba bogat ekosustav plugina (npr. WooCommerce, formular, booking), <strong>WordPress je najbolji izbor</strong>. Za pure marketing stranice s naprednim animacijama često je bolji Webflow ili Astro. Za složene aplikacije: custom (Next.js, Remix).',
         ],
       },
+      {
+        h2: 'Želiš da Cenner tim napravi projekt umjesto tebe?',
+        body: [
+          'Uz marketplace s nezavisnim WordPress developerima, Cenner tim i sam izrađuje WordPress stranice po fiksnoj cijeni. Ako ne želiš uspoređivati ponude, <a href="/services">pogledaj što Cenner tim radi</a> i javi se izravno.',
+        ],
+      },
     ],
     related: ['izrada-web-stranica', 'seo-optimizacija', 'dizajn-loga'],
+  },
+  {
+    slug: 'web-developeri',
+    title: 'Usluge Profesionalnih Web Developera u Hrvatskoj | Cenner',
+    keyword: 'usluge profesionalnih web developera, najbolji web developeri u hrvatskoj, web developer hrvatska',
+    description:
+      'Usluge profesionalnih web developera u Hrvatskoj: front-end, back-end, WordPress i web shopovi. Satnica od 25 €, plaćanje tek po isporuci.',
+    h1: 'Profesionalni Web Developeri u Hrvatskoj',
+    intro:
+      'Trebaš web developera koji isporučuje na vrijeme i piše kod koji se može održavati? Cenner okuplja provjerene hrvatske web developere za front-end, back-end, WordPress i e-commerce projekte, uz osigurano plaćanje i više ponuda na jednom mjestu.',
+    sections: [
+      {
+        h2: 'Koje usluge nude profesionalni web developeri?',
+        body: [
+          'Naši web developeri pokrivaju cijeli razvoj web stranica: <strong>front-end</strong> (React, Next.js, Vue, Astro, responzivni UI), <strong>back-end</strong> (Node.js, PHP, Python, baze podataka i API-ji), <strong>WordPress i WooCommerce</strong>, <strong>web shopove i integracije plaćanja</strong>, <strong>performance i SEO tehničku optimizaciju</strong> te <strong>održavanje i nadogradnju postojećih stranica</strong>.',
+        ],
+      },
+      {
+        h2: 'Koliko košta web developer u Hrvatskoj?',
+        body: [
+          'Satnica iskusnog web developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Fiksne cijene projekata: prezentacijska stranica od <strong>300 €</strong>, korporativna stranica s CMS-om od <strong>800 €</strong>, web shop ili aplikacija od <strong>2.000 €</strong> pa naviše.',
+          'Na Cenneru objaviš projekt, dobiješ <strong>više ponuda</strong> i sam biraš. Plaćanje je u escrowu i oslobađa se tek kad si zadovoljan isporukom.',
+        ],
+      },
+      {
+        h2: 'Kako prepoznati najboljeg web developera?',
+        body: [
+          'Najbolji web developeri u Hrvatskoj razlikuju se po provjerljivim stvarima: <strong>portfolio sa živim stranicama</strong>, ocjene prijašnjih klijenata, jasan opseg i rok u ponudi, brzina učitavanja (Core Web Vitals) i spremnost da objasne tehničke odluke jednostavnim jezikom. Na Cenneru su svi developeri prošli <strong>KYC verifikaciju</strong>, a profili prikazuju ocjene, vrijeme isporuke i prethodne projekte.',
+        ],
+      },
+      {
+        h2: 'Freelance web developer ili agencija?',
+        body: [
+          'Za većinu malih i srednjih projekata freelance web developer daje <strong>jednaku kvalitetu uz 2 do 3 puta nižu cijenu</strong> jer nema fiksnih režija agencije. Agencija ima smisla kad ti paralelno treba dizajn, razvoj, copywriting i marketing pod jednim ugovorom, a i to često možeš složiti na Cenneru iz više freelancera.',
+        ],
+      },
+      {
+        h2: 'Želiš da Cenner tim napravi projekt umjesto tebe?',
+        body: [
+          'Uz marketplace s nezavisnim developerima, Cenner tim i sam razvija web stranice, aplikacije i automatizacije po fiksnoj cijeni. Ako ne želiš uspoređivati ponude, <a href="/services">pogledaj što Cenner tim radi</a> i javi se izravno.',
+        ],
+      },
+    ],
+    related: ['izrada-web-stranica', 'wordpress-izrada', 'programiranje'],
   },
   {
     slug: 'programiranje',
     title: 'Usluge Programiranja: Programeri po Projektu od 500 € | Cenner',
     keyword: 'usluge programiranja',
     description:
-      'Usluge programiranja od 500 €: provjereni freelance programeri za web, mobilne aplikacije, backend i API integracije. Više ponuda, escrow plaćanje, bez agencijskih marži.',
+      'Usluge programiranja od 500 €: freelance programeri za web, mobilne aplikacije i API integracije. Više ponuda, escrow plaćanje, bez agencijskih marži.',
     h1: 'Usluge Programiranja: Freelance Developeri',
     intro:
       'Od web aplikacija i API integracija do mobilnih aplikacija i automatizacije, Cenner te povezuje s provjerenim hrvatskim programerima koji rade s modernim tehnologijama. Profesionalno programiranje po transparentnim cijenama, bez skupih agencijskih marži.',
@@ -231,6 +291,12 @@ const services = [
           'Klikni na "Pronađi freelancera", opiši svoj projekt i tehnički zahtjev u par rečenica, a naš AI matching predlaže 3–5 najprikladnijih developera u roku od minute. Pregledaj portfolije i reference, zatraži ponudu i kreni.',
         ],
       },
+      {
+        h2: 'Želiš da Cenner tim napravi projekt umjesto tebe?',
+        body: [
+          'Uz marketplace s nezavisnim programerima, Cenner tim i sam preuzima razvoj web aplikacija i automatizacija po fiksnoj cijeni. Ako ne želiš uspoređivati ponude, <a href="/services">pogledaj što Cenner tim radi</a> i javi se izravno.',
+        ],
+      },
     ],
     related: ['izrada-web-stranica', 'wordpress-izrada', 'seo-optimizacija'],
   },
@@ -241,6 +307,9 @@ const cities = [
   {
     slug: 'zagreb',
     name: 'Zagreb',
+    loc: 'Zagrebu',   // u ...
+    gen: 'Zagreba',   // iz ...
+    acc: 'Zagreb',   // Što čini ...
     title: 'Freelanceri Zagreb: Honorarni Posao u Zagrebu | Cenner',
     description:
       'Pronađi provjerene freelancere u Zagrebu: web developere, dizajnere, marketinške stručnjake. Honorarni posao u Zagrebu, brzo i sigurno.',
@@ -253,6 +322,9 @@ const cities = [
   {
     slug: 'split',
     name: 'Split',
+    loc: 'Splitu',   // u ...
+    gen: 'Splita',   // iz ...
+    acc: 'Split',   // Što čini ...
     title: 'Freelanceri Split: Honorarni Posao u Splitu | Cenner',
     description:
       'Pronađi vrhunske freelancere u Splitu i Dalmaciji. Web razvoj, dizajn, marketing, prijevodi. Provjereni stručnjaci, sigurno plaćanje.',
@@ -265,6 +337,9 @@ const cities = [
   {
     slug: 'rijeka',
     name: 'Rijeka',
+    loc: 'Rijeci',   // u ...
+    gen: 'Rijeke',   // iz ...
+    acc: 'Rijeku',   // Što čini ...
     title: 'Freelanceri Rijeka: Honorarni Posao u Rijeci | Cenner',
     description:
       'Pronađi freelancere u Rijeci i Primorsko-goranskoj županiji. Web izrada, dizajn, marketing, copywriting. Cenner je vodeća freelance platforma u Hrvatskoj.',
@@ -277,6 +352,9 @@ const cities = [
   {
     slug: 'osijek',
     name: 'Osijek',
+    loc: 'Osijeku',   // u ...
+    gen: 'Osijeka',   // iz ...
+    acc: 'Osijek',   // Što čini ...
     title: 'Freelanceri Osijek: Honorarni Posao u Slavoniji | Cenner',
     description:
       'Pronađi freelancere u Osijeku i Slavoniji. Web izrada, dizajn, marketing, prijevodi. Profesionalni rad po pristupačnim cijenama.',
@@ -321,71 +399,111 @@ function pageHTML({
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;700;800;900&family=Press+Start+2P&display=swap">
+<meta name="theme-color" content="#eef0f3">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 <style>
   *{box-sizing:border-box}
-  body{margin:0;font-family:'Inter',sans-serif;background:#050505;color:#f3f4f6;line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:#4ade80;text-decoration:none}
-  a:hover{text-decoration:underline}
-  header{padding:20px 24px;border-bottom:1px solid #ffffff14;display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto}
-  .logo{font-weight:800;font-size:20px;color:#fff}
-  .logo span{color:#4ade80}
-  nav a{color:#d1d5db;margin-left:24px;font-size:14px;font-weight:500}
-  main{max-width:880px;margin:0 auto;padding:64px 24px 96px}
-  h1{font-size:44px;font-weight:800;line-height:1.05;margin:0 0 24px;letter-spacing:-0.02em}
-  h2{font-size:28px;font-weight:700;margin:48px 0 16px;letter-spacing:-0.01em}
-  p{font-size:17px;color:#d1d5db;margin:0 0 16px}
-  strong{color:#fff}
-  .lead{font-size:19px;color:#e5e7eb;margin-bottom:32px}
-  .cta{display:inline-block;background:linear-gradient(135deg,#4ade80,#22c55e);color:#0a0a0a;padding:14px 28px;border-radius:14px;font-weight:700;margin:8px 12px 8px 0;box-shadow:0 0 24px rgba(74,222,128,0.25)}
-  .cta:hover{text-decoration:none;transform:translateY(-1px)}
-  .cta-secondary{background:transparent;color:#fff;border:1px solid #ffffff33}
-  .related{margin-top:64px;padding-top:32px;border-top:1px solid #ffffff14}
-  .related h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 16px}
-  .related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-  .related li{padding:14px 18px;border:1px solid #ffffff14;border-radius:12px;transition:border-color 0.2s}
-  .related li:hover{border-color:#4ade8055}
-  footer{border-top:1px solid #ffffff14;padding:32px 24px;text-align:center;color:#6b7280;font-size:14px;max-width:1200px;margin:0 auto}
-  footer a{color:#9ca3af;margin:0 12px}
-  @media (max-width:640px){
-    h1{font-size:32px}
-    h2{font-size:22px}
-    nav a{display:none}
-    nav a:first-child{display:inline-block}
+  :root{--paper:#eef0f3;--paper2:#e2e5ea;--ink:#0b0c0e;--slate:#5d6470;--sky:#002ca5}
+  body{margin:0;font-family:'Libre Franklin',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--sky);text-decoration:underline;text-underline-offset:3px}
+  a:hover{color:var(--ink)}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+  .bar{position:sticky;top:0;z-index:10;background:var(--paper)}
+  .bar-in{max-width:1400px;margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .logo{display:flex;align-items:center;gap:14px;color:var(--ink);text-decoration:none}
+  .logo:hover{color:var(--ink)}
+  .logo svg{flex:none;display:block}
+  /* the wordmark in the pixel face on the same green strip as the site's nav logo, fading out to the right */
+  .logo span{font-family:'Press Start 2P',monospace;font-size:15px;line-height:1;padding:10px 34px 10px 8px;margin-left:-6px;-webkit-text-stroke:.8px currentColor;
+    background:linear-gradient(90deg,rgba(34,197,94,.9),rgba(74,222,128,.9) 55%,rgba(74,222,128,0) 90%)}
+  .bar nav{display:flex;align-items:center;gap:4px}
+  .bar nav a{color:#0b0c0eb0;text-decoration:none;font-size:14px;font-weight:700;padding:6px 10px;border:2px solid transparent;white-space:nowrap;transition:transform .1s,box-shadow .1s,background-color .1s}
+  .bar nav a:hover,.bar nav a:focus-visible{color:var(--ink);border-color:var(--ink);background:#fff;box-shadow:3px 3px 0 0 var(--ink);transform:translate(-1px,-1px)}
+  .bar nav a.login{background:var(--sky);color:#fff;border-color:var(--ink);padding:10px 18px;margin-left:8px}
+  .bar nav a.login:hover,.bar nav a.login:focus-visible{background:var(--sky);color:#fff}
+  main{max-width:1400px;margin:0 auto;padding:48px 24px 96px}
+  h1{font-size:clamp(2rem,9vw,6.5rem);hyphens:auto;-webkit-hyphens:auto;font-weight:800;line-height:0.94;margin:0 0 32px;letter-spacing:-0.035em;text-transform:uppercase;max-width:16ch;overflow-wrap:break-word}
+  main>*:not(h1):not(.related):not(.cta-row){max-width:46rem}
+  h2{font-size:clamp(1.625rem,1.2rem+1.6vw,2.5rem);font-weight:800;line-height:1.05;margin:56px 0 16px;padding-top:20px;border-top:2px solid var(--ink);letter-spacing:-0.025em}
+  p{font-size:18px;color:#1d2126;margin:0 0 16px}
+  strong{color:var(--ink);font-weight:700}
+  .lead{font-size:clamp(1.25rem,1.1rem+0.7vw,1.625rem);line-height:1.4;color:var(--ink);margin-bottom:32px}
+  .cta-row{margin:0 0 8px}
+  .cta{display:inline-block;background:var(--sky);color:#fff;padding:16px 28px;border:2px solid var(--sky);font-weight:700;font-size:16px;margin:8px 12px 8px 0;text-decoration:none;transition:background .15s,color .15s,border-color .15s}
+  .cta:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+  .cta-secondary{background:transparent;color:var(--ink);border-color:var(--ink)}
+  .cta-secondary:hover{background:var(--ink);color:#fff}
+  main>ul{list-style:none;padding:0;margin:0 0 16px}
+  main>ul li{border-top:1px solid #0b0c0e33;padding:12px 0;font-weight:700;font-size:18px}
+  main>ul li:last-child{border-bottom:1px solid #0b0c0e33}
+  .related{max-width:none;margin-top:72px;padding-top:24px;border-top:2px solid var(--ink)}
+  .related h3{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--slate);margin:0 0 16px}
+  .related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .related li{background:#fff;border:2px solid var(--ink);transition:transform .15s,box-shadow .15s}
+  .related li:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 0 var(--ink)}
+  .related li a{display:block;padding:16px 18px;color:var(--ink);font-weight:700;text-decoration:none}
+  .related li a:hover{color:var(--sky)}
+  .related li small{display:block;margin-top:4px;font-weight:400;font-size:14px;color:var(--slate)}
+  footer{background:var(--ink);color:#ffffffb3;padding:40px 24px;font-size:14px}
+  .foot{max-width:1400px;margin:0 auto}
+  footer a{color:#fff;text-decoration:none;display:inline-block;margin:0 20px 8px 0;font-weight:500}
+  footer a:hover{text-decoration:underline;color:#fff}
+  footer a:focus-visible{outline:3px solid #fff;outline-offset:3px;text-decoration:underline}
+  .copy{margin-top:16px}
+  @media (max-width:760px){
+    .bar nav a:not(.login){display:none}
+    .bar-in{padding:0 16px}
+    .logo span{padding-right:18px}
+    .bar nav a.login{padding:10px 14px;margin-left:0}
+    .bar nav a.login .long{display:none}
+    h1{max-width:none}
+    p{font-size:17px}
   }
 </style>
 </head>
 <body>
-<header>
-  <a href="/" class="logo">cenner<span>.</span></a>
+<div class="bar"><div class="bar-in">
+  <a href="/" class="logo" aria-label="Cenner">${MARK}<span>CENNER</span></a>
   <nav>
     <a href="/marketplace">Marketplace</a>
     <a href="/services">Usluge</a>
     <a href="/blog">Blog</a>
     <a href="/about">O nama</a>
+    <a href="/auth" class="login">Prijava<span class="long"> / Registracija</span></a>
   </nav>
-</header>
+</div></div>
 <main>
 ${body}
 </main>
 <footer>
-  <div>
-    <a href="/">Naslovna</a>
-    <a href="/marketplace">Marketplace</a>
-    <a href="/services">Usluge</a>
-    <a href="/blog">Blog</a>
-    <a href="/about">O nama</a>
-    <a href="/contact">Kontakt</a>
-    <a href="/privacy">Privatnost</a>
-    <a href="/terms">Uvjeti</a>
+  <div class="foot">
+    <div>
+      <a href="/">Naslovna</a>
+      <a href="/marketplace">Marketplace</a>
+      <a href="/services">Usluge</a>
+      <a href="/blog">Blog</a>
+      <a href="/about">O nama</a>
+      <a href="/about#kontakt">Kontakt</a>
+      <a href="/privacy">Privatnost</a>
+      <a href="/terms">Uvjeti</a>
+    </div>
+    <div class="copy">© Cenner, Freelance Platforma Hrvatska</div>
   </div>
-  <div style="margin-top:16px">© Cenner, Freelance Platforma Hrvatska</div>
 </footer>
 </body>
 </html>
 `;
 }
+
+// Cross-links to Cenner's own products on their subdomains (never the vercel.app hosts).
+const TOOLS_HTML = `<div class="related">
+  <h3>Cenner alati</h3>
+  <ul>
+    <li><a href="https://links.cenner.hr">Cenner Links<small>Link-in-bio stranica za kreatore: sve tvoje poveznice na jednom mjestu.</small></a></li>
+    <li><a href="https://shorten.cenner.hr">Shorten<small>Skraćivač poveznica s brojanjem klikova po državama.</small></a></li>
+  </ul>
+</div>`;
 
 function serviceBody(svc) {
   const sectionsHTML = svc.sections
@@ -399,21 +517,22 @@ function serviceBody(svc) {
     .join('\n');
   return `<h1>${svc.h1}</h1>
 <p class="lead">${svc.intro}</p>
-<p>
+<p class="cta-row">
   <a href="/marketplace" class="cta">Pronađi freelancera</a>
   <a href="/services" class="cta cta-secondary">Pregledaj sve usluge</a>
 </p>
 ${sectionsHTML}
 <h2>Spreman za početak?</h2>
 <p>Cenner ti pomaže pronaći pravog freelancera u par minuta. Bez agencijskih marži, bez skrivenih troškova, uz osigurano plaćanje.</p>
-<p>
+<p class="cta-row">
   <a href="/marketplace" class="cta">Istraži marketplace</a>
   <a href="/auth" class="cta cta-secondary">Otvori račun</a>
 </p>
 <div class="related">
   <h3>Povezane usluge</h3>
   <ul>${relatedHTML}</ul>
-</div>`;
+</div>
+${TOOLS_HTML}`;
 }
 
 function cityBody(city) {
@@ -423,29 +542,31 @@ function cityBody(city) {
     .join('\n');
   return `<h1>${city.h1}</h1>
 <p class="lead">${city.intro}</p>
-<p>
-  <a href="/marketplace" class="cta">Pronađi freelancera u ${city.name}u</a>
+<p class="cta-row">
+  <a href="/marketplace" class="cta">Pronađi freelancera u ${city.loc}</a>
   <a href="/services" class="cta cta-secondary">Pregledaj usluge</a>
 </p>
-<h2>Što čini ${city.name} jakim freelance tržištem?</h2>
+<h2>Što čini ${city.acc} jakim freelance tržištem?</h2>
 <p>${city.extra}</p>
-<h2>Najtraženije kategorije u ${city.name}u</h2>
+<h2>Najtraženije kategorije u ${city.loc}</h2>
 <ul>
   <li><a href="/usluge/izrada-web-stranica">Izrada web stranica</a></li>
   <li><a href="/usluge/dizajn-loga">Dizajn loga i vizualnog identiteta</a></li>
   <li><a href="/usluge/seo-optimizacija">SEO optimizacija</a></li>
   <li><a href="/usluge/digitalni-marketing">Digitalni marketing</a></li>
   <li><a href="/usluge/wordpress-izrada">WordPress izrada</a></li>
+  <li><a href="/usluge/web-developeri">Web developeri</a></li>
 </ul>
 <h2>Kako Cenner radi?</h2>
-<p>Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz ${city.name}a i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow. Plaćaš tek kad si zadovoljan.</p>
-<p>
+<p>Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz ${city.gen} i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow. Plaćaš tek kad si zadovoljan.</p>
+<p class="cta-row">
   <a href="/marketplace" class="cta">Započni sad</a>
 </p>
 <div class="related">
   <h3>Freelanceri u drugim gradovima</h3>
   <ul>${otherCities}</ul>
-</div>`;
+</div>
+${TOOLS_HTML}`;
 }
 
 function serviceJsonLd(svc, url) {
@@ -479,17 +600,18 @@ function cityJsonLd(city, url) {
   return [
     {
       '@context': 'https://schema.org',
-      '@type': 'LocalBusiness',
-      name: `Cenner Freelanceri ${city.name}`,
+      '@type': 'Service',
+      name: `Freelanceri ${city.name}`,
+      serviceType: 'Freelance usluge',
       description: city.description,
       url,
       areaServed: { '@type': 'City', name: city.name },
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: city.name,
-        addressCountry: 'HR',
+      provider: {
+        '@type': 'Organization',
+        name: 'Cenner',
+        url: BASE,
+        address: { '@type': 'PostalAddress', streetAddress: 'Mikulinci 8', postalCode: '10010', addressLocality: 'Zagreb', addressCountry: 'HR' },
       },
-      parentOrganization: { '@type': 'Organization', name: 'Cenner', url: BASE },
     },
     {
       '@context': 'https://schema.org',

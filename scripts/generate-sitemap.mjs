@@ -43,6 +43,7 @@ const LANDING_ROUTES = [
   { path: '/usluge/wordpress-izrada',    priority: '0.9', changefreq: 'weekly' },
   { path: '/usluge/dizajn-loga',         priority: '0.9', changefreq: 'weekly' },
   { path: '/usluge/programiranje',       priority: '0.9', changefreq: 'weekly' },
+  { path: '/usluge/web-developeri',      priority: '0.9', changefreq: 'weekly' },
   { path: '/freelanceri/zagreb',         priority: '0.85', changefreq: 'weekly' },
   { path: '/freelanceri/split',          priority: '0.85', changefreq: 'weekly' },
   { path: '/freelanceri/rijeka',         priority: '0.85', changefreq: 'weekly' },
@@ -56,8 +57,7 @@ function urlEntry({ loc, lastmod = TODAY, changefreq = 'monthly', priority = '0.
     <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="${loc}" />
-    <xhtml:link rel="alternate" hreflang="en"        href="${loc}" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="${loc}" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${loc}" />
   </url>`;
 }

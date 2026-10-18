@@ -6,8 +6,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/" />
   </url>
   <url>
@@ -15,8 +14,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/marketplace" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/marketplace" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/marketplace" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/marketplace" />
   </url>
   <url>
@@ -24,8 +22,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/services" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/services" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/services" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/services" />
   </url>
   <url>
@@ -33,8 +30,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/subscription" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/subscription" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/subscription" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/subscription" />
   </url>
   <url>
@@ -42,8 +38,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/blog" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/blog" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/blog" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/blog" />
   </url>
   <url>
@@ -51,8 +46,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/about" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/about" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/about" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/about" />
   </url>
   <url>
@@ -60,8 +54,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/ranwhat" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/ranwhat" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/ranwhat" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/ranwhat" />
   </url>
   <url>
@@ -69,8 +62,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/onboarding" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/onboarding" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/onboarding" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/onboarding" />
   </url>
   <url>
@@ -78,8 +70,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/privacy" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/privacy" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/privacy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/privacy" />
   </url>
   <url>
@@ -87,8 +78,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/terms" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/terms" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/terms" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/terms" />
   </url>
   <url>
@@ -96,8 +86,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/cookies" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/cookies" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/cookies" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/cookies" />
   </url>
   <url>
@@ -105,8 +94,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/usluge/izrada-web-stranica" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/usluge/izrada-web-stranica" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/usluge/izrada-web-stranica" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/usluge/izrada-web-stranica" />
   </url>
   <url>
@@ -114,8 +102,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/usluge/seo-optimizacija" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/usluge/seo-optimizacija" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/usluge/seo-optimizacija" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/usluge/seo-optimizacija" />
   </url>
   <url>
@@ -123,8 +110,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/usluge/digitalni-marketing" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/usluge/digitalni-marketing" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/usluge/digitalni-marketing" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/usluge/digitalni-marketing" />
   </url>
   <url>
@@ -132,8 +118,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/usluge/wordpress-izrada" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/usluge/wordpress-izrada" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/usluge/wordpress-izrada" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/usluge/wordpress-izrada" />
   </url>
   <url>
@@ -141,8 +126,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/usluge/dizajn-loga" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/usluge/dizajn-loga" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/usluge/dizajn-loga" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/usluge/dizajn-loga" />
   </url>
   <url>
@@ -150,17 +134,23 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/usluge/programiranje" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/usluge/programiranje" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/usluge/programiranje" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/usluge/programiranje" />
+  </url>
+  <url>
+    <loc>https://cenner.hr/usluge/web-developeri</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/usluge/web-developeri" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/usluge/web-developeri" />
   </url>
   <url>
     <loc>https://cenner.hr/freelanceri/zagreb</loc>
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/freelanceri/zagreb" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/freelanceri/zagreb" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/freelanceri/zagreb" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/freelanceri/zagreb" />
   </url>
   <url>
@@ -168,8 +158,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/freelanceri/split" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/freelanceri/split" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/freelanceri/split" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/freelanceri/split" />
   </url>
   <url>
@@ -177,8 +166,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/freelanceri/rijeka" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/freelanceri/rijeka" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/freelanceri/rijeka" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/freelanceri/rijeka" />
   </url>
   <url>
@@ -186,8 +174,7 @@
     <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="hr"        href="https://cenner.hr/freelanceri/osijek" />
-    <xhtml:link rel="alternate" hreflang="en"        href="https://cenner.hr/freelanceri/osijek" />
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/freelanceri/osijek" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/freelanceri/osijek" />
   </url>
 </urlset>

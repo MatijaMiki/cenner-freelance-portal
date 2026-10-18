@@ -27,55 +27,84 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
-<script type="application/ld+json">[{"@context":"https://schema.org","@type":"LocalBusiness","name":"Cenner Freelanceri Split","description":"Pronađi vrhunske freelancere u Splitu i Dalmaciji. Web razvoj, dizajn, marketing, prijevodi. Provjereni stručnjaci, sigurno plaćanje.","url":"https://cenner.hr/freelanceri/split","areaServed":{"@type":"City","name":"Split"},"address":{"@type":"PostalAddress","addressLocality":"Split","addressCountry":"HR"},"parentOrganization":{"@type":"Organization","name":"Cenner","url":"https://cenner.hr"}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Naslovna","item":"https://cenner.hr"},{"@type":"ListItem","position":2,"name":"Freelanceri","item":"https://cenner.hr/marketplace"},{"@type":"ListItem","position":3,"name":"Split","item":"https://cenner.hr/freelanceri/split"}]}]</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;700;800;900&family=Press+Start+2P&display=swap">
+<meta name="theme-color" content="#eef0f3">
+<script type="application/ld+json">[{"@context":"https://schema.org","@type":"Service","name":"Freelanceri Split","serviceType":"Freelance usluge","description":"Pronađi vrhunske freelancere u Splitu i Dalmaciji. Web razvoj, dizajn, marketing, prijevodi. Provjereni stručnjaci, sigurno plaćanje.","url":"https://cenner.hr/freelanceri/split","areaServed":{"@type":"City","name":"Split"},"provider":{"@type":"Organization","name":"Cenner","url":"https://cenner.hr","address":{"@type":"PostalAddress","streetAddress":"Mikulinci 8","postalCode":"10010","addressLocality":"Zagreb","addressCountry":"HR"}}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Naslovna","item":"https://cenner.hr"},{"@type":"ListItem","position":2,"name":"Freelanceri","item":"https://cenner.hr/marketplace"},{"@type":"ListItem","position":3,"name":"Split","item":"https://cenner.hr/freelanceri/split"}]}]</script>
 <style>
   *{box-sizing:border-box}
-  body{margin:0;font-family:'Inter',sans-serif;background:#050505;color:#f3f4f6;line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:#4ade80;text-decoration:none}
-  a:hover{text-decoration:underline}
-  header{padding:20px 24px;border-bottom:1px solid #ffffff14;display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto}
-  .logo{font-weight:800;font-size:20px;color:#fff}
-  .logo span{color:#4ade80}
-  nav a{color:#d1d5db;margin-left:24px;font-size:14px;font-weight:500}
-  main{max-width:880px;margin:0 auto;padding:64px 24px 96px}
-  h1{font-size:44px;font-weight:800;line-height:1.05;margin:0 0 24px;letter-spacing:-0.02em}
-  h2{font-size:28px;font-weight:700;margin:48px 0 16px;letter-spacing:-0.01em}
-  p{font-size:17px;color:#d1d5db;margin:0 0 16px}
-  strong{color:#fff}
-  .lead{font-size:19px;color:#e5e7eb;margin-bottom:32px}
-  .cta{display:inline-block;background:linear-gradient(135deg,#4ade80,#22c55e);color:#0a0a0a;padding:14px 28px;border-radius:14px;font-weight:700;margin:8px 12px 8px 0;box-shadow:0 0 24px rgba(74,222,128,0.25)}
-  .cta:hover{text-decoration:none;transform:translateY(-1px)}
-  .cta-secondary{background:transparent;color:#fff;border:1px solid #ffffff33}
-  .related{margin-top:64px;padding-top:32px;border-top:1px solid #ffffff14}
-  .related h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin:0 0 16px}
-  .related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-  .related li{padding:14px 18px;border:1px solid #ffffff14;border-radius:12px;transition:border-color 0.2s}
-  .related li:hover{border-color:#4ade8055}
-  footer{border-top:1px solid #ffffff14;padding:32px 24px;text-align:center;color:#6b7280;font-size:14px;max-width:1200px;margin:0 auto}
-  footer a{color:#9ca3af;margin:0 12px}
-  @media (max-width:640px){
-    h1{font-size:32px}
-    h2{font-size:22px}
-    nav a{display:none}
-    nav a:first-child{display:inline-block}
+  :root{--paper:#eef0f3;--paper2:#e2e5ea;--ink:#0b0c0e;--slate:#5d6470;--sky:#002ca5}
+  body{margin:0;font-family:'Libre Franklin',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--sky);text-decoration:underline;text-underline-offset:3px}
+  a:hover{color:var(--ink)}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+  .bar{position:sticky;top:0;z-index:10;background:var(--paper)}
+  .bar-in{max-width:1400px;margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .logo{display:flex;align-items:center;gap:14px;color:var(--ink);text-decoration:none}
+  .logo:hover{color:var(--ink)}
+  .logo svg{flex:none;display:block}
+  /* the wordmark in the pixel face on the same green strip as the site's nav logo, fading out to the right */
+  .logo span{font-family:'Press Start 2P',monospace;font-size:15px;line-height:1;padding:10px 34px 10px 8px;margin-left:-6px;-webkit-text-stroke:.8px currentColor;
+    background:linear-gradient(90deg,rgba(34,197,94,.9),rgba(74,222,128,.9) 55%,rgba(74,222,128,0) 90%)}
+  .bar nav{display:flex;align-items:center;gap:4px}
+  .bar nav a{color:#0b0c0eb0;text-decoration:none;font-size:14px;font-weight:700;padding:6px 10px;border:2px solid transparent;white-space:nowrap;transition:transform .1s,box-shadow .1s,background-color .1s}
+  .bar nav a:hover,.bar nav a:focus-visible{color:var(--ink);border-color:var(--ink);background:#fff;box-shadow:3px 3px 0 0 var(--ink);transform:translate(-1px,-1px)}
+  .bar nav a.login{background:var(--sky);color:#fff;border-color:var(--ink);padding:10px 18px;margin-left:8px}
+  .bar nav a.login:hover,.bar nav a.login:focus-visible{background:var(--sky);color:#fff}
+  main{max-width:1400px;margin:0 auto;padding:48px 24px 96px}
+  h1{font-size:clamp(2rem,9vw,6.5rem);hyphens:auto;-webkit-hyphens:auto;font-weight:800;line-height:0.94;margin:0 0 32px;letter-spacing:-0.035em;text-transform:uppercase;max-width:16ch;overflow-wrap:break-word}
+  main>*:not(h1):not(.related):not(.cta-row){max-width:46rem}
+  h2{font-size:clamp(1.625rem,1.2rem+1.6vw,2.5rem);font-weight:800;line-height:1.05;margin:56px 0 16px;padding-top:20px;border-top:2px solid var(--ink);letter-spacing:-0.025em}
+  p{font-size:18px;color:#1d2126;margin:0 0 16px}
+  strong{color:var(--ink);font-weight:700}
+  .lead{font-size:clamp(1.25rem,1.1rem+0.7vw,1.625rem);line-height:1.4;color:var(--ink);margin-bottom:32px}
+  .cta-row{margin:0 0 8px}
+  .cta{display:inline-block;background:var(--sky);color:#fff;padding:16px 28px;border:2px solid var(--sky);font-weight:700;font-size:16px;margin:8px 12px 8px 0;text-decoration:none;transition:background .15s,color .15s,border-color .15s}
+  .cta:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+  .cta-secondary{background:transparent;color:var(--ink);border-color:var(--ink)}
+  .cta-secondary:hover{background:var(--ink);color:#fff}
+  main>ul{list-style:none;padding:0;margin:0 0 16px}
+  main>ul li{border-top:1px solid #0b0c0e33;padding:12px 0;font-weight:700;font-size:18px}
+  main>ul li:last-child{border-bottom:1px solid #0b0c0e33}
+  .related{max-width:none;margin-top:72px;padding-top:24px;border-top:2px solid var(--ink)}
+  .related h3{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--slate);margin:0 0 16px}
+  .related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .related li{background:#fff;border:2px solid var(--ink);transition:transform .15s,box-shadow .15s}
+  .related li:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 0 var(--ink)}
+  .related li a{display:block;padding:16px 18px;color:var(--ink);font-weight:700;text-decoration:none}
+  .related li a:hover{color:var(--sky)}
+  .related li small{display:block;margin-top:4px;font-weight:400;font-size:14px;color:var(--slate)}
+  footer{background:var(--ink);color:#ffffffb3;padding:40px 24px;font-size:14px}
+  .foot{max-width:1400px;margin:0 auto}
+  footer a{color:#fff;text-decoration:none;display:inline-block;margin:0 20px 8px 0;font-weight:500}
+  footer a:hover{text-decoration:underline;color:#fff}
+  footer a:focus-visible{outline:3px solid #fff;outline-offset:3px;text-decoration:underline}
+  .copy{margin-top:16px}
+  @media (max-width:760px){
+    .bar nav a:not(.login){display:none}
+    .bar-in{padding:0 16px}
+    .logo span{padding-right:18px}
+    .bar nav a.login{padding:10px 14px;margin-left:0}
+    .bar nav a.login .long{display:none}
+    h1{max-width:none}
+    p{font-size:17px}
   }
 </style>
 </head>
 <body>
-<header>
-  <a href="/" class="logo">cenner<span>.</span></a>
+<div class="bar"><div class="bar-in">
+  <a href="/" class="logo" aria-label="Cenner"><svg width="36" height="36" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#0c1015"/><circle cx="50" cy="10" r="1.0" fill="#5b3aa8"/><circle cx="30" cy="20" r="1.4" fill="#6e46ba"/><circle cx="40" cy="20" r="1.9" fill="#8354cf"/><circle cx="50" cy="20" r="2.1" fill="#8a59d6"/><circle cx="60" cy="20" r="1.9" fill="#8354cf"/><circle cx="70" cy="20" r="1.4" fill="#6e46ba"/><circle cx="20" cy="30" r="1.4" fill="#6e46ba"/><circle cx="30" cy="30" r="2.3" fill="#925ede"/><circle cx="40" cy="30" r="2.9" fill="#b55dcb"/><circle cx="50" cy="30" r="3.2" fill="#c459bc"/><circle cx="60" cy="30" r="2.9" fill="#b55dcb"/><circle cx="70" cy="30" r="2.3" fill="#925ede"/><circle cx="80" cy="30" r="1.4" fill="#6e46ba"/><circle cx="20" cy="40" r="1.9" fill="#8354cf"/><circle cx="30" cy="40" r="2.9" fill="#b55dcb"/><circle cx="40" cy="40" r="3.8" fill="#ea5098"/><circle cx="50" cy="40" r="4.3" fill="#f06c82"/><circle cx="60" cy="40" r="3.8" fill="#ea5098"/><circle cx="70" cy="40" r="2.9" fill="#b55dcb"/><circle cx="80" cy="40" r="1.9" fill="#8354cf"/><circle cx="10" cy="50" r="1.0" fill="#5b3aa8"/><circle cx="20" cy="50" r="2.1" fill="#8a59d6"/><circle cx="30" cy="50" r="3.2" fill="#c459bc"/><circle cx="40" cy="50" r="4.3" fill="#f06c82"/><circle cx="50" cy="50" r="5.4" fill="#f2c14e"/><circle cx="60" cy="50" r="4.3" fill="#f06c82"/><circle cx="70" cy="50" r="3.2" fill="#c459bc"/><circle cx="80" cy="50" r="2.1" fill="#8a59d6"/><circle cx="90" cy="50" r="1.0" fill="#5b3aa8"/><circle cx="20" cy="60" r="1.9" fill="#8354cf"/><circle cx="30" cy="60" r="2.9" fill="#b55dcb"/><circle cx="40" cy="60" r="3.8" fill="#ea5098"/><circle cx="50" cy="60" r="4.3" fill="#f06c82"/><circle cx="60" cy="60" r="3.8" fill="#ea5098"/><circle cx="70" cy="60" r="2.9" fill="#b55dcb"/><circle cx="80" cy="60" r="1.9" fill="#8354cf"/><circle cx="20" cy="70" r="1.4" fill="#6e46ba"/><circle cx="30" cy="70" r="2.3" fill="#925ede"/><circle cx="40" cy="70" r="2.9" fill="#b55dcb"/><circle cx="50" cy="70" r="3.2" fill="#c459bc"/><circle cx="60" cy="70" r="2.9" fill="#b55dcb"/><circle cx="70" cy="70" r="2.3" fill="#925ede"/><circle cx="80" cy="70" r="1.4" fill="#6e46ba"/><circle cx="30" cy="80" r="1.4" fill="#6e46ba"/><circle cx="40" cy="80" r="1.9" fill="#8354cf"/><circle cx="50" cy="80" r="2.1" fill="#8a59d6"/><circle cx="60" cy="80" r="1.9" fill="#8354cf"/><circle cx="70" cy="80" r="1.4" fill="#6e46ba"/><circle cx="50" cy="90" r="1.0" fill="#5b3aa8"/></svg><span>CENNER</span></a>
   <nav>
     <a href="/marketplace">Marketplace</a>
     <a href="/services">Usluge</a>
     <a href="/blog">Blog</a>
     <a href="/about">O nama</a>
+    <a href="/auth" class="login">Prijava<span class="long"> / Registracija</span></a>
   </nav>
-</header>
+</div></div>
 <main>
 <h1>Freelanceri u Splitu</h1>
 <p class="lead">Split i Dalmacija imaju brzorastuću freelance scenu, posebno u području web razvoja, turizma, hospitalityja i digitalnog marketinga. Cenner te povezuje s provjerenim splitskim freelancerima za honorarni posao u svim ključnim industrijama.</p>
-<p>
+<p class="cta-row">
   <a href="/marketplace" class="cta">Pronađi freelancera u Splitu</a>
   <a href="/services" class="cta cta-secondary">Pregledaj usluge</a>
 </p>
@@ -88,10 +117,11 @@
   <li><a href="/usluge/seo-optimizacija">SEO optimizacija</a></li>
   <li><a href="/usluge/digitalni-marketing">Digitalni marketing</a></li>
   <li><a href="/usluge/wordpress-izrada">WordPress izrada</a></li>
+  <li><a href="/usluge/web-developeri">Web developeri</a></li>
 </ul>
 <h2>Kako Cenner radi?</h2>
 <p>Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz Splita i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow. Plaćaš tek kad si zadovoljan.</p>
-<p>
+<p class="cta-row">
   <a href="/marketplace" class="cta">Započni sad</a>
 </p>
 <div class="related">
@@ -100,19 +130,28 @@
 <li><a href="/freelanceri/rijeka">Freelanceri Rijeka</a></li>
 <li><a href="/freelanceri/osijek">Freelanceri Osijek</a></li></ul>
 </div>
+<div class="related">
+  <h3>Cenner alati</h3>
+  <ul>
+    <li><a href="https://links.cenner.hr">Cenner Links<small>Link-in-bio stranica za kreatore: sve tvoje poveznice na jednom mjestu.</small></a></li>
+    <li><a href="https://shorten.cenner.hr">Shorten<small>Skraćivač poveznica s brojanjem klikova po državama.</small></a></li>
+  </ul>
+</div>
 </main>
 <footer>
-  <div>
-    <a href="/">Naslovna</a>
-    <a href="/marketplace">Marketplace</a>
-    <a href="/services">Usluge</a>
-    <a href="/blog">Blog</a>
-    <a href="/about">O nama</a>
-    <a href="/contact">Kontakt</a>
-    <a href="/privacy">Privatnost</a>
-    <a href="/terms">Uvjeti</a>
+  <div class="foot">
+    <div>
+      <a href="/">Naslovna</a>
+      <a href="/marketplace">Marketplace</a>
+      <a href="/services">Usluge</a>
+      <a href="/blog">Blog</a>
+      <a href="/about">O nama</a>
+      <a href="/about#kontakt">Kontakt</a>
+      <a href="/privacy">Privatnost</a>
+      <a href="/terms">Uvjeti</a>
+    </div>
+    <div class="copy">© Cenner, Freelance Platforma Hrvatska</div>
   </div>
-  <div style="margin-top:16px">© Cenner, Freelance Platforma Hrvatska</div>
 </footer>
 </body>
 </html>
