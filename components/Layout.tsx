@@ -255,7 +255,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     className="flex items-center gap-2 group/profile"
                   >
                     <div className="relative">
-                      <AvatarImg src={user.avatar} name={user.name} size={36} className="border-2 border-ink group-hover/profile:scale-110 transition-transform" />
+                      <AvatarImg src={user.avatar} name={user.name} size={36} className="border-2 border-brand-green shadow-[2px_2px_0_0_#0b0c0e] group-hover/profile:scale-110 transition-transform" />
                       {unread > 0 && (
                         <div className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 bg-brand-green flex items-center justify-center text-ink text-[9px] font-black border-2 border-ink">
                           {unread > 9 ? '9+' : unread}
@@ -269,7 +269,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <div className="absolute top-full right-0 mt-3 w-64 overflow-hidden border-2 border-ink bg-white shadow-[6px_6px_0_0_#0b0c0e] z-50 animate-in fade-in slide-in-from-top-1 duration-150">
                       {/* Who is signed in, on an ink bar like the Start menu's */}
                       <div className="flex items-center gap-3 bg-ink px-4 py-3.5 text-white">
-                        <AvatarImg src={user.avatar} name={user.name} size={40} className="shrink-0 border-2 border-white/80" />
+                        <AvatarImg src={user.avatar} name={user.name} size={40} className="shrink-0 border-2 border-brand-green" />
                         <div className="min-w-0">
                           <p className="truncate font-display text-[15px] font-bold">{user.name || 'Freelancer'}</p>
                           <p className="truncate text-[12px] text-white/60">{user.email}</p>
@@ -381,7 +381,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <>
                     <Link to="/profile" onClick={close} className="flex min-w-0 flex-1 items-center gap-2">
                       {user.avatar
-                        ? <img src={user.avatar} alt={user.name || 'User avatar'} className="h-8 w-8 border-2 border-white/80" />
+                        ? <img src={user.avatar} alt={user.name || 'User avatar'} className="h-8 w-8 border-2 border-brand-green object-cover" />
                         : <span className="flex h-8 w-8 shrink-0 items-center justify-center border-2 border-white/80 bg-white/10"><UserIcon size={16} /></span>}
                       <span className="min-w-0 truncate font-display text-[13px] font-bold">{user.name}</span>
                     </Link>
@@ -419,7 +419,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <>
                   <div className="flex items-center gap-3 py-3">
                     {user.avatar ? (
-                      <img src={user.avatar} alt={user.name || 'User avatar'} className={isHome ? 'h-8 w-8 border-2 border-ink' : 'w-8 h-8 rounded-full border border-brand-green'} />
+                      <img src={user.avatar} alt={user.name || 'User avatar'} className={isHome ? 'h-8 w-8 border-2 border-brand-green object-cover' : 'w-8 h-8 rounded-full border border-brand-green'} />
                     ) : (
                       <div className={isHome ? 'flex h-8 w-8 items-center justify-center border-2 border-ink bg-paper2 text-ink' : 'w-8 h-8 rounded-full bg-brand-grey border border-brand-green flex items-center justify-center text-brand-green'}>
                         <UserIcon size={16} />
