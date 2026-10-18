@@ -2082,7 +2082,7 @@ const Profile: React.FC = () => {
                 className="border-4 border-ink p-1 group-hover:scale-105 transition-transform duration-500"
               />
               {canCreateListings && (
-                <div className="absolute bottom-0 right-0 flex h-10 w-10 translate-x-1/2 translate-y-1/2 items-center justify-center" title="Identity Verified">
+                <div className="absolute bottom-2 right-2 flex h-10 w-10 translate-x-1/2 translate-y-1/2 items-center justify-center" title="Identity Verified">
                   <BadgeCheck size={38} className="text-ink" fill="#4ade80" strokeWidth={1.75} />
                 </div>
               )}
