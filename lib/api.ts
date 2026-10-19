@@ -76,6 +76,9 @@ export const API = {
   resetPassword: (token: string, newPassword: string) =>
     request<{ success: boolean }>('/auth/reset-password', 'POST', { token, newPassword }),
 
+  deleteAccount: (data: { confirm: string; password?: string; idToken?: string }) =>
+    request<{ success: boolean }>('/me', 'DELETE', data),
+
   changePassword: (currentPassword: string, newPassword: string) =>
     request<{ success: boolean }>('/auth/change-password', 'POST', { currentPassword, newPassword }),
 
