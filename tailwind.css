@@ -1,0 +1,7 @@
+/* Built by PostCSS at build time (tailwind.config.js). Replaces the Play CDN script that
+   index.html used to load at runtime. Imported from index.tsx on purpose: Vite then appends
+   the built <link> at the END of <head>, which is exactly where the Play CDN appended its
+   <style>, so the cascade order against the inline <style> block in index.html is unchanged. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
