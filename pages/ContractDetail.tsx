@@ -333,9 +333,9 @@ const ContractDetail: React.FC = () => {
                   {isClient && m.status === 'DISPUTED' && (
                     <button
                       onClick={async () => {
-                        const ok = await notify.confirm('Refund this milestone back to your card? This cannot be undone, and the freelancer will be notified.', {
+                        const ok = await notify.confirm('Ask Cenner support to refund this milestone to your card? Support reviews the dispute and decides; the freelancer will be notified.', {
                           title: 'Request refund?',
-                          confirmLabel: 'Yes, refund',
+                          confirmLabel: 'Yes, send request',
                           cancelLabel: 'Keep disputed',
                           variant: 'danger',
                         });
@@ -345,7 +345,7 @@ const ContractDetail: React.FC = () => {
                       className="flex items-center gap-1.5 px-3 py-1.5 bg-ink/5 border border-ink text-ink text-xs font-bold hover:bg-ink/5 transition-all disabled:opacity-50"
                     >
                       <DollarSign size={12} />
-                      {actionLoading === `refund-${m.id}` ? 'Refunding…' : 'Request refund'}
+                      {actionLoading === `refund-${m.id}` ? 'Sending…' : 'Request refund'}
                     </button>
                   )}
                 </div>
