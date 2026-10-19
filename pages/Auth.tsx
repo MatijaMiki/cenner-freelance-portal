@@ -6,6 +6,7 @@ import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
 import { hasRequiredConsent, openConsentModal } from '../lib/consent';
+import { API } from '../lib/api';
 
 // Cloudflare Turnstile: sitekey via env. No key = widget hidden and no token sent
 // (backend skips verification while its TURNSTILE_SECRET_KEY is unset too).
@@ -208,6 +209,25 @@ const Auth: React.FC = () => {
     }
   };
 
+  // Same answer whether or not the address exists (the API never reveals that).
+  const handleForgotPassword = async () => {
+    setError(null);
+    setNotice(null);
+    if (!email.trim()) {
+      setError(t('Enter your email address above, then press "Forgot password?".'));
+      return;
+    }
+    setLoading(true);
+    try {
+      await API.requestPasswordReset(email.trim());
+      setNotice(t('If that address has an account, we sent a reset link. Check your inbox.'));
+    } catch (err: any) {
+      setError(err.message || 'Could not send the reset email. Try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleGoogleAuth = async () => {
     setError(null);
     setLoading(true);
@@ -399,6 +419,18 @@ const Auth: React.FC = () => {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              {isLogin && (
+                <div className="mt-2 text-right">
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    disabled={loading}
+                    className="font-display text-[13px] font-bold text-sky underline-offset-4 hover:underline focus-visible:underline focus-visible:outline-none disabled:opacity-50"
+                  >
+                    {t('Forgot password?')}
+                  </button>
+                </div>
+              )}
             </div>
 
             {TURNSTILE_SITE_KEY && (
