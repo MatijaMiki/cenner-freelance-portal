@@ -10,7 +10,8 @@
     "landing": "node scripts/generate-landing-pages.mjs",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "prerender": "node scripts/prerender-static-routes.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:csp": "node scripts/check-csp-hashes.mjs"
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^9.0.1",
