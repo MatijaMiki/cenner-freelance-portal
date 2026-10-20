@@ -15,7 +15,8 @@ import { useT } from '../i18n';
 import AvatarImg from '../components/Avatar';
 import FreelancerHeatmap from '../components/FreelancerHeatmap';
 import { GlassLayers } from '../components/LiquidGlass';
-import MatchWaitlist from '../components/MatchWaitlist';
+import JobMatches from '../components/JobMatches';
+import ProposalModal, { ProposalTarget } from '../components/ProposalModal';
 
 type MarketplaceMode = 'freelancers' | 'clients';
 
@@ -25,6 +26,7 @@ const Marketplace: React.FC = () => {
   const navigate = useNavigate();
   const t = useT();
   const [mode, setMode] = useState<MarketplaceMode>('freelancers');
+  const [proposing, setProposing] = useState<ProposalTarget | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [priceRange, setPriceRange] = useState<number>(5000);
@@ -504,7 +506,13 @@ const Marketplace: React.FC = () => {
                         <p className="text-[13px] text-slate">{t('Budget Allocation')}</p>
                         <p className="font-display text-[1.75rem] font-extrabold leading-tight">{job.budgetRange}</p>
                       </div>
-                      <button className={btn}>
+                      <button
+                        type="button"
+                        className={btn}
+                        onClick={() => user
+                          ? setProposing({ id: job.id, title: job.title, budgetRange: job.budgetRange })
+                          : navigate('/auth', { state: { from: '/marketplace' } })}
+                      >
                         {t('Sync Proposal')}
                       </button>
                     </div>
@@ -519,10 +527,10 @@ const Marketplace: React.FC = () => {
               />
             )
           )}
-          {/* AI job matching's waitlist (where /match lands): under the results at every width. The
-              #ai-matching anchor appears only once the listings are in, so a /match visit scrolls
-              to where it finally sits, not to where it was before the cards pushed it down. */}
-          <MatchWaitlist id={dataLoading ? undefined : 'ai-matching'} className="mt-12 max-w-xl" />
+          {/* Job matching (where /match lands): under the results at every width. The #ai-matching
+              anchor appears only once the listings are in, so a /match visit scrolls to where it
+              finally sits, not to where it was before the cards pushed it down. */}
+          <JobMatches id={dataLoading ? undefined : 'ai-matching'} className="mt-12 max-w-3xl" />
         </div>
 
         {/* Right column — Talent density heatmap (freelancer mode only) */}
@@ -535,6 +543,7 @@ const Marketplace: React.FC = () => {
         )}
       </div>
       </div>
+      {proposing && <ProposalModal job={proposing} onClose={() => setProposing(null)} />}
     </div>
   );
 };
