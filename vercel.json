@@ -88,7 +88,7 @@
       "destination": "/api/render?type=blog&id=:slug"
     },
     {
-      "source": "/(profile|creator-onboarding|banned|orders|messages|contracts|reset-password|verify-email|order-success|referral)",
+      "source": "/(profile|creator-onboarding|banned|orders|messages|contracts|reset-password|verify-email|unsubscribe|order-success|referral)",
       "destination": "/api/render?type=private"
     },
     {
