@@ -85,6 +85,14 @@ export const API = {
   verifyEmail: (token: string) =>
     request<{ success: boolean; alreadyVerified?: boolean }>('/auth/verify-email', 'POST', { token }),
 
+  // Marketing-email unsubscribe. The check is side-effect free (mail scanners open email links);
+  // only the POST opts the user out.
+  unsubscribeCheck: (token: string) =>
+    request<{ valid: boolean }>(`/unsubscribe?token=${encodeURIComponent(token)}`),
+
+  unsubscribe: (token: string) =>
+    request<{ success: boolean }>('/unsubscribe', 'POST', { token }),
+
   resendVerificationEmail: () =>
     request<{ success: boolean }>('/auth/resend-verification', 'POST'),
 
