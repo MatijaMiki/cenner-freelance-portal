@@ -12,7 +12,7 @@ import { API } from '../lib/api';
 // (backend skips verification while its TURNSTILE_SECRET_KEY is unset too).
 const TURNSTILE_SITE_KEY = (import.meta as any).env?.VITE_TURNSTILE_SITE_KEY || '';
 
-const SAFE_REDIRECT_PATHS = ['/profile', '/marketplace', '/messages', '/orders', '/creator-onboarding', '/subscription', '/blog', '/community', '/services', '/about'];
+const SAFE_REDIRECT_PATHS = ['/profile', '/marketplace', '/messages', '/orders', '/creator-onboarding', '/subscription', '/blog', '/community', '/services', '/about', '/referral'];
 function getSafeRedirect(from: unknown): string {
   if (typeof from !== 'string') return '/profile';
   // the whitelist checks the path; a query or hash after it (/profile?tab=saved) comes along

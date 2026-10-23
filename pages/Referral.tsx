@@ -1,6 +1,6 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Trophy, Crown, Medal, Gift, Sparkles, Copy, Check, Share2, Mail,
   Twitter, MessageCircle, Users, TrendingUp, Clock, PartyPopper, Zap,
@@ -105,12 +105,13 @@ const fmtDate = (iso?: string | null) => {
 
 const Referral: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const notify = useNotify();
   const { listings } = useData();
 
   const [data, setData] = useState<ReferralMe | null>(null);
   const [board, setBoard] = useState<Leaderboard | null>(null);
+  // The contest as a signed-out visitor sees it (no personal data, no link).
+  const [publicCampaign, setPublicCampaign] = useState<ReferralCampaign | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [selectedListing, setSelectedListing] = useState('');
@@ -119,19 +120,29 @@ const Referral: React.FC = () => {
   const loadMe = () => API.getReferralMe().then((d) => setData(d as ReferralMe));
 
   useEffect(() => {
-    if (!user) navigate('/auth');
-  }, [user, navigate]);
-
-  useEffect(() => {
-    if (!user) return;
     setLoading(true);
+    if (!user) {
+      // Anyone can see the contest; only signed-in users get a link.
+      setData(null);
+      API.getReferralPublic()
+        .then((p) => {
+          setPublicCampaign(p.campaign as ReferralCampaign | null);
+          setBoard({
+            campaign: p.campaign ? { name: p.campaign.name, endsAt: p.campaign.endsAt, active: p.campaign.active } : null,
+            leaders: p.leaders,
+          });
+        })
+        .catch(() => { setPublicCampaign(null); setBoard(null); })
+        .finally(() => setLoading(false));
+      return;
+    }
     Promise.all([
       loadMe().catch(() => setData(null)),
       API.getReferralLeaderboard().then((b) => setBoard(b as Leaderboard)).catch(() => setBoard(null)),
     ]).finally(() => setLoading(false));
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const campaign = data?.campaign ?? null;
+  const campaign = (user ? data?.campaign : publicCampaign) ?? null;
   const countdown = useCountdown(campaign?.active ? campaign.endsAt : null);
 
   // The user's own listings — reused from DataContext (same filter Profile.tsx uses).
@@ -140,9 +151,7 @@ const Referral: React.FC = () => {
     [listings, user],
   );
 
-  if (!user) return null;
-
-  const shareUrl = data?.shareUrl || '';
+  const shareUrl = user ? data?.shareUrl || '' : '';
   const shareMessage =
     'Join me on Cenner, the freelance platform. Sign up with my link and let\'s both win:';
 
@@ -217,7 +226,9 @@ const Referral: React.FC = () => {
             <>
               <h1 className="text-4xl md:text-5xl font-black text-ink tracking-tighter mb-3">No active contest right now</h1>
               <p className="text-slate font-medium max-w-2xl">
-                There is no referral contest running at the moment. Check back soon. Your referral link below still works and counts toward the next round.
+                {user
+                  ? 'There is no referral contest running at the moment. Check back soon. Your referral link below still works and counts toward the next round.'
+                  : 'There is no referral contest running at the moment. Check back soon.'}
               </p>
             </>
           ) : !campaign.active ? (
@@ -330,6 +341,26 @@ const Referral: React.FC = () => {
           </div>
         )}
 
+        {/* ── Signed-out visitors: no link, no sharing, just the way in ── */}
+        {!user && (
+          <div className={`${card} mb-12`}>
+            <h2 className="text-xs font-black text-slate uppercase tracking-[0.2em] mb-5">Your referral link</h2>
+            <p className="text-ink font-black text-xl tracking-tight mb-2">Log in to get your personal link</p>
+            <p className="text-slate text-sm mb-6 max-w-xl">
+              Every friend who signs up with your link and verifies their email counts toward your rank.
+              New to Cenner? Create a free account and your link is ready in a minute.
+            </p>
+            <Link
+              to="/auth"
+              state={{ from: '/referral' }}
+              className="inline-flex items-center justify-center border-2 border-ink bg-sky px-7 py-3 font-display text-[15px] font-bold text-white transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#0b0c0e]"
+            >
+              Log in or sign up
+            </Link>
+          </div>
+        )}
+
+        {user && (<>
         {/* ── Referral link + share ── */}
         <div className={`${card} mb-12`}>
           <h2 className="text-xs font-black text-slate uppercase tracking-[0.2em] mb-5">Your referral link</h2>
@@ -395,6 +426,8 @@ const Referral: React.FC = () => {
           </div>
         </div>
 
+        </>)}
+
         {/* ── Leaderboard ── */}
         <div className={card}>
           <div className="flex items-center justify-between mb-5">
@@ -407,7 +440,9 @@ const Referral: React.FC = () => {
             <div className="text-center py-10">
               <Users size={32} className="text-slate mx-auto mb-4" />
               <p className="text-slate font-bold text-sm">No referrals yet</p>
-              <p className="text-slate text-xs mt-1">Be the first to climb the board. Share your link above.</p>
+              <p className="text-slate text-xs mt-1">
+                {user ? 'Be the first to climb the board. Share your link above.' : 'Be the first to climb the board. Log in to get your link.'}
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">

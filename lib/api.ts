@@ -469,6 +469,13 @@ export const API = {
       leaders: { rank: number; name: string; referralCount: number }[];
     }>('/referral/leaderboard'),
 
+  // Signed-out view of the contest: dates + masked top 10, no personal data and no link.
+  getReferralPublic: () =>
+    requestPublic<{
+      campaign: { name: string; slug: string; startsAt: string; endsAt: string; active: boolean; awarded: boolean } | null;
+      leaders: { rank: number; name: string; referralCount: number }[];
+    }>('/referral'),
+
   claimReferralBoost: (listingId: string) =>
     request<{ success: boolean; boostedUntil: string; monthsApplied: number }>('/referral/claim-boost', 'POST', { listingId }),
 };
