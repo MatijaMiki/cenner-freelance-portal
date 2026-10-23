@@ -1181,7 +1181,7 @@ const PocketPC: React.FC<{
                 <div className={rowCls} style={rowPad}>
                   {iconBox(PxFileText)}
                   <div className="leading-tight">
-                    <h2 className="font-bold">{t('Freelance Hrvatska')}</h2>
+                    <h2 className="font-bold">{t('Freelanceri iz Hrvatske')}</h2>
                     <p className="opacity-90">{t('Hrvatska freelance platforma za web stranice, dizajn, marketing i programiranje. Freelanceri s provjerenim identitetom, gotovi paketi s fiksnom cijenom, a novac se freelanceru isplaćuje tek kad posao bude isporučen.')}</p>
                   </div>
                 </div>
@@ -1805,7 +1805,8 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       id: 'welcome', title: 'dobrodosli.txt', bar: 'bg-brand-green text-ink', x: 0.17, y: 0.07, w: 'w-[30rem]',
       body: (
         <div className="p-5">
-          <h2 className="font-display text-[2rem] font-black uppercase leading-[0.95] tracking-[-0.03em]">{t('Freelance Hrvatska')}</h2>
+          <h2 className="font-display text-[2rem] font-black uppercase leading-[0.95] tracking-[-0.03em]">{t('Freelanceri iz Hrvatske')}</h2>
+          <p className="mt-3"><span className={`${HEAD_LABEL} font-display text-[1.125rem] font-black uppercase leading-none tracking-[-0.02em]`}>{t('za tvoj sljedeći projekt')}</span></p>
           <p className="mt-3 font-text text-[1.0625rem] leading-[1.5]">{t('Hrvatska freelance platforma za web stranice, dizajn, marketing i programiranje. Freelanceri s provjerenim identitetom, gotovi paketi s fiksnom cijenom, a novac se freelanceru isplaćuje tek kad posao bude isporučen.')}</p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Link to="/marketplace" className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-sky px-5 py-3 font-display text-[15px] font-bold text-white">{t('Explore Marketplace')} <ArrowRight size={17} /></Link>
@@ -1832,7 +1833,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       id: 'team', title: 'interni_tim.jpg', bar: 'bg-sky text-white', x: 0.33, y: 0.44, w: 'w-[34rem]',
       body: (
         <div className="grid sm:grid-cols-[1fr_1.1fr]">
-          <img src="/home/meadow-desk-760.jpg" alt="" width={760} height={760} loading="lazy" className="h-full max-h-72 w-full object-cover sm:max-h-none" />
+          <img src="/home/meadow-crt-760.jpg" alt="" width={760} height={760} loading="lazy" className="h-full max-h-72 w-full object-cover sm:max-h-none" />
           <div className="p-5">
             <h2 className="font-display text-[1.5rem] font-black leading-[1] tracking-[-0.03em]">{t('One')} {t('in-house')} {t('team. Start to finish.')}</h2>
             <div className={`mt-4 flex flex-wrap gap-x-6 gap-y-3 ${wide ? 'flex-nowrap' : ''}`}>
