@@ -197,6 +197,15 @@ html,body{overflow-x:clip}
 @keyframes cn-tap{from{transform:scale(.3);opacity:1}to{transform:scale(1.8);opacity:0}}
 .cn-beacon{animation:cn-start-hint 1.4s ease-out 2}
 .cn-grip{display:inline-block;flex:none;width:8px;height:12px;opacity:.65;background:radial-gradient(circle,currentColor 1px,transparent 1.4px) 0 0/4px 4px}
+/* The monitor is small, so with a mouse the desktop's windows rest at a reduced size and open up to
+   full size under the pointer (or keyboard focus) and while dragged. They scale with the individual
+   "scale" property, which composes with the minimise animation's transform. Touch screens keep
+   full-size windows (no hover to open them with). */
+@media (hover:hover) and (pointer:fine){
+  .cn-win{scale:.62;transform-origin:0 0!important;transition-property:transform,opacity,scale}
+  .cn-win:not([data-min]):hover,.cn-win:not([data-min]):focus-within,.cn-win[data-drag]{scale:1;z-index:70!important}
+}
+@media (prefers-reduced-motion:reduce){.cn-win{transition-duration:0s!important}}
 @media (prefers-reduced-motion:reduce){.cn-ghost,.cn-ghost[data-glide]{animation:none;transition:none}.cn-tap{display:none}.cn-start-hint,.cn-beacon{animation:none;box-shadow:0 0 0 3px #4ade80}}
 @keyframes cn-start-hint{0%{box-shadow:0 0 0 0 rgba(74,222,128,.95)}100%{box-shadow:0 0 0 14px rgba(74,222,128,0)}}
 .cn-bezel{--bz:.4}
@@ -249,6 +258,8 @@ html.cn-desk-gap [data-desktop]:not(.cn-pda-ground)::before{content:"";position:
  *  per moment (a cool-down stops two triggers of the same arrival from doubling it). */
 /** True while the page is gliding somewhere on its own (the desktop's entry stays dark then). */
 let deskGliding = false;
+/** True while the hero's zoom has run far enough that the section beneath it (the framed monitor) shows. */
+let heroRevealed = false;
 
 // The desktop's "how to use it" cue (see Desktop): played once per visitor, and the double-click
 // tag until the first double-click open. '?demo' in the URL plays the cue again (for checking it).
@@ -560,7 +571,13 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     curP.current = p;
     if (p >= 0.85 && !bootRun.current.started) startBoot();
     if (p < 0.8 && bootRun.current.started) resetBoot();
-    if (stage.current) stage.current.style.opacity = String(1 - smooth(span(p, 0.93, 1)));
+    if (stage.current) {
+      stage.current.style.opacity = String(1 - smooth(span(p, 0.9, 0.995)));
+      stage.current.style.pointerEvents = p > 0.97 ? 'none' : '';   // the white section is underneath: let clicks through
+    }
+    // the white section's text fades up once the card has mostly dissolved
+    const reveal = p >= 0.95;
+    if (reveal !== heroRevealed) { heroRevealed = reveal; window.dispatchEvent(new Event('cenner-home:reveal')); }
 
     // The headline splits apart as the camera moves in: the first line out to the left, the label to the right.
     const split = span(p, 0, 0.4);
@@ -574,7 +591,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
   const words = [t('Freelanceri iz Hrvatske'), t('za tvoj sljedeći projekt')];
 
   return (
-    <section ref={ref} className={reduce ? 'relative' : 'relative h-[380vh] bg-paper'}>
+    <section ref={ref} className={reduce ? 'relative' : 'relative z-10 h-[380vh]'}>
       <div ref={stage} className={`${reduce ? 'relative h-[calc(100svh-4.5rem)]' : 'sticky top-[4.5rem] h-[calc(100svh-4.5rem)]'} overflow-hidden bg-sky`}>
         <div ref={film} className="absolute inset-0 will-change-transform">
           <img
@@ -1488,6 +1505,7 @@ const StartMenu: React.FC<{ drop: 'up' | 'down'; onClose: () => void; onChat: ()
 
 const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   const t = useT();
+  const reduce = useReducedMotion();
   const wide = useMedia(DESK_QUERY);  // the full desktop (else the pocket device)
   const crt = useMedia(CRT_QUERY);    // ...in the CRT; below it, in the laptop lid
   const laptop = wide && !crt;
@@ -1507,13 +1525,52 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   // The text beside the monitor fades up the first time it is a quarter in view.
   const textRef = React.useRef<HTMLDivElement>(null);
   const [textOn, setTextOn] = React.useState(false);
+  // The section sits under the hero's last screen and is revealed as the card dissolves, so the text
+  // waits for that (the hero says when); under reduced motion nothing is pinned and it is just shown.
   React.useEffect(() => {
-    const el = textRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') { setTextOn(true); return; }
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setTextOn(true); io.disconnect(); } }, { threshold: 0.25 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [wide]);
+    if (reduce || typeof window === 'undefined') { setTextOn(true); return; }
+    const sync = () => { if (heroRevealed) setTextOn(true); };
+    sync();
+    window.addEventListener('cenner-home:reveal', sync);
+    return () => window.removeEventListener('cenner-home:reveal', sync);
+  }, [reduce]);
+  // Once the zoom has run in, the page lands on this first section: a downward scroll that comes to
+  // rest in the stretch just before it glides the last bit. It is a one-way magnet (scrolling on past
+  // it, or back up, is never held), and touch, keys and the wheel are never blocked except for the
+  // short glide itself. The zoom hero is CRT width only; tablets have their own hero.
+  const lockRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    const wrap = lockRef.current;
+    if (!crt || reduce || !wrap) return;
+    let lastY = window.scrollY, dir = 0, idle = 0, touching = false;
+    const settle = () => {
+      if (touching || deskGliding) return;
+      const target = wrap.getBoundingClientRect().top + window.scrollY - NAV_H;
+      const gap = target - window.scrollY;
+      if (dir > 0 && gap > 4 && gap < window.innerHeight * 0.4) glideTo(target, undefined, { ms: clamp(320 + gap * 0.8, 400, 720) });
+    };
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y !== lastY) dir = y > lastY ? 1 : -1;
+      lastY = y;
+      if (deskGliding) return;
+      window.clearTimeout(idle);
+      idle = window.setTimeout(settle, 200);
+    };
+    const down = () => { touching = true; window.clearTimeout(idle); };
+    const up = () => { touching = false; window.clearTimeout(idle); idle = window.setTimeout(settle, 260); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('touchstart', down, { passive: true });
+    window.addEventListener('touchend', up, { passive: true });
+    window.addEventListener('touchcancel', up, { passive: true });
+    return () => {
+      window.clearTimeout(idle);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('touchstart', down);
+      window.removeEventListener('touchend', up);
+      window.removeEventListener('touchcancel', up);
+    };
+  }, [crt, reduce]);
 
   // (The desktop used to lock the page: wheel scrolling was held while it filled the window and two
   // flicks were needed to move on. It is an ordinary section now; nothing takes over the scroll.)
@@ -1947,7 +2004,8 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
           let dx = clamp(W * 0.06, 48, 72);
           if (x0 + el.offsetWidth + dx > W - 8) dx = -dx;          // no room on the right: the other way
           const dy = 0.4 * Math.abs(dx);
-          const gx = x0 + Math.min(el.offsetWidth * 0.4, 180), gy = y0 + 18; // on the title bar, clear of _ and x
+          const k = parseFloat(getComputedStyle(el).scale) || 1;   // windows rest scaled down (see .cn-win)
+          const gx = x0 + Math.min(el.offsetWidth * 0.4, 180) * k, gy = y0 + 18 * k; // on the title bar, clear of _ and x
           prev = posRef.current[id]; savedOrder = orderRef.current;
           if (!still) { focus(id); reordered = true; }
           setTip('drag'); setGhost({ x: gx, y: gy });
@@ -2109,7 +2167,9 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
                   onPointerDown={() => focus(w.id)}
                   aria-hidden={min || undefined}
                   inert={min || undefined}
-                  className={`max-w-[calc(100%-1.5rem)] border-2 border-ink bg-white shadow-[10px_10px_0_#0b0c0e] ${w.w} ${wide ? 'absolute transition-[transform,opacity] duration-300 ease-[cubic-bezier(.4,0,.2,1)]' : 'relative'} ${min ? (wide ? 'pointer-events-none translate-y-[60vh] scale-[0.15] opacity-0' : 'hidden') : ''}`}
+                  data-min={min || undefined}
+                  data-drag={drag.current?.id === w.id || undefined}
+                  className={`max-w-[calc(100%-1.5rem)] border-2 border-ink bg-white shadow-[10px_10px_0_#0b0c0e] ${w.w} ${wide ? 'cn-win absolute transition-[transform,opacity] duration-300 ease-[cubic-bezier(.4,0,.2,1)]' : 'relative'} ${min ? (wide ? 'pointer-events-none translate-y-[60vh] scale-[0.15] opacity-0' : 'hidden') : ''}`}
                   style={{ ...(wide ? { left: p ? p.x : winLeft(w), top: p ? p.y : winTop(w), zIndex: 10 + z, transformOrigin: '50% 100%' } : {}), ...(min ? {} : bootIn(480 + wins.indexOf(w) * 160)) }}
                 >
                   <div
@@ -2275,7 +2335,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   if (!wide) return monitor;
   const mark = (n: number): React.CSSProperties => ({ transitionDelay: `${n * 0.1}s` });
   return (
-    <div className="relative bg-paper px-4 py-16 md:px-8 md:py-24 lg:py-28">
+    <div ref={lockRef} data-lock className="relative z-0 bg-paper px-4 py-16 md:px-8 md:py-24 lg:pb-28 lg:pt-12" style={reduce || !crt ? undefined : { marginTop: 'calc(-1 * (100svh - 4.5rem))' }}>
       <div className="mx-auto grid max-w-[92rem] items-center gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14">
         <div ref={textRef} className="max-w-[34rem]">
           <p className="cn-mark font-display text-[12px] font-black uppercase tracking-[0.2em] text-sky" data-on={textOn ? '1' : '0'}>{t('What we build')}</p>
