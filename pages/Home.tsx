@@ -260,6 +260,10 @@ html.cn-desk-gap [data-desktop]:not(.cn-pda-ground)::before{content:"";position:
 let deskGliding = false;
 /** True while the hero's zoom has run far enough that the section beneath it (the framed monitor) shows. */
 let heroRevealed = false;
+/** True while the zoom hero is pinned above the framed monitor (not under reduced motion): the monitor
+ *  sits under the hero's last screen then, and powers on only once it is revealed, so its white
+ *  flash is seen, on the monitor. */
+let heroPinned = false;
 
 // The desktop's "how to use it" cue (see Desktop): played once per visitor, and the double-click
 // tag until the first double-click open. '?demo' in the URL plays the cue again (for checking it).
@@ -543,6 +547,12 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     return () => window.removeEventListener('resize', layout);
   }, [layout]);
 
+  React.useEffect(() => {
+    if (reduce) return;
+    heroPinned = true;
+    return () => { heroPinned = false; };
+  }, [reduce]);
+
   usePin(ref, (p, W, H) => {
     // 1. The camera moves straight in on the glass until it fills the stage.
     const g = glass.current;
@@ -576,7 +586,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
       stage.current.style.pointerEvents = p > 0.97 ? 'none' : '';   // the white section is underneath: let clicks through
     }
     // the white section's text fades up once the card has mostly dissolved
-    const reveal = p >= 0.95;
+    const reveal = p >= 0.92;
     if (reveal !== heroRevealed) { heroRevealed = reveal; window.dispatchEvent(new Event('cenner-home:reveal')); }
 
     // The headline splits apart as the camera moves in: the first line out to the left, the label to the right.
@@ -1733,19 +1743,34 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       clear(); setHint(false); window.clearTimeout(hintOff.current); if (screenRef.current !== 'dark') setScreen('dark');
     }
     window.addEventListener('cenner-desktop:power', powerOn);
+    // Under the pinned hero the monitor waits for the reveal: it powers on as the card dissolves
+    // off it, and goes dark again if the visitor scrolls back up into the zoom.
+    let retry = 0;
+    const onReveal = () => {
+      if (!heroPinned) return;
+      window.clearTimeout(retry);
+      if (!heroRevealed) { powerOff(); return; }
+      if (screenRef.current !== 'dark' || powering.current) return;
+      // the landing glide may still be carrying the page here: try again once it has settled
+      if (deskGliding) { retry = window.setTimeout(onReveal, 150); return; }
+      const r = sec.getBoundingClientRect();
+      if (r.bottom > window.innerHeight * 0.4 && r.top < window.innerHeight * 0.6) powerOn();
+    };
+    window.addEventListener('cenner-home:reveal', onReveal);
+    window.addEventListener('scroll', onReveal, { passive: true });
     if (sec.getBoundingClientRect().top <= 0) setScreen('on'); // landed below it (back navigation)
     let io: IntersectionObserver | undefined;
     if (typeof IntersectionObserver !== 'undefined') {
       io = new IntersectionObserver(entries => { const e = entries[entries.length - 1];
         const top = e.boundingClientRect.top;
         const vis = e.intersectionRect.height >= Math.min(window.innerHeight, e.boundingClientRect.height) * 0.6;
-        if (vis && top > 0 && !deskGliding) powerOn();                       // scrolling DOWN into it
+        if (vis && top > 0 && !deskGliding && (!heroPinned || heroRevealed)) powerOn(); // scrolling DOWN into it
         else if (vis && top <= 0 && !deskGliding && screenRef.current === 'dark' && !powering.current) setScreen('on'); // arrived from below: just on
         if (!e.isIntersecting && top > 0) powerOff();                        // back up in the film
       }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
       io.observe(sec);
     }
-    return () => { window.removeEventListener('cenner-desktop:power', powerOn); io?.disconnect(); clear(); };
+    return () => { window.removeEventListener('cenner-desktop:power', powerOn); window.removeEventListener('cenner-home:reveal', onReveal); window.removeEventListener('scroll', onReveal); window.clearTimeout(retry); io?.disconnect(); clear(); };
   }, []);
   React.useEffect(() => {
     if (screen !== 'on' || !unread || tip !== 'done') return;
