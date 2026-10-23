@@ -397,6 +397,12 @@ const CRT_GLASS = { x: 0.1128, y: 0.1109, w: 0.7756, h: 0.568 };
 // The same CRT for the framed desktop section: upscaled, background removed, and its glass keyed out
 // (so the live desktop shows through it with the tube's own rounded corners). Height over width, and
 // where the glass opening sits, as fractions of the picture.
+// The desktop inside the CRT photo: drawn at OS_SCALE (smaller than life) and inset from the glass's
+// curved edges, so the taskbar and icons sit on the flat middle of the tube.
+const OS_SCALE = 0.66;
+const OS_INSET = { x: 0.035, top: 0.05, bottom: 0.04 };
+// How much of the CRT photo the framed section shows, from the top: the stand runs off its bottom edge.
+const CRT_VISIBLE = 0.86;
 const CRT_PHOTO = { src: ['/home/crt-photo-1000.webp', '/home/crt-photo-1800.webp'], aspect: 3505 / 3445, glass: { x: 0.1118, y: 0.1087, w: 0.7776, h: 0.5706 } };
 // The full-frame Cenner card the camera lands on (Kling 3.0, real CRT glitch static in the footage,
 // a seamless loop that plays live).
@@ -592,7 +598,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     if (blank.current) blank.current.style.opacity = String(smooth(span(p, 0.875, 0.915)));
     if (stage.current) {
       stage.current.style.opacity = String(1 - smooth(span(p, 0.915, 0.99)));
-      stage.current.style.pointerEvents = p > 0.97 ? 'none' : '';   // the white section is underneath: let clicks through
+      stage.current.style.pointerEvents = p > 0.97 ? 'none' : 'auto';   // the white section is underneath: let clicks through
     }
     // the white section's text fades up (and its monitor powers on) once the blue starts to go
     const reveal = p >= 0.93;
@@ -610,7 +616,9 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
   const words = [t('Freelanceri iz Hrvatske'), t('za tvoj sljedeći projekt')];
 
   return (
-    <section ref={ref} className={reduce ? 'relative' : 'relative z-10 h-[380vh]'}>
+    // (the section itself lets clicks through: it overlaps the framed monitor beneath its last
+    // screen; the stage catches them while it is visible)
+    <section ref={ref} className={reduce ? 'relative' : 'pointer-events-none relative z-10 h-[380vh]'}>
       <div ref={stage} className={`${reduce ? 'relative h-[calc(100svh-4.5rem)]' : 'sticky top-[4.5rem] h-[calc(100svh-4.5rem)]'} overflow-hidden bg-sky`}>
         <div ref={film} className="absolute inset-0 will-change-transform">
           <img
@@ -1443,7 +1451,7 @@ const StartMenu: React.FC<{ drop: 'up' | 'down'; onClose: () => void; onChat: ()
   const heading = 'px-2.5 pb-1 pt-2.5 font-term text-[11px] font-bold uppercase tracking-[0.14em] text-slate';
   const footBtn = 'flex items-center gap-1.5 border-2 border-white/70 px-2 py-1 font-display text-[13px] font-bold transition-colors hover:bg-white hover:text-ink focus-visible:bg-white focus-visible:text-ink focus-visible:outline-none';
   return (
-    <div ref={box} id="cn-start" className={`cn-toast absolute left-0 z-[90] flex max-h-[min(38rem,calc(100svh-10rem))] w-[min(36rem,calc(100vw-4rem))] flex-col ${drop === 'up' ? 'bottom-[calc(100%+8px)]' : 'top-[calc(100%+8px)]'} border-2 border-ink bg-white font-text text-ink shadow-[10px_10px_0_#0b0c0e]`}>
+    <div ref={box} id="cn-start" className={`cn-toast absolute left-0 z-[90] flex max-h-[min(38rem,calc(100cqh-4.5rem))] w-[min(36rem,calc(100cqw-2rem))] flex-col ${drop === 'up' ? 'bottom-[calc(100%+8px)]' : 'top-[calc(100%+8px)]'} border-2 border-ink bg-white font-text text-ink shadow-[10px_10px_0_#0b0c0e]`}>
       <div className="flex items-center gap-3 border-b-2 border-ink bg-sky px-3 py-2.5 text-white">
         {user ? (
           <Avatar src={user.avatar} name={user.name} size={40} className="h-10 w-10 shrink-0 border-2 border-white object-cover" />
@@ -2014,12 +2022,14 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   }, [wide]);
 
   const focus = (id: string) => setOrder(o => [...o.filter(x => x !== id), id]);
+  // pointer px -> desktop px (the CRT draws the desktop scaled down)
+  const osK = crt ? OS_SCALE : 1;
 
   const onDown = (e: React.PointerEvent, id: string) => {
     if (!wide || (e.target as HTMLElement).closest('button')) return;
     const el = document.getElementById(`cn-win-${id}`);
     const p = pos[id] || { x: el?.offsetLeft ?? 0, y: el?.offsetTop ?? 0 };
-    drag.current = { id, dx: e.clientX - p.x, dy: e.clientY - p.y, pid: e.pointerId };
+    drag.current = { id, dx: e.clientX / osK - p.x, dy: e.clientY / osK - p.y, pid: e.pointerId };
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     focus(id);
   };
@@ -2029,7 +2039,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
     if (!d || !el || e.pointerId !== d.pid) return;
     if (e.pointerType === 'mouse' && e.buttons === 0) { drag.current = null; return; } // the release was missed
     const r = el.getBoundingClientRect();
-    setPos(p => ({ ...p, [d.id]: { x: clamp(e.clientX - d.dx, -200, r.width - 120), y: clamp(e.clientY - d.dy, 0, r.height - 48) } }));
+    setPos(p => ({ ...p, [d.id]: { x: clamp(e.clientX / osK - d.dx, -200, r.width / osK - 120), y: clamp(e.clientY / osK - d.dy, 0, r.height / osK - 48) } }));
   };
   const onUp = () => { drag.current = null; };
 
@@ -2097,7 +2107,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
         // then point at the CENNER button: every page is in its Start menu
         const s0 = startBtn.current?.getBoundingClientRect(), a = area.getBoundingClientRect();
         if (s0) {
-          setGhost({ x: s0.left - a.left + s0.width * 0.72, y: s0.top - a.top + s0.height * 0.55, glide: !still });
+          setGhost({ x: (s0.left - a.left + s0.width * 0.72) / osK, y: (s0.top - a.top + s0.height * 0.55) / osK, glide: !still });
           if (!still) await wait(550, ac.signal);
         }
         setTip('start'); startReached = true; pulseStart(still ? 2400 : 4300);
@@ -2198,7 +2208,11 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       />
       {crt && <div aria-hidden="true" className="cn-scan pointer-events-none absolute inset-0 opacity-40" />}
       {wide ? (
-      <div className="relative flex flex-col" style={crt ? { height: '100%', containerType: 'size' } : { aspectRatio: '16 / 10', containerType: 'size' }}>
+      <div className="relative flex flex-col" style={crt ? {
+        position: 'absolute', left: `${OS_INSET.x * 100}%`, top: `${OS_INSET.top * 100}%`,
+        width: `${((1 - 2 * OS_INSET.x) * 100) / OS_SCALE}%`, height: `${((1 - OS_INSET.top - OS_INSET.bottom) * 100) / OS_SCALE}%`,
+        transform: `scale(${OS_SCALE})`, transformOrigin: '0 0', containerType: 'size',
+      } : { aspectRatio: '16 / 10', containerType: 'size' }}>
         <div ref={areaRef} className="relative flex-1 p-6" onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onLostPointerCapture={onUp} onPointerDown={e => { if (!(e.target as HTMLElement).closest('[data-icon]')) setSelIcon(null); }}>
           {/* Desktop icons */}
           <ul className={`absolute left-6 top-6 grid w-28 grid-cols-1 gap-5 ${dblTag ? 'z-[30]' : 'z-0'}`} role="list">
@@ -2396,9 +2410,19 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   if (!wide) return monitor;
   const mark = (n: number): React.CSSProperties => ({ transitionDelay: `${n * 0.1}s` });
   return (
-    <div ref={lockRef} data-lock className="relative z-0 bg-paper px-4 py-16 md:px-8 md:py-24 lg:pb-28 lg:pt-12" style={reduce || !crt ? undefined : { marginTop: 'calc(-1 * (100svh - 4.5rem))', boxShadow: '0 -100svh 0 0 #eef0f3' }}>
-      <div className="mx-auto grid max-w-[92rem] items-center gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14">
-        <div ref={textRef} className="max-w-[34rem]">
+    // On the CRT the section is exactly one screen tall and the monitor rises out of its bottom
+    // edge: the stand runs off it, cut by the section below.
+    <div
+      ref={lockRef}
+      data-lock
+      className={crt ? 'relative z-0 flex flex-col overflow-hidden bg-paper px-4 pt-10 md:px-8' : 'relative z-0 bg-paper px-4 py-16 md:px-8 md:py-24 lg:pb-28 lg:pt-12'}
+      style={{
+        ...(crt ? { minHeight: 'calc(100svh - 4.5rem)' } : {}),
+        ...(reduce || !crt ? {} : { marginTop: 'calc(-1 * (100svh - 4.5rem))', boxShadow: '0 -100svh 0 0 #eef0f3' }),
+      }}
+    >
+      <div className={`mx-auto grid w-full max-w-[92rem] items-center gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14 ${crt ? 'flex-1' : ''}`}>
+        <div ref={textRef} className={`max-w-[34rem] ${crt ? 'self-center pb-10' : ''}`}>
           <p className="cn-mark font-display text-[12px] font-black uppercase tracking-[0.2em] text-sky" data-on={textOn ? '1' : '0'}>{t('What we build')}</p>
           <h2 className="cn-mark mt-3 font-display text-[clamp(2rem,3.4vw,3.25rem)] font-black leading-[0.98] tracking-[-0.03em] text-ink" data-on={textOn ? '1' : '0'} style={mark(1)}>{t('The site you are looking at is our work.')}</h2>
           <p className="cn-mark mt-5 font-text text-[1.0625rem] leading-[1.6] text-slate" data-on={textOn ? '1' : '0'} style={mark(2)}>
@@ -2418,7 +2442,10 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
         {crt ? (
           // The CRT photo, with the live desktop set behind its keyed-out glass (a hair larger than
           // the opening, so the tube's rounded edge frames it), and the power light on the photo's LED.
-          <div className="relative mx-auto w-full max-w-[58rem]" style={{ aspectRatio: `1 / ${CRT_PHOTO.aspect}` }}>
+          // Only the top 86% of the picture takes room (so the section stays one screen tall); the
+          // rest of the stand hangs below and is cut by the section's edge.
+          <div className="relative ml-auto w-full max-w-[min(44rem,calc((100svh-7rem)/0.88))] self-end" style={{ aspectRatio: `1 / ${CRT_PHOTO.aspect * CRT_VISIBLE}` }}>
+          <div className="absolute inset-x-0 top-0" style={{ aspectRatio: `1 / ${CRT_PHOTO.aspect}` }}>
             <div className="absolute" style={{ left: `${(CRT_PHOTO.glass.x - 0.004) * 100}%`, top: `${(CRT_PHOTO.glass.y - 0.004) * 100}%`, width: `${(CRT_PHOTO.glass.w + 0.008) * 100}%`, height: `${(CRT_PHOTO.glass.h + 0.008) * 100}%` }}>{monitor}</div>
             <img
               src={CRT_PHOTO.src[1]}
@@ -2429,6 +2456,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
               className="pointer-events-none absolute inset-0 h-full w-full select-none drop-shadow-[0_34px_44px_rgba(11,12,14,.22)]"
             />
             <span aria-hidden="true" className={`pointer-events-none absolute left-[81.7%] top-[75.1%] h-[0.7%] w-[0.7%] -translate-x-1/2 -translate-y-1/2 rounded-full ${screen === 'on' ? 'cn-led bg-brand-green' : 'bg-[#a3a08a]'}`} />
+          </div>
           </div>
         ) : (
           <div className="mx-auto w-full max-w-[60rem]">{monitor}</div>
