@@ -388,13 +388,22 @@ const CRT_GLASS = { x: 0.1128, y: 0.1109, w: 0.7756, h: 0.568 };
 // The full-frame Cenner card the camera lands on (Kling 3.0, real CRT glitch static in the footage,
 // a seamless loop that plays live).
 const CARD_CLIP = ['/video/glitch-card-v1-1280.mp4', '/video/glitch-card-v1-854.mp4'];
-// Where the clip draws its lettering: ink boxes measured on its frames, as fractions of the 1280x720
-// frame (left, top, right, bottom). The glass lettering is set so that, with the camera all the way
-// in, it lands on exactly these boxes: the hand-off is the same words, the same size, in the same place.
-const CARD_INK = {
-  title: { l: 0.1484, t: 0.2889, r: 0.8352, b: 0.5292 },
-  sub: { l: 0.1531, t: 0.6028, r: 0.8492, b: 0.6653 },
-};
+// Where the clip draws each letter: ink boxes measured on its frames, in px of the 1280x720 frame
+// (left, top, right, bottom; the same in every frame). Each glass letter is fitted to its own box so
+// that, with the camera all the way in, it covers the clip's letter: the hand-off is the same words,
+// letter for letter, in the same place.
+const CARD_GLYPHS: { text: string; font: string; glow: number; boxes: number[][] }[] = [
+  {
+    text: 'CENNER', font: '900 100px "Libre Franklin", Inter, sans-serif', glow: 0.02,
+    boxes: [[190, 208, 343, 381], [360, 212, 471, 377], [490, 212, 629, 377], [652, 212, 789, 377], [809, 211, 917, 375], [936, 212, 1069, 377]],
+  },
+  {
+    text: 'FREELANCEHRVATSKA', font: '700 100px "JetBrains Mono", ui-monospace, monospace', glow: 0,
+    boxes: [[196, 434, 225, 479], [246, 434, 277, 479], [298, 434, 327, 479], [346, 434, 377, 479], [398, 434, 427, 479], [446, 434, 479, 479],
+      [498, 434, 531, 479], [550, 434, 581, 479], [600, 434, 631, 479], [697, 434, 729, 479], [748, 434, 779, 479], [800, 434, 831, 479],
+      [852, 434, 883, 479], [902, 434, 933, 479], [952, 434, 983, 479], [1003, 434, 1035, 479], [1054, 434, 1087, 479]],
+  },
+];
 // How far the camera moves in: until the glass covers the stage, with a little to spare.
 const camEndFor = (W: number, H: number, g: { w: number; h: number }) => Math.max(W / g.w, H / g.h) * 1.04;
 // The second headline line: a tilted label in the buttons' green, so the lines read as headline and answer.
@@ -507,30 +516,26 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     // The clip covers the stage (object-fit: cover); a point of its frame, at the end of the zoom,
     // sits on this point of the glass now.
     const s = Math.max(W / 1280, H / 720), ox = (W - 1280 * s) / 2, oy = (H - 720 * s) / 2;
-    const gx = (f: number) => g.w / 2 + (ox + f * 1280 * s - W / 2) / cam;
-    const gy = (f: number) => g.h / 2 + (oy + f * 720 * s - H / 2) / cam;
-    // One line: caps as tall as the box; spread (or, if too wide, narrowed) to its width.
-    const line = (text: string, font: string, box: { l: number; t: number; r: number; b: number }, glow: number) => {
-      const L = gx(box.l), R = gx(box.r), T = gy(box.t), B = gy(box.b);
-      ctx.font = font;
-      const m = ctx.measureText(text);
-      const inkW = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
-      const f = (B - T) / m.actualBoundingBoxAscent;
-      const chars = Array.from(text);
-      const gap = Math.max(0, ((R - L) / f - inkW) / (chars.length - 1));
-      const sx = Math.min(1, (R - L) / (f * inkW));
-      ctx.save();
-      ctx.translate(L, B);
-      ctx.scale(f * sx, f);
-      ctx.fillStyle = '#5ad7a8';   // the clip's mint, sampled from its frames
-      ctx.shadowColor = 'rgba(90,215,168,.5)';
-      ctx.shadowBlur = glow * k;
-      let x = m.actualBoundingBoxLeft;
-      for (const c of chars) { ctx.fillText(c, x, 0); x += ctx.measureText(c).width + gap; }
-      ctx.restore();
-    };
-    line('CENNER', '900 100px "Libre Franklin", Inter, sans-serif', CARD_INK.title, g.w * 0.02);
-    line('FREELANCE HRVATSKA', '700 100px "JetBrains Mono", ui-monospace, monospace', CARD_INK.sub, 0);
+    const gx = (px: number) => g.w / 2 + (ox + px * s - W / 2) / cam;
+    const gy = (px: number) => g.h / 2 + (oy + px * s - H / 2) / cam;
+    ctx.fillStyle = '#5ad7a8';   // the clip's mint, sampled from its frames
+    ctx.shadowColor = 'rgba(90,215,168,.5)';
+    // Every letter's own ink stretched onto its box.
+    for (const run of CARD_GLYPHS) {
+      ctx.font = run.font;
+      ctx.shadowBlur = run.glow * g.w * k;
+      Array.from(run.text).forEach((c, i) => {
+        const [l, t, r, b] = run.boxes[i];
+        const m = ctx.measureText(c);
+        const w = m.actualBoundingBoxLeft + m.actualBoundingBoxRight, h = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+        if (w <= 0 || h <= 0) return;
+        ctx.save();
+        ctx.translate(gx(l), gy(t));
+        ctx.scale((gx(r + 1) - gx(l)) / w, (gy(b + 1) - gy(t)) / h);
+        ctx.fillText(c, m.actualBoundingBoxLeft, m.actualBoundingBoxAscent);
+        ctx.restore();
+      });
+    }
   }, []);
   const layout = React.useCallback(() => {
     const st = stage.current, el = crt.current, cp = copy.current;
