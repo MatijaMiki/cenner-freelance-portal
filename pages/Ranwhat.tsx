@@ -2,10 +2,15 @@ import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import SEO from '../components/SEO';
 import { useT } from '../i18n';
+import { priceItem } from '../lib/cjenik.js';
+import AnchorPrice from '../components/AnchorPrice';
 
 const RW = 'https://ranwhat.com';
 
-const PLANS = [
+const PLUS_MONTH = priceItem('ranwhat-plus-month').price;
+const PLUS_YEAR = priceItem('ranwhat-plus-year').price;
+
+const PLANS: { name: string; price: string; body: string; anchor?: string[] }[] = [
   {
     name: 'Free',
     price: 'Free, forever',
@@ -13,7 +18,8 @@ const PLANS = [
   },
   {
     name: 'Plus',
-    price: '€12 / month or €120 / year',
+    price: `€${PLUS_MONTH} / month or €${PLUS_YEAR} / year`,
+    anchor: ['ranwhat-plus-month', 'ranwhat-plus-year'],
     body: 'Subscription to the capability catalogue feed at feed.ranwhat.com, so the scanner knows the scopes providers have added since your version shipped. One flat price per organisation, VAT included.',
   },
   {
@@ -56,7 +62,8 @@ const Ranwhat: React.FC = () => {
           {PLANS.map(p => (
             <div key={p.name} className="p-8 bg-white border-2 border-ink">
               <h3 className="text-ink font-black text-xl mb-1">{p.name}</h3>
-              <p className="text-leaf font-bold text-sm mb-4">{p.price}</p>
+              <p className={`text-leaf font-bold text-sm ${p.anchor ? '' : 'mb-4'}`}>{p.price}</p>
+              {p.anchor && <AnchorPrice ids={p.anchor} className="mt-1 mb-4 text-slate" />}
               <p className="text-slate text-sm leading-relaxed">{p.body}</p>
             </div>
           ))}

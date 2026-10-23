@@ -5,6 +5,8 @@ import { Zap, Globe, Crown } from 'lucide-react';
 import SEO from '../components/SEO';
 import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
+import { PLANS } from '../lib/plans';
+import AnchorPrice from '../components/AnchorPrice';
 
 type Feature = {
   name: string;
@@ -28,7 +30,7 @@ const tiers: Tier[] = [
   {
     name: 'Free',
     id: 'free',
-    price: '€0',
+    price: `€${PLANS.FREE.pricePerMonth}`,
     period: 'forever',
     description: 'Start freelancing',
     icon: <Globe className="text-gray-400" size={24} />,
@@ -68,7 +70,7 @@ const tiers: Tier[] = [
   {
     name: 'Pro',
     id: 'pro',
-    price: '€19',
+    price: `€${PLANS.PRO.pricePerMonth}`,
     period: 'per month',
     description: 'Grow faster',
     icon: <Zap className="text-brand-green" size={24} />,
@@ -108,7 +110,7 @@ const tiers: Tier[] = [
   {
     name: 'Ultra',
     id: 'ultra',
-    price: '€59',
+    price: `€${PLANS.ULTRA.pricePerMonth}`,
     period: 'per month',
     description: 'Build your business',
     icon: <Crown className="text-brand-pink" size={24} />,
@@ -226,7 +228,7 @@ const Subscription: React.FC = () => {
         {/* Pricing Grid */}
         <div className="mt-12 grid items-stretch gap-6 md:mt-16 lg:grid-cols-3">
           {tiers.map((tier) => {
-            const feeRate = ({ free: 15, pro: 10, ultra: 5 } as Record<string, number>)[tier.id] ?? 15;
+            const feeRate = PLANS[tier.id.toUpperCase() as keyof typeof PLANS].feePercent;
             const dark = !!tier.highlight;   // Pro: the recommended plan is the inverted card
             const muted = dark ? 'text-white/70' : 'text-slate';
             return (
@@ -253,6 +255,7 @@ const Subscription: React.FC = () => {
                   <span className="font-display text-[4rem] font-extrabold leading-none tracking-[-0.04em]">{tier.price}</span>
                   <span className={`text-[14px] ${muted}`}>/ {t(tier.period)}</span>
                 </div>
+                <AnchorPrice ids={[`plan-${tier.id}`, [`commission-${tier.id}`, 'platform fee']]} className={`mt-2 ${muted}`} />
 
                 <p className={`mt-3 text-[15px] ${muted}`}>
                   <span className={`font-display font-extrabold ${dark ? 'text-white' : 'text-ink'}`}>{feeRate}% {t('platform fee')}</span>
@@ -298,6 +301,7 @@ const Subscription: React.FC = () => {
           {t('Commission shown is deducted from the freelancer’s payout. Buyers pay a flat')} <span className="font-bold text-ink">5%</span> {t('service fee at checkout.')}{' '}
           {t('Enterprise sellers pay 0% commission, and their buyers pay no service fee.')}
         </p>
+        <AnchorPrice ids={[['buyer-fee', 'service fee'], ['buyer-fee-enterprise', 'service fee, Enterprise sellers']]} className="mt-1 text-slate" />
 
         {/* Enterprise */}
         <div className="mt-8 grid gap-8 border-2 border-ink bg-brand-green p-7 transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[8px_8px_0_0_#0b0c0e] md:p-10 lg:grid-cols-12 lg:items-center">
@@ -315,8 +319,9 @@ const Subscription: React.FC = () => {
           </div>
           <div className="flex flex-col items-start gap-3 lg:col-span-4 lg:items-end">
             <div className="lg:text-right">
-              <span className="font-display text-[3.5rem] font-extrabold leading-none tracking-[-0.04em]">€99</span>
+              <span className="font-display text-[3.5rem] font-extrabold leading-none tracking-[-0.04em]">€{PLANS.ENTERPRISE.pricePerMonth}</span>
               <span className="text-[15px]"> / {t('per month').replace('per ', '')}</span>
+              <AnchorPrice ids={['plan-enterprise', ['commission-enterprise', 'platform fee'], ['buyer-fee-enterprise', 'service fee']]} className="mt-2" />
             </div>
             <button
               onClick={() => handlePlanSelection('enterprise')}

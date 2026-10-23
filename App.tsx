@@ -31,6 +31,7 @@ const Subscription = lazy(() => import('./pages/Subscription'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Cookies = lazy(() => import('./pages/Cookies'));
+const Cjenik = lazy(() => import('./pages/Cjenik'));
 const FreelancerProfile = lazy(() => import('./pages/FreelancerProfile'));
 const Orders = lazy(() => import('./pages/Orders'));
 const Inbox = lazy(() => import('./pages/Inbox'));
@@ -89,6 +90,7 @@ const App: React.FC = () => {
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/cookies" element={<Cookies />} />
+                  <Route path="/cjenik" element={<Cjenik />} />
                   <Route path="/freelancer/:id" element={<FreelancerProfile />} />
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/messages" element={<Inbox />} />

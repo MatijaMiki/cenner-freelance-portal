@@ -7,6 +7,8 @@ import { Tube } from '../components/Tube';
 import ContactForm from '../components/ContactForm';
 import { useT } from '../i18n';
 import { COMPANY } from '../lib/company';
+import { priceItem } from '../lib/cjenik.js';
+import AnchorPrice from '../components/AnchorPrice';
 
 /*
  * Cenner's own work, one page (it was three: Services, Technology and Previous Projects). What
@@ -18,10 +20,10 @@ import { COMPANY } from '../lib/company';
 type Service = { id: string; title: string; desc: string; points: string[]; from?: number };
 
 const SERVICES: Service[] = [
-  { id: 'web-stranice', title: 'Websites', from: 800,
+  { id: 'web-stranice', title: 'Websites', from: priceItem('studio-web-stranice').price,
     desc: 'Custom websites built from scratch: fast, responsive and easy to find on Google.',
     points: ['Design and development', 'Works on every screen', 'Basic SEO set up'] },
-  { id: 'wordpress', title: 'WordPress', from: 500,
+  { id: 'wordpress', title: 'WordPress', from: priceItem('studio-wordpress').price,
     desc: 'WordPress sites and WooCommerce shops you can update yourself, with training included.',
     points: ['Custom themes and plugins', 'WooCommerce shops', 'Training for your team'] },
   { id: 'saas', title: 'SaaS and web apps',
@@ -33,7 +35,7 @@ const SERVICES: Service[] = [
   { id: 'automatizacija', title: 'Automation and AI',
     desc: 'n8n workflows and AI that take repetitive work off your team: forms, emails, spreadsheets, CRMs and APIs, connected.',
     points: ['n8n workflows', 'AI in your product or tools', 'Documentation and training'] },
-  { id: 'dizajn', title: 'Graphic design', from: 300,
+  { id: 'dizajn', title: 'Graphic design', from: priceItem('studio-dizajn').price,
     desc: 'Logos, brand identity and marketing material, ready for screen and print.',
     points: ['Logo and brand identity', 'Social and ad graphics', 'Print-ready files'] },
   { id: 'oglasavanje', title: 'Advertising',
@@ -190,6 +192,7 @@ const Services: React.FC = () => {
                   <div>
                     <p className="text-[0.85rem] text-slate">{s.from ? t('Starting at') : t('Price')}</p>
                     <p className="font-display text-[1.375rem] font-extrabold">{s.from ? `€${s.from}` : t('On request')}</p>
+                    {s.from && <AnchorPrice ids={[`studio-${s.id}`]} className="mt-1 text-slate" />}
                   </div>
                   {/* The whole card is the target: this link stretches over it (::after), so keyboard and screen readers still get a real link. */}
                   <a

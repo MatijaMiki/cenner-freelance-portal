@@ -4,13 +4,23 @@
  * project a freelancer delivers through cenner.hr: 15% on Free, 10% on Pro, 5% on Ultra, 0% on
  * Enterprise (pages/Subscription.tsx is the public statement of these).
  */
+import { priceItem } from './cjenik.js';
+
 export type PlanId = 'FREE' | 'PRO' | 'ULTRA' | 'ENTERPRISE';
 
+// The amounts come from the published price list (lib/cjenik.js), so the site and the cjenik
+// file cannot disagree.
+const plan = (name: string, id: string) => ({
+  name,
+  pricePerMonth: priceItem(`plan-${id}`).price,
+  feePercent: priceItem(`commission-${id}`).price,
+});
+
 export const PLANS: Record<PlanId, { name: string; pricePerMonth: number; feePercent: number }> = {
-  FREE: { name: 'Free', pricePerMonth: 0, feePercent: 15 },
-  PRO: { name: 'Pro', pricePerMonth: 19, feePercent: 10 },
-  ULTRA: { name: 'Ultra', pricePerMonth: 59, feePercent: 5 },
-  ENTERPRISE: { name: 'Enterprise', pricePerMonth: 99, feePercent: 0 },
+  FREE: plan('Free', 'free'),
+  PRO: plan('Pro', 'pro'),
+  ULTRA: plan('Ultra', 'ultra'),
+  ENTERPRISE: plan('Enterprise', 'enterprise'),
 };
 
 /** A user's plan from their `tier` (any case; unknown or missing means Free). */
