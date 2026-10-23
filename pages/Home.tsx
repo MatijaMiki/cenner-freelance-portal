@@ -202,9 +202,13 @@ html,body{overflow-x:clip}
    "scale" property, which composes with the minimise animation's transform. Touch screens keep
    full-size windows. */
 @media (hover:hover) and (pointer:fine){
-  .cn-win{--cn-win-k:var(--cn-win-rest,.62);scale:var(--cn-win-k);transform-origin:0 0!important;transition-property:transform,opacity,scale}
+  .cn-win{--cn-win-k:var(--cn-win-rest,.62);scale:var(--cn-win-k);transform-origin:0 0!important;transition-property:transform,opacity,scale,filter}
   .cn-win[data-drag]{z-index:70!important}
 }
+/* Only the front window is in full colour; the rest sink into the screen, greyed and darkened, and
+   come back while hovered or focused (clicking one brings it to the front). */
+.cn-win{transition-property:transform,opacity,scale,filter}
+.cn-win:not([data-top]):not([data-min]):not(:hover):not(:focus-within){filter:grayscale(1) brightness(.15)}
 @media (prefers-reduced-motion:reduce){.cn-win{transition-duration:0s!important}}
 @media (prefers-reduced-motion:reduce){.cn-ghost,.cn-ghost[data-glide]{animation:none;transition:none}.cn-tap{display:none}.cn-start-hint,.cn-beacon{animation:none;box-shadow:0 0 0 3px #4ade80}}
 @keyframes cn-start-hint{0%{box-shadow:0 0 0 0 rgba(74,222,128,.95)}100%{box-shadow:0 0 0 14px rgba(74,222,128,0)}}
@@ -1986,9 +1990,9 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   // between the CRT and the smaller laptop screen puts every window back at its fractions.
   const winLeft = (w: Win) => {
     const rem = Number(/w-\[(\d+(?:\.\d+)?)rem\]/.exec(w.w)?.[1] ?? 24);
-    // right of the icon column (9rem) where there is room; never past the screen's right edge
+    // right of the icon column (7.5rem) where there is room; never past the screen's right edge
     // (--cn-win-k: the size a window rests at with a mouse, so a shrunk window may sit further right)
-    return `max(8px, min(max(9rem, ${w.x * 100}%), calc(100% - min(${rem}rem, 100% - 1.5rem) * var(--cn-win-k, 1) - 12px)))`;
+    return `max(8px, min(max(7.5rem, ${w.x * 100}%), calc(100% - min(${rem}rem, 100% - 1.5rem) * var(--cn-win-k, 1) - 12px)))`;
   };
   // top: its fraction, but never so low that it runs under the taskbar on a short screen; on the
   // laptop the welcome window sits just under the trust window's title bar (see the order below)
@@ -2026,6 +2030,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   }, [wide]);
 
   const focus = (id: string) => setOrder(o => [...o.filter(x => x !== id), id]);
+  const front = [...order].reverse().find(id => !hidden[id] && wins.some(w => w.id === id));
   // pointer px -> desktop px (the CRT draws the desktop scaled down)
   // The monitor follows the window's size, and the desktop follows the monitor: its zoom keeps the
   // proportions it was tuned at (OS_SCALE on a glass OS_REF_GLASS_W wide).
@@ -2230,11 +2235,11 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       } as React.CSSProperties : { aspectRatio: '16 / 10', containerType: 'size' }}>
         <div ref={areaRef} className="relative flex-1 p-6" onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onLostPointerCapture={onUp} onPointerDown={e => { if (!(e.target as HTMLElement).closest('[data-icon]')) setSelIcon(null); }}>
           {/* Desktop icons */}
-          <ul className={`absolute left-6 top-6 grid w-28 grid-cols-1 gap-5 ${dblTag ? 'z-[30]' : 'z-0'}`} role="list">
+          <ul className={`absolute left-0 top-6 grid w-28 grid-cols-1 gap-4 ${dblTag ? 'z-[30]' : 'z-0'}`} role="list">
             {icons.map(({ to, label, Icon }, i) => (
               <li key={to} className="relative" style={bootIn(120 + i * 70)}>
                 <Link to={to} data-icon onClick={e => { if (dblClick && e.detail === 1) { e.preventDefault(); setSelIcon(to); } else if (dblClick && e.detail >= 2) learnDbl(); }} className="group flex flex-col items-center gap-1.5 text-center">
-                  <span className={`flex h-14 w-14 items-center justify-center border-2 border-ink transition-colors ${selIcon === to ? 'bg-brand-green' : 'bg-white group-hover:bg-brand-green'}`}><Icon size={24} /></span>
+                  <span className={`flex h-10 w-10 items-center justify-center border-2 border-ink transition-colors ${selIcon === to ? 'bg-brand-green' : 'bg-white group-hover:bg-brand-green'}`}><Icon size={18} /></span>
                   <span className={`px-1.5 py-0.5 font-display text-[13px] font-bold leading-tight ${selIcon === to ? 'bg-sky text-white outline-dotted outline-1 outline-offset-1 outline-white' : 'bg-ink text-white'}`}>{label}</span>
                 </Link>
                 {dblHint(to)}
@@ -2242,9 +2247,9 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
             ))}
             <li className="relative" style={bootIn(120 + icons.length * 70)}>
               <button type="button" data-icon onClick={iconClick('chat', openChat)} className="group flex w-full flex-col items-center gap-1.5 text-center">
-                <span className={`relative flex h-14 w-14 items-center justify-center border-2 border-ink transition-colors ${selIcon === 'chat' ? 'bg-white' : 'bg-brand-green group-hover:bg-white'}`}>
-                  <PxMessage size={24} />
-                  <span className="absolute -right-1.5 -top-1.5 h-3.5 w-3.5 animate-pulse rounded-full border-2 border-ink bg-brand-pink" />
+                <span className={`relative flex h-10 w-10 items-center justify-center border-2 border-ink transition-colors ${selIcon === 'chat' ? 'bg-white' : 'bg-brand-green group-hover:bg-white'}`}>
+                  <PxMessage size={18} />
+                  <span className="absolute -right-1.5 -top-1.5 h-3 w-3 animate-pulse rounded-full border-2 border-ink bg-brand-pink" />
                 </span>
                 <span className={`px-1.5 py-0.5 font-display text-[13px] font-bold leading-tight text-white ${selIcon === 'chat' ? 'bg-sky outline-dotted outline-1 outline-offset-1 outline-white' : 'bg-ink'}`}>{t('Chat with us')}</span>
               </button>
@@ -2270,6 +2275,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
                   inert={min || undefined}
                   data-min={min || undefined}
                   data-drag={drag.current?.id === w.id || undefined}
+                  data-top={w.id === front || undefined}
                   className={`max-w-[calc(100%-1.5rem)] border-2 border-ink bg-white shadow-[10px_10px_0_#0b0c0e] ${w.w} ${wide ? 'cn-win absolute transition-[transform,opacity] duration-300 ease-[cubic-bezier(.4,0,.2,1)]' : 'relative'} ${min ? (wide ? 'pointer-events-none translate-y-[60vh] scale-[0.15] opacity-0' : 'hidden') : ''}`}
                   style={{ ...(wide ? { left: p ? p.x : winLeft(w), top: p ? p.y : winTop(w), zIndex: 10 + z, transformOrigin: '50% 100%' } : {}), ...(min ? {} : bootIn(480 + wins.indexOf(w) * 160)) }}
                 >
