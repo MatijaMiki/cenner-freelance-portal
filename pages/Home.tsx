@@ -401,6 +401,8 @@ const CRT_GLASS = { x: 0.1128, y: 0.1109, w: 0.7756, h: 0.568 };
 // laid out at that size and stays crisp) and inset from the glass's curved edges, so the taskbar and
 // icons sit on the flat middle of the tube.
 const OS_SCALE = 0.72;
+// ...at that scale on a glass this wide (px); a bigger or smaller monitor scales the desktop with it.
+const OS_REF_GLASS_W = 553;
 const OS_INSET = { x: 0.035, top: 0.05, bottom: 0.04 };
 // How much of the CRT photo the framed section shows, from the top: the stand runs off its bottom edge.
 const CRT_VISIBLE = 0.86;
@@ -2024,7 +2026,18 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
 
   const focus = (id: string) => setOrder(o => [...o.filter(x => x !== id), id]);
   // pointer px -> desktop px (the CRT draws the desktop scaled down)
-  const osK = crt ? OS_SCALE : 1;
+  // The monitor follows the window's size, and the desktop follows the monitor: its zoom keeps the
+  // proportions it was tuned at (OS_SCALE on a glass OS_REF_GLASS_W wide).
+  const glassBox = React.useRef<HTMLDivElement>(null);
+  const [osZoom, setOsZoom] = React.useState(OS_SCALE);
+  React.useLayoutEffect(() => {
+    const el = glassBox.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(([e]) => setOsZoom(clamp(OS_SCALE * (e.contentRect.width / OS_REF_GLASS_W), 0.55, 1.15)));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [crt, wide]);
+  const osK = crt ? osZoom : 1;
 
   const onDown = (e: React.PointerEvent, id: string) => {
     if (!wide || (e.target as HTMLElement).closest('button')) return;
@@ -2212,7 +2225,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       <div className="relative flex flex-col" style={crt ? {
         position: 'absolute', left: `${OS_INSET.x * 100}%`, right: `${OS_INSET.x * 100}%`,
         top: `${OS_INSET.top * 100}%`, bottom: `${OS_INSET.bottom * 100}%`,
-        zoom: OS_SCALE, containerType: 'size', ['--cn-win-rest' as string]: 0.7,   // windows rest less shrunk here
+        zoom: osZoom, containerType: 'size', ['--cn-win-rest' as string]: 0.7,   // windows rest less shrunk here
       } as React.CSSProperties : { aspectRatio: '16 / 10', containerType: 'size' }}>
         <div ref={areaRef} className="relative flex-1 p-6" onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onLostPointerCapture={onUp} onPointerDown={e => { if (!(e.target as HTMLElement).closest('[data-icon]')) setSelIcon(null); }}>
           {/* Desktop icons */}
@@ -2422,7 +2435,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
         ...(reduce || !crt ? {} : { marginTop: 'calc(-1 * (100svh - 4.5rem))', boxShadow: '0 -100svh 0 0 #eef0f3' }),
       }}
     >
-      <div className={`mx-auto grid w-full max-w-[92rem] items-center gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14 ${crt ? 'flex-1' : ''}`}>
+      <div className={`mx-auto grid w-full items-center gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14 ${crt ? 'max-w-[128rem] flex-1' : 'max-w-[92rem]'}`}>
         <div ref={textRef} className={`max-w-[34rem] ${crt ? 'self-center pb-10' : ''}`}>
           <p className="cn-mark font-display text-[12px] font-black uppercase tracking-[0.2em] text-sky" data-on={textOn ? '1' : '0'}>{t('What we build')}</p>
           <h2 className="cn-mark mt-3 font-display text-[clamp(2rem,3.4vw,3.25rem)] font-black leading-[0.98] tracking-[-0.03em] text-ink" data-on={textOn ? '1' : '0'} style={mark(1)}>{t('The site you are looking at is our work.')}</h2>
@@ -2445,9 +2458,9 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
           // the opening, so the tube's rounded edge frames it), and the power light on the photo's LED.
           // Only the top 86% of the picture takes room (so the section stays one screen tall); the
           // rest of the stand hangs below and is cut by the section's edge.
-          <div className="relative ml-auto w-full max-w-[min(44rem,calc((100svh-7rem)/0.88))] self-end" style={{ aspectRatio: `1 / ${CRT_PHOTO.aspect * CRT_VISIBLE}` }}>
+          <div className="relative ml-auto w-full max-w-[calc((100svh-7rem)/0.88)] self-end" style={{ aspectRatio: `1 / ${CRT_PHOTO.aspect * CRT_VISIBLE}` }}>
           <div className="absolute inset-x-0 top-0" style={{ aspectRatio: `1 / ${CRT_PHOTO.aspect}` }}>
-            <div className="absolute" style={{ left: `${(CRT_PHOTO.glass.x - 0.004) * 100}%`, top: `${(CRT_PHOTO.glass.y - 0.004) * 100}%`, width: `${(CRT_PHOTO.glass.w + 0.008) * 100}%`, height: `${(CRT_PHOTO.glass.h + 0.008) * 100}%` }}>{monitor}</div>
+            <div ref={glassBox} className="absolute" style={{ left: `${(CRT_PHOTO.glass.x - 0.004) * 100}%`, top: `${(CRT_PHOTO.glass.y - 0.004) * 100}%`, width: `${(CRT_PHOTO.glass.w + 0.008) * 100}%`, height: `${(CRT_PHOTO.glass.h + 0.008) * 100}%` }}>{monitor}</div>
             <img
               src={CRT_PHOTO.src[1]}
               srcSet={`${CRT_PHOTO.src[0]} 1000w, ${CRT_PHOTO.src[1]} 1800w`}
