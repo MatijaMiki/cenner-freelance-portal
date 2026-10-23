@@ -202,7 +202,7 @@ html,body{overflow-x:clip}
    "scale" property, which composes with the minimise animation's transform. Touch screens keep
    full-size windows (no hover to open them with). */
 @media (hover:hover) and (pointer:fine){
-  .cn-win{scale:.62;transform-origin:0 0!important;transition-property:transform,opacity,scale}
+  .cn-win{scale:var(--cn-win-rest,.62);transform-origin:0 0!important;transition-property:transform,opacity,scale}
   .cn-win:not([data-min]):hover,.cn-win:not([data-min]):focus-within,.cn-win[data-drag]{scale:1;z-index:70!important}
 }
 @media (prefers-reduced-motion:reduce){.cn-win{transition-duration:0s!important}}
@@ -397,9 +397,10 @@ const CRT_GLASS = { x: 0.1128, y: 0.1109, w: 0.7756, h: 0.568 };
 // The same CRT for the framed desktop section: upscaled, background removed, and its glass keyed out
 // (so the live desktop shows through it with the tube's own rounded corners). Height over width, and
 // where the glass opening sits, as fractions of the picture.
-// The desktop inside the CRT photo: drawn at OS_SCALE (smaller than life) and inset from the glass's
-// curved edges, so the taskbar and icons sit on the flat middle of the tube.
-const OS_SCALE = 0.66;
+// The desktop inside the CRT photo: drawn at OS_SCALE (smaller than life, with CSS zoom so its text is
+// laid out at that size and stays crisp) and inset from the glass's curved edges, so the taskbar and
+// icons sit on the flat middle of the tube.
+const OS_SCALE = 0.72;
 const OS_INSET = { x: 0.035, top: 0.05, bottom: 0.04 };
 // How much of the CRT photo the framed section shows, from the top: the stand runs off its bottom edge.
 const CRT_VISIBLE = 0.86;
@@ -1092,7 +1093,7 @@ function useScreensaver(ref: React.RefObject<HTMLElement>) {
   if (!on) return null;
   return (
     <div aria-hidden="true" className="absolute inset-0 z-[90] bg-black">
-      <div ref={logo} className="absolute left-0 top-0 font-display text-[clamp(3rem,8vw,7rem)] font-black uppercase leading-none tracking-[-0.05em]" style={{ color: SAVER_COLOURS[0] }}>
+      <div ref={logo} className="absolute left-0 top-0 font-display text-[clamp(1.75rem,3.6vw,3.5rem)] font-black uppercase leading-none tracking-[-0.05em]" style={{ color: SAVER_COLOURS[0] }}>
         Cenner
       </div>
     </div>
@@ -2209,10 +2210,10 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       {crt && <div aria-hidden="true" className="cn-scan pointer-events-none absolute inset-0 opacity-40" />}
       {wide ? (
       <div className="relative flex flex-col" style={crt ? {
-        position: 'absolute', left: `${OS_INSET.x * 100}%`, top: `${OS_INSET.top * 100}%`,
-        width: `${((1 - 2 * OS_INSET.x) * 100) / OS_SCALE}%`, height: `${((1 - OS_INSET.top - OS_INSET.bottom) * 100) / OS_SCALE}%`,
-        transform: `scale(${OS_SCALE})`, transformOrigin: '0 0', containerType: 'size',
-      } : { aspectRatio: '16 / 10', containerType: 'size' }}>
+        position: 'absolute', left: `${OS_INSET.x * 100}%`, right: `${OS_INSET.x * 100}%`,
+        top: `${OS_INSET.top * 100}%`, bottom: `${OS_INSET.bottom * 100}%`,
+        zoom: OS_SCALE, containerType: 'size', ['--cn-win-rest' as string]: 0.7,   // windows rest less shrunk here
+      } as React.CSSProperties : { aspectRatio: '16 / 10', containerType: 'size' }}>
         <div ref={areaRef} className="relative flex-1 p-6" onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onLostPointerCapture={onUp} onPointerDown={e => { if (!(e.target as HTMLElement).closest('[data-icon]')) setSelIcon(null); }}>
           {/* Desktop icons */}
           <ul className={`absolute left-6 top-6 grid w-28 grid-cols-1 gap-5 ${dblTag ? 'z-[30]' : 'z-0'}`} role="list">
