@@ -191,7 +191,8 @@ const Auth: React.FC = () => {
         }
         const fullPhone = `${selectedCountry.code}${phone}`;
         const referralCode = localStorage.getItem('cenner_ref') || undefined;
-        await register({ email, password, name: username, mobile: fullPhone, referralCode, turnstileToken: turnstileToken || undefined });
+        // hasRequiredConsent() above guarantees the Terms were accepted; the API records it with the account.
+        await register({ email, password, name: username, mobile: fullPhone, referralCode, turnstileToken: turnstileToken || undefined, acceptedTerms: true });
         // Registration no longer auto-logs-in (anti-enumeration). Switch to the sign-in
         // view and prompt the user to check their email — same message regardless of
         // whether the address was already registered.
@@ -233,10 +234,16 @@ const Auth: React.FC = () => {
     setLoading(true);
     const from = getSafeRedirect((location.state as any)?.from);
     try {
-      await loginWithGoogle();
+      // Returning users sign straight in; a brand-new Google account needs the Terms accepted first.
+      await loginWithGoogle({ acceptedTerms: hasRequiredConsent() });
       navigate(from, { replace: true });
     } catch (err: any) {
-      setError(err.message || 'Google authentication failed.');
+      if (err?.code === 'TERMS_REQUIRED') {
+        openConsentModal('register');
+        setNotice(t('Accept the Terms of Service, then press the Google button again.'));
+      } else {
+        setError(err.message || 'Google authentication failed.');
+      }
     } finally {
       setLoading(false);
     }

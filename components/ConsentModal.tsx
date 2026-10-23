@@ -5,7 +5,8 @@ import { useLanguage, useT } from '../i18n';
 import {
   getConsent,
   setConsent,
-  isConsentPending,
+  shouldAutoPromptConsent,
+  skipConsentPrompt,
   type ConsentState,
 } from '../lib/consent';
 
@@ -45,9 +46,9 @@ const ConsentModal: React.FC = () => {
   const [showLangs, setShowLangs] = useState(false);
   const [state, setState] = useState<ConsentState>(getConsent());
 
-  // Auto-open on first visit if any consent is pending
+  // Auto-open on first visit if any consent is pending (and it wasn't skipped recently)
   useEffect(() => {
-    if (isConsentPending()) {
+    if (shouldAutoPromptConsent()) {
       const t = setTimeout(() => setOpen(true), 700);
       return () => clearTimeout(t);
     }
@@ -95,15 +96,24 @@ const ConsentModal: React.FC = () => {
   };
 
   const savePreferences = () => {
-    setConsent(state);
+    // Pressing Save is an answer: anything left untouched counts as "no" instead of staying
+    // pending (which would bring this prompt straight back on the next page).
+    const resolved: ConsentState = {
+      tos: state.tos === 'pending' ? 'declined' : state.tos,
+      cookies: state.cookies === 'pending' ? 'declined' : state.cookies,
+      location: state.location === 'pending' ? 'declined' : state.location,
+    };
+    setConsent(resolved);
     setOpen(false);
-    if (state.location === 'accepted' && 'geolocation' in navigator) {
+    if (resolved.location === 'accepted' && 'geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(() => {}, () => {}, { timeout: 10000 });
     }
   };
 
   const skip = () => {
-    // Skipping is allowed on first-visit; not allowed at register-gate (forced)
+    // Skipping is allowed on first-visit; not allowed at register-gate (forced).
+    // Nothing is stored as accepted, and we don't ask again for a week.
+    if (reason !== 'register') skipConsentPrompt();
     setOpen(false);
   };
 
@@ -113,13 +123,13 @@ const ConsentModal: React.FC = () => {
     : (isHr ? 'Vaše postavke privatnosti' : 'Your privacy preferences');
   const subtitle = reason === 'register'
     ? (isHr
-        ? 'Za izradu računa morate prihvatiti Uvjete korištenja i kolačiće.'
-        : 'To create an account, please accept the Terms of Service and Cookies.')
+        ? 'Za izradu računa morate prihvatiti Uvjete korištenja.'
+        : 'To create an account, please accept the Terms of Service.')
     : (isHr
         ? 'Vi odlučujete što dijelite. Ove postavke možete promijeniti u bilo kojem trenutku.'
         : 'You decide what to share. You can change these settings at any time.');
 
-  const canRegister = state.tos === 'accepted' && state.cookies === 'accepted';
+  const canRegister = state.tos === 'accepted';
 
   return (
     <div className="fixed inset-0 z-[400] flex items-center justify-center p-4 bg-ink/55 backdrop-blur-[2px] animate-in fade-in duration-300">
@@ -178,7 +188,7 @@ const ConsentModal: React.FC = () => {
                 <p className="text-xs font-bold text-ink">
                   {isHr ? 'Uvjeti korištenja' : 'Terms of Service'}
                   <span className="ml-1.5 text-[9px] font-black text-sky uppercase tracking-widest">
-                    {isHr ? 'Obavezno' : 'Required'}
+                    {isHr ? 'Obavezno za registraciju' : 'Required to sign up'}
                   </span>
                 </p>
                 <Toggle checked={state.tos === 'accepted'} onChange={v => toggle('tos', v)} />
@@ -197,17 +207,17 @@ const ConsentModal: React.FC = () => {
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-3 mb-1">
                 <p className="text-xs font-bold text-ink">
-                  {isHr ? 'Kolačići' : 'Cookies'}
-                  <span className="ml-1.5 text-[9px] font-black text-sky uppercase tracking-widest">
-                    {isHr ? 'Obavezno' : 'Required'}
+                  {isHr ? 'Analitički i oglašivački kolačići' : 'Analytics and advertising cookies'}
+                  <span className="ml-1.5 text-[9px] font-black text-slate uppercase tracking-widest">
+                    {isHr ? 'Neobavezno' : 'Optional'}
                   </span>
                 </p>
                 <Toggle checked={state.cookies === 'accepted'} onChange={v => toggle('cookies', v)} />
               </div>
               <p className="text-[11px] leading-relaxed text-slate">
                 {isHr
-                  ? <>Koristimo kolačiće za temeljnu funkcionalnost i analitiku. <Link to="/cookies" className="font-bold text-sky underline hover:no-underline" onClick={skip}>Saznaj više</Link>.</>
-                  : <>We use cookies for core functionality and analytics. <Link to="/cookies" className="font-bold text-sky underline hover:no-underline" onClick={skip}>Learn more</Link>.</>}
+                  ? <>Pomažu nam razumjeti kako se stranica koristi i mjeriti oglase (Google Analytics i Google Ads). Stranica radi i bez njih. Nužni kolačići (prijava, sigurnost) uvijek su uključeni. <Link to="/cookies" className="font-bold text-sky underline hover:no-underline" onClick={skip}>Saznaj više</Link>.</>
+                  : <>They help us understand how the site is used and measure our ads (Google Analytics and Google Ads). The site works without them. Strictly necessary cookies (login, security) are always on. <Link to="/cookies" className="font-bold text-sky underline hover:no-underline" onClick={skip}>Learn more</Link>.</>}
               </p>
             </div>
           </div>
