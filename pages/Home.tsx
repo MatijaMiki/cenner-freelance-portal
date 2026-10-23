@@ -394,6 +394,10 @@ const PLATE = ['/home/meadow-plate-960.webp', '/home/meadow-plate-1920.webp'];
 const CRT_FRONT = ['/home/crt-front-430.webp', '/home/crt-front-860.webp'];
 const CRT_ASPECT = 875 / 860;
 const CRT_GLASS = { x: 0.1128, y: 0.1109, w: 0.7756, h: 0.568 };
+// The same CRT for the framed desktop section: upscaled, background removed, and its glass keyed out
+// (so the live desktop shows through it with the tube's own rounded corners). Height over width, and
+// where the glass opening sits, as fractions of the picture.
+const CRT_PHOTO = { src: ['/home/crt-photo-1000.webp', '/home/crt-photo-1800.webp'], aspect: 3505 / 3445, glass: { x: 0.1118, y: 0.1087, w: 0.7776, h: 0.5706 } };
 // The full-frame Cenner card the camera lands on (Kling 3.0, real CRT glitch static in the footage,
 // a seamless loop that plays live).
 const CARD_CLIP = ['/video/glitch-card-v1-1280.mp4', '/video/glitch-card-v1-854.mp4'];
@@ -430,6 +434,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
   const intro = React.useRef<HTMLDivElement>(null);
   const card = React.useRef<HTMLVideoElement>(null);
   const boot = React.useRef<HTMLDivElement>(null);
+  const blank = React.useRef<HTMLDivElement>(null);
   const grain = React.useRef<HTMLDivElement>(null);
   const curP = React.useRef(0);
   const bootRun = React.useRef({ started: false, done: false, timers: [] as number[] });
@@ -581,12 +586,16 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     curP.current = p;
     if (p >= 0.85 && !bootRun.current.started) startBoot();
     if (p < 0.8 && bootRun.current.started) resetBoot();
+    // 4. Off the screen in two steps, so the lettering never hangs half-faded over the section
+    //    below: the card and its lines fade to the bare screen blue, then the blue fades away.
+    //    Scrolling back up runs it the other way: the blue first, then the lettering on it.
+    if (blank.current) blank.current.style.opacity = String(smooth(span(p, 0.875, 0.915)));
     if (stage.current) {
-      stage.current.style.opacity = String(1 - smooth(span(p, 0.9, 0.995)));
+      stage.current.style.opacity = String(1 - smooth(span(p, 0.915, 0.99)));
       stage.current.style.pointerEvents = p > 0.97 ? 'none' : '';   // the white section is underneath: let clicks through
     }
-    // the white section's text fades up once the card has mostly dissolved
-    const reveal = p >= 0.92;
+    // the white section's text fades up (and its monitor powers on) once the blue starts to go
+    const reveal = p >= 0.93;
     if (reveal !== heroRevealed) { heroRevealed = reveal; window.dispatchEvent(new Event('cenner-home:reveal')); }
 
     // The headline splits apart as the camera moves in: the first line out to the left, the label to the right.
@@ -674,6 +683,10 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
               <p data-boot className="translate-y-1.5 opacity-0 transition duration-300 ease-out">{t('Secure payment')} ........ OK</p>
               <p data-boot className="translate-y-1.5 opacity-0 transition duration-300 ease-out">{t('Fixed Pricing')} ........ OK</p>
               <p data-boot className="translate-y-1.5 opacity-0 transition duration-300 ease-out">{t('In-House Team')} ........ OK<span className="cn-caret">_</span></p>
+            </div>
+            {/* the bare screen: the card's own blue (sampled from its frames) with its scanlines */}
+            <div ref={blank} className="absolute inset-0 bg-[#051fb2] opacity-0">
+              <div className="cn-scan absolute inset-0 opacity-50" />
             </div>
           </div>
         )}
@@ -1581,6 +1594,40 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       window.removeEventListener('touchcancel', up);
     };
   }, [crt, reduce]);
+  // The page locks onto this section: a wheel scroll that would carry it across the section (down
+  // out of the zoom, or back up from below) glides onto it instead, and the rest of that scroll's
+  // momentum is absorbed. The next deliberate scroll, after a short pause, moves on in either
+  // direction. Touch and the keyboard are never held.
+  React.useEffect(() => {
+    const wrap = lockRef.current;
+    if (!crt || reduce || !wrap) return;
+    const landY = () => wrap.getBoundingClientRect().top + window.scrollY - NAV_H;
+    let held = false, heldAt = 0, lastWheel = 0;
+    const onWheel = (e: WheelEvent) => {
+      const now = performance.now(), gap = now - lastWheel;
+      lastWheel = now;
+      if (deskGliding) { e.preventDefault(); return; }
+      // a list on the screen that can still scroll this way (the Start menu) takes the wheel
+      const box = (e.target as Element | null)?.closest?.('[data-wheel-box]') as HTMLElement | null;
+      if (box && (e.deltaY > 0 ? box.scrollTop + box.clientHeight < box.scrollHeight - 1 : box.scrollTop > 0)) return;
+      if (held) {
+        if (gap < 260 && now - heldAt < 1800) { e.preventDefault(); return; }   // the same scroll's momentum
+        held = false;                                                               // a new scroll: free
+        return;
+      }
+      const y = window.scrollY, L = landY();
+      const dy = e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+      if (Math.abs(y - L) < 3) return;
+      // arriving on it counts as well as crossing it (wheel steps can land exactly on the edge)
+      if ((y < L && y + dy >= L) || (y > L && y + dy <= L)) {
+        e.preventDefault();
+        held = true; heldAt = now;
+        glideTo(L, () => { heldAt = performance.now(); }, { ms: clamp(260 + Math.abs(L - y) * 0.5, 320, 700) });
+      }
+    };
+    window.addEventListener('wheel', onWheel, { passive: false });
+    return () => window.removeEventListener('wheel', onWheel);
+  }, [crt, reduce]);
 
   // (The desktop used to lock the page: wheel scrolling was held while it filled the window and two
   // flicks were needed to move on. It is an ordinary section now; nothing takes over the scroll.)
@@ -2136,10 +2183,10 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   );
 
   const monitor = (
-    <section ref={sectionRef} data-desktop aria-label="Cenner" onPointerDownCapture={e => { if (e.pointerType !== 'touch' && tipRef.current === 'wait') touched.current = true; }} onPointerUpCapture={e => { if (e.pointerType === 'touch' && tipRef.current === 'wait') touched.current = true; }} className={`cn-cursor relative isolate text-ink ${crt ? 'cn-bezel bg-[#d8ccb6]' : laptop ? 'cn-laptop bg-ink' : 'cn-pda-ground'}`} style={crt ? ({ '--bz': 0.34 } as React.CSSProperties) : undefined}>
+    <section ref={sectionRef} data-desktop aria-label="Cenner" onPointerDownCapture={e => { if (e.pointerType !== 'touch' && tipRef.current === 'wait') touched.current = true; }} onPointerUpCapture={e => { if (e.pointerType === 'touch' && tipRef.current === 'wait') touched.current = true; }} className={`cn-cursor relative isolate text-ink ${crt ? 'h-full bg-[#05070c]' : laptop ? 'cn-laptop bg-ink' : 'cn-pda-ground'}`} style={undefined}>
       {/* The screen, set into the monitor's bezel (a photographed CRT front, or on tablet-size
           screens a 90s laptop lid, drawn over it). */}
-      <div className={`relative overflow-hidden bg-[#05070c]`}>
+      <div className={`relative overflow-hidden bg-[#05070c] ${crt ? 'h-full' : ''}`}>
       {/* Wallpaper: a halftone dot field in Cenner colours (no nature: the film is that moment). */}
       <ProjectDots
         palette={['#05070c', '#2a4bd8', '#4ade80', '#3a64e8', '#34c46e']}
@@ -2151,7 +2198,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       />
       {crt && <div aria-hidden="true" className="cn-scan pointer-events-none absolute inset-0 opacity-40" />}
       {wide ? (
-      <div className="relative flex flex-col" style={{ aspectRatio: crt ? '4 / 3' : '16 / 10', containerType: 'size' }}>
+      <div className="relative flex flex-col" style={crt ? { height: '100%', containerType: 'size' } : { aspectRatio: '16 / 10', containerType: 'size' }}>
         <div ref={areaRef} className="relative flex-1 p-6" onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onLostPointerCapture={onUp} onPointerDown={e => { if (!(e.target as HTMLElement).closest('[data-icon]')) setSelIcon(null); }}>
           {/* Desktop icons */}
           <ul className={`absolute left-6 top-6 grid w-28 grid-cols-1 gap-5 ${dblTag ? 'z-[30]' : 'z-0'}`} role="list">
@@ -2320,17 +2367,6 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       {/* the glass: the CRT's dark edge and vignette, or the LCD's shallow inset */}
       {wide && <div aria-hidden="true" className={`pointer-events-none absolute inset-0 z-[95] ${crt ? 'shadow-[inset_0_0_60px_rgba(0,0,0,.55)]' : 'shadow-[inset_0_0_14px_rgba(0,0,0,.6)]'}`} />}
       </div>
-      {crt && (
-        <>
-          {/* The bezel over the screen's edge, then the maker's mark, the power light and the power button. */}
-          <div aria-hidden="true" className="cn-bezel-frame pointer-events-none absolute inset-0 z-[96]" />
-          <img src="/home/crt-mark.webp" alt="" aria-hidden="true" className="pointer-events-none absolute z-[97] select-none" style={{ left: 'calc(70px * var(--bz))', bottom: 'calc(66px * var(--bz))', width: 'calc(180px * var(--bz))' }} />
-          <span aria-hidden="true" className="pointer-events-none absolute z-[97]" style={{ right: 'calc(90px * var(--bz))', bottom: 'calc(51px * var(--bz))', width: 'calc(160px * var(--bz))' }}>
-            <img src="/home/crt-power.webp" alt="" className="block w-full select-none" />
-            <span className="cn-led absolute left-[13.1%] top-1/2 h-[calc(14px*var(--bz))] w-[calc(14px*var(--bz))] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-green" />
-          </span>
-        </>
-      )}
       {laptop && (
         <>
           {/* The lid over the screen's edge (laptop-bezel.webp: badge, standby button, hinges),
@@ -2360,7 +2396,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   if (!wide) return monitor;
   const mark = (n: number): React.CSSProperties => ({ transitionDelay: `${n * 0.1}s` });
   return (
-    <div ref={lockRef} data-lock className="relative z-0 bg-paper px-4 py-16 md:px-8 md:py-24 lg:pb-28 lg:pt-12" style={reduce || !crt ? undefined : { marginTop: 'calc(-1 * (100svh - 4.5rem))' }}>
+    <div ref={lockRef} data-lock className="relative z-0 bg-paper px-4 py-16 md:px-8 md:py-24 lg:pb-28 lg:pt-12" style={reduce || !crt ? undefined : { marginTop: 'calc(-1 * (100svh - 4.5rem))', boxShadow: '0 -100svh 0 0 #eef0f3' }}>
       <div className="mx-auto grid max-w-[92rem] items-center gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14">
         <div ref={textRef} className="max-w-[34rem]">
           <p className="cn-mark font-display text-[12px] font-black uppercase tracking-[0.2em] text-sky" data-on={textOn ? '1' : '0'}>{t('What we build')}</p>
@@ -2379,7 +2415,24 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
             </Link>
           </div>
         </div>
-        <div className="mx-auto w-full max-w-[60rem]">{monitor}</div>
+        {crt ? (
+          // The CRT photo, with the live desktop set behind its keyed-out glass (a hair larger than
+          // the opening, so the tube's rounded edge frames it), and the power light on the photo's LED.
+          <div className="relative mx-auto w-full max-w-[58rem]" style={{ aspectRatio: `1 / ${CRT_PHOTO.aspect}` }}>
+            <div className="absolute" style={{ left: `${(CRT_PHOTO.glass.x - 0.004) * 100}%`, top: `${(CRT_PHOTO.glass.y - 0.004) * 100}%`, width: `${(CRT_PHOTO.glass.w + 0.008) * 100}%`, height: `${(CRT_PHOTO.glass.h + 0.008) * 100}%` }}>{monitor}</div>
+            <img
+              src={CRT_PHOTO.src[1]}
+              srcSet={`${CRT_PHOTO.src[0]} 1000w, ${CRT_PHOTO.src[1]} 1800w`}
+              sizes="min(58rem, 62vw)"
+              alt=""
+              draggable={false}
+              className="pointer-events-none absolute inset-0 h-full w-full select-none drop-shadow-[0_34px_44px_rgba(11,12,14,.22)]"
+            />
+            <span aria-hidden="true" className={`pointer-events-none absolute left-[81.7%] top-[75.1%] h-[0.7%] w-[0.7%] -translate-x-1/2 -translate-y-1/2 rounded-full ${screen === 'on' ? 'cn-led bg-brand-green' : 'bg-[#a3a08a]'}`} />
+          </div>
+        ) : (
+          <div className="mx-auto w-full max-w-[60rem]">{monitor}</div>
+        )}
       </div>
     </div>
   );
