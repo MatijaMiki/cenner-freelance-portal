@@ -388,6 +388,15 @@ const CRT_GLASS = { x: 0.1128, y: 0.1109, w: 0.7756, h: 0.568 };
 // The full-frame Cenner card the camera lands on (Kling 3.0, real CRT glitch static in the footage,
 // a seamless loop that plays live).
 const CARD_CLIP = ['/video/glitch-card-v1-1280.mp4', '/video/glitch-card-v1-854.mp4'];
+// Where the clip draws its lettering: ink boxes measured on its frames, as fractions of the 1280x720
+// frame (left, top, right, bottom). The glass lettering is set so that, with the camera all the way
+// in, it lands on exactly these boxes: the hand-off is the same words, the same size, in the same place.
+const CARD_INK = {
+  title: { l: 0.1484, t: 0.2889, r: 0.8352, b: 0.5292 },
+  sub: { l: 0.1531, t: 0.6028, r: 0.8492, b: 0.6653 },
+};
+// How far the camera moves in: until the glass covers the stage, with a little to spare.
+const camEndFor = (W: number, H: number, g: { w: number; h: number }) => Math.max(W / g.w, H / g.h) * 1.04;
 // The second headline line: a tilted label in the buttons' green, so the lines read as headline and answer.
 const HEAD_LABEL = 'inline-block -rotate-2 bg-brand-green px-[0.3em] pb-[0.06em] pt-[0.1em] text-ink [border:0.06em_solid_#0b0c0e] shadow-[0.12em_0.12em_0_#0b0c0e]';
 
@@ -480,6 +489,49 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
   // the whole glass and a strip of bezel in view (its stand runs off the bottom edge). The glass's
   // place on the stage is kept for the camera move.
   const glass = React.useRef({ x: 0, y: 0, w: 1, h: 1 });
+  const ink = React.useRef<HTMLCanvasElement>(null);
+  const scrollHint = React.useRef<HTMLParagraphElement>(null);
+  // The glass lettering, drawn on a canvas at the resolution of the end of the zoom (so it is still
+  // sharp when the glass fills the screen) and placed by working back from the clip's ink boxes.
+  const drawInk = React.useCallback(() => {
+    const cv = ink.current, st = stage.current;
+    if (!cv || !st) return;
+    const g = glass.current, W = st.clientWidth, H = st.clientHeight;
+    const cam = camEndFor(W, H, g);
+    const k = Math.min(cam * Math.min(window.devicePixelRatio || 1, 2), 4096 / g.w);
+    cv.width = Math.round(g.w * k);
+    cv.height = Math.round(g.h * k);
+    const ctx = cv.getContext('2d');
+    if (!ctx) return;
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    // The clip covers the stage (object-fit: cover); a point of its frame, at the end of the zoom,
+    // sits on this point of the glass now.
+    const s = Math.max(W / 1280, H / 720), ox = (W - 1280 * s) / 2, oy = (H - 720 * s) / 2;
+    const gx = (f: number) => g.w / 2 + (ox + f * 1280 * s - W / 2) / cam;
+    const gy = (f: number) => g.h / 2 + (oy + f * 720 * s - H / 2) / cam;
+    // One line: caps as tall as the box; spread (or, if too wide, narrowed) to its width.
+    const line = (text: string, font: string, box: { l: number; t: number; r: number; b: number }, glow: number) => {
+      const L = gx(box.l), R = gx(box.r), T = gy(box.t), B = gy(box.b);
+      ctx.font = font;
+      const m = ctx.measureText(text);
+      const inkW = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+      const f = (B - T) / m.actualBoundingBoxAscent;
+      const chars = Array.from(text);
+      const gap = Math.max(0, ((R - L) / f - inkW) / (chars.length - 1));
+      const sx = Math.min(1, (R - L) / (f * inkW));
+      ctx.save();
+      ctx.translate(L, B);
+      ctx.scale(f * sx, f);
+      ctx.fillStyle = '#5ad7a8';   // the clip's mint, sampled from its frames
+      ctx.shadowColor = 'rgba(90,215,168,.5)';
+      ctx.shadowBlur = glow * k;
+      let x = m.actualBoundingBoxLeft;
+      for (const c of chars) { ctx.fillText(c, x, 0); x += ctx.measureText(c).width + gap; }
+      ctx.restore();
+    };
+    line('CENNER', '900 100px "Libre Franklin", Inter, sans-serif', CARD_INK.title, g.w * 0.02);
+    line('FREELANCE HRVATSKA', '700 100px "JetBrains Mono", ui-monospace, monospace', CARD_INK.sub, 0);
+  }, []);
   const layout = React.useCallback(() => {
     const st = stage.current, el = crt.current, cp = copy.current;
     if (!st || !el || !cp) return;
@@ -492,11 +544,16 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     el.style.width = `${w}px`;
     el.style.setProperty('--gw', `${CRT_GLASS.w * w}px`);
     glass.current = { x: left + CRT_GLASS.x * w, y: top + CRT_GLASS.y * h, w: CRT_GLASS.w * w, h: CRT_GLASS.h * h };
-  }, []);
+    drawInk();
+  }, [drawInk]);
   React.useLayoutEffect(() => {
     layout();
     window.addEventListener('resize', layout);
-    document.fonts?.ready.then(() => { layout(); window.dispatchEvent(new Event('scroll')); }).catch(() => {});
+    // The lettering is measured in its own faces: draw again once both have loaded.
+    Promise.all([document.fonts?.load('900 100px "Libre Franklin"'), document.fonts?.load('700 100px "JetBrains Mono"')])
+      .then(() => document.fonts?.ready)
+      .then(() => { layout(); window.dispatchEvent(new Event('scroll')); })
+      .catch(() => {});
     return () => window.removeEventListener('resize', layout);
   }, [layout]);
 
@@ -504,7 +561,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     // 1. The camera moves straight in on the glass until it fills the stage.
     const g = glass.current;
     const cx = g.x + g.w / 2, cy = g.y + g.h / 2;
-    const camEnd = Math.max(W / g.w, H / g.h) * 1.04;
+    const camEnd = camEndFor(W, H, g);
     const z = smooth(span(p, 0.03, 0.7));
     if (film.current) {
       film.current.style.transformOrigin = `${cx}px ${cy}px`;
@@ -534,6 +591,8 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     if (line1.current) line1.current.style.transform = `translate3d(${-split * 110}vw,0,0)`;
     if (line2.current) line2.current.style.transform = `translate3d(${split * 110}vw,0,0)`;
     if (intro.current) { intro.current.style.opacity = String(1 - span(p, 0, 0.12)); intro.current.style.visibility = p > 0.14 ? 'hidden' : 'visible'; }
+    // The scroll prompt is the glass's own: it goes before the clip, which has none, takes over.
+    if (scrollHint.current) scrollHint.current.style.opacity = String(1 - span(p, 0.02, 0.2));
   }, !reduce);
 
   const words = [t('Freelanceri iz Hrvatske'), t('za tvoj sljedeći projekt')];
@@ -566,15 +625,12 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
               className="absolute overflow-hidden rounded-[5%/7%]"
               style={{ left: `${CRT_GLASS.x * 100}%`, top: `${CRT_GLASS.y * 100}%`, width: `${CRT_GLASS.w * 100}%`, height: `${CRT_GLASS.h * 100}%` }}
             >
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-[#a6dfcc]">
-                <p className="font-display font-black leading-none" style={{ fontSize: 'calc(var(--gw, 400px) * .19)', letterSpacing: '-0.06em', textShadow: '0 0 calc(var(--gw, 400px) * .02) rgba(166,223,204,.5)' }}>CENNER</p>
-                <p className="font-term font-bold uppercase" style={{ fontSize: 'calc(var(--gw, 400px) * .044)', letterSpacing: '0.13em', marginTop: 'calc(var(--gw, 400px) * .03)' }}>Freelance Hrvatska</p>
-                {!reduce && (
-                  <p className="absolute font-crt uppercase" style={{ bottom: 'calc(var(--gw, 400px) * .07)', fontSize: 'calc(var(--gw, 400px) * .03)', letterSpacing: '0.12em' }}>
-                    {t('Scroll')} <span className="cn-caret">v</span>
-                  </p>
-                )}
-              </div>
+              <canvas ref={ink} className="absolute inset-0 h-full w-full" />
+              {!reduce && (
+                <p ref={scrollHint} className="absolute inset-x-0 text-center font-crt uppercase text-[#a6dfcc]" style={{ bottom: 'calc(var(--gw, 400px) * .07)', fontSize: 'calc(var(--gw, 400px) * .03)', letterSpacing: '0.12em' }}>
+                  {t('Scroll')} <span className="cn-caret">v</span>
+                </p>
+              )}
               <div className="cn-scan absolute inset-0 opacity-50" />
               <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 calc(var(--gw, 400px) * .09) rgba(0,0,20,.55)' }} />
             </div>
