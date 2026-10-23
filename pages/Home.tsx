@@ -626,7 +626,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     if (intro.current) { intro.current.style.opacity = String(1 - span(p, 0, 0.12)); intro.current.style.visibility = p > 0.14 ? 'hidden' : 'visible'; }
   }, !reduce);
 
-  const words = [[t('Freelance Hrvatska')], [t('Pronađi Freelancera')]];
+  const words = [[t('Freelanceri iz Hrvatske')], [t('za tvoj sljedeći projekt')]];
 
   return (
     <section ref={ref} className={reduce ? 'relative' : 'relative h-[380vh]'}>
@@ -666,15 +666,18 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
 
         {/* The headline splits apart as the camera moves in. */}
         <h1 className="pointer-events-none absolute inset-x-0 top-[5%] z-10 px-4 font-display font-black uppercase leading-[0.86] tracking-[-0.04em] text-white md:px-8">
-          <div ref={line1} className="will-change-transform [text-shadow:.045em_.045em_0_#0b0c0e] text-[12.5vw] md:whitespace-nowrap md:text-[6.9vw]">{words[0]}</div>
-          <div ref={line2} className="will-change-transform text-right [text-shadow:.045em_.045em_0_#0b0c0e] text-[12.5vw] md:whitespace-nowrap md:text-[6.9vw]">{words[1]}</div>
+          <div ref={line1} className="will-change-transform [text-shadow:.045em_.045em_0_#0b0c0e] text-[12.5vw] md:whitespace-nowrap md:text-[6.6vw]">{words[0]}</div>
+          {/* The second line is a tilted label in the buttons' green, so the two lines read as headline and answer. */}
+          <div ref={line2} className="will-change-transform mt-4 text-right md:mt-6">
+            <span className="inline-block -rotate-2 bg-brand-green px-[0.3em] pb-[0.06em] pt-[0.1em] text-ink [border:0.06em_solid_#0b0c0e] shadow-[0.12em_0.12em_0_#0b0c0e] text-[8.5vw] md:whitespace-nowrap md:text-[4.4vw]">{words[1]}</span>
+          </div>
         </h1>
 
         <div ref={intro} className="absolute inset-x-4 bottom-4 z-10 flex flex-col items-start gap-3 md:inset-x-8 md:bottom-5">
           <div className="flex flex-col items-center gap-3">
           <div className="max-w-[34rem] text-ink md:border-2 md:border-ink md:bg-paper md:p-5 md:shadow-[8px_8px_0_#0b0c0e]">
             <p className="hidden font-text text-[1.0625rem] leading-[1.5] md:block">
-              {t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao: brzo, sigurno, profesionalno.')}
+              {t('Hrvatska freelance platforma za web stranice, dizajn, marketing i programiranje. Freelanceri s provjerenim identitetom, gotovi paketi s fiksnom cijenom, a novac se freelanceru isplaćuje tek kad posao bude isporučen.')}
             </p>
             <div className="flex flex-wrap gap-3 md:mt-4">
               <Link to="/marketplace" className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-brand-green px-5 py-3 font-display text-[15px] font-bold">
@@ -949,7 +952,7 @@ const ZoomInPocket: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     if (intro.current) { intro.current.style.opacity = String(1 - span(p, 0, 0.12)); intro.current.style.visibility = p > 0.14 ? 'hidden' : 'visible'; }
   }, !reduce);
 
-  const words = [t('Freelance Hrvatska'), t('Pronađi Freelancera')];
+  const words = [t('Freelanceri iz Hrvatske'), t('za tvoj sljedeći projekt')];
   return (
     <section ref={ref} className={reduce ? 'relative' : 'relative flow-root h-[300vh]'}>
       {/* The strip above the stage, under the nav: the screen's blue, seen once the nav has left as
@@ -986,7 +989,9 @@ const ZoomInPocket: React.FC<{ reduce: boolean }> = ({ reduce }) => {
 
         <h1 className="pointer-events-none absolute inset-x-0 top-[5%] z-10 px-4 font-display font-black uppercase leading-[0.86] tracking-[-0.04em] text-white md:px-8">
           <div ref={line1} className="will-change-transform text-[min(12.5vw,8.5svh)] [text-shadow:.045em_.045em_0_#0b0c0e]">{words[0]}</div>
-          <div ref={line2} className="will-change-transform text-right text-[min(12.5vw,8.5svh)] [text-shadow:.045em_.045em_0_#0b0c0e]">{words[1]}</div>
+          <div ref={line2} className="will-change-transform mt-4 text-right">
+            <span className="inline-block -rotate-2 bg-brand-green px-[0.3em] pb-[0.06em] pt-[0.1em] text-ink [border:0.06em_solid_#0b0c0e] shadow-[0.12em_0.12em_0_#0b0c0e] text-[min(8.5vw,5.8svh)]">{words[1]}</span>
+          </div>
         </h1>
 
         <div ref={intro} className="absolute inset-x-4 bottom-3 z-10 flex flex-col gap-3 md:inset-x-8 md:bottom-5">
@@ -1280,7 +1285,7 @@ const PocketPC: React.FC<{
                   {iconBox(PxFileText)}
                   <div className="leading-tight">
                     <h2 className="font-bold">{t('Freelance Hrvatska')}</h2>
-                    <p className="opacity-90">{t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao: brzo, sigurno, profesionalno.')}</p>
+                    <p className="opacity-90">{t('Hrvatska freelance platforma za web stranice, dizajn, marketing i programiranje. Freelanceri s provjerenim identitetom, gotovi paketi s fiksnom cijenom, a novac se freelanceru isplaćuje tek kad posao bude isporučen.')}</p>
                   </div>
                 </div>
                 <Link to={user ? '/profile' : '/auth'} className={rowCls} style={rowPad}>
@@ -1904,7 +1909,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       body: (
         <div className="p-5">
           <h2 className="font-display text-[2rem] font-black uppercase leading-[0.95] tracking-[-0.03em]">{t('Freelance Hrvatska')}</h2>
-          <p className="mt-3 font-text text-[1.0625rem] leading-[1.5]">{t('Vodeća freelance platforma u Hrvatskoj. Povezujemo tvrtke s provjerenim freelancerima za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao: brzo, sigurno, profesionalno.')}</p>
+          <p className="mt-3 font-text text-[1.0625rem] leading-[1.5]">{t('Hrvatska freelance platforma za web stranice, dizajn, marketing i programiranje. Freelanceri s provjerenim identitetom, gotovi paketi s fiksnom cijenom, a novac se freelanceru isplaćuje tek kad posao bude isporučen.')}</p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Link to="/marketplace" className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-sky px-5 py-3 font-display text-[15px] font-bold text-white">{t('Explore Marketplace')} <ArrowRight size={17} /></Link>
             <Link to="/services" className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-white px-5 py-3 font-display text-[15px] font-bold">{t('Cenner Services')}</Link>
