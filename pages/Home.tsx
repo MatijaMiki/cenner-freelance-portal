@@ -364,7 +364,6 @@ function goToShutdown() {
 
 /* ===================================================================== hero: zoom in */
 
-const STATIC_DELAY_MS = 500;
 // The four status lines under the card: first one after BOOT_FIRST_MS, then one every BOOT_STEP_MS.
 const BOOT_FIRST_MS = 350;
 const BOOT_STEP_MS = 420;
@@ -378,41 +377,33 @@ const EXIT_HOLD_MS = 1400; // after leaving the desktop: downward wheel held whi
 const CATCH_QUIET_MS = 240;  // scrolling back up onto the desktop: the flick's momentum is absorbed
 const CATCH_MAX_MS = 1800;   // until the wheel goes quiet this long, or for at most this long
 
-// The close-up the push-in video starts from: this rectangle of the film (a crop of the still).
-const CLOSEUP = { x: 868, y: 479.25, w: 145, h: 81.6 };
-// Three Higgsfield clips (Kling 3.0), all with real CRT glitch static in the footage, and like
-// the still, graded to the meadow film's colours (per-channel gain/offset fitted on the frames):
-//  - HOLD: the close-up, camera locked, the screen glitching (a seamless loop). It lies on the
-//    still's monitor inside the zooming layer and plays from the moment the screen appears;
-//  - PUSH: from that close-up into the screen until the Cenner card fills the frame
-//    (short GOPs so scroll can scrub it);
-//  - CARD: the full-frame Cenner card glitching (a seamless loop, plays live).
-const CLIPS = {
-  hold: ['/video/glitch-closeup-v1-1280.mp4', '/video/glitch-closeup-v1-854.mp4'],
-  push: ['/video/push-in-v3-1280.mp4', '/video/push-in-v3-854.mp4'],
-  card: ['/video/glitch-card-v1-1280.mp4', '/video/glitch-card-v1-854.mp4'],
-} as const;
+// The opening, built like a classic landing page: the meadow (the film's own poster with the desk
+// painted out, Higgsfield edit) behind centred copy, and a head-on CRT (Higgsfield still, background
+// removed) rising from the bottom edge. Its glass sits at these fractions of the 860x875 picture;
+// the page draws the screen's lettering on it, so it stays sharp and follows the language.
+const PLATE = ['/home/meadow-plate-960.webp', '/home/meadow-plate-1920.webp'];
+const CRT_FRONT = ['/home/crt-front-430.webp', '/home/crt-front-860.webp'];
+const CRT_ASPECT = 875 / 860;
+const CRT_GLASS = { x: 0.1128, y: 0.1109, w: 0.7756, h: 0.568 };
+// The full-frame Cenner card the camera lands on (Kling 3.0, real CRT glitch static in the footage,
+// a seamless loop that plays live).
+const CARD_CLIP = ['/video/glitch-card-v1-1280.mp4', '/video/glitch-card-v1-854.mp4'];
+// The second headline line: a tilted label in the buttons' green, so the lines read as headline and answer.
+const HEAD_LABEL = 'inline-block -rotate-2 bg-brand-green px-[0.3em] pb-[0.06em] pt-[0.1em] text-ink [border:0.06em_solid_#0b0c0e] shadow-[0.12em_0.12em_0_#0b0c0e]';
 
 const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
   const t = useT();
   const ref = React.useRef<HTMLElement>(null);
+  const stage = React.useRef<HTMLDivElement>(null);
   const film = React.useRef<HTMLDivElement>(null);
+  const crt = React.useRef<HTMLDivElement>(null);
+  const copy = React.useRef<HTMLDivElement>(null);
   const line1 = React.useRef<HTMLDivElement>(null);
   const line2 = React.useRef<HTMLDivElement>(null);
   const intro = React.useRef<HTMLDivElement>(null);
-  const still = React.useRef<HTMLImageElement>(null);
-  const hold = React.useRef<HTMLVideoElement>(null);
-  const push = React.useRef<HTMLVideoElement>(null);
   const card = React.useRef<HTMLVideoElement>(null);
-  const inside = React.useRef<HTMLDivElement>(null);
   const boot = React.useRef<HTMLDivElement>(null);
   const grain = React.useRef<HTMLDivElement>(null);
-  // The static starts STATIC_DELAY_MS after the Cenner screen has appeared (a timer, not a
-  // scroll position), so the clean screen always holds for a beat first.
-  const staticTimer = React.useRef<number | null>(null);
-  const staticOn = React.useRef(false);
-  const lastP = React.useRef(-1);
-  const pushEnded = React.useRef(false);   // the push-in played to its end on its own
   const curP = React.useRef(0);
   const bootRun = React.useRef({ started: false, done: false, timers: [] as number[] });
   const bootLines = () => Array.from(boot.current?.querySelectorAll<HTMLElement>('[data-boot]') ?? []);
@@ -460,20 +451,8 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     window.addEventListener('wheel', brake, { passive: false });
     return () => { window.removeEventListener('wheel', brake); bootRun.current.timers.forEach(id => window.clearTimeout(id)); };
   }, [reduce]);
-  const lastScrollT = React.useRef(-1);    // push time the scroll last asked for
-  const idle = React.useRef(0);            // timer: start playing when the scroll pauses
-  const lastScroll = React.useRef({ y: 0, t: 0, v: 0 }); // for the visitor's scroll speed
-  const lastHeroP = React.useRef(0);
-  React.useEffect(() => () => window.clearTimeout(idle.current), []);
-  React.useEffect(() => () => { if (staticTimer.current) window.clearTimeout(staticTimer.current); }, []);
-  const [narrow, setNarrow] = React.useState<boolean | null>(null); // null until the clips may load
-  // The meadow film only plays while it can be seen: from the push-in on (p .5) the clips cover the whole
-  // stage. Its grain only shows until p .1 (it hands over to the screen-sized grain below).
-  const [meadowOn, setMeadowOn] = React.useState(true);
-  const [meadowGrain, setMeadowGrain] = React.useState(true);
-  const meadowRef = React.useRef({ on: true, grain: true });
-  // Scrolled past the hero (the desktop, the FAQ, the outro), none of its clips can be seen: they stop
-  // decoding, and the first scroll back in starts whichever is showing again (see show()).
+  // Scrolled past the hero (the desktop, the FAQ, the outro), the card loop stops decoding; the
+  // first scroll back in starts it again.
   const onScreen = React.useRef(true);
   React.useEffect(() => {
     const el = ref.current;
@@ -481,14 +460,14 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     const io = new IntersectionObserver(([e]) => {
       onScreen.current = e.isIntersecting;
       if (e.isIntersecting) { window.dispatchEvent(new Event('scroll')); return; }
-      if (idle.current) { window.clearTimeout(idle.current); idle.current = 0; }
-      [hold.current, push.current, card.current].forEach(v => { if (v && !v.paused) v.pause(); });
+      if (card.current && !card.current.paused) card.current.pause();
     });
     io.observe(el);
     return () => io.disconnect();
   }, [reduce]);
 
-  // The clips are only fetched once the page has loaded and the browser is idle.
+  // The card clip is only fetched once the page has loaded and the browser is idle.
+  const [narrow, setNarrow] = React.useState<boolean | null>(null);
   React.useEffect(() => {
     if (reduce) return;
     const pick = () => setNarrow(window.matchMedia('(max-width: 767px)').matches);
@@ -497,189 +476,124 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     else window.addEventListener('load', go, { once: true });
   }, [reduce]);
 
-  usePin(ref, (p, W, H) => {
-    const bw = Math.max(W, (H * 16) / 9);
-    const bh = (bw * 9) / 16;
-    const boxL = FOCUS_X * W - FOCUS_X * bw, boxT = 0.5 * H - 0.5 * bh;
-    const fx = (x: number) => boxL + (x / 1920) * bw;
-    const fy = (y: number) => boxT + (y / 1080) * bh;
+  // The monitor stands centred a little under the copy, as large as the room below it allows with
+  // the whole glass and a strip of bezel in view (its stand runs off the bottom edge). The glass's
+  // place on the stage is kept for the camera move.
+  const glass = React.useRef({ x: 0, y: 0, w: 1, h: 1 });
+  const layout = React.useCallback(() => {
+    const st = stage.current, el = crt.current, cp = copy.current;
+    if (!st || !el || !cp) return;
+    const W = st.clientWidth, H = st.clientHeight;
+    const top = Math.max(cp.offsetTop + cp.offsetHeight + 32, H * 0.4);
+    const w = clamp(Math.min(W * 0.5, (H - top) / ((CRT_GLASS.y + CRT_GLASS.h + 0.08) * CRT_ASPECT)), 240, 900);
+    const left = (W - w) / 2, h = w * CRT_ASPECT;
+    el.style.left = `${left}px`;
+    el.style.top = `${top}px`;
+    el.style.width = `${w}px`;
+    el.style.setProperty('--gw', `${CRT_GLASS.w * w}px`);
+    glass.current = { x: left + CRT_GLASS.x * w, y: top + CRT_GLASS.y * h, w: CRT_GLASS.w * w, h: CRT_GLASS.h * h };
+  }, []);
+  React.useLayoutEffect(() => {
+    layout();
+    window.addEventListener('resize', layout);
+    document.fonts?.ready.then(() => { layout(); window.dispatchEvent(new Event('scroll')); }).catch(() => {});
+    return () => window.removeEventListener('resize', layout);
+  }, [layout]);
 
-    // 1. The camera moves in on the film (and the 4K still laid over it) until the view is
-    //    exactly the close-up the push-in video starts from.
-    const cx = fx(CLOSEUP.x + CLOSEUP.w / 2), cy = fy(CLOSEUP.y + CLOSEUP.h / 2);
-    // Wide screens fill the stage with the close-up (cover); tall phone screens fit its width
-    // (contain), so the clips that follow are never cropped at the sides.
-    const tall = W / H < 16 / 9 * 0.8;
-    const fit = tall ? Math.min : Math.max;
-    const camEnd = fit(W / ((CLOSEUP.w / 1920) * bw), H / ((CLOSEUP.h / 1080) * bh));
-    const z = smooth(span(p, 0.03, 0.4));
-    const cam = Math.pow(camEnd, z);
-    const tx = (W / 2 - cx) * z, ty = (H / 2 - cy) * z;
+  usePin(ref, (p, W, H) => {
+    // 1. The camera moves straight in on the glass until it fills the stage.
+    const g = glass.current;
+    const cx = g.x + g.w / 2, cy = g.y + g.h / 2;
+    const camEnd = Math.max(W / g.w, H / g.h) * 1.04;
+    const z = smooth(span(p, 0.03, 0.7));
     if (film.current) {
       film.current.style.transformOrigin = `${cx}px ${cy}px`;
-      film.current.style.transform = `translate3d(${tx}px,${ty}px,0) scale(${cam})`;
-      // The film's own grain (sky only, and it would scale with the zoom) hands over to the
-      // screen-sized grain layer below, which covers the still and the clips too.
-      film.current.style.setProperty('--mh-grain-opacity', String(0.88 * (1 - span(p, 0.015, 0.1))));
+      film.current.style.transform = `translate3d(${(W / 2 - cx) * z}px,${(H / 2 - cy) * z}px,0) scale(${Math.pow(camEnd, z)})`;
     }
-    // (only when they flip: React keeps every setState call queued, even an unchanged one)
-    if (meadowRef.current.on !== p < 0.5) { meadowRef.current.on = p < 0.5; setMeadowOn(p < 0.5); }
-    if (meadowRef.current.grain !== p < 0.1) { meadowRef.current.grain = p < 0.1; setMeadowGrain(p < 0.1); }
     if (grain.current) {
-      const g = span(p, 0.015, 0.1) * (1 - span(p, 0.95, 1));
-      grain.current.style.opacity = String(g);
-      grain.current.style.display = g > 0 ? '' : 'none';   // an invisible grain would still animate 25 times a second
+      const o = 1 - span(p, 0.95, 1);
+      grain.current.style.opacity = String(o);
+      grain.current.style.display = o > 0 ? '' : 'none';   // an invisible grain would still animate 25 times a second
     }
-    // The Higgsfield still (graded to the film's colours) fades in slowly as the scroll starts,
-    // a touch soft at first like the film, sharpening as the camera moves in. The glitch loop
-    // sits on its monitor (it is a crop of the same picture) and plays from the first moment.
-    const appear = smooth(span(p, 0.005, 0.16));
-    const blur = 1.1 * (1 - smooth(span(p, 0.005, 0.25)));
-    const soft = blur >= 0.005 ? `blur(${blur.toFixed(2)}px)` : 'none';   // blur(0px) still costs a filter pass
-    const place = (el: HTMLElement | null, r: { x: number; y: number; w: number; h: number }) => {
-      if (!el) return;
-      el.style.left = `${fx(r.x)}px`;
-      el.style.top = `${fy(r.y)}px`;
-      el.style.width = `${(r.w / 1920) * bw}px`;
-      el.style.height = `${(r.h / 1080) * bh}px`;
-      el.style.filter = soft;
-    };
-    place(still.current, STILL);
-    place(hold.current, CLOSEUP);
-    if (still.current) still.current.style.opacity = String(appear);
-    // 2. Hold on the close-up: the glitch loop takes over from the still (same frame) and
-    //    plays live. 3. The push-in takes over (same frame again) and scroll scrubs it.
-    //    4. The card loop takes over from its last frame and plays live.
-    const show = (el: HTMLVideoElement | null, o: number) => {
-      if (!el) return;
-      el.style.opacity = String(o);
-      if (o > 0 && el.loop && el.paused && onScreen.current) el.play().catch(() => {});
-      if (o === 0 && el.loop && !el.paused) el.pause();
-    };
-    if (appear > 0.6 && !staticOn.current && staticTimer.current === null) {
-      staticTimer.current = window.setTimeout(() => {
-        staticTimer.current = null;
-        staticOn.current = true;
-        lastP.current >= 0 && show(hold.current, 1 - span(lastP.current, 0.51, 0.52));
-      }, STATIC_DELAY_MS);
-    } else if (appear < 0.1) {
-      // Back out in the meadow: reset, so the beat happens again next time.
-      if (staticTimer.current !== null) { window.clearTimeout(staticTimer.current); staticTimer.current = null; }
-      staticOn.current = false;
-    }
-    lastP.current = p;
-    show(hold.current, staticOn.current ? 1 - span(p, 0.51, 0.52) : 0);
-    // The push-in follows the scroll, but if the scroll stops part-way it keeps playing on its
-    // own (static and all) and the card takes over when it ends, even before p reaches .84.
-    const vid = push.current;
-    const inZone = p >= 0.5 && p < 0.84;
-    // Scrolling back up out of the monitor (leaving the push-in for the close-up): a flash.
-    lastHeroP.current = p;
-    if (p < 0.5) pushEnded.current = false;
-    const cardOn = Math.max(span(p, 0.84, 0.85), pushEnded.current && p >= 0.5 ? 1 : 0);
-    show(push.current, span(p, 0.5, 0.51) * (1 - cardOn));
-    show(card.current, cardOn);
-    // On a phone the clips sit as a band across the middle: the meadow still shows around the
-    // close-up, and from the push-in on the band sits on the card's own edge blue.
-    if (inside.current) inside.current.style.backgroundColor = tall && p >= 0.5 ? '#051199' : 'transparent';
-    [push.current, card.current].forEach(el => { if (el) el.style.objectFit = tall ? 'contain' : 'cover'; });
-    if (vid && vid.readyState >= 1 && isFinite(vid.duration)) {
-      const end = Math.max(0, vid.duration - 0.05);
-      const scrollT = span(p, 0.5, 0.84) * end;
-      if (!vid.paused) vid.pause();
-      if (idle.current) { window.clearTimeout(idle.current); idle.current = 0; }
-      // Relative scrub: move by as much as the scroll moved, from wherever the video is now,
-      // so there is no jump after it has played ahead on its own. Pinned at the zone's ends.
-      let target = p < 0.5 ? 0 : p >= 0.84 ? end : clamp(vid.currentTime + (scrollT - lastScrollT.current), 0, end);
-      if (lastScrollT.current < 0) target = scrollT;
-      lastScrollT.current = scrollT;
-      if (Math.abs(vid.currentTime - target) > 1 / 60) vid.currentTime = target;
-      // How fast the visitor was scrolling (px/s, smoothed): the push-in carries on at a
-      // matching speed when they stop, from 1.5x for a gentle scroll up to 4x for a fast spin.
-      const now = performance.now(), y = window.scrollY;
-      const dt = Math.max(1, now - lastScroll.current.t);
-      if (dt < 400) lastScroll.current.v = lastScroll.current.v * 0.6 + (Math.abs(y - lastScroll.current.y) / dt) * 1000 * 0.4;
-      lastScroll.current = { y, t: now, v: lastScroll.current.v };
-      if (inZone && !pushEnded.current && target < end) {
-        idle.current = window.setTimeout(() => {
-          idle.current = 0;
-          vid.playbackRate = clamp(1.5 + lastScroll.current.v / 900, 1.5, 4);
-          vid.play().catch(() => {});
-        }, 180);
-      }
-      vid.onended = () => {
-        pushEnded.current = true;
-        show(push.current, 0);
-        show(card.current, 1);
-      };
-    }
-
-    // 3. Once the card is fully on, the status lines tick in on a timer (not the scroll, so a
+    // 2. With the glass filling the frame, the glitching card takes over and plays live.
+    //    3. Once the card is fully on, the status lines tick in on a timer (not the scroll, so a
     //    fast wheel cannot skip them); after that the next scroll goes straight to the desktop.
+    const c = card.current;
+    if (c) {
+      const o = span(p, 0.68, 0.74);
+      c.style.opacity = String(o);
+      if (o > 0 && c.paused && onScreen.current) c.play().catch(() => {});
+      if (o === 0 && !c.paused) c.pause();
+    }
     curP.current = p;
-    if (cardOn >= 1 && !bootRun.current.started) startBoot();
+    if (p >= 0.85 && !bootRun.current.started) startBoot();
     if (p < 0.8 && bootRun.current.started) resetBoot();
 
+    // The headline splits apart as the camera moves in: the first line out to the left, the label to the right.
     const split = span(p, 0, 0.4);
     if (line1.current) line1.current.style.transform = `translate3d(${-split * 110}vw,0,0)`;
     if (line2.current) line2.current.style.transform = `translate3d(${split * 110}vw,0,0)`;
     if (intro.current) { intro.current.style.opacity = String(1 - span(p, 0, 0.12)); intro.current.style.visibility = p > 0.14 ? 'hidden' : 'visible'; }
   }, !reduce);
 
-  const words = [[t('Freelanceri iz Hrvatske')], [t('za tvoj sljedeći projekt')]];
+  const words = [t('Freelanceri iz Hrvatske'), t('za tvoj sljedeći projekt')];
 
   return (
     <section ref={ref} className={reduce ? 'relative' : 'relative h-[380vh]'}>
-      <div className={`${reduce ? 'relative h-[calc(100svh-4.5rem)]' : 'sticky top-[4.5rem] h-[calc(100svh-4.5rem)]'} overflow-hidden bg-sky`}>
+      <div ref={stage} className={`${reduce ? 'relative h-[calc(100svh-4.5rem)]' : 'sticky top-[4.5rem] h-[calc(100svh-4.5rem)]'} overflow-hidden bg-sky`}>
         <div ref={film} className="absolute inset-0 will-change-transform">
-          <MeadowBackdrop variant="frame" controls={false} eager active={reduce || meadowOn} grain={reduce || meadowGrain} />
-          {!reduce && (
+          <img
+            src={PLATE[1]}
+            srcSet={`${PLATE[0]} 960w, ${PLATE[1]} 1920w`}
+            sizes="100vw"
+            alt=""
+            decoding="async"
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-[50%_35%]"
+          />
+          <div ref={crt} className="absolute left-[calc(50%-min(25vw,320px))] top-1/2 w-[min(50vw,640px)]">
             <img
-              ref={still}
-              src="/home/monitor-screen-1440.jpg"
-              srcSet="/home/monitor-screen-1440.jpg 1440w, /home/monitor-screen-2880.jpg 2880w"
-              sizes="1600px"
+              src={CRT_FRONT[1]}
+              srcSet={`${CRT_FRONT[0]} 430w, ${CRT_FRONT[1]} 860w`}
+              sizes="min(50vw, 900px)"
               alt=""
-              decoding="async"
-              className="pointer-events-none absolute opacity-0 [mask-image:radial-gradient(closest-side,#000_46%,rgba(0,0,0,.6)_70%,transparent_100%)] [-webkit-mask-image:radial-gradient(closest-side,#000_46%,rgba(0,0,0,.6)_70%,transparent_100%)]"
+              draggable={false}
+              className="block w-full select-none drop-shadow-[0_24px_40px_rgba(11,12,14,.35)]"
             />
-          )}
-          {!reduce && narrow !== null && (
-            <video
-              ref={hold}
-              src={CLIPS.hold[narrow ? 1 : 0]}
-              muted
-              loop
-              playsInline
-              preload="auto"
-              tabIndex={-1}
-              className="pointer-events-none absolute object-cover opacity-0 transition-opacity duration-300"
-              style={{
-                WebkitMaskImage: 'linear-gradient(to right,transparent,#000 14%,#000 86%,transparent),linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent)',
-                maskImage: 'linear-gradient(to right,transparent,#000 14%,#000 86%,transparent),linear-gradient(to bottom,transparent,#000 14%,#000 86%,transparent)',
-                WebkitMaskComposite: 'source-in',
-                maskComposite: 'intersect',
-              }}
-            />
-          )}
+            {/* The glass: the screen's lettering, scanlines and a vignette, drawn by the page. */}
+            <div
+              aria-hidden="true"
+              className="absolute overflow-hidden rounded-[5%/7%]"
+              style={{ left: `${CRT_GLASS.x * 100}%`, top: `${CRT_GLASS.y * 100}%`, width: `${CRT_GLASS.w * 100}%`, height: `${CRT_GLASS.h * 100}%` }}
+            >
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-[#a6dfcc]">
+                <p className="font-display font-black leading-none" style={{ fontSize: 'calc(var(--gw, 400px) * .19)', letterSpacing: '-0.06em', textShadow: '0 0 calc(var(--gw, 400px) * .02) rgba(166,223,204,.5)' }}>CENNER</p>
+                <p className="font-term font-bold uppercase" style={{ fontSize: 'calc(var(--gw, 400px) * .044)', letterSpacing: '0.13em', marginTop: 'calc(var(--gw, 400px) * .03)' }}>Freelance Hrvatska</p>
+                {!reduce && (
+                  <p className="absolute font-crt uppercase" style={{ bottom: 'calc(var(--gw, 400px) * .07)', fontSize: 'calc(var(--gw, 400px) * .03)', letterSpacing: '0.12em' }}>
+                    {t('Scroll')} <span className="cn-caret">v</span>
+                  </p>
+                )}
+              </div>
+              <div className="cn-scan absolute inset-0 opacity-50" />
+              <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 calc(var(--gw, 400px) * .09) rgba(0,0,20,.55)' }} />
+            </div>
+          </div>
         </div>
 
-        {/* The headline splits apart as the camera moves in. */}
-        <h1 className="pointer-events-none absolute inset-x-0 top-[5%] z-10 px-4 font-display font-black uppercase leading-[0.86] tracking-[-0.04em] text-white md:px-8">
-          <div ref={line1} className="will-change-transform [text-shadow:.045em_.045em_0_#0b0c0e] text-[12.5vw] md:whitespace-nowrap md:text-[6.6vw]">{words[0]}</div>
-          {/* The second line is a tilted label in the buttons' green, so the two lines read as headline and answer. */}
-          <div ref={line2} className="will-change-transform mt-4 text-right md:mt-6">
-            <span className="inline-block -rotate-2 bg-brand-green px-[0.3em] pb-[0.06em] pt-[0.1em] text-ink [border:0.06em_solid_#0b0c0e] shadow-[0.12em_0.12em_0_#0b0c0e] text-[8.5vw] md:whitespace-nowrap md:text-[4.4vw]">{words[1]}</span>
-          </div>
-        </h1>
-
-        <div ref={intro} className="absolute inset-x-4 bottom-4 z-10 flex flex-col items-start gap-3 md:inset-x-8 md:bottom-5">
-          <div className="flex flex-col items-center gap-3">
-          <div className="max-w-[34rem] text-ink md:border-2 md:border-ink md:bg-paper md:p-5 md:shadow-[8px_8px_0_#0b0c0e]">
-            <p className="hidden font-text text-[1.0625rem] leading-[1.5] md:block">
+        {/* The copy, centred over the sky: headline, what Cenner is, the two ways in. */}
+        <div ref={copy} className="absolute inset-x-0 top-[5%] z-10 flex flex-col items-center px-4 text-center md:px-8">
+          <h1 className="pointer-events-none font-display font-black uppercase leading-[0.9] tracking-[-0.04em] text-white">
+            <div ref={line1} className="will-change-transform text-[clamp(2.25rem,4.6vw,5.5rem)] [text-shadow:.05em_.05em_0_#0b0c0e] md:whitespace-nowrap">{words[0]}</div>
+            <div ref={line2} className="will-change-transform mt-3 md:mt-4">
+              <span className={`${HEAD_LABEL} text-[clamp(1.375rem,2.8vw,3.25rem)] md:whitespace-nowrap`}>{words[1]}</span>
+            </div>
+          </h1>
+          <div ref={intro} className="mt-7 flex flex-col items-center gap-4 md:mt-8">
+            <p className="max-w-[38rem] border-2 border-ink bg-paper px-5 py-3 font-text text-[1.0625rem] leading-[1.5] text-ink shadow-[6px_6px_0_#0b0c0e]">
               {t('Hrvatska freelance platforma za web stranice, dizajn, marketing i programiranje. Freelanceri s provjerenim identitetom, gotovi paketi s fiksnom cijenom, a novac se freelanceru isplaćuje tek kad posao bude isporučen.')}
             </p>
-            <div className="flex flex-wrap gap-3 md:mt-4">
+            <div className="flex flex-wrap justify-center gap-3">
               <Link to="/marketplace" className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-brand-green px-5 py-3 font-display text-[15px] font-bold">
                 {t('Explore Marketplace')} <ArrowRight size={17} />
               </Link>
@@ -688,30 +602,13 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
               </Link>
             </div>
           </div>
-          </div>
-          {/* Scroll cue: the word in the pixel font, a pixel arrow stepping up and down under it,
-              always right under the intro card. */}
-          {!reduce && (
-            <span aria-hidden="true" className="pointer-events-none flex flex-col items-center gap-2 self-center font-crt text-[11px] uppercase tracking-[0.12em] text-white [text-shadow:2px_2px_0_#0b0c0e] md:text-[13px]">
-              {t('Scroll')}
-              <svg className="cn-bob h-[21px] w-[27px] md:h-[24px] md:w-[30px]" viewBox="0 0 9 7" shapeRendering="crispEdges" style={{ filter: 'drop-shadow(2px 2px 0 #0b0c0e)' }}>
-                {[[4, 0], [4, 1], [4, 2], [1, 3], [4, 3], [7, 3], [2, 4], [4, 4], [6, 4], [3, 5], [4, 5], [5, 5], [4, 6]].map(([x, y]) => (
-                  <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="#fff" />
-                ))}
-              </svg>
-            </span>
-          )}
         </div>
 
-        {/* Inside the monitor: the three glitching clips, stacked, each faded in on the frame
-            the previous one ends on. */}
+        {/* Inside the monitor: the glitching card, faded in once the glass fills the frame, and its status lines. */}
         {!reduce && (
-          <div ref={inside} aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20">
             {narrow !== null && (
-              <>
-                <video ref={push} src={CLIPS.push[narrow ? 1 : 0]} muted playsInline preload="auto" tabIndex={-1} className="absolute inset-0 h-full w-full object-cover opacity-0" />
-                <video ref={card} src={CLIPS.card[narrow ? 1 : 0]} muted loop playsInline preload="auto" tabIndex={-1} className="absolute inset-0 h-full w-full object-cover opacity-0" />
-              </>
+              <video ref={card} src={CARD_CLIP[narrow ? 1 : 0]} muted loop playsInline preload="auto" tabIndex={-1} className="absolute inset-0 h-full w-full object-cover opacity-0" />
             )}
             <div ref={boot} className="absolute inset-x-0 top-[calc(72%+60px)] flex flex-col items-center space-y-2 font-crt text-[clamp(0.7rem,1.1vw,1.05rem)] uppercase leading-[1.6] text-brand-green cn-glow">
               <p data-boot className="translate-y-1.5 opacity-0 transition duration-300 ease-out">{t('Verified freelancers')} ........ OK</p>
@@ -722,10 +619,10 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
           </div>
         )}
 
-        {/* The same film grain as the meadow loop (grain-v1.png, approved "grain 30"), at screen
-            scale over the still and the clips once the camera starts moving. */}
+        {/* The same film grain as the meadow loop (grain-v1.png, approved "grain 30"), over the
+            whole stage. */}
         {!reduce && (
-          <div ref={grain} aria-hidden="true" className="pointer-events-none absolute inset-0 z-30 overflow-hidden opacity-0">
+          <div ref={grain} aria-hidden="true" className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
             <span className="cn-grain" />
           </div>
         )}
