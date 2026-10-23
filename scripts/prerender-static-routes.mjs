@@ -139,6 +139,12 @@ const ROUTES = [
     description:
       'Learn how Cenner uses cookies and similar technologies to improve your experience on our platform.',
   },
+  {
+    path: '/cjenik',
+    title: 'Cjenik | Cenner',
+    description:
+      'Cjenik usluga koje naplaćuje Cenner (planovi, naknade, izrada web stranica, ranwhat) s cijenom na referentni datum, te strojno čitljivi cjenik u .csv obliku.',
+  },
 ];
 
 const escapeAttr = (s) =>

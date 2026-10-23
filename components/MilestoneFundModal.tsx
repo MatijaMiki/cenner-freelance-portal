@@ -3,6 +3,7 @@ import { loadStripe, type Stripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { Loader2, Lock, ShieldCheck, X } from 'lucide-react';
 import { API } from '../lib/api';
+import AnchorPrice from './AnchorPrice';
 
 interface Props {
   milestoneId: string;
@@ -66,6 +67,7 @@ const PayForm: React.FC<{ amount: number; serviceFee: number; total: number; fee
         <div className="flex justify-between text-slate"><span>Milestone amount</span><span className="text-ink font-bold">€{amount.toFixed(2)}</span></div>
         <div className="flex justify-between text-slate"><span>Service fee ({feeRate}%)</span><span className="text-ink font-bold">€{serviceFee.toFixed(2)}</span></div>
         <div className="flex justify-between pt-2 border-t-2 border-ink"><span className="text-ink font-black uppercase tracking-tighter">Total</span><span className="text-leaf font-black">€{total.toFixed(2)}</span></div>
+        <AnchorPrice ids={[[feeRate === 0 ? 'buyer-fee-enterprise' : 'buyer-fee', 'service fee']]} className="text-slate" />
       </div>
 
       {error && (

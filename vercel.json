@@ -150,6 +150,14 @@
       ]
     },
     {
+      "source": "/cjenik/(.*)\\.csv",
+      "headers": [
+        { "key": "Content-Type", "value": "text/csv; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
       "source": "/sitemap.xml",
       "headers": [
         {

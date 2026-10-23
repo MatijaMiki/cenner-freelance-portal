@@ -8,6 +8,8 @@ import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
 import { API } from '../lib/api';
 import SEO from '../components/SEO';
+import AnchorPrice from '../components/AnchorPrice';
+import { priceItem } from '../lib/cjenik.js';
 
 interface PaymentFormProps {
   listing: any;
@@ -109,7 +111,7 @@ const Checkout: React.FC = () => {
 
   // Buyer pays the listing price plus a service fee. The freelancer commission is separate and
   // deducted from the freelancer's payout. Server values override these local estimates.
-  const BUYER_FEE_RATE = 5;
+  const BUYER_FEE_RATE = priceItem('buyer-fee').price;
   const serviceFee = listing ? Math.round(listing.price * BUYER_FEE_RATE) / 100 : 0;
   const totalAmount = listing ? listing.price + serviceFee : 0;
 
@@ -295,6 +297,7 @@ const Checkout: React.FC = () => {
                 <p className="text-[12px] text-slate mt-2 uppercase tracking-widest font-black">
                   {(serverRate ?? BUYER_FEE_RATE) === 0 ? 'No service fee on this listing' : `Includes a ${serverRate ?? BUYER_FEE_RATE}% service fee`}
                 </p>
+                <AnchorPrice ids={[[(serverRate ?? BUYER_FEE_RATE) === 0 ? 'buyer-fee-enterprise' : 'buyer-fee', 'service fee']]} className="mt-1 text-slate" />
               </div>
 
               <div className="space-y-3">
