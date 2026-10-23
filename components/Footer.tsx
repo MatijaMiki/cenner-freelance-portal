@@ -155,6 +155,7 @@ const Footer: React.FC<{ home?: boolean }> = ({ home = false }) => {
             <Link to="/privacy" className={small}>{t('Privacy')}</Link>
             <Link to="/terms"   className={small}>{t('Terms')}</Link>
             <Link to="/cookies" className={small}>{t('Cookies')}</Link>
+            <Link to="/cjenik"  className={small}>{t('Price list')}</Link>
           </div>
         </div>
       </div>

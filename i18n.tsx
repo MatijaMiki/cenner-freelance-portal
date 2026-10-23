@@ -620,6 +620,12 @@ const en: Record<string, string> = {
   'Plan payments': 'Plan payments',
   'mo': 'mo',
   'platform fee': 'platform fee',
+  'yr': 'yr',
+  'from (price)': 'from',
+  'Price on': 'Price on',
+  'Price list': 'Price list',
+  'service fee': 'service fee',
+  'service fee, Enterprise sellers': 'service fee, Enterprise sellers',
 };
 
 const hr: Record<string, string> = {
@@ -1239,6 +1245,12 @@ const hr: Record<string, string> = {
   'Plan payments': 'Plaćanja plana',
   'mo': 'mj.',
   'platform fee': 'naknada platforme',
+  'yr': 'god.',
+  'from (price)': 'od',
+  'Price on': 'Cijena na',
+  'Price list': 'Cjenik',
+  'service fee': 'naknada za uslugu',
+  'service fee, Enterprise sellers': 'naknada za uslugu kod Enterprise prodavača',
 };
 
 const dicts: Record<string, Record<string, string>> = { EN: en, HR: hr };

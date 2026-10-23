@@ -4,13 +4,15 @@ import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Crown, Zap, Rocket, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import SEO from '../components/SEO';
+import AnchorPrice from '../components/AnchorPrice';
+import { PLANS as PRICES } from '../lib/plans';
 
 const API_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 
 const PLANS: Record<string, { title: string; price: number; icon: React.ReactNode; color: string }> = {
-  pro:        { title: 'Pro Plan',        price: 19, icon: <Zap size={24} />,    color: 'text-leaf' },
-  ultra:      { title: 'Ultra Plan',      price: 59, icon: <Crown size={24} />,  color: 'text-sky'  },
-  enterprise: { title: 'Enterprise Plan', price: 99, icon: <Rocket size={24} />, color: 'text-ink'       },
+  pro:        { title: 'Pro Plan',        price: PRICES.PRO.pricePerMonth, icon: <Zap size={24} />,    color: 'text-leaf' },
+  ultra:      { title: 'Ultra Plan',      price: PRICES.ULTRA.pricePerMonth, icon: <Crown size={24} />,  color: 'text-sky'  },
+  enterprise: { title: 'Enterprise Plan', price: PRICES.ENTERPRISE.pricePerMonth, icon: <Rocket size={24} />, color: 'text-ink'       },
 };
 
 // ── Success screen ─────────────────────────────────────────────────────────
@@ -126,6 +128,7 @@ const SubscriptionCheckout: React.FC = () => {
           <div>
             <h1 className="text-2xl font-black text-ink tracking-tight">{plan.title}</h1>
             <p className="text-slate text-sm">€{plan.price} / month · cancel anytime</p>
+            <AnchorPrice ids={[`plan-${planKey}`]} className="mt-1 text-slate" />
           </div>
         </div>
 
