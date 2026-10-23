@@ -27,10 +27,124 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { sortedBlogPosts } from '../content/blog/posts.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
 const BASE = 'https://cenner.hr';
+
+const escapeAttr = (s) =>
+  s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const escapeText = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// ---- blog ----
+// Posts from content/blog/posts.mjs get a shell each, like the routes below, plus the
+// article itself as the page text and BlogPosting JSON-LD. The same file wins over the
+// vercel.json /blog/:slug rewrite to api/render.js, which stays in front of CMS posts only.
+// Keep the copy in step with pages/Blog.tsx and pages/BlogPost.tsx.
+
+const BLOG_INDEX_DESCRIPTION =
+  'Vodiči za klijente i freelancere u Hrvatskoj: izrada web stranica, odabir web developera, cijene SEO optimizacije, dizajn loga i kako početi s freelanceom.';
+
+const BLOG_CSS = `<style>
+.cb{max-width:760px;font-size:19px;line-height:1.7;color:#1d2026}
+.cb h2{font-size:32px;font-weight:800;line-height:1.1;margin:56px 0 16px;padding-top:20px;border-top:2px solid #0b0c0e;color:#0b0c0e}
+.cb h3{font-size:24px;font-weight:800;margin:40px 0 12px;color:#0b0c0e}
+.cb p{margin:0 0 20px}.cb ul,.cb ol{margin:0 0 20px;padding-left:24px}.cb li{margin:0 0 8px}
+.cb a{color:#002ca5}.cb strong{color:#0b0c0e}
+</style>`;
+
+const fmtDateHr = (iso) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString('hr-HR', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+
+const markdownToHtml = (md) => renderToStaticMarkup(createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, md));
+
+function blogIndexBody() {
+  const items = sortedBlogPosts()
+    .map(
+      (p) => `<li style="margin:0 0 32px;"><a href="/blog/${p.slug}" style="font-size:24px;font-weight:800;color:#0b0c0e;text-decoration:none;">${escapeText(p.title)}</a>
+          <p style="margin:8px 0 0;color:#5d6470;line-height:1.6;">${escapeText(p.excerpt)}</p></li>`
+    )
+    .join('\n        ');
+  return `<main style="max-width:1100px;margin:0 auto;padding:80px 24px;font-family:Inter,sans-serif;color:#0b0c0e;">
+        <h1 style="font-size:56px;font-weight:800;line-height:1.05;margin:0 0 24px;">Blog</h1>
+        <p style="font-size:20px;line-height:1.6;color:#5d6470;max-width:720px;margin:0 0 56px;">Vodiči za klijente i freelancere u Hrvatskoj.</p>
+        <ul style="list-style:none;padding:0;margin:0;">
+        ${items}
+        </ul>
+      </main>`;
+}
+
+function blogPostBody(post, others) {
+  const more = others
+    .map((p) => `<li style="margin:0 0 12px;"><a href="/blog/${p.slug}" style="color:#002ca5;">${escapeText(p.title)}</a></li>`)
+    .join('');
+  return `<main style="max-width:1100px;margin:0 auto;padding:56px 24px 80px;font-family:Inter,sans-serif;color:#0b0c0e;">
+        ${BLOG_CSS}
+        <p style="margin:0 0 40px;"><a href="/blog" style="color:#0b0c0e;font-weight:700;">← Blog</a></p>
+        <article>
+          <h1 style="font-size:52px;font-weight:800;line-height:1.02;margin:0 0 28px;max-width:960px;">${escapeText(post.title)}</h1>
+          <p style="font-size:21px;line-height:1.5;max-width:640px;margin:0 0 28px;">${escapeText(post.excerpt)}</p>
+          <p style="border-top:2px solid #0b0c0e;border-bottom:2px solid #0b0c0e;padding:14px 0;margin:0 0 40px;font-size:15px;color:#5d6470;"><strong style="color:#0b0c0e;">${escapeText(post.author)}</strong> · <time datetime="${post.publishedAt}">${fmtDateHr(post.publishedAt)}</time></p>
+          <div class="cb">${markdownToHtml(post.content)}</div>
+        </article>
+        <aside style="margin-top:80px;border-top:2px solid #0b0c0e;padding-top:24px;">
+          <p style="font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#5d6470;margin:0 0 16px;">Više s bloga</p>
+          <ul style="list-style:none;padding:0;margin:0;">${more}</ul>
+        </aside>
+      </main>`;
+}
+
+function blogPostJsonLd(post) {
+  const url = `${BASE}/blog/${post.slug}`;
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: post.description,
+      datePublished: post.publishedAt,
+      dateModified: post.updatedAt || post.publishedAt,
+      inLanguage: 'hr',
+      keywords: post.keywords.join(', '),
+      wordCount: post.content.trim().split(/\s+/).length,
+      author: { '@type': 'Organization', name: 'Cenner', url: BASE },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Cenner',
+        url: BASE,
+        logo: { '@type': 'ImageObject', url: `${BASE}/favicon.svg` },
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Početna', item: BASE },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${BASE}/blog` },
+        { '@type': 'ListItem', position: 3, name: post.title, item: url },
+      ],
+    },
+  ];
+}
+
+const blogPostRoutes = () => {
+  const posts = sortedBlogPosts();
+  return posts.map((post) => ({
+    path: `/blog/${post.slug}`,
+    title: `${post.seoTitle || post.title} | Cenner`,
+    description: post.description,
+    ogType: 'article',
+    jsonLd: blogPostJsonLd(post),
+    body: blogPostBody(post, posts.filter((p) => p.slug !== post.slug).slice(0, 3)),
+  }));
+};
 
 // Titles/descriptions mirror what components/SEO.tsx renders for each page, so
 // the pre-render and post-render heads agree. SEO.tsx formats as `${title} | Cenner`.
@@ -82,9 +196,9 @@ const ROUTES = [
   },
   {
     path: '/blog',
-    title: 'Blog: Freelance Savjeti i Vodiči | Cenner',
-    description:
-      'Vodiči, savjeti i vijesti o freelancingu u Hrvatskoj i EU. Otvaranje paušalnog obrta, ugovori, cijene, alati i sve ostalo što trebate znati kao slobodni radnik.',
+    title: 'Blog: Vodiči za Klijente i Freelancere | Cenner',
+    description: BLOG_INDEX_DESCRIPTION,
+    body: blogIndexBody(),
   },
   {
     path: '/community',
@@ -139,12 +253,8 @@ const ROUTES = [
     description:
       'Learn how Cenner uses cookies and similar technologies to improve your experience on our platform.',
   },
+  ...blogPostRoutes(),
 ];
-
-const escapeAttr = (s) =>
-  s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-const escapeText = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /** Replace an existing tag if present, otherwise leave the HTML untouched. */
 function replaceTag(html, pattern, replacement, label, route) {
@@ -222,6 +332,18 @@ function buildRouteHtml(shell, route) {
   ].join('\n    ');
 
   html = replaceTag(html, /<meta name="robots" content="[\s\S]*?"\s*\/>/, head, 'robots meta', route.path);
+
+  if (route.ogType) {
+    html = replaceTag(html, /<meta property="og:type" content="[\s\S]*?"\s*\/>/, `<meta property="og:type" content="${route.ogType}" />`, 'og:type', route.path);
+  }
+
+  // JSON-LD for this page goes after the shell's own blocks. "<" is escaped so text can never close the tag.
+  if (route.jsonLd) {
+    const blocks = route.jsonLd
+      .map((d) => `<script type="application/ld+json">${JSON.stringify(d).replace(/</g, '\\u003c')}</script>`)
+      .join('\n');
+    html = replaceTag(html, /<\/head>/, `${blocks}\n</head>`, '</head>', route.path);
+  }
 
   // Routes that have their own page text swap the shell's homepage copy for it (same words the page renders).
   if (route.body) {
