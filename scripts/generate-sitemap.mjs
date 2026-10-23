@@ -12,6 +12,7 @@
 import { writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { BLOG_POSTS } from '../content/blog/posts.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BASE_URL = 'https://cenner.hr';
@@ -89,12 +90,23 @@ async function main() {
     entries.push(urlEntry({ loc: `${BASE_URL}${r.path}`, changefreq: r.changefreq, priority: r.priority }));
   }
 
-  // Dynamic: blog posts.
+  // Blog posts written in the repo (content/blog/posts.mjs).
+  const repoSlugs = new Set(BLOG_POSTS.map(p => p.slug));
+  for (const post of BLOG_POSTS) {
+    entries.push(urlEntry({
+      loc: `${BASE_URL}/blog/${post.slug}`,
+      lastmod: post.updatedAt || post.publishedAt,
+      changefreq: 'monthly',
+      priority: '0.7',
+    }));
+  }
+
+  // Dynamic: blog posts from the CMS.
   // NOTE: the collection route is /api/v1/public/blog — a bare /blog is a 404 on
   // this API and fetchJson used to swallow it, so this loop silently did nothing.
   const posts = await fetchJson(`${API_BASE}/api/v1/public/blog`);
   for (const post of posts) {
-    if (!post.slug || post.published === false) continue;
+    if (!post.slug || post.published === false || repoSlugs.has(post.slug)) continue;
     entries.push(urlEntry({
       loc: `${BASE_URL}/blog/${encodeURIComponent(post.slug)}`,
       lastmod: (post.updatedAt || post.publishedAt || TODAY).split('T')[0],

@@ -8,6 +8,7 @@ import { readFileSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { sortedBlogPosts } from '../content/blog/posts.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = join(__dirname, '..', 'public');
@@ -515,6 +516,15 @@ function serviceBody(svc) {
       return r ? `<li><a href="/usluge/${r.slug}">${r.h1}</a></li>` : '';
     })
     .join('\n');
+  // Blog posts that name this page in `services` (content/blog/posts.mjs).
+  const guides = sortedBlogPosts().filter((p) => p.services.includes(svc.slug));
+  const guidesHTML = guides.length
+    ? `<div class="related">
+  <h3>Vodiči s bloga</h3>
+  <ul>${guides.map((p) => `<li><a href="/blog/${p.slug}">${p.title}</a></li>`).join('\n')}</ul>
+</div>
+`
+    : '';
   return `<h1>${svc.h1}</h1>
 <p class="lead">${svc.intro}</p>
 <p class="cta-row">
@@ -532,7 +542,7 @@ ${sectionsHTML}
   <h3>Povezane usluge</h3>
   <ul>${relatedHTML}</ul>
 </div>
-${TOOLS_HTML}`;
+${guidesHTML}${TOOLS_HTML}`;
 }
 
 function cityBody(city) {

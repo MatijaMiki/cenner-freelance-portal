@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import type { Components } from 'react-markdown';
 import { ArrowLeft, Calendar, Edit2, BookOpen } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -8,10 +9,15 @@ import AvatarImg from '../components/Avatar';
 import BlogCover from '../components/BlogCover';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { BLOG_POSTS, findBlogPost } from '../content/blog/posts.mjs';
 
 interface BlogPostData {
   slug: string;
   title: string;
+  /** Repo posts only: a shorter <title> and a meta description written for search. */
+  seoTitle?: string;
+  description?: string;
+  keywords?: string[];
   excerpt?: string | null;
   content: string;
   coverImage?: string | null;
@@ -28,8 +34,16 @@ const fmtDate = (iso?: string | null) => {
   catch { return ''; }
 };
 
+// Markdown links: a site path opens in the same tab through the router, anything else in a new one.
+const MdLink: Components['a'] = ({ node, href = '', ...p }) =>
+  href.startsWith('/')
+    ? <Link to={href} className="text-sky underline underline-offset-[3px] hover:text-ink" {...p} />
+    : <a href={href} className="text-sky underline underline-offset-[3px] hover:text-ink" target="_blank" rel="noopener noreferrer" {...p} />;
+
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  // A post written in the repo (content/blog/posts.mjs) needs no API call; its page is also prerendered.
+  const repoPost = slug ? findBlogPost(slug) : null;
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   const [post, setPost] = useState<BlogPostData | null>(null);
@@ -39,18 +53,27 @@ const BlogPost: React.FC = () => {
 
   useEffect(() => {
     if (!slug) return;
+    if (repoPost) {
+      setPost(repoPost);
+      setError(null);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     API.getPublicBlogPost(slug)
       .then(setPost)
       .catch(() => setError('Post not found'))
       .finally(() => setLoading(false));
-  }, [slug]);
+  }, [slug, repoPost]);
 
   useEffect(() => {
+    const others = (posts: BlogPostData[]) => posts.filter(p => p.slug !== slug);
+    setRelatedPosts(others(BLOG_POSTS).slice(0, 3));
     API.listPublicBlogPosts()
       .then((posts: BlogPostData[]) => {
-        setRelatedPosts(posts.filter(p => p.slug !== slug).slice(0, 3));
+        const repoSlugs = new Set(BLOG_POSTS.map(p => p.slug));
+        setRelatedPosts(others([...BLOG_POSTS, ...posts.filter(p => !repoSlugs.has(p.slug))]).slice(0, 3));
       })
       .catch(() => {});
   }, [slug]);
@@ -61,9 +84,10 @@ const BlogPost: React.FC = () => {
     <div className="relative min-h-screen font-text text-ink">
       {post ? (
         <SEO
-          title={post.title}
+          title={post.seoTitle || post.title}
           canonical={canonical}
-          description={post.excerpt || post.title}
+          description={post.description || post.excerpt || post.title}
+          keywords={post.keywords?.join(', ')}
           ogType="article"
           ogImage={post.coverImage || undefined}
           jsonLd={[
@@ -77,7 +101,7 @@ const BlogPost: React.FC = () => {
               dateModified: post.publishedAt || undefined,
               wordCount: post.content ? post.content.trim().split(/\s+/).length : undefined,
               articleSection: 'Freelance',
-              keywords: `freelance hrvatska, ${post.title.toLowerCase()}`,
+              keywords: post.keywords?.join(', ') || `freelance hrvatska, ${post.title.toLowerCase()}`,
               inLanguage: 'hr',
               author: { '@type': 'Person', name: post.author },
               publisher: {
@@ -165,7 +189,7 @@ const BlogPost: React.FC = () => {
                   h3: ({ node, ...p }) => <h3 className="mb-3 mt-10 font-display text-[1.625rem] font-extrabold leading-tight tracking-[-0.02em] text-ink" {...p} />,
                   h4: ({ node, ...p }) => <h4 className="mb-3 mt-8 font-display text-[1.25rem] font-extrabold text-ink" {...p} />,
                   p:  ({ node, ...p }) => <p className="leading-[1.7]" {...p} />,
-                  a:  ({ node, ...p }) => <a className="text-sky underline underline-offset-[3px] hover:text-ink" target="_blank" rel="noopener noreferrer" {...p} />,
+                  a: MdLink,
                   strong: ({ node, ...p }) => <strong className="font-bold text-ink" {...p} />,
                   ul: ({ node, ...p }) => <ul className="list-outside list-disc space-y-2 pl-6 marker:text-ink" {...p} />,
                   ol: ({ node, ...p }) => <ol className="list-outside list-decimal space-y-2 pl-6 marker:font-bold marker:text-ink" {...p} />,

@@ -6,6 +6,7 @@ import AvatarImg from '../components/Avatar';
 import BlogCover from '../components/BlogCover';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { sortedBlogPosts } from '../content/blog/posts.mjs';
 
 interface BlogListItem {
   slug: string;
@@ -17,6 +18,18 @@ interface BlogListItem {
   authorAvatar?: string;
 }
 
+// Posts written in the repo (content/blog/posts.mjs) are there before the API answers, and stay if it fails.
+const REPO_POSTS: BlogListItem[] = sortedBlogPosts().map(p => ({
+  slug: p.slug, title: p.title, excerpt: p.excerpt, publishedAt: p.publishedAt, author: p.author,
+}));
+
+/** Repo and CMS posts in one list, newest first; a CMS post never replaces a repo post with the same slug. */
+const mergePosts = (cms: BlogListItem[]) => {
+  const seen = new Set(REPO_POSTS.map(p => p.slug));
+  return [...REPO_POSTS, ...cms.filter(p => !seen.has(p.slug))]
+    .sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''));
+};
+
 const fmtDate = (iso?: string | null) => {
   if (!iso) return '';
   try { return new Date(iso).toLocaleDateString('hr-HR', { year: 'numeric', month: 'long', day: 'numeric' }); }
@@ -26,14 +39,14 @@ const fmtDate = (iso?: string | null) => {
 const Blog: React.FC = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
-  const [posts, setPosts] = useState<BlogListItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<BlogListItem[]>(REPO_POSTS);
+  const [loading, setLoading] = useState(REPO_POSTS.length === 0);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     API.listPublicBlogPosts()
-      .then(setPosts)
-      .catch(() => setError('Could not load posts'))
+      .then(cms => setPosts(mergePosts(cms)))
+      .catch(() => { if (REPO_POSTS.length === 0) setError('Could not load posts'); })
       .finally(() => setLoading(false));
   }, []);
 
@@ -58,16 +71,16 @@ const Blog: React.FC = () => {
   return (
     <div className="min-h-screen font-text text-ink">
       <SEO
-        title="Blog: Freelance Savjeti i Vodiči"
+        title="Blog: Vodiči za Klijente i Freelancere"
         canonical="/blog"
-        description="Vodiči, savjeti i vijesti o freelancingu u Hrvatskoj i EU. Otvaranje paušalnog obrta, ugovori, cijene, alati i sve ostalo što trebate znati kao slobodni radnik."
-        keywords="freelance blog hrvatska, paušalni obrt vodič, freelancing savjeti, slobodni radnik blog, freelance hrvatska vijesti"
+        description="Vodiči za klijente i freelancere u Hrvatskoj: izrada web stranica, odabir web developera, cijene SEO optimizacije, dizajn loga i kako početi s freelanceom."
+        keywords="freelance blog hrvatska, izrada web stranica vodič, seo optimizacija cijena, kako odabrati web developera, dizajn loga, freelance hrvatska"
         jsonLd={[
           {
             '@context': 'https://schema.org',
             '@type': 'Blog',
             name: 'Cenner Blog',
-            description: 'Vodiči i savjeti za freelancere i klijente u Hrvatskoj i EU.',
+            description: 'Vodiči za klijente i freelancere u Hrvatskoj i EU.',
             url: 'https://cenner.hr/blog',
             inLanguage: ['hr', 'en'],
             publisher: {
@@ -92,7 +105,7 @@ const Blog: React.FC = () => {
         <header className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <h1 className="font-display text-[clamp(2.75rem,9vw,8.5rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.035em]">Blog</h1>
-            <p className="mt-8 max-w-[46ch] text-[clamp(1.125rem,1.05rem+0.5vw,1.375rem)] leading-snug">Vodiči, savjeti i vijesti o freelancingu u Hrvatskoj.</p>
+            <p className="mt-8 max-w-[46ch] text-[clamp(1.125rem,1.05rem+0.5vw,1.375rem)] leading-snug">Vodiči za klijente i freelancere u Hrvatskoj.</p>
           </div>
           {isAdmin && (
             <Link
