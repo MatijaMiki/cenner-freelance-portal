@@ -197,13 +197,13 @@ html,body{overflow-x:clip}
 @keyframes cn-tap{from{transform:scale(.3);opacity:1}to{transform:scale(1.8);opacity:0}}
 .cn-beacon{animation:cn-start-hint 1.4s ease-out 2}
 .cn-grip{display:inline-block;flex:none;width:8px;height:12px;opacity:.65;background:radial-gradient(circle,currentColor 1px,transparent 1.4px) 0 0/4px 4px}
-/* The monitor is small, so with a mouse the desktop's windows rest at a reduced size and open up to
-   full size under the pointer (or keyboard focus) and while dragged. They scale with the individual
+/* The monitor is small, so with a mouse the desktop's windows stay at a reduced size (they do not
+   grow under the pointer); a dragged window comes to the front. They scale with the individual
    "scale" property, which composes with the minimise animation's transform. Touch screens keep
-   full-size windows (no hover to open them with). */
+   full-size windows. */
 @media (hover:hover) and (pointer:fine){
-  .cn-win{scale:var(--cn-win-rest,.62);transform-origin:0 0!important;transition-property:transform,opacity,scale}
-  .cn-win:not([data-min]):hover,.cn-win:not([data-min]):focus-within,.cn-win[data-drag]{scale:1;z-index:70!important}
+  .cn-win{--cn-win-k:var(--cn-win-rest,.62);scale:var(--cn-win-k);transform-origin:0 0!important;transition-property:transform,opacity,scale}
+  .cn-win[data-drag]{z-index:70!important}
 }
 @media (prefers-reduced-motion:reduce){.cn-win{transition-duration:0s!important}}
 @media (prefers-reduced-motion:reduce){.cn-ghost,.cn-ghost[data-glide]{animation:none;transition:none}.cn-tap{display:none}.cn-start-hint,.cn-beacon{animation:none;box-shadow:0 0 0 3px #4ade80}}
@@ -400,7 +400,7 @@ const CRT_GLASS = { x: 0.1128, y: 0.1109, w: 0.7756, h: 0.568 };
 // The desktop inside the CRT photo: drawn at OS_SCALE (smaller than life, with CSS zoom so its text is
 // laid out at that size and stays crisp) and inset from the glass's curved edges, so the taskbar and
 // icons sit on the flat middle of the tube.
-const OS_SCALE = 0.72;
+const OS_SCALE = 0.82;
 // ...at that scale on a glass this wide (px); a bigger or smaller monitor scales the desktop with it.
 const OS_REF_GLASS_W = 553;
 const OS_INSET = { x: 0.035, top: 0.05, bottom: 0.04 };
@@ -1454,7 +1454,7 @@ const StartMenu: React.FC<{ drop: 'up' | 'down'; onClose: () => void; onChat: ()
   const heading = 'px-2.5 pb-1 pt-2.5 font-term text-[11px] font-bold uppercase tracking-[0.14em] text-slate';
   const footBtn = 'flex items-center gap-1.5 border-2 border-white/70 px-2 py-1 font-display text-[13px] font-bold transition-colors hover:bg-white hover:text-ink focus-visible:bg-white focus-visible:text-ink focus-visible:outline-none';
   return (
-    <div ref={box} id="cn-start" className={`cn-toast absolute left-0 z-[90] flex max-h-[min(38rem,calc(100cqh-4.5rem))] w-[min(36rem,calc(100cqw-2rem))] flex-col ${drop === 'up' ? 'bottom-[calc(100%+8px)]' : 'top-[calc(100%+8px)]'} border-2 border-ink bg-white font-text text-ink shadow-[10px_10px_0_#0b0c0e]`}>
+    <div ref={box} id="cn-start" className={`cn-toast absolute left-0 z-[90] flex max-h-[min(38rem,calc(100cqh-4.5rem))] w-[min(31rem,calc(100cqw-2rem))] flex-col ${drop === 'up' ? 'bottom-[calc(100%+8px)]' : 'top-[calc(100%+8px)]'} border-2 border-ink bg-white font-text text-ink shadow-[10px_10px_0_#0b0c0e]`}>
       <div className="flex items-center gap-3 border-b-2 border-ink bg-sky px-3 py-2.5 text-white">
         {user ? (
           <Avatar src={user.avatar} name={user.name} size={40} className="h-10 w-10 shrink-0 border-2 border-white object-cover" />
@@ -1469,15 +1469,15 @@ const StartMenu: React.FC<{ drop: 'up' | 'down'; onClose: () => void; onChat: ()
         )}
       </div>
 
-      <nav data-wheel-box aria-label={t('Menu')} className="grid min-h-0 flex-1 overflow-y-auto overscroll-contain sm:grid-cols-[1.2fr_1fr]">
-        <ul className="p-1.5">
+      <nav data-wheel-box aria-label={t('Menu')} className="grid min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+        <ul className="min-w-0 p-1.5">
           {main.map((it, i) => (
             <li key={it.path}>
               <Link ref={i === 0 ? first : undefined} to={it.path} onClick={onClose} className="group flex items-center gap-3 px-2.5 py-2 transition-colors hover:bg-ink hover:text-white focus-visible:bg-ink focus-visible:text-white focus-visible:outline-none">
                 <span className={`flex h-9 w-9 shrink-0 items-center justify-center border-2 border-ink text-ink ${tiles[i]}`}><it.icon size={18} /></span>
                 <span className="min-w-0">
                   <span className="block font-display text-[15px] font-bold leading-tight">{it.label}</span>
-                  {it.desc && <span className="block truncate text-[13px] text-slate group-hover:text-white/75 group-focus-visible:text-white/75">{it.desc}</span>}
+                  {it.desc && <span className="block text-[13px] leading-snug text-slate group-hover:text-white/75 group-focus-visible:text-white/75">{it.desc}</span>}
                 </span>
               </Link>
             </li>
@@ -1987,7 +1987,8 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   const winLeft = (w: Win) => {
     const rem = Number(/w-\[(\d+(?:\.\d+)?)rem\]/.exec(w.w)?.[1] ?? 24);
     // right of the icon column (9rem) where there is room; never past the screen's right edge
-    return `max(8px, min(max(9rem, ${w.x * 100}%), calc(100% - min(${rem}rem, 100% - 1.5rem) - 12px)))`;
+    // (--cn-win-k: the size a window rests at with a mouse, so a shrunk window may sit further right)
+    return `max(8px, min(max(9rem, ${w.x * 100}%), calc(100% - min(${rem}rem, 100% - 1.5rem) * var(--cn-win-k, 1) - 12px)))`;
   };
   // top: its fraction, but never so low that it runs under the taskbar on a short screen; on the
   // laptop the welcome window sits just under the trust window's title bar (see the order below)
@@ -2225,7 +2226,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       <div className="relative flex flex-col" style={crt ? {
         position: 'absolute', left: `${OS_INSET.x * 100}%`, right: `${OS_INSET.x * 100}%`,
         top: `${OS_INSET.top * 100}%`, bottom: `${OS_INSET.bottom * 100}%`,
-        zoom: osZoom, containerType: 'size', ['--cn-win-rest' as string]: 0.7,   // windows rest less shrunk here
+        zoom: osZoom, containerType: 'size', ['--cn-win-rest' as string]: 0.8,   // windows rest less shrunk here
       } as React.CSSProperties : { aspectRatio: '16 / 10', containerType: 'size' }}>
         <div ref={areaRef} className="relative flex-1 p-6" onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onLostPointerCapture={onUp} onPointerDown={e => { if (!(e.target as HTMLElement).closest('[data-icon]')) setSelIcon(null); }}>
           {/* Desktop icons */}
