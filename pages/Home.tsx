@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  ArrowRight, ArrowDown, Briefcase, Lock, ShieldCheck, Check, Star,
+  ArrowRight, Briefcase, Lock, ShieldCheck, Check, Star,
 } from 'lucide-react';
 import ProjectDots from '../components/ProjectDots';
 import MeadowBackdrop from '../components/MeadowBackdrop';
@@ -179,6 +179,7 @@ html,body{overflow-x:clip}
 @media (prefers-reduced-motion:reduce){.cn-balloon{animation:none}}
 .cn-mark{opacity:0;transform:translate3d(0,4vh,0);transition:opacity .9s ease,transform 1.1s cubic-bezier(.22,1,.36,1)}
 .cn-mark[data-on="1"]{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.cn-mark{opacity:1;transform:none;transition:none}}
 .cn-bob{animation:cn-bob 1.1s steps(4,end) infinite}
 @keyframes cn-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
 @media (prefers-reduced-motion:reduce){.cn-bob{animation:none}}
@@ -367,15 +368,8 @@ function goToShutdown() {
 // The four status lines under the card: first one after BOOT_FIRST_MS, then one every BOOT_STEP_MS.
 const BOOT_FIRST_MS = 350;
 const BOOT_STEP_MS = 420;
-// Desktop lock: wheel input in the first LOCK_SETTLE_MS after arriving is absorbed; a "flick"
-// is a burst of wheel events after at least FLICK_GAP_MS of quiet; two flicks move on.
-const LOCK_SETTLE_MS = 800;
-const FLICK_GAP_MS = 300;
 const POWER_DELAY_MS = 250; // the dark glass holds this long before the power-on
 const POWER_MS = 760;       // dot -> line -> white field -> fade
-const EXIT_HOLD_MS = 1400; // after leaving the desktop: downward wheel held while landing
-const CATCH_QUIET_MS = 240;  // scrolling back up onto the desktop: the flick's momentum is absorbed
-const CATCH_MAX_MS = 1800;   // until the wheel goes quiet this long, or for at most this long
 
 // The opening, built like a classic landing page: the meadow (the film's own poster with the desk
 // painted out, Higgsfield edit) behind centred copy, and a head-on CRT (Higgsfield still, background
@@ -442,33 +436,9 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     run.timers = []; run.started = false; run.done = false;
     bootLines().forEach(el => { el.style.opacity = '0'; el.style.transform = ''; });
   };
-  // While the lines are ticking in, extra downward wheel scrolling past the card is held back
-  // (about two seconds at most), so a free-spinning wheel cannot fling the visitor past them.
-  // Touch and keyboard scrolling are never blocked.
-  React.useEffect(() => {
-    if (reduce) return;
-    const brake = (e: WheelEvent) => {
-      const run = bootRun.current, sec = ref.current;
-      if (e.deltaY <= 0 || !sec) return;
-      const p = curP.current;
-      if (p < 0.6 || p >= 1) return;
-      // Lines done: the next downward scroll goes straight into the desktop.
-      if (run.done) { if (p >= 0.84) { e.preventDefault(); goToDesktop(); } return; }
-      const range = Math.max(1, sec.offsetHeight - (window.innerHeight - NAV_H));
-      const px = e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
-      const next = p + px / range;
-      if (run.started && p >= 0.84) { e.preventDefault(); return; }
-      // A fast wheel would jump straight past the card: stop exactly on it instead, which
-      // starts the lines, and hold there until they have finished.
-      if (!run.started && next > 0.86) {
-        e.preventDefault();
-        const top = sec.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo(0, top - NAV_H + 0.855 * range);
-      }
-    };
-    window.addEventListener('wheel', brake, { passive: false });
-    return () => { window.removeEventListener('wheel', brake); bootRun.current.timers.forEach(id => window.clearTimeout(id)); };
-  }, [reduce]);
+  // (There used to be a wheel brake here that held the page on the card until the status lines
+  // finished and then flew into the desktop. Scrolling is never taken over any more.)
+  React.useEffect(() => () => { bootRun.current.timers.forEach(id => window.clearTimeout(id)); }, []);
   // Scrolled past the hero (the desktop, the FAQ, the outro), the card loop stops decoding; the
   // first scroll back in starts it again.
   const onScreen = React.useRef(true);
@@ -590,6 +560,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     curP.current = p;
     if (p >= 0.85 && !bootRun.current.started) startBoot();
     if (p < 0.8 && bootRun.current.started) resetBoot();
+    if (stage.current) stage.current.style.opacity = String(1 - smooth(span(p, 0.93, 1)));
 
     // The headline splits apart as the camera moves in: the first line out to the left, the label to the right.
     const split = span(p, 0, 0.4);
@@ -603,7 +574,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
   const words = [t('Freelanceri iz Hrvatske'), t('za tvoj sljedeći projekt')];
 
   return (
-    <section ref={ref} className={reduce ? 'relative' : 'relative h-[380vh]'}>
+    <section ref={ref} className={reduce ? 'relative' : 'relative h-[380vh] bg-paper'}>
       <div ref={stage} className={`${reduce ? 'relative h-[calc(100svh-4.5rem)]' : 'sticky top-[4.5rem] h-[calc(100svh-4.5rem)]'} overflow-hidden bg-sky`}>
         <div ref={film} className="absolute inset-0 will-change-transform">
           <img
@@ -1521,7 +1492,6 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   const crt = useMedia(CRT_QUERY);    // ...in the CRT; below it, in the laptop lid
   const laptop = wide && !crt;
   const fine = useMedia('(hover: hover) and (pointer: fine)'); // a mouse: icons select on one click
-  const roomy = useMedia('(min-width: 1400px)'); // the scroll hint clears the balloon
   const areaRef = React.useRef<HTMLDivElement>(null);
   const [order, setOrder] = React.useState<string[]>([]);
   const [pos, setPos] = React.useState<Record<string, { x: number; y: number }>>({});
@@ -1534,101 +1504,35 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
   const drag = React.useRef<{ id: string; dx: number; dy: number; pid: number } | null>(null);
   const sectionRef = React.useRef<HTMLElement>(null);
   const saver = useScreensaver(sectionRef);
-  const [aligned, setAligned] = React.useState(false);
-  const [armed, setArmed] = React.useState(false);
-
-  // Locked in: while the desktop fills the window (wide screens, nav hidden), downward wheel
-  // scrolling is held; two separate flicks within 1.8s move on to the next section. Scrolling
-  // up, touch and the keyboard are never held.
+  // The text beside the monitor fades up the first time it is a quarter in view.
+  const textRef = React.useRef<HTMLDivElement>(null);
+  const [textOn, setTextOn] = React.useState(false);
   React.useEffect(() => {
-    const sec = sectionRef.current;
-    if (!sec || !wide) { setAligned(false); return; }
-    const isAligned = () => Math.abs(sec.getBoundingClientRect().top) < 4;
-    let last = 0, flicks: number[] = [], arrivedAt = 0, was = false, holdUntil = 0, catchAt = 0, catchLast = 0;
-    const onScroll = () => {
-      const a = isAligned();
-      // the site nav makes way as the monitor comes in: pushed up pixel for pixel (see pushNav)
-      pushNav(sec);
-      if (a && !was) arrivedAt = performance.now();
-      was = a; setAligned(a);
-      if (!a) { flicks = []; setArmed(false); }
-    };
-    let exitTimer = 0;
-    const onWheel = (e: WheelEvent) => {
-      // a list on the screen that can still scroll this way (the Start menu) takes the wheel
-      const box = (e.target as Element | null)?.closest?.('[data-wheel-box]') as HTMLElement | null;
-      if (box && (e.deltaY > 0 ? box.scrollTop + box.clientHeight < box.scrollHeight - 1 : box.scrollTop > 0)) { last = performance.now(); return; }
-      if (e.deltaY < 0) { // turning back up cancels the exit's re-snap (and puts the snap point back now)
-        window.clearTimeout(exitTimer);
-        if (resnapTimer) { window.clearTimeout(resnapTimer); resnapTimer = 0; if (snapWanted() && !deskGliding) document.documentElement.classList.add('cn-snap'); }
-      }
-      // Scrolling back UP from the sections below: caught on the monitor. Instead of flying on
-      // into the film, the page settles with the desktop filling the window and soaks up the rest
-      // of that flick; the next scroll up (after a short pause) carries on. No double-scroll lock.
-      if (e.deltaY < 0) {
-        const now = performance.now();
-        if (catchAt) {
-          if (now - catchLast < CATCH_QUIET_MS && now - catchAt < CATCH_MAX_MS) { e.preventDefault(); catchLast = now; return; }
-          catchAt = 0;
-        }
-        const top = sec.getBoundingClientRect().top;
-        const px = e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
-        if (top < -2 && top - px > 0) {   // this scroll would carry the desktop down past the top
-          e.preventDefault();
-          catchAt = catchLast = now;
-          glideTo(top + window.scrollY, () => {
-            // arrived from below without having seen it power on: just on, no flash
-            if (screenRef.current === 'dark' && !powering.current) setScreen('on');
-          });
-        }
-        return;
-      }
-      if (e.deltaY > 0 && performance.now() < holdUntil) { e.preventDefault(); return; }
-      if (e.deltaY <= 0 || !isAligned()) return;
-      e.preventDefault();
-      const now = performance.now();
-      // The tail of the scroll that brought the visitor here does not count.
-      if (now - arrivedAt < LOCK_SETTLE_MS) { last = now; return; }
-      if (now - last > FLICK_GAP_MS) {              // a new flick, after a real pause
-        flicks = flicks.filter(f => now - f < 1800);
-        flicks.push(now);
-        if (flicks.length >= 2) {
-          flicks = []; setArmed(false);
-          // Glide to the next section and hold there for a moment, so a hard flick's momentum
-          // cannot carry the visitor past it.
-          // (the next section lands at the top; the nav comes back as the visitor scrolls on, see pushNav)
-          const target = sec.getBoundingClientRect().bottom + window.scrollY;
-          holdUntil = now + EXIT_HOLD_MS;
-          // (on the laptop the device's snap point is off while this scroll leaves it)
-          const root = document.documentElement;
-          if (root.classList.contains('cn-snap')) { root.classList.remove('cn-snap'); window.clearTimeout(resnapTimer); resnapTimer = window.setTimeout(() => { if (snapWanted()) root.classList.add('cn-snap'); }, EXIT_HOLD_MS); }
-          window.scrollTo({ top: target, behavior: 'smooth' });
-          exitTimer = window.setTimeout(() => { if (Math.abs(window.scrollY - target) > 4) window.scrollTo({ top: target }); }, 700);
-        } else { setArmed(true); setBalloon(false); } // the held flick also clears the balloon away
-      }
-      last = now;
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('wheel', onWheel, { passive: false });
-    return () => { window.clearTimeout(exitTimer); window.removeEventListener('scroll', onScroll); window.removeEventListener('wheel', onWheel); releaseNav(); };
+    const el = textRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') { setTextOn(true); return; }
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setTextOn(true); io.disconnect(); } }, { threshold: 0.25 });
+    io.observe(el);
+    return () => io.disconnect();
   }, [wide]);
 
-  // Phones and the laptop are reached by a free scroll (only the CRT is glided onto): a snap point
-  // at the device's top catches the scroll there from either side, so it lands full-frame and the
-  // nav steps aside; the next scroll carries on.
+  // (The desktop used to lock the page: wheel scrolling was held while it filled the window and two
+  // flicks were needed to move on. It is an ordinary section now; nothing takes over the scroll.)
+
+  // Phones: the pocket device is reached by a free scroll; a snap point at its top catches the
+  // scroll there from either side, so it lands full-frame and the nav steps aside; the next scroll
+  // carries on. (The CRT and laptop are plain sections now: no snap, no glide.)
   React.useEffect(() => {
-    if (crt) return;
+    if (wide) return;
     const root = document.documentElement;
     if (!deskGliding) root.classList.add('cn-snap'); // a running glide puts it back when it ends
     return () => { root.classList.remove('cn-snap'); window.clearTimeout(resnapTimer); resnapTimer = 0; };
-  }, [crt]);
+  }, [wide]);
 
-  // Every layout (phone, laptop, CRT): a scroll that stops with the device part-way in view (moving
-  // towards it) waits a beat, then the device drops into place, with a small overshoot and settle.
+  // Phones: a scroll that stops with the pocket device part-way in view (moving towards it) waits a
+  // beat, then the device drops into place, with a small overshoot and settle.
   React.useEffect(() => {
     const sec = sectionRef.current;
-    if (!sec) return;
+    if (!sec || wide) return;
     let lastY = window.scrollY, dir = 0, idle = 0, touching = false;
     const fall = (x: number) => { const c1 = 1.25, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); }; // easeOutBack
     const settle = () => {
@@ -1662,7 +1566,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('touchcancel', onTouchEnd);
     };
-  }, [crt]);
+  }, [wide]);
 
   // a menu left open on a wide screen does not come back after a rotate below lg
   React.useEffect(() => { if (!wide) { setStart(false); setLangOpen(false); setSelIcon(null); } }, [wide]);
@@ -2148,8 +2052,8 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
     </div>
   );
 
-  return (
-    <section ref={sectionRef} data-desktop aria-label="Cenner" onPointerDownCapture={e => { if (e.pointerType !== 'touch' && tipRef.current === 'wait') touched.current = true; }} onPointerUpCapture={e => { if (e.pointerType === 'touch' && tipRef.current === 'wait') touched.current = true; }} className={`cn-cursor relative isolate text-ink ${crt ? 'cn-bezel bg-[#d8ccb6]' : laptop ? 'cn-laptop bg-ink' : 'cn-pda-ground'}`}>
+  const monitor = (
+    <section ref={sectionRef} data-desktop aria-label="Cenner" onPointerDownCapture={e => { if (e.pointerType !== 'touch' && tipRef.current === 'wait') touched.current = true; }} onPointerUpCapture={e => { if (e.pointerType === 'touch' && tipRef.current === 'wait') touched.current = true; }} className={`cn-cursor relative isolate text-ink ${crt ? 'cn-bezel bg-[#d8ccb6]' : laptop ? 'cn-laptop bg-ink' : 'cn-pda-ground'}`} style={crt ? ({ '--bz': 0.34 } as React.CSSProperties) : undefined}>
       {/* The screen, set into the monitor's bezel (a photographed CRT front, or on tablet-size
           screens a 90s laptop lid, drawn over it). */}
       <div className={`relative overflow-hidden bg-[#05070c]`}>
@@ -2164,7 +2068,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       />
       {crt && <div aria-hidden="true" className="cn-scan pointer-events-none absolute inset-0 opacity-40" />}
       {wide ? (
-      <div className="relative flex flex-col" style={{ height: crt ? 'calc(100svh - 6.725rem)' : 'calc(100svh - 246px * var(--lz))', minHeight: crt ? '38rem' : '30rem' }}>
+      <div className="relative flex flex-col" style={{ aspectRatio: crt ? '4 / 3' : '16 / 10', containerType: 'size' }}>
         <div ref={areaRef} className="relative flex-1 p-6" onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} onLostPointerCapture={onUp} onPointerDown={e => { if (!(e.target as HTMLElement).closest('[data-icon]')) setSelIcon(null); }}>
           {/* Desktop icons */}
           <ul className={`absolute left-6 top-6 grid w-28 grid-cols-1 gap-5 ${dblTag ? 'z-[30]' : 'z-0'}`} role="list">
@@ -2313,12 +2217,6 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
       ) : (
         <PocketPC wins={wins} power={screen} screenOn={screen === 'on'} unread={unread} balloon={balloon} onBalloon={setBalloon} onRead={() => setUnread(false)} cue={tip === 'start' ? 'on' : tip === 'bye' ? 'out' : false} />
       )}
-      {aligned && !start && !tipRunning && !(balloonShown && !roomy) && (
-        <div aria-live="polite" className={`pointer-events-none absolute bottom-24 left-1/2 z-[80] flex -translate-x-1/2 items-center gap-2 border-2 border-ink px-3 py-1.5 font-term text-[13px] font-bold shadow-[4px_4px_0_#0b0c0e] transition-colors ${armed ? 'bg-white text-ink' : 'bg-ink text-white'}`}>
-          <ArrowDown size={14} className="animate-bounce" />
-          {armed ? t('Once more to continue') : t('Scroll twice to continue')}
-        </div>
-      )}
       {wide && saver}
       {/* the screen while it is off, and its power-on: the CRT's dot, line, white field and fade;
           the laptop's LCD backlight flickering on */}
@@ -2369,6 +2267,36 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
         </>
       )}
     </section>
+  );
+
+  // Phones keep the pocket device as it was. Everywhere else the monitor is an ordinary framed
+  // feature on a white section: the screen keeps the monitor's proportions (4:3 CRT, 16:10 laptop
+  // lid), the text beside it fades up as the section comes into view, and nothing takes over the scroll.
+  if (!wide) return monitor;
+  const mark = (n: number): React.CSSProperties => ({ transitionDelay: `${n * 0.1}s` });
+  return (
+    <div className="relative bg-paper px-4 py-16 md:px-8 md:py-24 lg:py-28">
+      <div className="mx-auto grid max-w-[92rem] items-center gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14">
+        <div ref={textRef} className="max-w-[34rem]">
+          <p className="cn-mark font-display text-[12px] font-black uppercase tracking-[0.2em] text-sky" data-on={textOn ? '1' : '0'}>{t('What we build')}</p>
+          <h2 className="cn-mark mt-3 font-display text-[clamp(2rem,3.4vw,3.25rem)] font-black leading-[0.98] tracking-[-0.03em] text-ink" data-on={textOn ? '1' : '0'} style={mark(1)}>{t('The site you are looking at is our work.')}</h2>
+          <p className="cn-mark mt-5 font-text text-[1.0625rem] leading-[1.6] text-slate" data-on={textOn ? '1' : '0'} style={mark(2)}>
+            {t('Behind the marketplace is an in-house team that designs, builds and runs websites, shops and automations. This screen is a small working sample: open the windows, drag them around, press CENNER for every page.')}
+          </p>
+          <ul className="cn-mark mt-6 grid grid-cols-2 gap-x-6 gap-y-2" data-on={textOn ? '1' : '0'} style={mark(3)}>
+            {['Web Development', 'Graphic Design', 'SEO', 'Automations'].map(k => (
+              <li key={k} className="flex items-center gap-2 font-display text-[15px] font-bold text-ink"><Check size={16} className="shrink-0 text-sky" aria-hidden="true" />{t(k)}</li>
+            ))}
+          </ul>
+          <div className="cn-mark mt-8" data-on={textOn ? '1' : '0'} style={mark(4)}>
+            <Link to="/services" className="cn-press inline-flex items-center gap-2 border-2 border-ink bg-brand-green px-5 py-3 font-display text-[15px] font-bold text-ink">
+              {t('Cenner Services')} <ArrowRight size={17} />
+            </Link>
+          </div>
+        </div>
+        <div className="mx-auto w-full max-w-[60rem]">{monitor}</div>
+      </div>
+    </div>
   );
 };
 
