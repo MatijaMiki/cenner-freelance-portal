@@ -26,15 +26,12 @@ Disallow: /reset-password
 Disallow: /invoices/
 Disallow: /admin
 
-# AI training bots — opt out
-User-agent: GPTBot
-Disallow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
+# AI search and answer engines are welcome, so Cenner can be cited by ChatGPT,
+# Claude, Perplexity and Gemini. GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot,
+# Claude-SearchBot, Claude-User, PerplexityBot, Google-Extended and
+# Applebot-Extended fall under * on purpose: a separate group per bot would
+# drop the private-page rules above for that bot.
+# Plain-text summary for AI tools: https://cenner.hr/llms.txt
 
 Sitemap: https://cenner.hr/sitemap.xml
 Sitemap: https://api.cenner.hr/sitemap-dynamic.xml

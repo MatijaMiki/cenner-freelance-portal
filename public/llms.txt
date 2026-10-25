@@ -1,0 +1,37 @@
+# Cenner
+
+> Cenner (cenner.hr) is a Croatian freelance marketplace and an in-house web studio, based in Zagreb. Businesses find identity-verified Croatian freelancers for websites, design, marketing and programming, buy fixed-price packages, and the freelancer is paid only after the work is delivered. Cenner's own team also builds websites, WordPress sites, web apps, CRM systems and automations at a fixed price.
+
+Cenner je hrvatska freelance platforma (freelance Hrvatska, honorarni posao, izrada web stranica) i vlastiti studio za web stranice, aplikacije i automatizacije.
+
+## Marketplace (freelanceri)
+
+- [Marketplace](https://cenner.hr/marketplace): verified freelancers in Croatia and the EU for web development, design, marketing, writing and more.
+- Every freelancer goes through KYC identity verification. Payments run through Stripe and are released to the freelancer after delivery.
+- [Izrada web stranica](https://cenner.hr/usluge/izrada-web-stranica): website development for companies and obrts in Croatia; a typical small-business site costs 300 € to 800 € and takes 1 to 3 weeks.
+- [Web developeri](https://cenner.hr/usluge/web-developeri): professional web developers.
+- [WordPress izrada](https://cenner.hr/usluge/wordpress-izrada): WordPress websites.
+- [Programiranje](https://cenner.hr/usluge/programiranje): programming services.
+- [SEO optimizacija](https://cenner.hr/usluge/seo-optimizacija): search engine optimisation.
+- [Digitalni marketing](https://cenner.hr/usluge/digitalni-marketing): digital marketing.
+- [Dizajn loga](https://cenner.hr/usluge/dizajn-loga): logo and visual identity design.
+- Freelancers by city: [Zagreb](https://cenner.hr/freelanceri/zagreb), [Split](https://cenner.hr/freelanceri/split), [Rijeka](https://cenner.hr/freelanceri/rijeka), [Osijek](https://cenner.hr/freelanceri/osijek).
+
+## Cenner studio (our own services)
+
+- [Services](https://cenner.hr/services): custom websites (from 800 €), WordPress and WooCommerce (from 500 €), SaaS and web apps with accounts and Stripe payments, CRM systems, n8n automation and AI, graphic design, advertising, and servers and hosting. Fixed price, direct communication with the developer.
+- Previous work: [Čistimo](https://cistimo.com) (booking platform for a Zagreb cleaning company), [Selected Real Estate](https://selectedrealestate.hr) (property portal), [ranwhat](https://ranwhat.com) (Cenner's own open-source security tool for AI coding agents).
+
+## Guides (blog)
+
+- [Izrada web stranice za firmu ili obrt](https://cenner.hr/blog/izrada-web-stranice-za-firmu-i-obrt)
+- [Kako odabrati web developera](https://cenner.hr/blog/kako-odabrati-web-developera)
+- [Koliko košta SEO optimizacija](https://cenner.hr/blog/koliko-kosta-seo-optimizacija)
+- [Freelance u Hrvatskoj](https://cenner.hr/blog/freelance-u-hrvatskoj)
+- [Dizajn loga i vizualnog identiteta](https://cenner.hr/blog/dizajn-loga-i-vizualnog-identiteta)
+
+## Company
+
+- Legal name: Cenner, obrt za računalno programiranje i ostale usluge, vl. Matija Mikulinec
+- Owner: Matija Mikulinec. Zagreb, Croatia. Founded 2026. MB 99210363.
+- Contact: info@cenner.hr, support@cenner.hr. [About and contact](https://cenner.hr/about)
