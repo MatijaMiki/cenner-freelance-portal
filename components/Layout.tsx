@@ -15,6 +15,7 @@ import NotificationBell from './NotificationBell';
 import ChatWidget from './ChatWidget';
 import Footer from './Footer';
 import ConsentModal from './ConsentModal';
+import GuidePopup from './GuidePopup';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage, useT } from '../i18n';
 import { API } from '../lib/api';
@@ -154,6 +155,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* (not behind the inbox: it fills the window with an opaque panel, so the dots could never be seen) */}
       {isHome && location.pathname !== '/' && location.pathname !== '/v3' && !location.pathname.startsWith('/messages') && <PageBackdrop seed={location.pathname} />}
       <ChatWidget bubble={location.pathname !== '/'} />
+      <GuidePopup />
 
       {/* Navbar */}
       <nav className={isHome
