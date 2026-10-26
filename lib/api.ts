@@ -222,7 +222,7 @@ export const API = {
     request<{ success: boolean }>('/contact', 'POST', data),
 
   // ── Launch waitlist (unreleased features) ────────────────────────────
-  notifyLaunch: (email: string, feature: 'job-matching') =>
+  notifyLaunch: (email: string, feature: 'job-matching' | 'vodic-web-stranica') =>
     request<{ success: boolean; alreadySignedUp?: boolean }>('/notify-launch', 'POST', { email, feature }),
 
   // ── KYC (Stripe Identity) ─────────────────────────────────────────────────
