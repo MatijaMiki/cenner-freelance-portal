@@ -32,6 +32,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { sortedBlogPosts } from '../content/blog/posts.mjs';
+import { matchMdRoute, mdPathOf } from '../lib/md/routes.mjs';
+import { AI_SUMMARIES } from '../lib/md/summaries.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
@@ -335,6 +337,13 @@ function buildRouteHtml(shell, route) {
     `<link rel="alternate" hreflang="hr-HR" href="${url}" />`,
     `<link rel="alternate" hreflang="x-default" href="${url}" />`,
     `<meta property="og:url" content="${url}" />`,
+    // For AI agents, matching components/SEO.tsx: a one-line summary and the markdown version.
+    ...(route.noIndex
+      ? []
+      : [`<meta name="ai-summary" content="${escapeAttr(AI_SUMMARIES[route.path] || route.description)}" />`]),
+    ...(!route.noIndex && matchMdRoute(route.path)
+      ? [`<link rel="alternate" type="text/markdown" href="${BASE}${mdPathOf(route.path)}" />`]
+      : []),
   ].join('\n    ');
 
   html = replaceTag(html, /<meta name="robots" content="[\s\S]*?"\s*\/>/, head, 'robots meta', route.path);

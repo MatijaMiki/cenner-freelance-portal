@@ -28,3 +28,6 @@ serviceAccountKey.json
 *.sw?
 .vercel
 .env*
+
+# bundled by scripts/build-md.mjs from lib/md
+api/_md

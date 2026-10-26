@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { matchMdRoute, mdPathOf } from '../lib/md/routes.mjs';
 
 interface SEOProps {
   title?: string;
@@ -11,6 +12,8 @@ interface SEOProps {
   noIndex?: boolean;
   jsonLd?: object | object[];
   keywords?: string;
+  /** <meta name="ai-summary">; defaults to the description. Key pages take theirs from lib/md/summaries.mjs. */
+  aiSummary?: string;
 }
 
 const BASE_URL = 'https://cenner.hr';
@@ -30,9 +33,13 @@ const SEO: React.FC<SEOProps> = ({
   noIndex = false,
   jsonLd,
   keywords,
+  aiSummary,
 }) => {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME}: Freelance Platforma Hrvatska`;
   const fullCanonical = canonical ? `${BASE_URL}${canonical}` : undefined;
+  // Only pages that really have a markdown version (lib/md/routes.mjs) advertise one.
+  const markdownHref = canonical && !noIndex && matchMdRoute(canonical) ? `${BASE_URL}${mdPathOf(canonical)}` : undefined;
+  const summary = noIndex ? undefined : aiSummary || description;
   const fullKeywords = keywords ? `${keywords}, ${BASE_KEYWORDS}` : BASE_KEYWORDS;
 
   // Support both a single JSON-LD object and an array of schemas
@@ -68,6 +75,10 @@ const SEO: React.FC<SEOProps> = ({
       {/* hreflang — Croatian primary market */}
       {fullCanonical && <link rel="alternate" hrefLang="hr-HR" href={fullCanonical} />}
       {fullCanonical && <link rel="alternate" hrefLang="x-default" href={fullCanonical} />}
+
+      {/* For AI agents: a one-line summary and the page's markdown version */}
+      {summary && <meta name="ai-summary" content={summary} />}
+      {markdownHref && <link rel="alternate" type="text/markdown" href={markdownHref} />}
 
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />

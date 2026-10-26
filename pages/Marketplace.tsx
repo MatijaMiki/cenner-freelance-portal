@@ -2,6 +2,7 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
+import { AI_SUMMARIES } from '../lib/md/summaries.mjs';
 import {
   Search, Filter, Star, Clock, ChevronDown,
   X, SlidersHorizontal, ArrowUpDown, Briefcase,
@@ -250,6 +251,7 @@ const Marketplace: React.FC = () => {
         description="Pronađi verificirane freelancere u Hrvatskoj i EU na Cenner marketplaceu. Web razvoj, dizajn, marketing, pisanje i više. Honorarni posao na jednom mjestu."
         keywords="freelance marketplace hrvatska, freelanceri hrvatska, najam freelancera, web developer hrvatska, grafički dizajner hrvatska, digitalni marketing hrvatska, honorarni posao eu"
         jsonLd={marketplaceJsonLd}
+        aiSummary={AI_SUMMARIES['/marketplace']}
       />
       {/* Mobile Filter Drawer */}
       {isFilterDrawerOpen && (

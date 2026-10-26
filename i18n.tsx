@@ -1301,6 +1301,16 @@ const hr: Record<string, string> = {
 
 const dicts: Record<string, Record<string, string>> = { EN: en, HR: hr };
 
+/** The same lookup `t` does, outside React (lib/md renders the Croatian copy as markdown). */
+export const translate = (key: string, lang: LangCode = 'HR'): string => {
+  const dict = dicts[lang] || dicts['EN'];
+  if (dict && dict[key] !== undefined) return dict[key];
+  // Fallback to English
+  if (dicts['EN'] && dicts['EN'][key] !== undefined) return dicts['EN'][key];
+  // Fallback to key itself
+  return key;
+};
+
 const LanguageContext = createContext<LanguageContextValue>({
   lang: 'HR',
   setLang: () => {},
@@ -1321,14 +1331,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('cenner_lang', code);
   };
 
-  const t = (key: string): string => {
-    const dict = dicts[lang] || dicts['EN'];
-    if (dict && dict[key] !== undefined) return dict[key];
-    // Fallback to English
-    if (dicts['EN'] && dicts['EN'][key] !== undefined) return dicts['EN'][key];
-    // Fallback to key itself
-    return key;
-  };
+  const t = (key: string): string => translate(key, lang);
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>
