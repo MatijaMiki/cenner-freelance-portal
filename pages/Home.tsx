@@ -13,6 +13,7 @@ import {
   PxGift, PxMinus, PxSave, PxArrowBigUp, PxBatteryMedium, PxInfoBox, PxShield,
 } from '../components/PixelIcon';
 import SEO from '../components/SEO';
+import { AI_SUMMARIES } from '../lib/md/summaries.mjs';
 import { useT, useLanguage } from '../i18n';
 import { LANGUAGES, useSiteNav } from '../components/siteNav';
 import { disconnectSocket } from '../hooks/useSocket';
@@ -3032,6 +3033,7 @@ const Home: React.FC = () => {
         canonical="/"
         description="Cenner je vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno."
         keywords="freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera"
+        aiSummary={AI_SUMMARIES['/']}
       />
       {wideHero ? <ZoomIn reduce={reduce} /> : <ZoomInPocket reduce={reduce} />}
       <Desktop people={people} />

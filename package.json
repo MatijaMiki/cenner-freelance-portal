@@ -5,14 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-cjenik.mjs && node scripts/generate-landing-pages.mjs && node scripts/generate-sitemap.mjs && vite build && node scripts/prerender-static-routes.mjs",
+    "build": "node scripts/generate-cjenik.mjs && node scripts/generate-landing-pages.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && vite build && node scripts/prerender-static-routes.mjs && node scripts/build-md.mjs",
     "build:no-sitemap": "vite build",
     "landing": "node scripts/generate-landing-pages.mjs",
     "cjenik": "node scripts/generate-cjenik.mjs",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "prerender": "node scripts/prerender-static-routes.mjs",
     "preview": "vite preview",
-    "check:csp": "node scripts/check-csp-hashes.mjs"
+    "check:csp": "node scripts/check-csp-hashes.mjs",
+    "robots": "node scripts/generate-robots.mjs",
+    "md": "node scripts/build-md.mjs",
+    "check:md": "node scripts/build-md.mjs && node scripts/check-md-coverage.mjs"
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^9.0.1",

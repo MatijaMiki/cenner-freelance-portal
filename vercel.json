@@ -75,6 +75,11 @@
     }
   ],
   "rewrites": [
+    { "source": "/llms.txt", "destination": "/api/md?file=llms" },
+    { "source": "/llms-full.txt", "destination": "/api/md?file=llms-full" },
+    { "source": "/ai.txt", "destination": "/api/md?file=ai" },
+    { "source": "/api/md/_catalog", "destination": "/api/md?file=catalog" },
+    { "source": "/api/md/:path*", "destination": "/api/md?path=/:path*" },
     {
       "source": "/service/:id",
       "destination": "/api/render?type=service&id=:id"
@@ -124,6 +129,13 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "geolocation=(self), usb=(), serial=(), bluetooth=()" },
         { "key": "Strict-Transport-Security", "value": "max-age=31536000" }
+      ]
+    },
+    {
+      "source": "/((?!api/)(?!.*\\.md$).*)",
+      "missing": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "headers": [
+        { "key": "Link", "value": "<https://cenner.hr/llms.txt>; rel=\"describedby\"; type=\"text/plain\", <https://cenner.hr/llms-full.txt>; rel=\"describedby\"; type=\"text/plain\", <https://cenner.hr/ai.txt>; rel=\"describedby\"; type=\"text/plain\"" }
       ]
     },
     {

@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Zap, Globe, Crown } from 'lucide-react';
 import SEO from '../components/SEO';
+import { AI_SUMMARIES } from '../lib/md/summaries.mjs';
 import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
 import { PLANS } from '../lib/plans';
@@ -177,6 +178,7 @@ const Subscription: React.FC = () => {
       <SEO
         title="Pricing & Plans"
         canonical="/subscription"
+        aiSummary={AI_SUMMARIES['/subscription']}
         description="Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams."
         jsonLd={[
           {
