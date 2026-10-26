@@ -56,6 +56,27 @@ async function requestPublic<T>(endpoint: string, method: string = 'GET', body?:
   return handleResponse<T>(res);
 }
 
+export interface JobMatch {
+  score: number;
+  matchedSkills: string[];
+  categoryMatch: boolean;
+  job: {
+    id: string; title: string; description: string; category: string; budgetRange: string;
+    urgency: 'low' | 'medium' | 'high'; proposalsCount: number;
+    clientId: string; clientName: string; clientAvatar: string; postedAt: string;
+  };
+}
+
+export interface FreelancerMatch {
+  score: number;
+  matchedSkills: string[];
+  categoryMatch: boolean;
+  freelancer: {
+    id: string; name: string; avatar: string; location: string; bio: string;
+    skills: string[]; avgRating: number | null; reviewCount: number;
+  };
+}
+
 export const API = {
   // ── Auth ──────────────────────────────────────────────────────────────
   register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string; turnstileToken?: string }) =>
@@ -160,6 +181,13 @@ export const API = {
   // ── Jobs ──────────────────────────────────────────────────────────────
   getJobs: (category?: string) =>
     request<any[]>(`/jobs${category ? `?category=${encodeURIComponent(category)}` : ''}`),
+
+  // Ranked matches (server-side scoring). Jobs for the signed-in freelancer; freelancers for one of my jobs.
+  getJobMatches: (limit = 10) =>
+    request<{ hasProfile: boolean; matches: JobMatch[] }>(`/jobs/matches?limit=${limit}`),
+
+  getFreelancerMatches: (jobId: string, limit = 10) =>
+    request<FreelancerMatch[]>(`/jobs/${jobId}/matches?limit=${limit}`),
 
   createJob: (data: any) => request<any>('/jobs', 'POST', data),
 
