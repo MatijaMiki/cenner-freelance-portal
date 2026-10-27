@@ -621,7 +621,7 @@ const ZoomIn: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     if (scrollHint.current) scrollHint.current.style.opacity = String(1 - span(p, 0.02, 0.2));
   }, !reduce);
 
-  const words = [t('Freelanceri iz Hrvatske'), t('za tvoj sljedeći projekt')];
+  const words = [t('Izrada web stranica'), t('i freelanceri iz Hrvatske')];
 
   return (
     // (the section itself lets clicks through: it overlaps the framed monitor beneath its last
@@ -937,7 +937,7 @@ const ZoomInPocket: React.FC<{ reduce: boolean }> = ({ reduce }) => {
     if (intro.current) { intro.current.style.opacity = String(1 - span(p, 0, 0.12)); intro.current.style.visibility = p > 0.14 ? 'hidden' : 'visible'; }
   }, !reduce);
 
-  const words = [t('Freelanceri iz Hrvatske'), t('za tvoj sljedeći projekt')];
+  const words = [t('Izrada web stranica'), t('i freelanceri iz Hrvatske')];
   return (
     <section ref={ref} className={reduce ? 'relative' : 'relative flow-root h-[300vh]'}>
       {/* The strip above the stage, under the nav: the screen's blue, seen once the nav has left as
@@ -3029,9 +3029,9 @@ const Home: React.FC = () => {
     <div ref={page} className="relative bg-ink font-text text-ink">
       <style>{CSS}</style>
       <SEO
-        title="Freelance Hrvatska: Pronađi Freelancera"
+        title="Izrada web stranica i freelance Hrvatska"
         canonical="/"
-        description="Cenner je vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno."
+        description="Cenner: profesionalna izrada web stranica i web rješenja po pristupačnoj cijeni, plus provjereni freelanceri u Hrvatskoj za dizajn, marketing i razvoj."
         keywords="freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera"
         aiSummary={AI_SUMMARIES['/']}
       />

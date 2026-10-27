@@ -239,9 +239,9 @@ const ROUTES = [
     // hydrated heads agree. api/render.js strips this canonical back out when it uses
     // the same file as its shell for an entity page.
     path: '/',
-    title: 'Freelance Hrvatska: Pronađi Freelancera | Cenner',
+    title: 'Izrada web stranica i freelance Hrvatska | Cenner',
     description:
-      'Cenner je vodeća freelance platforma u Hrvatskoj. Pronađi provjerene freelancere za izradu web stranica, dizajn, marketing i razvoj. Honorarni posao brzo i sigurno.',
+      'Cenner: profesionalna izrada web stranica i web rješenja po pristupačnoj cijeni, plus provjereni freelanceri u Hrvatskoj za dizajn, marketing i razvoj.',
   },
   {
     path: '/onboarding',
