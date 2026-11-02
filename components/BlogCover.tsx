@@ -22,11 +22,11 @@ const PALETTES: string[][] = [
   ['#f2c14e', '#ef6f6c', '#9a63e6', '#4ea0f0', '#3fc1a5'],       // sunset to sea
 ];
 
-// Posts about our own products wear that product's colours: ranwhat's brick red to amber, Stenvakt's
-// black with its yellow and blue.
+// Posts about our own products wear their own look: Stenvakt is black dots on yellow, ranwhat is
+// orange, yellow, red, green and blue dots on grey.
 const BRANDS: Record<string, { ground: string; colours: string[] }> = {
-  'kako-smo-izradili-ranwhat': { ground: GROUND, colours: ['#7a2c1a', '#b8482d', '#d9751e', '#d1a821'] },
-  'kako-smo-izradili-stenvakt': { ground: '#111111', colours: ['#665e18', '#c9b81f', '#ffe927', '#1e4bd7'] },
+  'kako-smo-izradili-ranwhat': { ground: '#3d4147', colours: ['#f2873a', '#ffd23f', '#e5413a', '#3fbf6e', '#3b7be5'] },
+  'kako-smo-izradili-stenvakt': { ground: '#ffe927', colours: ['#111111', '#2b2b2b', '#000000'] },
 };
 
 export const BlogCover: React.FC<{ seed: string; className?: string }> = ({ seed, className = '' }) => {

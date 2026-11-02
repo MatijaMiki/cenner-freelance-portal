@@ -51,7 +51,9 @@ const Blog: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const [first, ...rest] = posts;
+  // The two top posts (pinned ones come first) are the two biggest boxes, side by side.
+  const big = posts.slice(0, 2);
+  const rest = posts.slice(2);
   const lift = 'transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#0b0c0e] focus-visible:-translate-x-1 focus-visible:-translate-y-1 focus-visible:shadow-[6px_6px_0_0_#002ca5] focus-visible:outline-none';
 
   const Meta = ({ p }: { p: BlogListItem }) => (
@@ -141,38 +143,43 @@ const Blog: React.FC = () => {
             </div>
           )}
 
-          {first && (
-            <Link
-              to={`/blog/${first.slug}`}
-              className={`group grid border-2 border-ink bg-white lg:grid-cols-12 ${lift}`}
-            >
-              <div className="overflow-hidden border-b-2 border-ink bg-paper2 lg:col-span-7 lg:border-b-0 lg:border-r-2">
-                {first.coverImage ? (
-                  <img
-                    src={first.coverImage}
-                    alt={first.title}
-                    className="aspect-[16/9] h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                ) : (
-                  <BlogCover seed={first.slug} className="aspect-[16/9] h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                )}
-              </div>
-              <div className={`flex flex-col justify-between gap-8 p-6 md:p-10 lg:col-span-5`}>
-                <div>
-                  <h2 className="font-display text-[clamp(1.75rem,1.2rem+2vw,3rem)] font-extrabold leading-[1.02] tracking-[-0.03em] transition-colors group-hover:text-sky">
-                    {first.title}
-                  </h2>
-                  {first.excerpt && (
-                    <p className="mt-5 line-clamp-4 text-[1.0625rem] leading-relaxed text-ink/85">{first.excerpt}</p>
-                  )}
-                </div>
-                <Meta p={first} />
-              </div>
-            </Link>
+          {big.length > 0 && (
+            <div className="grid gap-6 lg:grid-cols-2">
+              {big.map(p => (
+                <Link
+                  key={p.slug}
+                  to={`/blog/${p.slug}`}
+                  className={`group flex flex-col border-2 border-ink bg-white ${lift}`}
+                >
+                  <div className="overflow-hidden border-b-2 border-ink bg-paper2">
+                    {p.coverImage ? (
+                      <img
+                        src={p.coverImage}
+                        alt={p.title}
+                        className="aspect-[16/9] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <BlogCover seed={p.slug} className="aspect-[16/9] w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    )}
+                  </div>
+                  <div className="flex flex-grow flex-col justify-between gap-8 p-6 md:p-8">
+                    <div>
+                      <h2 className="font-display text-[clamp(1.75rem,1.2rem+1.4vw,2.5rem)] font-extrabold leading-[1.04] tracking-[-0.03em] transition-colors group-hover:text-sky">
+                        {p.title}
+                      </h2>
+                      {p.excerpt && (
+                        <p className="mt-5 line-clamp-4 text-[1.0625rem] leading-relaxed text-ink/85">{p.excerpt}</p>
+                      )}
+                    </div>
+                    <Meta p={p} />
+                  </div>
+                </Link>
+              ))}
+            </div>
           )}
 
           {rest.length > 0 && (
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {rest.map(p => (
                 <Link
                   key={p.slug}
