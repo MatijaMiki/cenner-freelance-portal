@@ -52,11 +52,23 @@ const fitBox = (img: HTMLImageElement): Box => {
 };
 const boxOf = (el: Element): Box => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; };
 
+// The part of the thumbnail that is not on screen or under the sticky nav, in px from its top and bottom edges. The
+// picture starts clipped to what can be seen, so it never covers the nav (or the screen's edge) on the first frame.
+type Cut = { t: number; b: number };
+const cutOf = (el: Element): Cut => {
+  const r = el.getBoundingClientRect();
+  const nav = document.querySelector('nav');
+  const navBottom = nav ? nav.getBoundingClientRect().bottom : 0;
+  return { t: Math.max(0, Math.min(r.height, navBottom - r.top)), b: Math.max(0, Math.min(r.height, r.bottom - window.innerHeight)) };
+};
+
 const ZoomImg: Components['img'] = ({ node, ...p }) => {
   const thumb = React.useRef<HTMLImageElement>(null);
   const [mounted, setMounted] = useState(false);
   const [shown, setShown] = useState(false);     // false: the veil is clear and the picture sits on its thumbnail
   const [box, setBox] = useState<Box | null>(null);
+  const [cut, setCut] = useState<Cut>({ t: 0, b: 0 });
+  const [navH, setNavH] = useState(0);   // the veil starts under the sticky nav, which therefore is never dimmed or covered by it
   const closing = React.useRef(false);
 
   const open = async () => {
@@ -67,10 +79,13 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
     try { const pre = new Image(); pre.src = p.src || ''; await pre.decode(); } catch { /* shows when it loads */ }
     if (!thumb.current) return;
     setBox(boxOf(thumb.current));
+    setCut(cutOf(thumb.current));
+    setNavH(document.querySelector('nav')?.getBoundingClientRect().bottom ?? 0);
     setMounted(true);
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (!thumb.current) return;
       setBox(fitBox(thumb.current));
+      setCut({ t: 0, b: 0 });
       setShown(true);
     }));
   };
@@ -78,6 +93,7 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
     if (closing.current || !thumb.current) return;
     closing.current = true;
     setBox(boxOf(thumb.current));   // where the thumbnail is now, in case the page moved
+    setCut(cutOf(thumb.current));
     setShown(false);
     window.setTimeout(() => { setMounted(false); closing.current = false; }, ZOOM_MS);
   };
@@ -117,12 +133,12 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
         <>
           {/* The veil sits under the site nav (z-50), so the nav stays put and clickable; the picture sits over everything. */}
           <div aria-hidden="true" onClick={close}
-            className="fixed inset-0 z-[45] cursor-zoom-out motion-reduce:!transition-none"
-            style={{ background: 'rgba(11,12,14,0.5)', opacity: shown ? 1 : 0, transition: `opacity ${shown ? ZOOM_MS : Math.round(ZOOM_MS * 0.6)}ms ease` }} />
+            className="fixed inset-x-0 bottom-0 z-[45] cursor-zoom-out motion-reduce:!transition-none"
+            style={{ top: navH, background: 'rgba(11,12,14,0.5)', opacity: shown ? 1 : 0, transition: `opacity ${shown ? ZOOM_MS : Math.round(ZOOM_MS * 0.6)}ms ease` }} />
           <div role="dialog" aria-modal="true" aria-label={p.alt || 'Slika'} className="pointer-events-none fixed inset-0 z-[60]">
             <img src={p.src} alt={p.alt} onClick={close}
-              className="pointer-events-auto fixed cursor-zoom-out border-4 border-ink object-fill shadow-[0_20px_60px_rgba(0,0,0,0.35)] motion-reduce:!transition-none"
-              style={{ left: box.left, top: box.top, width: box.width, height: box.height, transition: `left ${ease}, top ${ease}, width ${ease}, height ${ease}` }} />
+              className="pointer-events-auto fixed cursor-zoom-out border-4 border-ink object-fill motion-reduce:!transition-none"
+              style={{ left: box.left, top: box.top, width: box.width, height: box.height, clipPath: `inset(${cut.t}px 0 ${cut.b}px 0)`, transition: `left ${ease}, top ${ease}, width ${ease}, height ${ease}, clip-path ${ease}` }} />
             <button type="button" onClick={close} aria-label="Zatvori"
               className="pointer-events-auto fixed bottom-4 left-4 border-2 border-ink bg-white p-2 text-ink hover:bg-ink hover:text-white"
               style={{ opacity: shown ? 1 : 0, transition: 'opacity 120ms ease' }}>
