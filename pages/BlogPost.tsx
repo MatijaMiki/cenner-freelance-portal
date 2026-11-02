@@ -39,9 +39,9 @@ const fmtDate = (iso?: string | null) => {
 /**
  * An article image that opens full screen on click, so a screenshot can be read. The picture grows from where it
  * sits to fit the screen and shrinks back on close (Esc, a click or the button), over a light veil. The page
- * does not scroll while it is open.
+ * does not scroll while it is open (the scrollbar stays, so nothing on the page reflows or redraws).
  */
-const ZOOM_MS = 320;
+const ZOOM_MS = 200;
 type Box = { left: number; top: number; width: number; height: number };
 
 const fitBox = (img: HTMLImageElement): Box => {
@@ -59,9 +59,13 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
   const [box, setBox] = useState<Box | null>(null);
   const closing = React.useRef(false);
 
-  const open = () => {
-    if (!thumb.current) return;
+  const open = async () => {
+    const el = thumb.current;
+    if (!el || mounted) return;
     closing.current = false;
+    // Have the picture decoded before it replaces the thumbnail, so there is no blank frame in between.
+    try { const pre = new Image(); pre.src = p.src || ''; await pre.decode(); } catch { /* shows when it loads */ }
+    if (!thumb.current) return;
     setBox(boxOf(thumb.current));
     setMounted(true);
     requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -80,13 +84,10 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
 
   useEffect(() => {
     if (!mounted) return;
-    const root = document.documentElement, body = document.body;
-    const prev = { r: root.style.overflow, b: body.style.overflow, pad: body.style.paddingRight };
-    const gap = window.innerWidth - root.clientWidth;   // keep the page from jumping when the scrollbar goes
-    root.style.overflow = 'hidden';
-    body.style.overflow = 'hidden';
-    if (gap > 0) body.style.paddingRight = `${gap}px`;
+    // No scrolling while it is open, without touching overflow: that would remove the scrollbar and reflow the page.
+    const x0 = window.scrollX, y0 = window.scrollY;
     const stop = (e: Event) => e.preventDefault();
+    const hold = () => { if (window.scrollY !== y0 || window.scrollX !== x0) window.scrollTo(x0, y0); };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close();
       else if ([' ', 'PageUp', 'PageDown', 'Home', 'End', 'ArrowUp', 'ArrowDown'].includes(e.key)) e.preventDefault();
@@ -94,14 +95,15 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
     const onResize = () => { if (thumb.current && !closing.current) setBox(fitBox(thumb.current)); };
     window.addEventListener('wheel', stop, { passive: false });
     window.addEventListener('touchmove', stop, { passive: false });
+    window.addEventListener('scroll', hold);
     window.addEventListener('keydown', onKey);
     window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('wheel', stop);
       window.removeEventListener('touchmove', stop);
+      window.removeEventListener('scroll', hold);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('resize', onResize);
-      root.style.overflow = prev.r; body.style.overflow = prev.b; body.style.paddingRight = prev.pad;
     };
   }, [mounted]);
 
