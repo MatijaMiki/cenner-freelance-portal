@@ -39,6 +39,7 @@ const Inbox = lazy(() => import('./pages/Inbox'));
 const Contracts = lazy(() => import('./pages/Contracts'));
 const ContractDetail = lazy(() => import('./pages/ContractDetail'));
 const Ranwhat = lazy(() => import('./pages/Ranwhat'));
+const Stenvakt = lazy(() => import('./pages/Stenvakt'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 const Unsubscribe = lazy(() => import('./pages/Unsubscribe'));
@@ -100,6 +101,7 @@ const App: React.FC = () => {
                   <Route path="/contracts" element={<Contracts />} />
                   <Route path="/contracts/:id" element={<ContractDetail />} />
                   <Route path="/ranwhat" element={<Ranwhat />} />
+                  <Route path="/stenvakt" element={<Stenvakt />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/verify-email" element={<VerifyEmail />} />
                   <Route path="/unsubscribe" element={<Unsubscribe />} />

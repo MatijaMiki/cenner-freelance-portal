@@ -18,6 +18,7 @@ import * as onboarding from './pages/onboarding';
 import * as privacy from './pages/privacy';
 import * as ranwhat from './pages/ranwhat';
 import * as services from './pages/services';
+import * as stenvakt from './pages/stenvakt';
 import * as subscription from './pages/subscription';
 import * as terms from './pages/terms';
 
@@ -29,6 +30,7 @@ export const RENDERERS: Record<string, PageModule> = {
   about,
   cjenik,
   ranwhat,
+  stenvakt,
   community,
   'landing-service': landing.service,
   'landing-city': landing.city,

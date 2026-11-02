@@ -604,6 +604,7 @@ const en: Record<string, string> = {
   'A link-in-bio builder for creators: one page with all your links, your own look, and a share link ready in minutes.': 'A link-in-bio builder for creators: one page with all your links, your own look, and a share link ready in minutes.',
   'This marketplace: freelancer listings, protected payments, identity checks and subscriptions, and the design of this site. Built and run in-house.': 'This marketplace: freelancer listings, protected payments, identity checks and subscriptions, and the design of this site. Built and run in-house.',
   'About ranwhat': 'About ranwhat',
+  'About Stenvakt': 'About Stenvakt',
   'We talk through what you need, your timeline and your budget. No obligation.': 'We talk through what you need, your timeline and your budget. No obligation.',
   'You get a clear scope, a timeline and a fixed price. No hidden extras.': 'You get a clear scope, a timeline and a fixed price. No hidden extras.',
   'We build in stages and show progress. You give feedback until it is right.': 'We build in stages and show progress. You give feedback until it is right.',
@@ -1019,6 +1020,7 @@ const hr: Record<string, string> = {
   'Who runs it': 'Tko ga vodi',
   'Terms of service': 'Uvjeti korištenja',
   'About ranwhat': 'O ranwhatu',
+  'About Stenvakt': 'O Stenvaktu',
 
   // Subscription
   'Simple, Honest Pricing.': 'Jednostavne, poštene cijene.',

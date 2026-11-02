@@ -46,6 +46,7 @@ const COMPANY_LINKS = [
   { label: 'Previous Projects', path: '/services#radovi' },
   { label: 'Onboarding',        path: '/onboarding' },
   { label: 'ranwhat',           path: '/ranwhat' },
+  { label: 'Stenvakt',          path: '/stenvakt' },
   { label: 'Contact',           path: '/about#kontakt' },
 ];
 
