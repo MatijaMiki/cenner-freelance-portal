@@ -500,7 +500,7 @@ Ako razmišljaš o web stranici ili aplikaciji i želiš s timom koji ovako razm
     publishedAt: '2026-11-02',
     pinned: 2,
     author: 'Cenner',
-    content: `Cenner, kao i svaki projekt koji ima korisnike, radi na serverima, i netko ih mora održavati. Iz tog posla nastao je [Stenvakt](https://stenvakt.com), Mac aplikacija koja pregledava, nadzire i ažurira Linux servere preko SSH-a. Evo kako je nastala i što smo naučili. Bez recepata i detalja: priča je važnija.
+    content: `Cenner, kao i svaki projekt koji ima korisnike, radi na serverima, i netko ih mora održavati. Iz tog posla nastao je [Stenvakt](https://stenvakt.com), Mac aplikacija koja pregledava, nadzire i ažurira Linux servere koje sami vodite, preko SSH-a. Evo kako je nastala i što smo naučili. Bez recepata i detalja: priča je važnija.
 
 ## Problem koji smo imali
 
@@ -510,7 +510,7 @@ Alati koji to rješavaju ili su preteški (agenti i paneli koje treba instalirat
 
 ## Ideja koja je sve odredila: promjena se mora moći poništiti
 
-Cijeli dizajn proizašao je iz jednog pitanja: što ako nešto pođe po zlu? Svaka rizična promjena stoga ima sigurnosnu mrežu: prije izmjene sustav pamti stanje, a ako nakon izmjene aplikacija ne uspije ponovno ući, server se vraća na prethodno stanje sam, bez ičije intervencije. Najveći strah administratora tako postaje običan korak u postupku.
+Cijeli dizajn proizašao je iz jednog pitanja: što ako nešto pođe po zlu? Izmjene vatrozida i SSH-a, koje su najopasnije za zaključavanje, stoga imaju sigurnosnu mrežu: server prije izmjene postavlja mjerač vremena za povratak, a promjena se zadržava tek kad se aplikacija uspije ponovno prijaviti novom vezom. Ako ne uspije, server se vraća na prethodno stanje sam, bez ičije intervencije. Najveći strah administratora tako postaje običan korak u postupku.
 
 Tek kad je to radilo, imalo je smisla dodavati ostalo: pregled s ocjenama i popisom što riješiti prvo, praćenje neobične aktivnosti i ažuriranje programa s provjerom prije i poslije.
 
@@ -524,7 +524,7 @@ Tek kad je to radilo, imalo je smisla dodavati ostalo: pregled s ocjenama i popi
 
 ## Pametni pomoćnici, ali s pravilima
 
-Danas se sve više radi uz AI asistente, pa smo omogućili da i oni čitaju izvještaje i predlažu izmjene. Pravilo je jednostavno: asistent predlaže, čovjek odobrava. Asistent nikad ne dobiva lozinke ni ključeve, ne može isključiti sigurnosnu mrežu, a sve što dolazi sa servera smatra se nepouzdanim tekstom. Iz toga smo naučili nešto korisno i za druge projekte: kad u sustav pustiš automatiku, najprije odluči što joj je zabranjeno, tek onda što smije.
+Danas se sve više radi uz AI asistente, pa smo omogućili da i oni čitaju izvještaje i predlažu izmjene. Pravilo je jednostavno: asistent predlaže, čovjek odobrava. Asistent nikad ne dobiva lozinke ni ključeve, ne može isključiti sigurnosni način, a sve što dolazi sa servera smatra se nepouzdanim tekstom. Iz toga smo naučili nešto korisno i za druge projekte: kad u sustav pustiš automatiku, najprije odluči što joj je zabranjeno, tek onda što smije.
 
 ## Što smo naučili usput
 
@@ -534,7 +534,7 @@ Danas se sve više radi uz AI asistente, pa smo omogućili da i oni čitaju izvj
 
 **Jedan problem, jedna stranica.** Web stranica ima vodiče, svaki odgovara na jedno konkretno pitanje koje smo i sami googlali dok smo održavali servere. To je ista lekcija kao kod svakog sadržaja: ljudi ne traže tvoj proizvod, traže rješenje svog problema.
 
-**Dovrši, pa objavi.** Aplikacija je dugo bila "skoro gotova". Pravu kvalitetu dobila je tek kad smo je pustili svima i počeli ispravljati ono što stvarni korisnici pronađu. Prvo javno izdanje objavljeno je početkom studenog 2026.
+**Dovrši, pa objavi.** Aplikacija je dugo bila "skoro gotova". Pravu kvalitetu dobila je tek kad smo je pustili svima i počeli ispravljati ono što stvarni korisnici pronađu. Prvo javno izdanje objavljeno je početkom studenog 2026, a besplatna verzija radi bez računa i bez ograničenja broja servera.
 
 ## Što to znači za tvoj projekt
 

@@ -36,13 +36,13 @@ const SERVICES: { id: string; title: string; desc: string; points: string[]; pri
 ];
 
 /** In the order the page shows them (sorted by colour, warm to cool). */
-const PROJECTS: { title: string; url: string; internal?: string; internalLabel?: string; category: string; desc: string }[] = [
-  { title: 'ranwhat', url: 'https://ranwhat.com', internal: '/ranwhat', category: 'Our product · AI agent security',
+const PROJECTS: { title: string; url: string; internal?: string; internalLabel?: string; badges?: string[]; category: string; desc: string }[] = [
+  { title: 'ranwhat', url: 'https://ranwhat.com', internal: '/ranwhat', badges: ['In active development', 'A Cenner project'], category: 'Our product · AI agent security',
     desc: 'A flight recorder for AI coding agents and a scanner for the authority they hold: open-source CLI, website and a paid catalogue feed. Our own product, built and run at Cenner.' },
   { title: 'Selected Real Estate', url: 'https://selectedrealestate.hr', category: 'Real estate',
     desc: 'Premium portal for a Croatian luxury property agency: property listings, search, agent profiles and several languages.' },
-  { title: 'Stenvakt', url: 'https://stenvakt.com', internal: '/stenvakt', internalLabel: 'About Stenvakt', category: 'Our product · Server maintenance',
-    desc: 'A Mac app that reviews, watches and updates Linux servers over SSH, with a safe mode that rolls a change back by itself if access is lost, plus a website of server guides. Our own product, built and run at Cenner.' },
+  { title: 'Stenvakt', url: 'https://stenvakt.com', internal: '/stenvakt', internalLabel: 'About Stenvakt', badges: ['In active development', 'A Cenner project'], category: 'Our product · Server maintenance',
+    desc: 'A Mac app that reviews, watches and updates Linux servers over SSH, with a safe mode that undoes firewall and SSH changes if access is lost, plus a website of server guides. Our own product, built and run at Cenner.' },
   { title: 'Čistimo', url: 'https://cistimo.com', category: 'Cleaning services',
     desc: 'Booking platform and web presence for a Zagreb apartment and office cleaning company: online scheduling, clear pricing and several languages.' },
   { title: 'Shorten', url: 'https://shorten.cenner.hr', category: 'Our product · Link shortener',
@@ -90,7 +90,7 @@ export const render: PageModule['render'] = () => ({
       blocks(
         h3(p.title),
         t(p.desc),
-        list([`${t(p.category)}`, link(p.url.replace(/^https:\/\//, ''), p.url), p.internal && link(t(p.internalLabel || 'About ranwhat'), p.internal)]),
+        list([`${t(p.category)}`, ...(p.badges || []).map(t), link(p.url.replace(/^https:\/\//, ''), p.url), p.internal && link(t(p.internalLabel || 'About ranwhat'), p.internal)]),
       ),
     ),
     h2(t('How It Works')),
