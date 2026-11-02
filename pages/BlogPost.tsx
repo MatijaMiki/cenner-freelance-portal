@@ -111,7 +111,7 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
   return (
     <>
       <button type="button" onClick={open} aria-label={`Povećaj sliku: ${p.alt || ''}`} className="my-8 block w-full cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky">
-        <img ref={thumb} className="w-full border-2 border-ink" style={{ visibility: mounted ? 'hidden' : 'visible' }} loading="lazy" {...p} />
+        <img ref={thumb} className="w-full border-2 border-ink" style={{ visibility: shown ? 'hidden' : 'visible' }} loading="lazy" {...p} />
       </button>
       {mounted && box && createPortal(
         <>
@@ -121,7 +121,7 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
             style={{ background: 'rgba(11,12,14,0.5)', opacity: shown ? 1 : 0, transition: `opacity ${shown ? ZOOM_MS : Math.round(ZOOM_MS * 0.6)}ms ease` }} />
           <div role="dialog" aria-modal="true" aria-label={p.alt || 'Slika'} className="pointer-events-none fixed inset-0 z-[60]">
             <img src={p.src} alt={p.alt} onClick={close}
-              className="pointer-events-auto fixed cursor-zoom-out border-2 border-ink bg-white object-contain shadow-[0_20px_60px_rgba(0,0,0,0.35)] motion-reduce:!transition-none"
+              className="pointer-events-auto fixed cursor-zoom-out border-2 border-ink object-contain shadow-[0_20px_60px_rgba(0,0,0,0.35)] motion-reduce:!transition-none"
               style={{ left: box.left, top: box.top, width: box.width, height: box.height, transition: `left ${ease}, top ${ease}, width ${ease}, height ${ease}` }} />
             <button type="button" onClick={close} aria-label="Zatvori"
               className="pointer-events-auto fixed bottom-4 right-4 border-2 border-ink bg-white p-2 text-ink hover:bg-ink hover:text-white"
