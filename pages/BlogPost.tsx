@@ -36,28 +36,92 @@ const fmtDate = (iso?: string | null) => {
 };
 
 // Markdown links: a site path opens in the same tab through the router, anything else in a new one.
-/** An article image that opens full screen on click (Esc, a click or the button closes it), so a screenshot can be read. */
+/**
+ * An article image that opens full screen on click, so a screenshot can be read. The picture grows from where it
+ * sits to fit the screen and shrinks back on close (Esc, a click or the button), over a light veil. The page
+ * does not scroll while it is open.
+ */
+const ZOOM_MS = 320;
+type Box = { left: number; top: number; width: number; height: number };
+
+const fitBox = (img: HTMLImageElement): Box => {
+  const ratio = (img.naturalWidth || 16) / (img.naturalHeight || 9);
+  const maxW = window.innerWidth * 0.96, maxH = window.innerHeight * 0.92;
+  const width = Math.min(maxW, maxH * ratio), height = width / ratio;
+  return { left: (window.innerWidth - width) / 2, top: (window.innerHeight - height) / 2, width, height };
+};
+const boxOf = (el: Element): Box => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; };
+
 const ZoomImg: Components['img'] = ({ node, ...p }) => {
-  const [open, setOpen] = useState(false);
+  const thumb = React.useRef<HTMLImageElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [shown, setShown] = useState(false);     // false: the veil is clear and the picture sits on its thumbnail
+  const [box, setBox] = useState<Box | null>(null);
+  const closing = React.useRef(false);
+
+  const open = () => {
+    if (!thumb.current) return;
+    closing.current = false;
+    setBox(boxOf(thumb.current));
+    setMounted(true);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (!thumb.current) return;
+      setBox(fitBox(thumb.current));
+      setShown(true);
+    }));
+  };
+  const close = () => {
+    if (closing.current || !thumb.current) return;
+    closing.current = true;
+    setBox(boxOf(thumb.current));   // where the thumbnail is now, in case the page moved
+    setShown(false);
+    window.setTimeout(() => { setMounted(false); closing.current = false; }, ZOOM_MS);
+  };
+
   useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    if (!mounted) return;
+    const root = document.documentElement, body = document.body;
+    const prev = { r: root.style.overflow, b: body.style.overflow, pad: body.style.paddingRight };
+    const gap = window.innerWidth - root.clientWidth;   // keep the page from jumping when the scrollbar goes
+    root.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    if (gap > 0) body.style.paddingRight = `${gap}px`;
+    const stop = (e: Event) => e.preventDefault();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close();
+      else if ([' ', 'PageUp', 'PageDown', 'Home', 'End', 'ArrowUp', 'ArrowDown'].includes(e.key)) e.preventDefault();
+    };
+    const onResize = () => { if (thumb.current && !closing.current) setBox(fitBox(thumb.current)); };
+    window.addEventListener('wheel', stop, { passive: false });
+    window.addEventListener('touchmove', stop, { passive: false });
     window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
-  }, [open]);
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('wheel', stop);
+      window.removeEventListener('touchmove', stop);
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('resize', onResize);
+      root.style.overflow = prev.r; body.style.overflow = prev.b; body.style.paddingRight = prev.pad;
+    };
+  }, [mounted]);
+
+  const ease = `${ZOOM_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`;
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} aria-label={`Povećaj sliku: ${p.alt || ''}`} className="my-8 block w-full cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky">
-        <img className="w-full border-2 border-ink" loading="lazy" {...p} />
+      <button type="button" onClick={open} aria-label={`Povećaj sliku: ${p.alt || ''}`} className="my-8 block w-full cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky">
+        <img ref={thumb} className="w-full border-2 border-ink" style={{ visibility: mounted ? 'hidden' : 'visible' }} loading="lazy" {...p} />
       </button>
-      {open && createPortal(
-        <div role="dialog" aria-modal="true" aria-label={p.alt || 'Slika'} onClick={() => setOpen(false)} className="fixed inset-0 z-[100] flex cursor-zoom-out items-center justify-center bg-black/90 p-3 md:p-6">
-          <button type="button" onClick={() => setOpen(false)} aria-label="Zatvori" className="absolute right-4 top-4 border-2 border-white bg-black p-2 text-white hover:bg-white hover:text-black">
+      {mounted && box && createPortal(
+        <div role="dialog" aria-modal="true" aria-label={p.alt || 'Slika'} onClick={close}
+          className="fixed inset-0 z-[100] cursor-zoom-out motion-reduce:!transition-none"
+          style={{ background: 'rgba(11,12,14,0.5)', opacity: shown ? 1 : 0, transition: `opacity ${ZOOM_MS}ms ease` }}>
+          <img src={p.src} alt={p.alt}
+            className="fixed border-2 border-ink bg-white object-contain shadow-[0_20px_60px_rgba(0,0,0,0.35)] motion-reduce:!transition-none"
+            style={{ left: box.left, top: box.top, width: box.width, height: box.height, transition: `left ${ease}, top ${ease}, width ${ease}, height ${ease}` }} />
+          <button type="button" onClick={(e) => { e.stopPropagation(); close(); }} aria-label="Zatvori"
+            className="fixed right-4 top-4 border-2 border-ink bg-white p-2 text-ink hover:bg-ink hover:text-white">
             <X size={22} aria-hidden="true" />
           </button>
-          <img src={p.src} alt={p.alt} className="max-h-[94vh] max-w-[96vw] object-contain" />
         </div>,
         document.body,
       )}
