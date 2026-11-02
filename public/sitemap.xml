@@ -58,6 +58,14 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/ranwhat" />
   </url>
   <url>
+    <loc>https://cenner.hr/stenvakt</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="hr-HR"     href="https://cenner.hr/stenvakt" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/stenvakt" />
+  </url>
+  <url>
     <loc>https://cenner.hr/onboarding</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>monthly</changefreq>

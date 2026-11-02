@@ -49,7 +49,7 @@ const SERVICES: Service[] = [
 /** bg and fg are the project's own colours, taken from its site: its signature colour as the
  *  ground, and its own dark or light for the type. palette is its darkest colour and four more
  *  from its stylesheet, shown as its swatch. */
-type Project = { id: string; title: string; url?: string; internal?: string; category: string; desc: string; bg: string; fg: string; palette: string[] };
+type Project = { id: string; title: string; url?: string; internal?: string; internalLabel?: string; category: string; desc: string; bg: string; fg: string; palette: string[] };
 
 const PROJECTS: Project[] = [
   { id: 'cistimo', title: 'Čistimo', url: 'https://cistimo.com', category: 'Cleaning services',
@@ -64,7 +64,7 @@ const PROJECTS: Project[] = [
     desc: 'A flight recorder for AI coding agents and a scanner for the authority they hold: open-source CLI, website and a paid catalogue feed. Our own product, built and run at Cenner.',
     bg: '#ea8471', fg: '#0e1318',
     palette: ['#0e1318', '#ea8471', '#e0b25c', '#72c69d', '#8db4dd'] },
-  { id: 'stenvakt', title: 'Stenvakt', url: 'https://stenvakt.com', category: 'Our product · Server maintenance',
+  { id: 'stenvakt', title: 'Stenvakt', url: 'https://stenvakt.com', internal: '/stenvakt', internalLabel: 'About Stenvakt', category: 'Our product · Server maintenance',
     desc: 'A Mac app that reviews, watches and updates Linux servers over SSH, with a safe mode that rolls a change back by itself if access is lost, plus a website of server guides. Our own product, built and run at Cenner.',
     bg: '#ffe927', fg: '#111111',
     palette: ['#111111', '#ffe927', '#1e4bd7', '#d71e1e', '#ffffff'] },
@@ -247,7 +247,7 @@ const Services: React.FC = () => {
               </div>
               {p.internal && (
                 <Link to={p.internal} className="relative z-10 mt-6 inline-flex items-center gap-2 self-start font-display text-[1.0625rem] font-bold underline-offset-4 hover:underline">
-                  {t('About ranwhat')} <ArrowRight size={18} />
+                  {t(p.internalLabel || 'About ranwhat')} <ArrowRight size={18} />
                 </Link>
               )}
             </article>

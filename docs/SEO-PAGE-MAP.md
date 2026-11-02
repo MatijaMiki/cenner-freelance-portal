@@ -30,6 +30,7 @@ ranking pages is not.
 | `/subscription` | pricing | indexable |
 | `/onboarding` | public guide to opening a paušalni obrt; prerendered, in the sitemap, linked from the footer | 12 impr |
 | `/ranwhat` | sister product page | indexable |
+| `/stenvakt` | sister product page | indexable |
 | `/privacy`, `/terms`, `/cookies` | legal | indexable, low priority |
 | `/service/:id`, `/freelancer/:id` | entity pages with their own heads | long tail |
 

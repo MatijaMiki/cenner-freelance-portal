@@ -197,6 +197,29 @@ const ROUTES = [
       </main>`,
   },
   {
+    path: '/stenvakt',
+    title: 'Stenvakt: Server Maintenance App by Cenner | Cenner',
+    description:
+      'Stenvakt is a Mac app that reviews, watches and updates Linux servers over SSH, with a safe mode that undoes a change if access is lost. Built and operated by Cenner, Zagreb.',
+    // The page's own text, so the first byte already says what the page says (keep in step with pages/Stenvakt.tsx).
+    body: `<main style="max-width:1024px;margin:0 auto;padding:80px 24px;font-family:Inter,sans-serif;color:#0b0c0e;">
+        <p style="font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#1b7a3e;margin:0 0 16px;">A Cenner product</p>
+        <h1 style="font-size:56px;font-weight:800;line-height:1.05;margin:0 0 24px;">Stenvakt</h1>
+        <p style="font-size:20px;line-height:1.6;color:#5d6470;max-width:760px;margin:0 0 32px;">A Mac app that reviews, watches and updates your Linux servers over SSH. Nothing is installed on the servers: it sends a short script, shows what it found, and changes only what you approve. Risky changes run in safe mode, which saves the server's state first and rolls the change back by itself if the app cannot get back in.</p>
+        <p style="margin:0 0 56px;"><a href="https://stenvakt.com" style="display:inline-block;background:#002ca5;color:#fff;padding:14px 28px;text-decoration:none;font-weight:800;">stenvakt.com</a></p>
+        <h2 style="font-size:30px;font-weight:800;margin:0 0 24px;">What it does</h2>
+        <h3 style="font-size:20px;margin:0 0 8px;">Review</h3><p style="margin:0 0 24px;color:#5d6470;">Scores each server for security and health and lists what to fix first. Read-only: nothing changes until you preview a fix.</p>
+        <h3 style="font-size:20px;margin:0 0 8px;">Watch</h3><p style="margin:0 0 24px;color:#5d6470;">Outside activity read from the servers' own logs: failed logins, blocked ports, bots and probes, with a one-click block that never touches your own address.</p>
+        <h3 style="font-size:20px;margin:0 0 8px;">Update</h3><p style="margin:0 0 24px;color:#5d6470;">Patches programs one at a time, checking services, ports and containers before and after, and stops at the first regression.</p>
+        <h3 style="font-size:20px;margin:0 0 8px;">Safe mode</h3><p style="margin:0 0 24px;color:#5d6470;">Every risky firewall or SSH change saves the server's state first and rolls back by itself if the app cannot log back in.</p>
+        <h3 style="font-size:20px;margin:0 0 8px;">AI assistants</h3><p style="margin:0 0 24px;color:#5d6470;">Assistants such as Claude Code can read reports and propose changes. You approve every one; they never receive passwords or keys, and they cannot switch safe mode off.</p>
+        <h2 style="font-size:24px;font-weight:800;margin:32px 0 16px;">Guides</h2>
+        <p style="color:#5d6470;line-height:1.7;margin:0 0 24px;">The Stenvakt website also carries a library of practical server guides, one problem per page: SSH, firewalls, exposed databases, updates and backups. <a href="https://stenvakt.com/guides" style="color:#002ca5;">stenvakt.com/guides</a></p>
+        <h2 style="font-size:24px;font-weight:800;margin:0 0 16px;">Try it</h2>
+        <p style="color:#5d6470;line-height:1.7;margin:0;">Download the free version at stenvakt.com/download. <a href="mailto:hello@stenvakt.com" style="color:#002ca5;">hello@stenvakt.com</a></p>
+      </main>`,
+  },
+  {
     path: '/blog',
     title: 'Blog: Vodiči za Klijente i Freelancere | Cenner',
     description: BLOG_INDEX_DESCRIPTION,
