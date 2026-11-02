@@ -22,8 +22,18 @@ const PALETTES: string[][] = [
   ['#f2c14e', '#ef6f6c', '#9a63e6', '#4ea0f0', '#3fc1a5'],       // sunset to sea
 ];
 
+// Posts about our own products wear that product's colours: ranwhat's brick red to amber, Stenvakt's
+// black with its yellow and blue.
+const BRANDS: Record<string, { ground: string; colours: string[] }> = {
+  'kako-smo-izradili-ranwhat': { ground: GROUND, colours: ['#7a2c1a', '#b8482d', '#d9751e', '#d1a821'] },
+  'kako-smo-izradili-stenvakt': { ground: '#111111', colours: ['#665e18', '#c9b81f', '#ffe927', '#1e4bd7'] },
+};
+
 export const BlogCover: React.FC<{ seed: string; className?: string }> = ({ seed, className = '' }) => {
-  const palette = React.useMemo(() => [GROUND, ...PALETTES[hash(seed || 'cenner') % PALETTES.length]], [seed]);
+  const palette = React.useMemo(() => {
+    const brand = BRANDS[seed];
+    return brand ? [brand.ground, ...brand.colours] : [GROUND, ...PALETTES[hash(seed || 'cenner') % PALETTES.length]];
+  }, [seed]);
   return <ProjectDots palette={palette} className={className} />;
 };
 
