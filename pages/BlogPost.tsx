@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import type { Components } from 'react-markdown';
-import { ArrowLeft, Calendar, Edit2, BookOpen } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { ArrowLeft, Calendar, Edit2, BookOpen, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import SEO from '../components/SEO';
@@ -35,6 +36,35 @@ const fmtDate = (iso?: string | null) => {
 };
 
 // Markdown links: a site path opens in the same tab through the router, anything else in a new one.
+/** An article image that opens full screen on click (Esc, a click or the button closes it), so a screenshot can be read. */
+const ZoomImg: Components['img'] = ({ node, ...p }) => {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
+  }, [open]);
+  return (
+    <>
+      <button type="button" onClick={() => setOpen(true)} aria-label={`Povećaj sliku: ${p.alt || ''}`} className="my-8 block w-full cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky">
+        <img className="w-full border-2 border-ink" loading="lazy" {...p} />
+      </button>
+      {open && createPortal(
+        <div role="dialog" aria-modal="true" aria-label={p.alt || 'Slika'} onClick={() => setOpen(false)} className="fixed inset-0 z-[100] flex cursor-zoom-out items-center justify-center bg-black/90 p-3 md:p-6">
+          <button type="button" onClick={() => setOpen(false)} aria-label="Zatvori" className="absolute right-4 top-4 border-2 border-white bg-black p-2 text-white hover:bg-white hover:text-black">
+            <X size={22} aria-hidden="true" />
+          </button>
+          <img src={p.src} alt={p.alt} className="max-h-[94vh] max-w-[96vw] object-contain" />
+        </div>,
+        document.body,
+      )}
+    </>
+  );
+};
+
 const MdLink: Components['a'] = ({ node, href = '', ...p }) =>
   href.startsWith('/')
     ? <Link to={href} className="text-sky underline underline-offset-[3px] hover:text-ink" {...p} />
@@ -180,7 +210,7 @@ const BlogPost: React.FC = () => {
               </div>
             )}
 
-            <div data-calm className="blog-content max-w-[46rem] space-y-6 text-[1.1875rem] leading-[1.7] text-ink/90">
+            <div data-calm className="blog-content max-w-[60rem] space-y-6 text-[1.1875rem] leading-[1.7] text-ink/90 lg:text-[1.3125rem]">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -198,7 +228,7 @@ const BlogPost: React.FC = () => {
                   code: ({ node, ...p }) => <code className="bg-paper2 px-1.5 py-0.5 font-mono text-[0.9em] text-ink" {...p} />,
                   pre:  ({ node, ...p }) => <pre className="overflow-x-auto border-2 border-ink bg-ink p-4 text-[0.9rem] text-white [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-white" {...p} />,
                   hr:   () => <hr className="my-12 border-t-2 border-ink" />,
-                  img:  ({ node, ...p }) => <img className="my-8 w-full border-2 border-ink" loading="lazy" {...p} />,
+                  img: ZoomImg,
                   table: ({ node, ...p }) => <div className="overflow-x-auto"><table className="w-full border-2 border-ink text-[1rem]" {...p} /></div>,
                   th: ({ node, ...p }) => <th className="border-2 border-ink bg-paper2 px-3 py-2 text-left font-display font-bold" {...p} />,
                   td: ({ node, ...p }) => <td className="border-2 border-ink px-3 py-2" {...p} />,
