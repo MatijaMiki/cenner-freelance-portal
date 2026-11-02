@@ -121,10 +121,10 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
             style={{ background: 'rgba(11,12,14,0.5)', opacity: shown ? 1 : 0, transition: `opacity ${shown ? ZOOM_MS : Math.round(ZOOM_MS * 0.6)}ms ease` }} />
           <div role="dialog" aria-modal="true" aria-label={p.alt || 'Slika'} className="pointer-events-none fixed inset-0 z-[60]">
             <img src={p.src} alt={p.alt} onClick={close}
-              className="pointer-events-auto fixed cursor-zoom-out border-2 border-ink object-contain shadow-[0_20px_60px_rgba(0,0,0,0.35)] motion-reduce:!transition-none"
+              className="pointer-events-auto fixed cursor-zoom-out border-4 border-ink object-fill shadow-[0_20px_60px_rgba(0,0,0,0.35)] motion-reduce:!transition-none"
               style={{ left: box.left, top: box.top, width: box.width, height: box.height, transition: `left ${ease}, top ${ease}, width ${ease}, height ${ease}` }} />
             <button type="button" onClick={close} aria-label="Zatvori"
-              className="pointer-events-auto fixed bottom-4 right-4 border-2 border-ink bg-white p-2 text-ink hover:bg-ink hover:text-white"
+              className="pointer-events-auto fixed bottom-4 left-4 border-2 border-ink bg-white p-2 text-ink hover:bg-ink hover:text-white"
               style={{ opacity: shown ? 1 : 0, transition: 'opacity 120ms ease' }}>
               <X size={22} aria-hidden="true" />
             </button>
