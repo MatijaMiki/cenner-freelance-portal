@@ -416,6 +416,123 @@ Kad imaš identitet, slijede vizuali za društvene mreže, oglase i tisak. Ako s
 Na Cenneru možeš pregledati gotove pakete grafičkih dizajnera s fiksnom cijenom i rokom isporuke ili objaviti projekt i usporediti ponude. Dizajneri prolaze KYC provjeru identiteta, a plaćanje se oslobađa po isporuci. Ako želiš da posao preuzme Cenner tim, grafički dizajn (logo, vizualni identitet, grafike za društvene mreže i oglase, datoteke spremne za tisak) radimo od 300 €. Pogledaj [usluge Cenner tima](/services).
 `,
   },
+  {
+    slug: 'kako-smo-izradili-ranwhat',
+    title: 'Kako smo izradili ranwhat: od problema do proizvoda koji radi',
+    seoTitle: 'Kako smo izradili ranwhat: studio iza proizvoda',
+    description:
+      'Priča o izradi ranwhata, besplatnog alata koji provjerava što su AI agenti za kodiranje zapisali na tvoje računalo: zašto smo ga napravili, što je bilo teško i što smo naučili.',
+    excerpt:
+      'Zašto smo napravili alat za sigurnost AI agenata, koje smo odluke donijeli, gdje smo pogriješili i što iz toga vrijedi za svaki web projekt.',
+    keywords: [
+      'izrada web aplikacije',
+      'izrada web stranica',
+      'razvoj softvera po mjeri',
+      'web developer Hrvatska',
+      'izrada web rješenja',
+    ],
+    services: ['izrada-web-stranica', 'web-developeri'],
+    publishedAt: '2026-11-02',
+    author: 'Cenner',
+    content: `Uz klijentske projekte, Cenner tim gradi i vlastite proizvode. Jedan od njih je [ranwhat](https://ranwhat.com), besplatan alat otvorenog koda koji provjerava što su AI agenti za kodiranje (Claude Code, Codex, Cursor i drugi) ostavili na tvom računalu. Ovdje pišemo kako je nastao, što nas je namučilo i što iz toga vrijedi za svakoga tko naručuje ili gradi web proizvod. Namjerno ne ulazimo u tehničke detalje: priča je zanimljivija od recepta.
+
+## Zašto smo ga uopće napravili
+
+I sami svaki dan radimo s AI agentima. Primijetili smo nešto što gotovo nitko ne gleda: agent sve što radi sprema u običnu tekstualnu datoteku na disku. Ako je neka naredba ispisala lozinku ili ključ za pristup, taj je podatak sada zapisan u povijesti razgovora. Alati koji traže tajne u kodu to ne vide, jer tajna nije u kodu nego u zapisu razgovora.
+
+Pitanje "što je moj agent zapravo radio i što je usput pročitao?" nije imalo dobar odgovor. Zato smo ga napravili sami.
+
+## Odluke koje su oblikovale proizvod
+
+- **Sve se događa na tvom računalu.** Alat nema račun, ne šalje podatke i ne treba internet. Za alat koji dira osjetljive podatke to nije marketing, nego uvjet da mu itko vjeruje.
+- **Besplatno mora ostati besplatno.** Plaćeni dio rastemo samo funkcijama koje bez poslužitelja ne mogu postojati. Ništa što se računa lokalno ne zaključavamo iza pretplate, jer bi to prije ili kasnije slomilo povjerenje korisnika.
+- **Prvo mjerenje, onda tvrdnje.** Napravili smo vlastiti test s unaprijed postavljenim tajnama i mamcima te objavljujemo samo ono što bilo tko može ponoviti. U proizvodu koji govori o sigurnosti, preuveličana tvrdnja je najgora moguća pogreška.
+- **Ne kopiramo konkurenciju.** Kad se pojavio sličan alat, odlučili smo ugraditi vlastite verzije zamisli koje vrijede, ali nikad tuđi kod, tekst ni pravila. Ideje su slobodne, tuđi rad nije.
+
+## Što je bilo teško
+
+**Svaki alat piše svoj format.** Što više agenata podržavaš, to više različitih zapisa moraš razumjeti, a oni se s novim verzijama mijenjaju. Naučili smo sve svesti na jedan zajednički oblik čim podaci uđu u alat, tako da novi agent znači jedan novi čitač, a ne promjene posvuda.
+
+**Kod koji čita tuđi tekst mora biti otporan na zloban tekst.** Pokazalo se da se jedan naoko bezazlen izraz za prepoznavanje na neobičnom ulazu uspori do te mjere da se alat praktički zaledi. Našla ga je provjera koda, ne naši testovi. Od tada svaki dio koji čita nepouzdan tekst ima testove s namjerno pakosnim ulazima.
+
+**"Radi kod mene" nije dovoljno.** Dio testova pretpostavljao je Mac, pa su na Linuxu i Windowsu pali. Naučili smo da se prenosivost ne dodaje na kraju, nego se provjerava od prvog dana, na svim sustavima koje obećavaš.
+
+**Lažni alarmi su jednako loši kao propušteni.** Alat koji viče na svaku sitnicu korisnik ugasi. Dugo smo ugađali granicu između "upozori" i "šuti", i svaku promjenu mjerili na istom testu.
+
+## Web stranica je dio proizvoda
+
+Stranica nije samo ulaz, nego dio onoga što isporučujemo: vodiči odgovaraju na pitanja koja ljudi doista postavljaju, a svaka stranica ima i verziju koju strojevi lako čitaju. Realno, rezultati dolaze sporo. Prvih nekoliko tjedana pretraživač je stranicu pokazivao tek nekoliko stotina puta, uz samo nekoliko klikova. Za novu domenu bez poveznica to je normalno, i dobar podsjetnik klijentima: SEO nije prekidač, nego rad koji se zbraja tjednima.
+
+Ni objava na Hacker Newsu nije prošla iz prve. Nove račune zajednica filtrira i cijeni sudjelovanje više od reklame. Prošli smo kroz to i naučili da proizvod ne postoji dok ga netko ne pronađe, a to treba graditi odvojeno od koda.
+
+## Što iz ovoga vrijedi za tvoj projekt
+
+1. **Odluči što nikad nećeš naplaćivati** prije nego što prvi put naplatiš nešto.
+2. **Mjeri prije nego što tvrdiš.** Brojke bez načina da ih netko ponovi ne vrijede.
+3. **Nepouzdan ulaz tretiraj kao neprijatelja.** Obrasci, uploadi i uvezeni podaci jednako vrijede kao i alati.
+4. **Provjera koda od druge osobe (ili drugog alata) hvata ono što autor ne vidi.**
+5. **Planiraj vidljivost kao dio projekta**, ne kao nešto što dolazi nakon objave.
+
+Ako razmišljaš o web stranici ili aplikaciji i želiš s timom koji ovako razmišlja, pogledaj [izradu web stranica](/usluge/izrada-web-stranica) ili [usluge Cenner tima](/services). Alat možeš isprobati besplatno na [ranwhat.com](https://ranwhat.com).
+`,
+  },
+  {
+    slug: 'kako-smo-izradili-stenvakt',
+    title: 'Kako smo izradili Stenvakt: aplikacija za održavanje servera bez straha',
+    seoTitle: 'Kako smo izradili Stenvakt: studio iza proizvoda',
+    description:
+      'Priča o izradi Stenvakta, Mac aplikacije za pregled, zaštitu i ažuriranje Linux servera: zašto smo je napravili, kako smo se riješili straha od zaključavanja i što smo naučili.',
+    excerpt:
+      'Zašto smo napravili aplikaciju za održavanje servera, kako smo riješili najveći strah administratora i što smo usput naučili o dizajnu i proizvodima.',
+    keywords: [
+      'izrada web aplikacije',
+      'razvoj aplikacija po mjeri',
+      'izrada web stranica',
+      'web developer Hrvatska',
+      'održavanje servera',
+    ],
+    services: ['izrada-web-stranica', 'web-developeri'],
+    publishedAt: '2026-11-02',
+    author: 'Cenner',
+    content: `Cenner, kao i svaki projekt koji ima korisnike, radi na serverima, i netko ih mora održavati. Iz tog posla nastao je [Stenvakt](https://stenvakt.com), Mac aplikacija koja pregledava, nadzire i ažurira Linux servere preko SSH-a. Evo kako je nastala i što smo naučili. Bez recepata i detalja: priča je važnija.
+
+## Problem koji smo imali
+
+Održavanje servera ručno je dosadno i opasno u isto vrijeme. Dosadno jer se isti koraci ponavljaju: ažuriranja, vatrozid, pristup, sigurnosne kopije. Opasno jer jedna pogrešna naredba može zaključati tebe izvan tvog servera. Svatko tko to radi zna taj trenutak kad pritisneš Enter i moliš se da se veza ne prekine.
+
+Alati koji to rješavaju ili su preteški (agenti i paneli koje treba instalirati na svaki server) ili prelaki (skripta iz tutorijala koju slijepo pokreneš). Htjeli smo nešto između: jednostavnu aplikaciju koja ništa ne instalira na servere, pokazuje što je loše i mijenja samo ono što odobriš.
+
+## Ideja koja je sve odredila: promjena se mora moći poništiti
+
+Cijeli dizajn proizašao je iz jednog pitanja: što ako nešto pođe po zlu? Svaka rizična promjena stoga ima sigurnosnu mrežu: prije izmjene sustav pamti stanje, a ako nakon izmjene aplikacija ne uspije ponovno ući, server se vraća na prethodno stanje sam, bez ičije intervencije. Najveći strah administratora tako postaje običan korak u postupku.
+
+Tek kad je to radilo, imalo je smisla dodavati ostalo: pregled s ocjenama i popisom što riješiti prvo, praćenje neobične aktivnosti i ažuriranje programa s provjerom prije i poslije.
+
+## Pametni pomoćnici, ali s pravilima
+
+Danas se sve više radi uz AI asistente, pa smo omogućili da i oni čitaju izvještaje i predlažu izmjene. Pravilo je jednostavno: asistent predlaže, čovjek odobrava. Asistent nikad ne dobiva lozinke ni ključeve, ne može isključiti sigurnosnu mrežu, a sve što dolazi sa servera smatra se nepouzdanim tekstom. Iz toga smo naučili nešto korisno i za druge projekte: kad u sustav pustiš automatiku, najprije odluči što joj je zabranjeno, tek onda što smije.
+
+## Što smo naučili usput
+
+**Ime je teže nego što izgleda.** Većina riječi i elegantnih izmišljotina već je zauzeta. Završili smo s izmišljenom riječju, jer ime koje je moguće steći i zadržati vrijedi više od zgodnog imena koje ti nikad neće pripadati.
+
+**Inspiracija nije kopiranje.** Prvi dizajn aplikacije bio je preblizu jednom uzoru koji smo gledali. Primijetili smo to na vrijeme i uklonili baš ona mjesta koja su bila preuzeta, a ostavili ono što radi: raspored, boje i način rada su naši. Pouka za svakog klijenta koji kaže "želim kao kod njih": uzori su dobri za smjer, ali konačan izgled mora biti vlastiti.
+
+**Jedan problem, jedna stranica.** Web stranica ima vodiče, svaki odgovara na jedno konkretno pitanje koje smo i sami googlali dok smo održavali servere. To je ista lekcija kao kod svakog sadržaja: ljudi ne traže tvoj proizvod, traže rješenje svog problema.
+
+**Dovrši, pa objavi.** Aplikacija je dugo bila "skoro gotova". Pravu kvalitetu dobila je tek kad smo je pustili svima i počeli ispravljati ono što stvarni korisnici pronađu. Prvo javno izdanje objavljeno je početkom studenog 2026.
+
+## Što to znači za tvoj projekt
+
+1. **Najprije osmisli što se događa kad nešto pođe po zlu**, tek onda što se događa kad sve radi.
+2. **Automatiku ograniči prije nego joj daš moć.**
+3. **Uzori određuju smjer, ne izgled.**
+4. **Sadržaj piši oko pitanja koja ljudi postavljaju**, ne oko onoga što ti želiš reći.
+5. **Objavi prije nego što bude savršeno**, ali nikad prije nego što je sigurno.
+
+Ako želiš web stranicu ili aplikaciju od tima koji svoje proizvode gradi na isti način, pogledaj [izradu web stranica](/usluge/izrada-web-stranica) ili [usluge Cenner tima](/services). Stenvakt možeš pogledati na [stenvakt.com](https://stenvakt.com), a priču o našem drugom proizvodu pročitaj u članku [Kako smo izradili ranwhat](/blog/kako-smo-izradili-ranwhat).
+`,
+  },
 ];
 
 /** Posts newest first, as the blog index lists them. */
