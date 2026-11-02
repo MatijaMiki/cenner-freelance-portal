@@ -433,6 +433,7 @@ Na Cenneru možeš pregledati gotove pakete grafičkih dizajnera s fiksnom cijen
     ],
     services: ['izrada-web-stranica', 'web-developeri'],
     publishedAt: '2026-11-02',
+    pinned: 1,
     author: 'Cenner',
     content: `Uz klijentske projekte, Cenner tim gradi i vlastite proizvode. Jedan od njih je [ranwhat](https://ranwhat.com), besplatan alat otvorenog koda koji provjerava što su AI agenti za kodiranje (Claude Code, Codex, Cursor i drugi) ostavili na tvom računalu. Ovdje pišemo kako je nastao, što nas je namučilo i što iz toga vrijedi za svakoga tko naručuje ili gradi web proizvod. Namjerno ne ulazimo u tehničke detalje: priča je zanimljivija od recepta.
 
@@ -493,6 +494,7 @@ Ako razmišljaš o web stranici ili aplikaciji i želiš s timom koji ovako razm
     ],
     services: ['izrada-web-stranica', 'web-developeri'],
     publishedAt: '2026-11-02',
+    pinned: 2,
     author: 'Cenner',
     content: `Cenner, kao i svaki projekt koji ima korisnike, radi na serverima, i netko ih mora održavati. Iz tog posla nastao je [Stenvakt](https://stenvakt.com), Mac aplikacija koja pregledava, nadzire i ažurira Linux servere preko SSH-a. Evo kako je nastala i što smo naučili. Bez recepata i detalja: priča je važnija.
 
@@ -535,8 +537,12 @@ Ako želiš web stranicu ili aplikaciju od tima koji svoje proizvode gradi na is
   },
 ];
 
-/** Posts newest first, as the blog index lists them. */
+/** Pinned posts first (1 is the very first), then newest first, as the blog index lists them. */
 export const sortedBlogPosts = () =>
-  [...BLOG_POSTS].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : a.publishedAt > b.publishedAt ? -1 : 0));
+  [...BLOG_POSTS].sort(
+    (a, b) =>
+      (a.pinned || 99) - (b.pinned || 99) ||
+      (a.publishedAt < b.publishedAt ? 1 : a.publishedAt > b.publishedAt ? -1 : 0),
+  );
 
 export const findBlogPost = (slug) => BLOG_POSTS.find((p) => p.slug === slug) || null;

@@ -16,18 +16,19 @@ interface BlogListItem {
   publishedAt?: string | null;
   author: string;
   authorAvatar?: string;
+  pinned?: number;
 }
 
 // Posts written in the repo (content/blog/posts.mjs) are there before the API answers, and stay if it fails.
 const REPO_POSTS: BlogListItem[] = sortedBlogPosts().map(p => ({
-  slug: p.slug, title: p.title, excerpt: p.excerpt, publishedAt: p.publishedAt, author: p.author,
+  slug: p.slug, title: p.title, excerpt: p.excerpt, publishedAt: p.publishedAt, author: p.author, pinned: p.pinned,
 }));
 
-/** Repo and CMS posts in one list, newest first; a CMS post never replaces a repo post with the same slug. */
+/** Repo and CMS posts in one list, pinned posts first, then newest first; a CMS post never replaces a repo post with the same slug. */
 const mergePosts = (cms: BlogListItem[]) => {
   const seen = new Set(REPO_POSTS.map(p => p.slug));
   return [...REPO_POSTS, ...cms.filter(p => !seen.has(p.slug))]
-    .sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''));
+    .sort((a, b) => (a.pinned || 99) - (b.pinned || 99) || (b.publishedAt || '').localeCompare(a.publishedAt || ''));
 };
 
 const fmtDate = (iso?: string | null) => {

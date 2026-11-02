@@ -59,6 +59,7 @@ const holder = rootElement as HTMLElement & RootHolder;
 if (!holder.__root) {
   rootElement.replaceChildren();
   holder.__root = ReactDOM.createRoot(rootElement);
+  document.documentElement.classList.add('app-ready');
 }
 holder.__root.render(
   <React.StrictMode>
