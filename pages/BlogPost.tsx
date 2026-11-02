@@ -68,7 +68,6 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
   const [shown, setShown] = useState(false);     // false: the veil is clear and the picture sits on its thumbnail
   const [box, setBox] = useState<Box | null>(null);
   const [cut, setCut] = useState<Cut>({ t: 0, b: 0 });
-  const [navH, setNavH] = useState(0);   // the veil starts under the sticky nav, which therefore is never dimmed or covered by it
   const closing = React.useRef(false);
 
   const open = async () => {
@@ -80,7 +79,6 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
     if (!thumb.current) return;
     setBox(boxOf(thumb.current));
     setCut(cutOf(thumb.current));
-    setNavH(document.querySelector('nav')?.getBoundingClientRect().bottom ?? 0);
     setMounted(true);
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (!thumb.current) return;
@@ -131,10 +129,10 @@ const ZoomImg: Components['img'] = ({ node, ...p }) => {
       </button>
       {mounted && box && createPortal(
         <>
-          {/* The veil sits under the site nav (z-50), so the nav stays put and clickable; the picture sits over everything. */}
+          {/* The veil dims the whole page, nav included, with a quick fade; the picture sits over it. */}
           <div aria-hidden="true" onClick={close}
-            className="fixed inset-x-0 bottom-0 z-[45] cursor-zoom-out motion-reduce:!transition-none"
-            style={{ top: navH, background: 'rgba(11,12,14,0.5)', opacity: shown ? 1 : 0, transition: `opacity ${shown ? ZOOM_MS : Math.round(ZOOM_MS * 0.6)}ms ease` }} />
+            className="fixed inset-0 z-[45] cursor-zoom-out motion-reduce:!transition-none"
+            style={{ background: 'rgba(11,12,14,0.5)', opacity: shown ? 1 : 0, transition: `opacity ${shown ? ZOOM_MS : Math.round(ZOOM_MS * 0.6)}ms ease` }} />
           <div role="dialog" aria-modal="true" aria-label={p.alt || 'Slika'} className="pointer-events-none fixed inset-0 z-[60]">
             <img src={p.src} alt={p.alt} onClick={close}
               className="pointer-events-auto fixed cursor-zoom-out border-4 border-ink object-fill motion-reduce:!transition-none"
