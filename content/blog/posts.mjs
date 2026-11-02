@@ -450,6 +450,10 @@ Pitanje "što je moj agent zapravo radio i što je usput pročitao?" nije imalo 
 - **Prvo mjerenje, onda tvrdnje.** Napravili smo vlastiti test s unaprijed postavljenim tajnama i mamcima te objavljujemo samo ono što bilo tko može ponoviti. U proizvodu koji govori o sigurnosti, preuveličana tvrdnja je najgora moguća pogreška.
 - **Ne kopiramo konkurenciju.** Kad se pojavio sličan alat, odlučili smo ugraditi vlastite verzije zamisli koje vrijede, ali nikad tuđi kod, tekst ni pravila. Ideje su slobodne, tuđi rad nije.
 
+![Terminal: ranwhat bench javlja da je pronašao svih 12 podmetnutih tajni i nije dirao nijedan mamac](/blog/ranwhat-bench.webp)
+
+*Isječak izlaza naredbe ranwhat bench, na izmišljenim podacima. Potpuni izlaz uključuje i popis stvari koje alat ne hvata.*
+
 ## Što je bilo teško
 
 **Svaki alat piše svoj format.** Što više agenata podržavaš, to više različitih zapisa moraš razumjeti, a oni se s novim verzijama mijenjaju. Naučili smo sve svesti na jedan zajednički oblik čim podaci uđu u alat, tako da novi agent znači jedan novi čitač, a ne promjene posvuda.
@@ -509,6 +513,14 @@ Alati koji to rješavaju ili su preteški (agenti i paneli koje treba instalirat
 Cijeli dizajn proizašao je iz jednog pitanja: što ako nešto pođe po zlu? Svaka rizična promjena stoga ima sigurnosnu mrežu: prije izmjene sustav pamti stanje, a ako nakon izmjene aplikacija ne uspije ponovno ući, server se vraća na prethodno stanje sam, bez ičije intervencije. Najveći strah administratora tako postaje običan korak u postupku.
 
 Tek kad je to radilo, imalo je smisla dodavati ostalo: pregled s ocjenama i popisom što riješiti prvo, praćenje neobične aktivnosti i ažuriranje programa s provjerom prije i poslije.
+
+![Stenvakt, zaslon Review: ocjene sigurnosti i zdravlja servera i popis što treba popraviti](/blog/stenvakt-review.webp)
+
+*Zaslon Review: ocjene i popis što riješiti prvo. Prikaz s izmišljenim serverima i adresama za primjer.*
+
+![Stenvakt, zaslon Watch: tko se spaja na server i odakle](/blog/stenvakt-watch.webp)
+
+*Zaslon Watch: što je stiglo do servera u zadnji sat. Također izmišljeni podaci.*
 
 ## Pametni pomoćnici, ali s pravilima
 
