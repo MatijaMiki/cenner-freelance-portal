@@ -41,6 +41,8 @@ const PROJECTS: { title: string; url: string; internal?: string; category: strin
     desc: 'A flight recorder for AI coding agents and a scanner for the authority they hold: open-source CLI, website and a paid catalogue feed. Our own product, built and run at Cenner.' },
   { title: 'Selected Real Estate', url: 'https://selectedrealestate.hr', category: 'Real estate',
     desc: 'Premium portal for a Croatian luxury property agency: property listings, search, agent profiles and several languages.' },
+  { title: 'Stenvakt', url: 'https://stenvakt.com', category: 'Our product · Server maintenance',
+    desc: 'A Mac app that reviews, watches and updates Linux servers over SSH, with a safe mode that rolls a change back by itself if access is lost, plus a website of server guides. Our own product, built and run at Cenner.' },
   { title: 'Čistimo', url: 'https://cistimo.com', category: 'Cleaning services',
     desc: 'Booking platform and web presence for a Zagreb apartment and office cleaning company: online scheduling, clear pricing and several languages.' },
   { title: 'Shorten', url: 'https://shorten.cenner.hr', category: 'Our product · Link shortener',
