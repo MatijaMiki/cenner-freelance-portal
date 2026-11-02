@@ -41,7 +41,10 @@ const Ranwhat: React.FC = () => {
       />
 
       <div className="mb-20">
-        <div className="inline-block px-4 py-1 bg-leaf/10 text-leaf text-xs font-black uppercase tracking-widest mb-6">{t('A Cenner product')}</div>
+        <div className="mb-6 flex flex-wrap gap-2">
+          <span className="inline-block px-4 py-1 bg-leaf/10 text-leaf text-xs font-black uppercase tracking-widest">{t('A Cenner product')}</span>
+          <span className="inline-block px-4 py-1 border-2 border-ink text-ink text-xs font-black uppercase tracking-widest">{t('In active development')}</span>
+        </div>
         <h1 className="text-5xl md:text-6xl font-extrabold text-ink mb-6 tracking-tight">ranwhat</h1>
         <p className="text-xl md:text-2xl text-slate leading-relaxed max-w-3xl mb-8">
           A flight recorder for AI agents, and a scanner for the authority they hold. ranwhat reads what coding agents such as Claude Code actually ran on your machine and surfaces the irreversible actions worth knowing about: credentials read, bulk deletions, force pushes, packages published.

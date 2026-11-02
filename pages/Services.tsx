@@ -49,7 +49,7 @@ const SERVICES: Service[] = [
 /** bg and fg are the project's own colours, taken from its site: its signature colour as the
  *  ground, and its own dark or light for the type. palette is its darkest colour and four more
  *  from its stylesheet, shown as its swatch. */
-type Project = { id: string; title: string; url?: string; internal?: string; internalLabel?: string; category: string; desc: string; bg: string; fg: string; palette: string[] };
+type Project = { id: string; title: string; url?: string; internal?: string; internalLabel?: string; badges?: string[]; category: string; desc: string; bg: string; fg: string; palette: string[] };
 
 const PROJECTS: Project[] = [
   { id: 'cistimo', title: 'Čistimo', url: 'https://cistimo.com', category: 'Cleaning services',
@@ -60,12 +60,12 @@ const PROJECTS: Project[] = [
     desc: 'Premium portal for a Croatian luxury property agency: property listings, search, agent profiles and several languages.',
     bg: '#b19777', fg: '#1e1e1e',
     palette: ['#1e1e1e', '#f8f4f3', '#b19777', '#665745', '#252531'] },
-  { id: 'ranwhat', title: 'ranwhat', url: 'https://ranwhat.com', internal: '/ranwhat', category: 'Our product · AI agent security',
+  { id: 'ranwhat', title: 'ranwhat', url: 'https://ranwhat.com', internal: '/ranwhat', badges: ['In active development', 'A Cenner project'], category: 'Our product · AI agent security',
     desc: 'A flight recorder for AI coding agents and a scanner for the authority they hold: open-source CLI, website and a paid catalogue feed. Our own product, built and run at Cenner.',
     bg: '#ea8471', fg: '#0e1318',
     palette: ['#0e1318', '#ea8471', '#e0b25c', '#72c69d', '#8db4dd'] },
-  { id: 'stenvakt', title: 'Stenvakt', url: 'https://stenvakt.com', internal: '/stenvakt', internalLabel: 'About Stenvakt', category: 'Our product · Server maintenance',
-    desc: 'A Mac app that reviews, watches and updates Linux servers over SSH, with a safe mode that rolls a change back by itself if access is lost, plus a website of server guides. Our own product, built and run at Cenner.',
+  { id: 'stenvakt', title: 'Stenvakt', url: 'https://stenvakt.com', internal: '/stenvakt', internalLabel: 'About Stenvakt', badges: ['In active development', 'A Cenner project'], category: 'Our product · Server maintenance',
+    desc: 'A Mac app that reviews, watches and updates Linux servers over SSH, with a safe mode that undoes firewall and SSH changes if access is lost, plus a website of server guides. Our own product, built and run at Cenner.',
     bg: '#ffe927', fg: '#111111',
     palette: ['#111111', '#ffe927', '#1e4bd7', '#d71e1e', '#ffffff'] },
   { id: 'cenner', title: 'Cenner.hr', url: 'https://cenner.hr', category: 'Our platform · Marketplace',
@@ -244,6 +244,13 @@ const Services: React.FC = () => {
               <div className="mt-6 max-w-[52ch]">
                 <p className={lead}>{t(p.desc)}</p>
                 <p className="mt-4 text-[1rem] text-slate">{t(p.category)}</p>
+                {p.badges && (
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {p.badges.map(b => (
+                      <li key={b} className="border-2 border-ink px-2.5 py-1 font-display text-[12px] font-bold uppercase tracking-wide">{t(b)}</li>
+                    ))}
+                  </ul>
+                )}
               </div>
               {p.internal && (
                 <Link to={p.internal} className="relative z-10 mt-6 inline-flex items-center gap-2 self-start font-display text-[1.0625rem] font-bold underline-offset-4 hover:underline">

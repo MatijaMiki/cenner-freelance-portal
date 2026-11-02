@@ -40,7 +40,7 @@ export const render: PageModule['render'] = () => ({
     'ranwhat is a flight recorder for AI coding agents and a scanner for the authority they hold. Built and operated by Cenner, Zagreb.',
   path: '/ranwhat',
   body: blocks(
-    t('A Cenner product'),
+    `${t('A Cenner product')} · ${t('In active development')}`,
     'A flight recorder for AI agents, and a scanner for the authority they hold. ranwhat reads what coding agents such as Claude Code actually ran on your machine and surfaces the irreversible actions worth knowing about: credentials read, bulk deletions, force pushes, packages published.',
     link('ranwhat.com', RW),
     h2(t('Pricing')),
