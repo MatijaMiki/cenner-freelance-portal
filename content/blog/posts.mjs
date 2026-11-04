@@ -526,6 +526,12 @@ Tek kad je to radilo, imalo je smisla dodavati ostalo: pregled s ocjenama i popi
 
 Danas se sve više radi uz AI asistente, pa smo omogućili da i oni čitaju izvještaje i predlažu izmjene. Pravilo je jednostavno: asistent predlaže, čovjek odobrava. Asistent nikad ne dobiva lozinke ni ključeve, ne može isključiti sigurnosni način, a sve što dolazi sa servera smatra se nepouzdanim tekstom. Iz toga smo naučili nešto korisno i za druge projekte: kad u sustav pustiš automatiku, najprije odluči što joj je zabranjeno, tek onda što smije.
 
+## Na čemu radimo sada: čišćenje servera u jednom prolazu
+
+Posljednja stvar na kojoj radimo zove se Polish, a nastala je iz našeg vlastitog posla: nakon ručnog čišćenja servera ostao je dugačak lanac koraka koje nitko ne želi voditi napamet. Sigurnosna kopija baze i provjera da se može pročitati, osvježavanje zastarjelih slika kontejnera, zatvaranje portova koji ne trebaju biti vani, prijava samo ključem, ažuriranja. Svaki korak ima uvjet prije, provjeru poslije i povratak na staro ako provjera padne. Ponovno pokretanje servera uvijek pita tebe.
+
+Isto pravilo kao i s asistentima vrijedi i tu: asistent smije pratiti tijek, dodati bilješku, pauzirati ili prekinuti, ali nastaviti može samo čovjek. Za sada je isprobano na probnom serveru, još nije objavljeno i dio je plana Autopilot, koji se još ne prodaje.
+
 ## Što smo naučili usput
 
 **Ime je teže nego što izgleda.** Većina riječi i elegantnih izmišljotina već je zauzeta. Završili smo s izmišljenom riječju, jer ime koje je moguće steći i zadržati vrijedi više od zgodnog imena koje ti nikad neće pripadati.
