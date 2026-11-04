@@ -553,6 +553,53 @@ Isto pravilo kao i s asistentima vrijedi i tu: asistent smije pratiti tijek, dod
 Ako želiš web stranicu ili aplikaciju od tima koji svoje proizvode gradi na isti način, pogledaj [izradu web stranica](/usluge/izrada-web-stranica) ili [usluge Cenner tima](/services). Stenvakt možeš pogledati na [stenvakt.com](https://stenvakt.com), a priču o našem drugom proizvodu pročitaj u članku [Kako smo izradili ranwhat](/blog/kako-smo-izradili-ranwhat).
 `,
   },
+  {
+    slug: 'ai-agent-na-serveru-odobri-pa-provjeri',
+    title: 'AI agent na tvom serveru: odobri prije, provjeri poslije',
+    seoTitle: 'AI agent na serveru: odobri prije, provjeri poslije',
+    description:
+      'Kako pustiti AI agenta (Claude Code, Codex, Cursor) do Linux servera bez straha: promjene idu preko odobrenja, a poslije provjeriš što je agent zaista pokrenuo.',
+    excerpt:
+      'Dva alata koja smo sami napravili, Stenvakt i ranwhat, pokrivaju dva trenutka rada s AI agentom na serveru: prije promjene i poslije nje.',
+    keywords: [
+      'AI agent server sigurnost',
+      'Claude Code server',
+      'održavanje servera',
+      'izrada web aplikacije',
+      'razvoj softvera po mjeri',
+    ],
+    services: ['izrada-web-stranica', 'web-developeri'],
+    publishedAt: '2026-11-04',
+    author: 'Cenner',
+    content: `Svi koji danas održavaju server pitaju se isto: smijem li agentu dati pristup? Dok sami radimo s agentima svaki dan, na vlastitim serverima, naučili smo da odgovor nije "da" ni "ne", nego "uz dvije provjere". Obje smo pretvorili u alate: [Stenvakt](https://stenvakt.com) i [ranwhat](https://ranwhat.com). Ovo je kratka priča o tome kako rade zajedno.
+
+## Najgori način je i najčešći
+
+Zalijepiš SSH naredbu u razgovor i agent radi. Od tog trenutka drži tvoj ključ, tvoju ljusku i tvoj server, a jedini zapis o tome što je napravio je povijest razgovora. Ako nešto pođe po zlu, ne znaš ni što je pokrenuto ni kada.
+
+## Prije promjene: agent predlaže, čovjek odobrava
+
+Većina onoga što tražiš od agenta na serveru je čitanje: koji su portovi otvoreni, čekaju li ažuriranja, tko se prijavljivao. Čitanje ništa ne mijenja, pa može teći bez pitanja. Svaka promjena je drugačija. U Stenvaktu agent promjenu samo predlaže, ti vidiš naredbe koje bi se pokrenule i odobriš ih, a rizični koraci (vatrozid, SSH) imaju sigurnosnu mrežu: ako nakon promjene ne možeš ući, server se sam vraća na staro. Agent pritom nikad ne dobiva lozinke ni ključeve, jer vezu drži aplikacija na tvom računalu.
+
+## Poslije: pročitaj što je agent stvarno napravio
+
+Odobravanje pokriva samo ono što je prošlo kroz odobravanje. Agent koji ima i ljusku može pokrenuti naredbe mimo toga. Zato smo napravili ranwhat: čita zapise koje agenti već spremaju na tvoje računalo i izdvaja radnje koje vrijedi pogledati, poput brisanja, čitanja ključeva ili objave paketa. Radi lokalno, bez računa i bez slanja podataka. Jedna naredba, uvx ranwhat check, dovoljna je za početak.
+
+## Rutina od pet minuta
+
+1. Prije rada napravi sigurnosnu kopiju ili snimku servera.
+2. Pusti agenta da čita i predlaže, a naredbe u svakom prijedlogu pročitaj prije odobrenja.
+3. Sigurnosnu mrežu ostavi uključenu.
+4. Kad sesija završi, pregledaj što je agent pokrenuo.
+5. Na serveru provjeri zapis prijava ima li nepoznatih.
+
+Detaljan vodič, s naredbama, nalazi se na [stenvakt.com](https://stenvakt.com/guides/ai-agent-on-your-server).
+
+## Što smo iz toga naučili za tvoj projekt
+
+Isto razmišljanje vrijedi za bilo koji sustav u koji pustiš automatiku: odluči što smije čitati, što smije mijenjati samo uz odobrenje, i kako ćeš poslije provjeriti što je napravila. Ako želiš aplikaciju ili web stranicu od tima koji svoje proizvode gradi na isti način, pogledaj [izradu web stranica](/usluge/izrada-web-stranica) ili [usluge Cenner tima](/services). Priče o samim alatima pročitaj u člancima [Kako smo izradili Stenvakt](/blog/kako-smo-izradili-stenvakt) i [Kako smo izradili ranwhat](/blog/kako-smo-izradili-ranwhat).
+`,
+  },
 ];
 
 /** Pinned posts first (1 is the very first), then newest first, as the blog index lists them. */
