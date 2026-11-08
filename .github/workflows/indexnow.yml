@@ -1,0 +1,67 @@
+name: indexnow
+
+# Tell Bing and the other IndexNow engines that cenner.hr pages changed, once
+# Vercel has deployed this commit to Production. Only content pushes trigger it;
+# it sends every sitemap URL (about 30), because sitemap lastmod is the build date.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/**"
+      - "public/usluge/**"
+      - "public/freelanceri/**"
+      - "scripts/generate-landing-pages.mjs"
+      - "scripts/generate-sitemap.mjs"
+      - "index.html"
+  # Run by hand from the Actions tab to send every sitemap page again.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: true
+
+jobs:
+  submit:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      # Values reach the shell through env, never pasted into the script.
+      - name: Wait for Vercel to deploy this commit to Production
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          for i in $(seq 1 50); do
+            id=$(gh api "repos/$REPO/deployments?sha=$SHA&environment=Production&per_page=1" --jq '.[0].id // empty') || id=""
+            state=""
+            if [ -n "$id" ]; then
+              state=$(gh api "repos/$REPO/deployments/$id/statuses?per_page=1" --jq '.[0].state // empty') || state=""
+            fi
+            echo "attempt $i: ${state:-no Production deployment yet}"
+            case "$state" in
+              success) sleep 20; exit 0 ;;
+              failure|error|inactive) echo "::error::Vercel did not deploy $SHA ($state); nothing sent."; exit 1 ;;
+            esac
+            sleep 30
+          done
+          echo "::error::No finished Production deploy for $SHA after 25 minutes; nothing sent."
+          exit 1
+
+      - name: Submit to IndexNow
+        run: node scripts/indexnow.mjs
