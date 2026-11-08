@@ -23,8 +23,8 @@ interface AuthContextType {
   user: AuthUser | null;
   loading: boolean;
   login: (email: string, password: string, turnstileToken?: string) => Promise<void>;
-  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string; turnstileToken?: string }) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
+  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string; turnstileToken?: string; acceptedTerms?: boolean }) => Promise<void>;
+  loginWithGoogle: (opts?: { acceptedTerms?: boolean }) => Promise<void>;
   logout: () => void;
   updateUser: (data: Partial<AuthUser>) => void;
 }
@@ -92,7 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (opts?: { acceptedTerms?: boolean }) => {
     setLoading(true);
     try {
       const idToken = await firebaseSignInWithGoogle();
@@ -104,11 +104,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ idToken, ...(referralCode ? { referralCode } : {}) }),
+        // acceptedTerms only matters when this creates a brand-new account; the API asks for it then.
+        body: JSON.stringify({ idToken, ...(referralCode ? { referralCode } : {}), ...(opts?.acceptedTerms ? { acceptedTerms: true } : {}) }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: res.statusText }));
-        throw new Error(err.error || 'Google sign-in failed');
+        throw Object.assign(new Error(err.error || 'Google sign-in failed'), { code: err.code as string | undefined });
       }
       const { user: newUser } = await res.json();
       persistSession(newUser);

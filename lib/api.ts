@@ -79,7 +79,7 @@ export interface FreelancerMatch {
 
 export const API = {
   // ── Auth ──────────────────────────────────────────────────────────────
-  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string; turnstileToken?: string }) =>
+  register: (data: { email: string; password: string; name: string; mobile?: string; referralCode?: string; turnstileToken?: string; acceptedTerms?: boolean }) =>
     request<{ pending: boolean }>('/auth/register', 'POST', data),
 
   login: (email: string, password: string, turnstileToken?: string) =>
