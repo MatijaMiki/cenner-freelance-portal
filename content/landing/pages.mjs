@@ -1,6 +1,7 @@
 // The copy of the /usluge/* and /freelanceri/* landing pages. scripts/generate-landing-pages.mjs
 // turns it into the static HTML; lib/md/pages/landing.ts into the markdown versions. Body strings
-// may carry inline <strong>, <em> and <a>.
+// may carry inline <strong>, <em> and <a>. Optional `faq` ({ q, a }) renders as a "Česta pitanja"
+// section plus FAQPage JSON-LD.
 //
 // Plain .mjs so the Node build script can import it without a TypeScript step.
 
@@ -9,9 +10,9 @@ export const services = [
   {
     slug: 'izrada-web-stranica',
     title: 'Profesionalna Izrada Web Stranica u Hrvatskoj | Cenner',
-    keyword: 'izrada web stranica, profesionalna izrada web stranica, izrada internet stranica',
+    keyword: 'izrada web stranica, profesionalna izrada web stranica, web dizajn hrvatska, izrada internet stranica',
     description:
-      'Profesionalna izrada web stranica za firme, obrte i male tvrtke u Hrvatskoj. Provjereni web developeri, više ponuda, cijene od 300 €. Bez agencijskih marži.',
+      'Profesionalna izrada web stranica i web dizajn za firme i obrte u cijeloj Hrvatskoj. Provjereni developeri, više ponuda i cijene od 300 €.',
     h1: 'Profesionalna Izrada Web Stranica u Hrvatskoj',
     intro:
       'Tražiš profesionalnu izradu web stranice ili internet stranice za svoju firmu po pristupačnoj cijeni? Cenner povezuje hrvatske tvrtke, obrte i poduzetnike s provjerenim web developerima koji rade brzo, kvalitetno i bez skupih agencijskih marži.',
@@ -45,6 +46,19 @@ export const services = [
         ],
       },
       {
+        h2: 'Web dizajn za cijelu Hrvatsku: Zagreb, Split, Trogir i manja mjesta',
+        body: [
+          'Freelanceri na Cenneru rade iz Zagreba, Splita, Rijeke, Osijeka i drugih gradova, a cijeli posao vodi se online: objava projekta, ponude, poruke i plaćanje kroz platformu. Zato je izrada web stranica online jednako dobra opcija za firmu u Zagrebu kao i za apartmane u Trogiru ili obrt u manjem mjestu. Web dizajnera biraš po portfoliju i ocjenama, a ne po tome koliko je blizu.',
+        ],
+      },
+      {
+        h2: 'Izrada po mjeri ili programi za izradu web stranica (Wix, WordPress…)?',
+        body: [
+          'Programi za izradu web stranica poput <strong>Wixa, Squarespacea ili WordPressa s gotovom temom</strong> imaju smisla za jednostavnu stranicu koju želiš složiti sam i brzo: plaćaš mjesečnu pretplatu, biraš predložak i sam unosiš sadržaj. Ograničenja dođu kasnije: teže je prilagoditi dizajn, brzina i SEO ovise o platformi, a selidba na drugo rješenje često znači izradu ispočetka.',
+          'Izrada web stranice po mjeri znači da developer gradi dizajn i funkcije oko tvog posla: upite, rezervacije, višejezičnost, integracije ili korisničke račune. To je pravi izbor kad ti treba <strong>izrada naprednih web stranica po mjeri</strong>, kad je brzina važna ili kad stranica mora rasti s poslom. WordPress je često sredina: freelancer ga postavi i prilagodi, a ti sam uređuješ sadržaj (više na stranici <a href="/usluge/wordpress-izrada">WordPress izrada</a>).',
+        ],
+      },
+      {
         h2: 'Kako pronaći pravog web developera?',
         body: [
           'Klikni na "Pronađi freelancera" ispod, opiši svoj projekt u par rečenica, i naš AI matching će ti predložiti 3–5 najprikladnijih kandidata u roku od minute. Pregledaj njihove portfolije, ocjene i prethodne projekte, pa odaberi najboljeg.',
@@ -57,17 +71,35 @@ export const services = [
         ],
       },
     ],
+    faq: [
+      {
+        q: 'Što uključuje profesionalna izrada web stranica?',
+        a: 'Dizajn, responzivnu izradu koja radi na svim ekranima, CMS ako ga trebaš, SEO osnovu (naslovi, opisi, sitemap, brzina), postavljanje na hosting i jamstvo na rad. Točan opseg uvijek piše u ponudi, pa ponude usporedi stavku po stavku.',
+      },
+      {
+        q: 'Može li se izrada web stranice odraditi online, ako nismo u Zagrebu?',
+        a: 'Može. Na Cenneru se projekt objavljuje, dogovara i plaća online, pa lokacija firme ne igra ulogu. Freelanceri rade za klijente iz cijele Hrvatske.',
+      },
+      {
+        q: 'Koliko traje izrada web stranice?',
+        a: 'Predstavljajuća stranica male firme ili obrta obično je gotova za 1 do 3 tjedna. Web shopovi i stranice s posebnim funkcijama traju dulje, ovisno o opsegu.',
+      },
+      {
+        q: 'Je li bolje koristiti program za izradu web stranica ili angažirati developera?',
+        a: 'Za jednostavnu stranicu koju želiš održavati sam, program poput Wixa može biti dovoljan. Ako trebaš vlastiti dizajn, posebne funkcije, brzinu ili bolju poziciju na Googleu, isplati se izrada po mjeri.',
+      },
+    ],
     related: ['web-developeri', 'seo-optimizacija', 'wordpress-izrada'],
   },
   {
     slug: 'dizajn-loga',
-    title: 'Dizajn Loga i Vizualnog Identiteta | Cenner',
-    keyword: 'dizajn loga',
+    title: 'Dizajn Loga i Izrada Vizualnog Identiteta | Cenner',
+    keyword: 'dizajn loga, izrada loga, izrada vizualnog identiteta, vizualni identitet',
     description:
-      'Pronađi grafičkog dizajnera za izradu loga, vizualnog identiteta i brendinga u Hrvatskoj. Ponude od provjerenih freelancera. Cijene od 80 €.',
-    h1: 'Dizajn Loga i Vizualnog Identiteta',
+      'Dizajn loga i izrada vizualnog identiteta u Hrvatskoj: provjereni grafički dizajneri, više ponuda, cijene od 80 €. Logo, boje, tipografija i brand guide.',
+    h1: 'Dizajn Loga i Izrada Vizualnog Identiteta',
     intro:
-      'Tvoj brend zaslužuje logo koji ostaje u sjećanju. Cenner povezuje hrvatske tvrtke s vrhunskim grafičkim dizajnerima koji izrađuju logotipe, vizualne identitete i branding pakete po fer cijenama.',
+      'Tvoj brend zaslužuje logo koji ostaje u sjećanju. Cenner povezuje hrvatske tvrtke s grafičkim dizajnerima za izradu loga, cijeli vizualni identitet (boje, tipografija, pravila primjene) i branding pakete po fer cijenama.',
     sections: [
       {
         h2: 'Koliko košta dizajn loga u Hrvatskoj?',
@@ -92,19 +124,26 @@ export const services = [
   },
   {
     slug: 'seo-optimizacija',
-    title: 'SEO Optimizacija: Cijene i Usluge u Hrvatskoj | Cenner',
-    keyword: 'seo optimizacija, seo optimizacija cijena, usluge seo optimizacije, seo stručnjak',
+    title: 'SEO Usluge: Usluge SEO Optimizacije u Hrvatskoj | Cenner',
+    keyword: 'seo usluge, usluge seo optimizacije, seo optimizacija, seo savjetovanje, seo stručnjak',
     description:
-      'Usluge SEO optimizacije u Hrvatskoj (Zagreb, Split i cijela zemlja): cijena audita od 200 €, mjesečni paketi od 300 €. SEO marketing i lokalni SEO.',
-    h1: 'SEO Optimizacija: Cijene i Usluge u Hrvatskoj',
+      'SEO usluge u Hrvatskoj: tehnički audit, on-page, lokalni SEO, sadržaj i SEO savjetovanje. Provjereni SEO stručnjaci, više ponuda, plaćanje po isporuci.',
+    h1: 'SEO Usluge i SEO Optimizacija u Hrvatskoj',
     intro:
-      'Ako te kupci ne mogu pronaći na Googleu, ne postojiš. Ovdje je pregled što SEO optimizacija stvarno košta u Hrvatskoj i što uključuje, a Cenner te povezuje sa SEO stručnjacima koji znaju kako tehnički, sadržajno i autoritativno postaviti web stranicu da rangira za prave ključne riječi.',
+      'Ako te kupci ne mogu pronaći na Googleu, ne postojiš. Cenner te povezuje sa SEO stručnjacima koji nude usluge SEO optimizacije od tehničkog audita do sadržaja i lokalnog SEO-a, i znaju kako postaviti web stranicu da rangira za prave ključne riječi.',
     sections: [
       {
-        h2: 'SEO optimizacija cijena: koliko košta SEO u Hrvatskoj?',
+        h2: 'Koje SEO usluge možeš naručiti?',
         body: [
-          'Jednokratni SEO audit s preporukama kreće od <strong>200 € do 600 €</strong>. Mjesečni paket optimizacije za malu web stranicu ide od <strong>300 € do 800 € mjesečno</strong>. Veći e-commerce projekti i nacionalne kampanje kreću od <strong>1.000 € mjesečno</strong> i više. Ako te zanima cijena SEO optimizacije za tvoju konkretnu stranicu, objavi projekt i usporedi ponude više freelancera.',
+          'SEO stručnjaci na Cenneru rade <strong>jednokratne SEO audite</strong> s preporukama, <strong>mjesečne pakete optimizacije</strong> za stranice koje žele rasti iz mjeseca u mjesec, te <strong>projekte s jasnim krajem</strong>: migraciju na novu stranicu bez gubitka pozicija, optimizaciju web shopa ili postavljanje strukturiranih podataka. Usluge možeš kombinirati prema tome što tvoja stranica treba.',
+          'Koliko što košta i o čemu ovisi cijena, s okvirnim rasponima za audit i mjesečne pakete, objasnili smo u vodiču <a href="/blog/koliko-kosta-seo-optimizacija">cijena SEO optimizacije</a>. Za ponudu za tvoju stranicu objavi projekt i usporedi ponude više freelancera.',
           'Za razliku od plaćenih oglasa, SEO daje <strong>dugoročne rezultate</strong>. Jednom kad rangiraš, dolazi besplatan promet mjesecima.',
+        ],
+      },
+      {
+        h2: 'SEO savjetovanje: kad ti ne treba cijeli paket',
+        body: [
+          'Ako imaš developera ili nekoga u firmi tko će provesti izmjene, često je dovoljno <strong>SEO savjetovanje</strong>: stručnjak pregleda stranicu i Search Console, odgovori na pitanja tvog tima i složi redoslijed što popraviti prvo. Takvu konzultaciju objaviš kao manji projekt s jasnim opsegom, a plaćanje se oslobađa kad je posao isporučen.',
         ],
       },
       {
@@ -127,14 +166,28 @@ export const services = [
         ],
       },
     ],
+    faq: [
+      {
+        q: 'Što uključuju usluge SEO optimizacije?',
+        a: 'Tehnički audit (brzina, indeksiranje, struktura), istraživanje ključnih riječi za hrvatsko tržište, on-page optimizaciju, strukturirane podatke, lokalni SEO i redovito izvještavanje iz Google Search Consolea i Analyticsa. Što je točno uključeno piše u ponudi svakog stručnjaka.',
+      },
+      {
+        q: 'Što je SEO savjetovanje?',
+        a: 'Konzultacija u kojoj SEO stručnjak pregleda tvoju stranicu i podatke, odgovori na pitanja i preporuči što napraviti i kojim redom. Izmjene zatim provodi tvoj tim ili developer.',
+      },
+      {
+        q: 'Koliko košta SEO optimizacija?',
+        a: 'Ovisi o veličini stranice, konkurenciji i opsegu posla. Okvirne raspone i što ulazi u koji model naplate opisali smo u vodiču o cijeni SEO optimizacije na blogu.',
+      },
+    ],
     related: ['izrada-web-stranica', 'digitalni-marketing', 'wordpress-izrada'],
   },
   {
     slug: 'digitalni-marketing',
-    title: 'Digitalni Marketing: Freelance Marketinški Stručnjaci | Cenner',
-    keyword: 'digitalni marketing',
+    title: 'Digitalni Marketing Freelance: Oglasi, SEO, Mreže | Cenner',
+    keyword: 'digitalni marketing, digitalni marketing freelance, freelance marketing stručnjak',
     description:
-      'Pronađi marketinškog freelancera u Hrvatskoj: Google Ads, Meta oglasi, social media, email marketing. Provjereni stručnjaci, transparentne cijene.',
+      'Digitalni marketing freelance: Google Ads, Meta oglasi, SEO i društvene mreže. Provjereni hrvatski stručnjaci, više ponuda i zaštićeno plaćanje.',
     h1: 'Digitalni Marketing: Freelance Stručnjaci',
     intro:
       'Treba ti više kvalificiranih leadova, povratnih kupaca ili pratitelja na društvenim mrežama? Cenner povezuje hrvatske tvrtke s marketinškim freelancerima koji znaju što rade, bez gubljenja proračuna na neučinkovite kampanje.',

@@ -184,17 +184,16 @@ Ako trebaš razvoj aplikacije, integraciju ili automatizaciju, pogledaj i [uslug
   },
   {
     slug: 'koliko-kosta-seo-optimizacija',
-    title: 'Koliko košta SEO optimizacija i kako odabrati SEO stručnjaka',
-    seoTitle: 'SEO optimizacija cijena: što plaćaš i koga odabrati',
+    title: 'SEO optimizacija cijena: koliko košta SEO i kako odabrati stručnjaka',
+    seoTitle: 'SEO optimizacija cijena: koliko košta SEO?',
     description:
-      'Zašto se cijene SEO optimizacije toliko razlikuju, što ulazi u audit, mjesečni paket ili lokalni SEO, i kako prepoznati SEO stručnjaka ili agenciju kojoj se isplati platiti.',
+      'SEO optimizacija cijena: okvirni rasponi za SEO audit i mjesečne pakete, zašto se ponude toliko razlikuju i kako prepoznati SEO stručnjaka kojem se isplati platiti.',
     excerpt:
       'Zašto jedna ponuda za SEO košta pet puta više od druge, što bi trebalo biti uključeno i kako prepoznati SEO stručnjaka kojemu se isplati platiti.',
     keywords: [
       'seo optimizacija cijena',
       'cijena seo optimizacije',
-      'usluge seo optimizacije',
-      'seo usluge',
+      'koliko košta seo optimizacija',
       'seo marketing cijena',
       'seo stručnjak',
       'seo konzultant',
@@ -223,7 +222,13 @@ Kontinuirani rad: popravci, novi i bolji sadržaj, interne poveznice, lokalni SE
 
 Konkretan zadatak s početkom i krajem: migracija na novu stranicu bez gubitka pozicija, postavljanje strukturiranih podataka, optimizacija web shopa ili SEO konzultacije za tvoj tim.
 
-Okvirne cijene za svaki od ovih modela navodimo na stranici [SEO optimizacija: cijene i usluge](/usluge/seo-optimizacija).
+## Okvirne cijene SEO optimizacije u Hrvatskoj
+
+- **Jednokratni SEO audit** s preporukama: od **200 € do 600 €**.
+- **Mjesečni paket** optimizacije za malu web stranicu: od **300 € do 800 € mjesečno**.
+- **Veći e-commerce projekti i nacionalne kampanje**: od **1.000 € mjesečno** i više.
+
+To su rasponi, ne cjenik: tvoja cijena ovisi o stvarima iz sljedećeg odjeljka. Što sve ulazi u pojedine [SEO usluge](/usluge/seo-optimizacija) opisali smo na zasebnoj stranici.
 
 ## O čemu ovisi cijena SEO optimizacije
 
@@ -370,7 +375,7 @@ Ovaj vodič je za naručitelje: kako se pripremiti, što tražiti i što moraš 
 - **Vizualni identitet** je sustav: logo, boje, tipografija, način korištenja fotografija i grafika, pravila primjene.
 - **Brend** je ono što ljudi misle i osjećaju o tebi. Vizualni identitet ga podržava, ali ga ne može sam stvoriti.
 
-Za mali obrt ponekad je dovoljan logo s osnovnim bojama. Firma koja će imati web, društvene mreže, ambalažu i vozila treba cijeli vizualni identitet, inače svaka primjena izgleda malo drugačije.
+Za mali obrt ponekad je dovoljan logo s osnovnim bojama. Firma koja će imati web, društvene mreže, ambalažu i vozila treba cijeli vizualni identitet, inače svaka primjena izgleda malo drugačije. Što ulazi u [izradu vizualnog identiteta](/usluge/dizajn-loga) i kako pronaći dizajnera, pregledali smo na posebnoj stranici.
 
 ## Kako napisati brief za dizajnera
 

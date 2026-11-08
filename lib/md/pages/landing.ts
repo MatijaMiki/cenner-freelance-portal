@@ -5,7 +5,7 @@
  */
 import { services, cities } from '../../../content/landing/pages.mjs';
 import { sortedBlogPosts } from '../../../content/blog/posts.mjs';
-import { blocks, h2, inlineHtml, link, list, type PageModule } from '../format';
+import { blocks, h2, h3, inlineHtml, link, list, type PageModule } from '../format';
 
 const TOOLS = [
   `${link('Cenner Links', 'https://links.cenner.hr')}: Link-in-bio stranica za kreatore: sve tvoje poveznice na jednom mjestu.`,
@@ -24,6 +24,8 @@ export const service: PageModule = {
       body: blocks(
         inlineHtml(svc.intro),
         ...svc.sections.flatMap((s) => [h2(s.h2), ...s.body.map(inlineHtml)]),
+        svc.faq?.length ? h2('Česta pitanja') : '',
+        ...(svc.faq || []).flatMap((f: { q: string; a: string }) => [h3(f.q), inlineHtml(f.a)]),
         h2('Spreman za početak?'),
         'Cenner ti pomaže pronaći pravog freelancera u par minuta. Bez agencijskih marži, bez skrivenih troškova, uz osigurano plaćanje.',
         h2('Povezane usluge'),

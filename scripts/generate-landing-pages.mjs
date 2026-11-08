@@ -82,6 +82,7 @@ function pageHTML({
   main>*:not(h1):not(.related):not(.cta-row){max-width:46rem}
   h2{font-size:clamp(1.625rem,1.2rem+1.6vw,2.5rem);font-weight:800;line-height:1.05;margin:56px 0 16px;padding-top:20px;border-top:2px solid var(--ink);letter-spacing:-0.025em}
   p{font-size:18px;color:#1d2126;margin:0 0 16px}
+  main>h3{font-size:20px;font-weight:800;line-height:1.25;margin:28px 0 8px;letter-spacing:-0.01em}
   strong{color:var(--ink);font-weight:700}
   .lead{font-size:clamp(1.25rem,1.1rem+0.7vw,1.625rem);line-height:1.4;color:var(--ink);margin-bottom:32px}
   .cta-row{margin:0 0 8px}
@@ -164,6 +165,9 @@ function serviceBody(svc) {
   const sectionsHTML = svc.sections
     .map((s) => `<h2>${s.h2}</h2>${s.body.map((p) => `<p>${p}</p>`).join('\n')}`)
     .join('\n');
+  const faqHTML = svc.faq?.length
+    ? `<h2>Česta pitanja</h2>\n${svc.faq.map((f) => `<h3>${f.q}</h3>\n<p>${f.a}</p>`).join('\n')}\n`
+    : '';
   const relatedHTML = svc.related
     .map((slug) => {
       const r = services.find((x) => x.slug === slug);
@@ -186,7 +190,7 @@ function serviceBody(svc) {
   <a href="/services" class="cta cta-secondary">Pregledaj sve usluge</a>
 </p>
 ${sectionsHTML}
-<h2>Spreman za početak?</h2>
+${faqHTML}<h2>Spreman za početak?</h2>
 <p>Cenner ti pomaže pronaći pravog freelancera u par minuta. Bez agencijskih marži, bez skrivenih troškova, uz osigurano plaćanje.</p>
 <p class="cta-row">
   <a href="/marketplace" class="cta">Istraži marketplace</a>
@@ -233,7 +237,20 @@ function cityBody(city) {
 ${TOOLS_HTML}`;
 }
 
+const stripTags = (html) => html.replace(/<[^>]+>/g, '');
+
 function serviceJsonLd(svc, url) {
+  const faq = svc.faq?.length
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: svc.faq.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: stripTags(f.a) },
+        })),
+      }]
+    : [];
   return [
     {
       '@context': 'https://schema.org',
@@ -257,6 +274,7 @@ function serviceJsonLd(svc, url) {
         { '@type': 'ListItem', position: 3, name: svc.h1, item: url },
       ],
     },
+    ...faq,
   ];
 }
 
