@@ -127,7 +127,7 @@ export const services = [
     title: 'SEO Usluge: Usluge SEO Optimizacije u Hrvatskoj | Cenner',
     keyword: 'seo usluge, usluge seo optimizacije, seo optimizacija, seo savjetovanje, seo stručnjak',
     description:
-      'SEO usluge u Hrvatskoj: tehnički audit, on-page, lokalni SEO, sadržaj i SEO savjetovanje. Provjereni SEO stručnjaci, više ponuda, plaćanje po isporuci.',
+      'SEO usluge u Hrvatskoj: tehnički audit, on-page, lokalni SEO, sadržaj i SEO savjetovanje. Provjereni SEO stručnjaci, više ponuda, zaštićeno plaćanje.',
     h1: 'SEO Usluge i SEO Optimizacija u Hrvatskoj',
     intro:
       'Ako te kupci ne mogu pronaći na Googleu, ne postojiš. Cenner te povezuje sa SEO stručnjacima koji nude usluge SEO optimizacije od tehničkog audita do sadržaja i lokalnog SEO-a, i znaju kako postaviti web stranicu da rangira za prave ključne riječi.',
