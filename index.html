@@ -17,8 +17,8 @@
     <link rel="dns-prefetch" href="https://js.stripe.com" />
     <link rel="dns-prefetch" href="https://www.paypal.com" />
 
-    <!-- Google tag (gtag.js) — Ads (G-YEYHV1V9WP) + Analytics (G-MQ8LYQNEC5) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YEYHV1V9WP"></script>
+    <!-- Google tag (gtag.js) — single GA4 property "Cenner" (G-MQ8LYQNEC5) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ8LYQNEC5"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -53,7 +53,6 @@
       var ceCfg = /[?&]token=/.test(location.search)
         ? { page_location: location.href.replace(/([?&]token=)[^&#]*/g, '$1redacted') }
         : {};
-      gtag('config', 'G-YEYHV1V9WP', ceCfg);
       gtag('config', 'G-MQ8LYQNEC5', ceCfg);
     </script>
 
