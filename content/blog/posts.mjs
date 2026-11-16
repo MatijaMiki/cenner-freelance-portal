@@ -15,12 +15,12 @@
 export const BLOG_POSTS = [
   {
     slug: 'izrada-web-stranice-za-firmu-i-obrt',
-    title: 'Izrada web stranice za firmu ili obrt: vodič od ideje do objave',
-    seoTitle: 'Izrada web stranice za firmu i obrt: vodič',
+    title: 'Izrada poslovnih web stranica za firme i obrte: 7 koraka od ideje do objave',
+    seoTitle: 'Izrada poslovnih web stranica za obrte: 7 koraka',
     description:
-      'Profesionalna izrada web stranice bez iznenađenja: što mala firma ili obrt stvarno treba, kojim redom ide posao, o čemu ovisi cijena i što provjeriti prije potpisa.',
+      'Obrtu i maloj firmi dovoljna je stranica od pet dijelova koja se brzo otvara na mobitelu. Što još provjeriti prije plaćanja i tko mora biti vlasnik domene?',
     excerpt:
-      'Što mala firma ili obrt stvarno treba od web stranice, kojim redom ide izrada, o čemu ovisi cijena i što provjeriti prije nego što nekome platiš.',
+      'Što treba poslovna web stranica obrta, d.o.o.-a, poduzetnika ili proizvođača, po čemu se prepoznaje profesionalna stranica, sedam koraka izrade i cijene.',
     keywords: [
       'izrada web stranica',
       'profesionalna izrada web stranica',
@@ -29,17 +29,25 @@ export const BLOG_POSTS = [
       'izrada web rješenja',
       'izrada web stranica za male firme',
       'izrada naprednih web stranica po mjeri',
+      'izrada poslovnih web stranica',
+      'izrada stranice za obrte',
+      'profesionalna internet web stranica',
+      'profesionalne web stranice',
+      'izrada web stranica za poduzetnike',
+      'izrada web stranica za proizvođače',
+      'izrada web stranica za poduzeća',
     ],
     services: ['izrada-web-stranica', 'wordpress-izrada'],
     publishedAt: '2026-10-23',
+    updatedAt: '2026-11-16',
     author: 'Cenner',
-    content: `Većina malih firmi i obrta ne treba "najbolju web stranicu na svijetu". Treba stranicu koja se brzo otvara na mobitelu, jasno kaže što radiš i gdje si, i kupcu omogućuje da te nazove, pošalje upit ili rezervira termin. Sve ostalo je dodatak koji ima smisla tek kad osnova radi.
+    content: `Ponude za istu web stranicu znaju se razlikovati i po nekoliko puta, a iz njih rijetko jasno piše što zapravo dobivaš. Većina malih firmi i obrta ne treba "najbolju web stranicu na svijetu". Treba stranicu koja se brzo otvara na mobitelu, jasno kaže što radiš i gdje si, i kupcu omogućuje da te nazove, pošalje upit ili rezervira termin. Sve ostalo je dodatak koji ima smisla tek kad osnova radi.
 
-Ovaj vodič prolazi cijeli put: od toga što ti zaista treba, preko izbora tehnologije i koraka izrade, do pitanja koja trebaš postaviti prije nego što nekome platiš.
+Ovaj vodič prolazi cijeli put: od toga što ti zaista treba, preko izbora tehnologije i sedam koraka izrade, do pitanja koja trebaš postaviti prije nego što nekome platiš.
 
-## Što web stranica male firme stvarno treba
+## Što treba poslovna web stranica male firme ili obrta?
 
-Za obrt, ured ili malu tvrtku dovoljna je kratka, uredna stranica sa sljedećim dijelovima:
+Za obrt, ured ili malu tvrtku dovoljna je kratka, uredna stranica od pet dijelova:
 
 - **Početna** koja u jednoj rečenici kaže što radiš, za koga i gdje.
 - **Usluge ili ponuda**, svaka s kratkim opisom, a po mogućnosti i okvirnom cijenom ili načinom obračuna.
@@ -49,9 +57,38 @@ Za obrt, ured ili malu tvrtku dovoljna je kratka, uredna stranica sa sljedećim 
 
 Uz to dolaze stvari koje se ne vide, a jednako su važne: stranica mora raditi na svim veličinama ekrana, brzo se učitavati, imati SSL certifikat (lokot u pregledniku), osnovnu SEO postavku i povezan Google Business profil. Bez toga i najljepši dizajn ostaje nevidljiv.
 
-## Prezentacijska stranica, web shop ili rješenje po mjeri?
+## Što je profesionalna internet web stranica?
 
-Prije traženja ponuda odluči koju vrstu projekta zapravo naručuješ, jer se razlikuju u trajanju i cijeni:
+Profesionalna web stranica je ona koja se brzo otvara na mobitelu, jasno kaže što nudiš i kupcu daje jedan očit sljedeći korak: poziv, upit ili rezervaciju. Skup dizajn to ne jamči, a jeftina stranica to ne isključuje.
+
+Profesionalne web stranice prepoznaju se po nekoliko stvari koje kupac primijeti i kad ih ne zna nazvati:
+
+- **Vlastita domena i poslovni e-mail** (ime@tvojafirma.hr umjesto besplatne adrese).
+- **Lokot u pregledniku** (SSL) i stranica koja se ne raspada na mobitelu.
+- **Prave fotografije** ljudi, prostora i radova umjesto fotografija sa stock stranica.
+- **Kontakt na jedan dodir**: broj se na mobitelu može kliknuti, adresa otvara kartu.
+- **Svjež sadržaj**: cijene, radno vrijeme i ponuda odgovaraju stvarnosti.
+- **Podaci o firmi** (naziv, adresa, OIB) koje poslovna stranica treba imati.
+
+## Web stranica za obrt ili za d.o.o.: postoji li razlika?
+
+Tehnički nema razlike, razlika je u sadržaju i podacima koje stranica mora prikazati. Izrada stranice za obrte i izrada stranice za tvrtku idu istim koracima, ali s drugim naglaskom.
+
+**Obrt** je najčešće jedna osoba ili mali tim koji radi lokalno. Kupac želi brzo vidjeti što radiš, gdje si, kad radiš i kako te dobiti. Najviše vrijede telefon, radno vrijeme, galerija radova i povezan Google Business profil, a na stranici trebaju biti naziv obrta i podaci o vlasniku.
+
+**D.o.o. ili j.d.o.o.** češće prodaje drugim firmama, pa kupac prije upita provjerava tko ste: reference, tim, certifikati, ponekad i stranica na engleskom. Trgovačko društvo uz to mora navesti propisane podatke o društvu (npr. registarski sud, MBS i temeljni kapital). Točan popis provjeri s knjigovođom.
+
+## Kakva web stranica treba poduzetnicima, proizvođačima i poduzećima?
+
+Ovisi o tome kome prodaješ: krajnjem kupcu treba jasna ponuda i brz kontakt, a poslovnom kupcu katalog, specifikacije i upit za ponudu.
+
+- **Poduzetnici na početku**: jedna dobro napisana stranica s ponudom i kontaktom dovoljna je da provjeriš ima li interesa. Proširuje se kad posao krene.
+- **Proizvođači**: katalog proizvoda s tehničkim podacima, specifikacije za preuzimanje, upit za veleprodaju i često više jezika ako izvoziš. Web shop treba samo ako stvarno prodaješ krajnjim kupcima online.
+- **Poduzeća s više odjela**: više podstranica, novosti, stranica za zapošljavanje i CMS u kojem više ljudi uređuje sadržaj.
+
+## Treba ti prezentacijska stranica, web shop ili rješenje po mjeri?
+
+Za većinu obrta i malih firmi dovoljna je prezentacijska stranica, a web shop ili rješenje po mjeri trebaju tek kad prodaješ online ili trebaš posebne funkcije. Prije traženja ponuda odluči koju vrstu projekta zapravo naručuješ, jer se razlikuju u trajanju i cijeni:
 
 1. **Prezentacijska stranica.** Nekoliko podstranica, kontakt obrazac, Google karta. To je ono što treba većini obrtnika, ordinacija, ureda i lokalnih servisa.
 2. **Web shop.** Katalog proizvoda, košarica, online plaćanje, dostava, računi. Posla je znatno više, a i odgovornosti: plaćanja, uvjeti prodaje, povrati.
@@ -59,7 +96,9 @@ Prije traženja ponuda odluči koju vrstu projekta zapravo naručuješ, jer se r
 
 Primjer iz naše prakse: za agenciju za nekretnine Selected Real Estate Cenner tim izradio je portal s oglasima, pretragom, profilima agenata i više jezika, a za zagrebačku firmu za čišćenje Čistimo platformu za online rezervacije s jasnim cijenama. Takvi projekti traže drugačiji opseg od stranice s pet podstranica, pa ih ne treba uspoređivati istom mjerom.
 
-## WordPress ili izrada od nule?
+## Je li bolji WordPress ili izrada od nule?
+
+Ni jedno nije bolje samo po sebi: WordPress je bolji kad sam uređuješ sadržaj, a izrada od nule kad su presudni brzina ili posebne funkcije.
 
 **WordPress** je dobar izbor kad želiš sam mijenjati tekstove, dodavati objave ili voditi manji web shop (WooCommerce), a stranica ne treba neobične funkcije. Prednost je velik izbor gotovih dodataka i lako pronalaženje nekoga tko ga zna održavati. Više o tome piše na stranici o [izradi WordPress stranica](/usluge/wordpress-izrada).
 
@@ -67,7 +106,9 @@ Primjer iz naše prakse: za agenciju za nekretnine Selected Real Estate Cenner t
 
 Nijedno nije "bolje" samo po sebi. Dobar izvođač preporučit će ono što odgovara tvom poslu, a ne ono što on najčešće radi.
 
-## Kako izgleda izrada web stranice, korak po korak
+## Kako izgleda izrada web stranice, korak po korak?
+
+Izrada ide u sedam koraka, od cilja i sadržaja do održavanja nakon objave:
 
 1. **Cilj i sadržaj.** Zapiši što stranica treba postići (pozivi, upiti, prodaja, rezervacije) i skupi tekstove, fotografije i logo. Nedostatak sadržaja najčešći je razlog kašnjenja.
 2. **Domena i hosting.** Domenu registriraj na svoje ime ili ime firme. Ako je za tebe registrira izvođač, provjeri da si ti vlasnik.
@@ -77,13 +118,15 @@ Nijedno nije "bolje" samo po sebi. Dobar izvođač preporučit će ono što odgo
 6. **Testiranje i objava.** Provjera na više uređaja i preglednika, test obrazaca, preusmjeravanja sa stare stranice ako je imaš.
 7. **Održavanje.** Ažuriranja, sigurnosne kopije i sitne izmjene. Dogovori unaprijed tko to radi i koliko košta.
 
-## O čemu ovisi cijena izrade web stranice
+## O čemu ovisi cijena izrade web stranice?
 
 Cijena ovisi o broju podstranica, tome tko piše tekstove, posebnim funkcijama (rezervacije, plaćanje, više jezika), dizajnu po mjeri ili gotovoj temi te o tome uključuje li ponuda hosting i održavanje. Okvirne raspone za različite vrste projekata držimo na stranici o [profesionalnoj izradi web stranica](/usluge/izrada-web-stranica).
 
 Kad uspoređuješ ponude, nemoj gledati samo ukupan iznos. Usporedi **što je točno uključeno**: broj revizija dizajna, unos sadržaja, SEO postavku, obuku za uređivanje i rok. Jeftinija ponuda koja ne uključuje unos sadržaja ili mobilnu verziju dizajna na kraju često ispadne skuplja.
 
-## Što provjeriti prije nego što platiš
+## Što provjeriti prije nego što platiš izradu web stranice?
+
+Pet stvari: opseg u pisanom obliku, tko je vlasnik domene i koda, plaćanje po fazama, reference koje se mogu otvoriti i tko održava stranicu nakon objave.
 
 - **Opseg u pisanom obliku**: koje podstranice, koje funkcije, koliko revizija, koji rok.
 - **Vlasništvo**: domena, hosting, pristupni podaci i (kod izrade od nule) izvorni kod moraju na kraju biti tvoji.
@@ -91,9 +134,9 @@ Kad uspoređuješ ponude, nemoj gledati samo ukupan iznos. Usporedi **što je to
 - **Reference koje se mogu otvoriti**: žive stranice, ne samo slike.
 - **Što je nakon objave**: tko popravlja greške i koliko se dugo to radi bez naplate.
 
-## Kako to ide preko Cennera
+## Kako ide izrada web stranice preko Cennera?
 
-Na Cenneru imaš dva puta.
+Na Cenneru imaš dva puta: sam biraš freelancera na marketplaceu ili posao preuzima Cenner tim po fiksnoj cijeni.
 
 **Marketplace s freelancerima.** Pregledaš gotove pakete web developera s fiksnom cijenom i rokom ili objaviš projekt i usporediš ponude. Freelanceri prolaze KYC provjeru identiteta, a plaćanje ide kroz platformu: novac se drži dok posao nije isporučen, a veći projekti mogu se podijeliti na etape koje se plaćaju jedna po jedna.
 
@@ -107,6 +150,28 @@ Na Cenneru imaš dva puta.
 - Plaćanje je po fazama ili zaštićeno.
 - Nakon objave znam tko održava stranicu.
 `,
+    faq: [
+      {
+        q: 'Koliko košta izrada poslovne web stranice za obrt ili malu firmu?',
+        a: 'Jednostavna predstavljajuća stranica obrta ili male firme obično staje 300 € do 800 €, a korporativna stranica s više podstranica i CMS-om 800 € do 2.500 €. Cenner tim radi web stranice po mjeri od 800 € i WordPress stranice od 500 €.',
+      },
+      {
+        q: 'Koliko traje izrada web stranice za obrt?',
+        a: 'Predstavljajuća stranica obrta ili male firme obično je gotova za 1 do 3 tjedna. Najčešći razlog kašnjenja je sadržaj (tekstovi i fotografije) koji nije spreman na vrijeme.',
+      },
+      {
+        q: 'Treba li obrtu web stranica ako već ima Facebook ili Instagram profil?',
+        a: 'Treba ako želiš da te pronađu na Googleu i da imaš prostor koji je tvoj. Profil na društvenoj mreži ovisi o pravilima te mreže, a vlastita stranica i domena ostaju tvoje.',
+      },
+      {
+        q: 'Priznaje li se izrada web stranice kao poslovni trošak?',
+        a: 'Kod obrta koji vodi poslovne knjige i kod tvrtke to je u pravilu poslovni trošak, a način knjiženja dogovori s knjigovođom. Paušalni obrt porez plaća prema primicima, pa mu troškovi ne smanjuju porez.',
+      },
+      {
+        q: 'Tko treba biti vlasnik domene?',
+        a: 'Ti ili tvoja firma. Ako domenu registrira izvođač, traži da bude na tvoje ime, zajedno s pristupnim podacima za hosting i, kod izrade od nule, izvornim kodom.',
+      },
+    ],
   },
   {
     slug: 'kako-odabrati-web-developera',
@@ -274,12 +339,12 @@ Na Cenneru možeš pronaći SEO freelancere i stručnjake za [digitalni marketin
   },
   {
     slug: 'freelance-u-hrvatskoj',
-    title: 'Freelance u Hrvatskoj: kako početi i pronaći honorarni posao online',
-    seoTitle: 'Freelance u Hrvatskoj i honorarni posao online: vodič',
+    title: 'Freelance u Hrvatskoj: kako početi, što znači freelancer i što ti nitko ne kaže o paušalu',
+    seoTitle: 'Freelance u Hrvatskoj: što nitko ne kaže o paušalu',
     description:
-      'Kako početi s freelanceom u Hrvatskoj: registracija (paušalni obrt ili tvrtka), gdje tražiti honorarni posao online, kako složiti profil i ponudu te kako izbjeći prevare.',
+      'Za freelance u Hrvatskoj većini je dovoljan paušalni obrt. Ali troškovi ti ne smanjuju porez, a doprinosi stižu i u mjesecu bez posla. Što još znati?',
     excerpt:
-      'Od registracije do prvog klijenta: kako zakonito početi raditi kao freelancer u Hrvatskoj, gdje tražiti honorarni posao online i kako ne naletjeti na prevaru.',
+      'Što znači freelancer i honorarni posao, kako zakonito početi (ugovor o djelu ili paušalni obrt), četiri stvari koje iznenade paušaliste i kako izbjeći prevaru.',
     keywords: [
       'freelance hrvatska',
       'freelance',
@@ -289,34 +354,71 @@ Na Cenneru možeš pronaći SEO freelancere i stručnjake za [digitalni marketin
       'honorarni posao online',
       'honorarni poslovi online',
       'freelance poslovi hrvatska',
+      'freelancer',
+      'freelancer značenje',
+      'honorarni posao',
+      'što znači honorarni posao',
+      'honorarni ugovor',
     ],
     services: ['digitalni-marketing', 'programiranje'],
     publishedAt: '2026-10-23',
+    updatedAt: '2026-11-16',
     author: 'Cenner',
-    content: `Freelance je u Hrvatskoj sve češći način rada: dizajneri, programeri, prevoditelji, marketinški stručnjaci i mnogi drugi rade za više klijenata umjesto za jednog poslodavca. Sloboda je stvarna, ali i odgovornost: sam tražiš posao, sam određuješ cijenu i sam brineš o porezima.
+    content: `Daš otkaz ili uzmeš prvi honorarni projekt, a onda shvatiš da nitko nije objasnio kako se izdaje račun, koliko ide državi i zašto ti platforma ne želi isplatiti zaradu. Freelance je u Hrvatskoj sve češći način rada: dizajneri, programeri, prevoditelji, marketinški stručnjaci i mnogi drugi rade za više klijenata umjesto za jednog poslodavca. Sloboda je stvarna, ali i odgovornost: sam tražiš posao, sam određuješ cijenu i sam brineš o porezima.
 
-Ovaj vodič je za one koji tek kreću ili žele honorarni posao online pretvoriti u nešto stabilnije.
+Ovaj vodič je za one koji tek kreću ili žele honorarni posao online pretvoriti u nešto stabilnije. Ako tražiš freelancera, a ne posao, skoči na zadnji odjeljak.
 
-## Što je freelance, a što honorarni posao
+## Što znači freelancer?
 
-U svakodnevnom govoru znače gotovo isto: radiš na projektima za klijente, bez ugovora o radu. Razlika je obično u opsegu. Honorarni posao često je dodatak uz stalni posao, a freelance je glavni izvor prihoda. Pravila oko računa i poreza vrijede za oboje.
+Freelancer je osoba koja radi samostalno, za više klijenata, po projektu ili po satu, bez ugovora o radu s jednim poslodavcem. Riječ dolazi iz engleskog "free lance", slobodno koplje: tako su se nekad zvali plaćenici koji nisu služili jednom gospodaru.
 
-## Prvi korak: zakonita registracija
+Freelance je način rada, ne zanimanje. Freelancer može biti dizajner, programer, prevoditelj, fotograf ili marketinški stručnjak.
 
-Da bi u Hrvatskoj mogao izdavati račune klijentima, trebaš registriran oblik djelatnosti. Za većinu freelancera koji kreću najjednostavniji je **paušalni obrt**: umjesto vođenja poslovnih knjiga plaća se paušalni porez prema razredu godišnjeg primitka. Kad posao naraste, mnogi prelaze na obrt koji vodi knjige ili osnivaju j.d.o.o. ili d.o.o.
+## Što znači honorarni posao i po čemu se razlikuje od freelancea?
+
+Honorarni posao je posao za koji primaš honorar umjesto plaće, najčešće uz stalni posao, a freelance je kad je takav rad tvoj glavni izvor prihoda. U svakodnevnom govoru znače gotovo isto: radiš na projektima za klijente, bez ugovora o radu. Pravila oko računa i poreza vrijede za oboje.
+
+## Kako se plaća honorarni posao: ugovor o djelu ili obrt?
+
+Povremeni posao može se isplatiti preko ugovora o djelu ili autorskog ugovora, a za redovan rad za više klijenata treba ti obrt ili tvrtka.
+
+- **Ugovor o djelu ili autorski ugovor** ima smisla za jednokratan posao: naručitelj ti isplaćuje honorar i pritom obračunava porez i doprinose. Zato ga obično nude firme, a ne pojedinci, a za isplatu preko platformi poput Cennera nije dovoljan.
+- **Paušalni obrt** je najčešći izbor kad radiš redovno, za više klijenata ili za klijente iz inozemstva, jer sam izdaješ račune.
+- **J.d.o.o. ili d.o.o.** dolazi kad posao naraste ili kad radiš s partnerima.
+
+Ako honorarno radiš uz stalni posao, provjeri ugovor o radu: radnik bez odobrenja poslodavca ne smije za svoj račun raditi u istoj djelatnosti kojom se bavi poslodavac.
+
+## Kako zakonito početi raditi kao freelancer?
+
+Za većinu početnika najjednostavniji put je paušalni obrt. Da bi u Hrvatskoj mogao izdavati račune klijentima, trebaš registriran oblik djelatnosti. Za većinu freelancera koji kreću najjednostavniji je **paušalni obrt**: umjesto vođenja poslovnih knjiga plaća se paušalni porez prema razredu godišnjeg primitka. Kad posao naraste, mnogi prelaze na obrt koji vodi knjige ili osnivaju j.d.o.o. ili d.o.o.
 
 Iznose poreza, doprinosa i pragova godišnjeg primitka uvijek provjeri na stranicama Porezne uprave ili kod knjigovođe, jer se mijenjaju. Korake otvaranja paušalnog obrta opisali smo u vodiču [Početak rada: otvaranje paušalnog obrta](/onboarding).
 
 Važno ako radiš preko Cennera: platforma isplaćuje zaradu samo registriranim poreznim obveznicima (obrt, paušalni obrt ili tvrtka), jer bez registriranog subjekta ne možeš izdati račun.
 
-## Gdje tražiti honorarni posao online
+## Što ti nitko ne kaže o paušalnom obrtu?
+
+Paušal je jednostavan, ali ima četiri stvari koje početnike iznenade:
+
+1. **Troškovi ti ne smanjuju porez.** Paušalist plaća porez prema razredu godišnjeg primitka, a ne prema dobiti. Novi laptop ili program koji kupiš za posao ne mijenjaju iznos poreza.
+2. **Doprinosi stižu i u mjesecu bez posla.** Ako je obrt tvoja jedina djelatnost, doprinosi se plaćaju svaki mjesec, bez obzira na to koliko si taj mjesec zaradio. Zato drži rezervu za slabije mjesece.
+3. **Paušal ima gornju granicu.** Kad godišnji primici prijeđu propisani prag, prelaziš u drugi sustav oporezivanja. Iznos praga provjeri na stranicama Porezne uprave jer se mijenja.
+4. **Bez registracije nema isplate.** Platforme koje rade po pravilima, pa tako i Cenner, zaradu isplaćuju samo registriranom obrtu ili tvrtki.
+
+Ništa od toga nije razlog da ne kreneš, ali jest razlog da cijenu računaš s porezima i doprinosima, a ne bez njih.
+
+## Gdje tražiti honorarni posao online?
+
+Najbrže preko vlastite mreže i freelance platformi, a zatim preko LinkedIna i lokalnih firmi. Detaljnije o tome koji se poslovi traže piše u vodičima [honorarni posao online](/blog/honorarni-posao-online) i [freelance poslovi u Hrvatskoj](/blog/freelance-poslovi-hrvatska).
 
 - **Vlastita mreža.** Prvi klijenti vrlo često dolaze preko bivših kolega, poslodavaca i poznanika. Javi im da radiš i što točno nudiš.
 - **Freelance platforme.** Prednost je što klijenti tamo već traže izvođača, a plaćanje je zaštićeno. Nedostatak je konkurencija, pa profil mora biti dobar.
 - **LinkedIn i društvene mreže.** Objavljuj konkretne radove i rezultate, ne samo "dostupan sam za posao".
 - **Lokalne firme.** Obrti i male tvrtke u tvom kraju često trebaju web stranicu, grafike ili oglase, a nemaju koga pitati.
 
-## Profil koji dobiva posao
+## Kako složiti freelance profil koji dobiva posao?
+
+Profil koji dobiva posao ima jasnu specijalizaciju, prave radove i konkretnu ponudu s cijenom i rokom.
 
 1. **Jasna specijalizacija.** "Izrađujem WordPress stranice za ordinacije i salone" prodaje bolje od "radim sve vezano uz web".
 2. **Portfolio s pravim radovima.** Ako tek krećeš, napravi dva ili tri projekta za sebe ili neprofitnu udrugu i pokaži ih.
@@ -324,18 +426,20 @@ Važno ako radiš preko Cennera: platforma isplaćuje zaradu samo registriranim 
 4. **Brz i jasan odgovor.** Na upite odgovaraj isti dan, čak i ako je odgovor "javim se sutra s ponudom".
 5. **Provjeren identitet.** Klijenti radije biraju nekoga čiji je identitet potvrđen.
 
-## Kako odrediti cijenu
+## Kako odrediti cijenu kao freelancer?
 
 Kreni od toga koliko trebaš zaraditi mjesečno, dodaj poreze i doprinose, troškove alata i opreme te vrijeme koje nije naplativo (komunikacija, ponude, administracija). Tek onda usporedi s tržištem. Pogreška početnika je cijena koja pokriva samo sate rada na projektu.
 
-## Kako izbjeći prevare
+## Kako izbjeći prevare s honorarnim poslom?
+
+Pravilo je jednostavno: ti nikad ne plaćaš da bi dobio posao.
 
 - Nikad ne plaćaj "klijentu" za materijale, licence ili "ulaznu naknadu" da bi dobio posao.
 - Ne radi veliki posao bez pisanog dogovora o opsegu, roku i cijeni.
 - Budi oprezan kad netko inzistira da komunikacija i plaćanje odmah idu izvan platforme.
 - Kod većih projekata traži plaćanje po etapama.
 
-## Kako freelance izgleda na Cenneru
+## Kako freelance izgleda na Cenneru?
 
 Cenner je hrvatska freelance platforma na kojoj freelanceri nude gotove pakete (opis, fiksna cijena, rok isporuke) i odgovaraju na projekte koje objavljuju klijenti. Identitet se potvrđuje KYC provjerom, a plaćanje ide kroz platformu: klijent plaća unaprijed, novac se drži dok posao nije isporučen, a veći ugovori mogu se podijeliti na etape.
 
@@ -344,16 +448,46 @@ Otvaranje profila je besplatno. Na besplatnom planu provizija je 15 %, Pro (19 �
 U studenom stiže i **job matching**: poslovi rangirani prema tvojim vještinama, oglasima i profilu, tako da prvo vidiš projekte za koje imaš najviše šanse.
 
 Ako tek krećeš, prvo uredi profil i objavi jedan dobro opisan paket. To je najbrži put do prvog upita.
+
+## Freelanceri po gradovima
+
+Freelance posao vodi se online, ali klijenti često traže i nekoga iz svog kraja. Pogledaj tko radi u [Zagrebu](/freelanceri/zagreb), [Splitu](/freelanceri/split), [Rijeci](/freelanceri/rijeka) i [Osijeku](/freelanceri/osijek).
+
+## Tražiš freelancera, a ne posao?
+
+Ako si klijent, na [Marketplaceu](/marketplace) pregledaš gotove pakete s fiksnom cijenom ili objaviš projekt i usporediš ponude. Novac se drži na platformi i freelanceru se isplaćuje tek kad je posao isporučen. Za web projekte pogledaj [izradu web stranica](/usluge/izrada-web-stranica) i [web developere](/usluge/web-developeri).
 `,
+    faq: [
+      {
+        q: 'Što znači freelancer?',
+        a: 'Freelancer je osoba koja samostalno radi za više klijenata, po projektu ili po satu, bez ugovora o radu s jednim poslodavcem.',
+      },
+      {
+        q: 'Što znači honorarni posao?',
+        a: 'Honorarni posao je posao za koji primaš honorar umjesto plaće, najčešće povremeno ili uz stalni posao. Isplaćuje se preko ugovora o djelu, autorskog ugovora ili računa obrta ili tvrtke.',
+      },
+      {
+        q: 'Trebam li otvoriti obrt da bih radio kao freelancer?',
+        a: 'Za redovan rad za više klijenata da, jer bez registrirane djelatnosti ne možeš izdavati račune. Za većinu početnika najjednostavniji je paušalni obrt.',
+      },
+      {
+        q: 'Smanjuju li troškovi porez paušalnom obrtu?',
+        a: 'Ne. Paušalist plaća porez prema razredu godišnjeg primitka, pa troškovi opreme i alata ne mijenjaju iznos poreza.',
+      },
+      {
+        q: 'Koliko Cenner uzima od freelancera?',
+        a: 'Na besplatnom planu provizija je 15 %, na Pro planu (19 € mjesečno) 10 %, na Ultra (59 € mjesečno) 5 %, a na Enterprise (99 € mjesečno) 0 %. Otvaranje profila je besplatno.',
+      },
+    ],
   },
   {
     slug: 'dizajn-loga-i-vizualnog-identiteta',
-    title: 'Dizajn loga i vizualnog identiteta: kako naručiti logo koji traje',
-    seoTitle: 'Dizajn loga i vizualnog identiteta: vodič',
+    title: 'Dizajn loga i vizualnog identiteta: 7 stvari koje moraš dobiti od dizajnera',
+    seoTitle: 'Dizajn loga: 7 stvari koje moraš dobiti uz logo',
     description:
-      'Što je razlika između loga i vizualnog identiteta, kako napisati dobar brief za dizajnera, koje datoteke i prava moraš dobiti i o čemu ovisi cijena dizajna loga.',
+      'Uz dobar logo dobivaš vektorske datoteke, varijante i pisani prijenos prava. Bez toga ga možda ne možeš zaštititi kao žig. Što još tražiti i koliko košta?',
     excerpt:
-      'Logo nije cijeli brend, ali je početak. Kako napisati brief, što tražiti od dizajnera i koje datoteke i prava moraš dobiti na kraju.',
+      'Vrste logotipa, redoslijed dizajna logotipa i brendiranja, brief za dizajnera, cijene te sedam datoteka i prava koje moraš dobiti kad je logo gotov.',
     keywords: [
       'dizajn loga',
       'izrada vizualnog identiteta',
@@ -361,15 +495,21 @@ Ako tek krećeš, prvo uredi profil i objavi jedan dobro opisan paket. To je naj
       'vizualni identitet',
       'izrada vizuala',
       'grafički dizajn',
+      'logo dizajn',
+      'dizajn logotipa',
+      'dizajn logotipa i brendiranje',
     ],
     services: ['dizajn-loga'],
     publishedAt: '2026-10-23',
+    updatedAt: '2026-11-16',
     author: 'Cenner',
-    content: `Dobar logo prepoznaje se i na kartici od nekoliko milimetara i na kombiju. Loš logo radi samo na slici koju ti je dizajner poslao. Razlika najčešće ne ovisi o talentu, nego o tome koliko je dobro bio postavljen zadatak.
+    content: `Logo izgleda odlično na slici koju ti je dizajner poslao, a onda se na vizitki razmaže, na majici ga se ne može izvesti, a tiskara traži datoteku koju nemaš. Dobar logo prepoznaje se i na kartici od nekoliko milimetara i na kombiju. Razlika najčešće ne ovisi o talentu, nego o tome koliko je dobro bio postavljen zadatak.
 
-Ovaj vodič je za naručitelje: kako se pripremiti, što tražiti i što moraš dobiti na kraju.
+Ovaj vodič je za naručitelje: kako se pripremiti, što tražiti i sedam stvari koje moraš dobiti na kraju.
 
-## Logo, vizualni identitet i brend nisu isto
+## Koja je razlika između loga, vizualnog identiteta i brenda?
+
+Logo je znak, vizualni identitet je cijeli sustav oko njega (boje, pisma, pravila), a brend je dojam koji ljudi imaju o tebi.
 
 - **Logo** je znak i/ili ime u određenom pismu. To je jedna, istina najvažnija, stavka.
 - **Vizualni identitet** je sustav: logo, boje, tipografija, način korištenja fotografija i grafika, pravila primjene.
@@ -377,9 +517,25 @@ Ovaj vodič je za naručitelje: kako se pripremiti, što tražiti i što moraš 
 
 Za mali obrt ponekad je dovoljan logo s osnovnim bojama. Firma koja će imati web, društvene mreže, ambalažu i vozila treba cijeli vizualni identitet, inače svaka primjena izgleda malo drugačije. Što ulazi u [izradu vizualnog identiteta](/usluge/dizajn-loga) i kako pronaći dizajnera, pregledali smo na posebnoj stranici.
 
-## Kako napisati brief za dizajnera
+## Koje vrste logotipa postoje?
 
-Brief ne mora biti dug. Dobar brief odgovara na ova pitanja:
+U logo dizajnu najčešće se koristi pet vrsta, a izbor ovisi o imenu firme i o tome gdje će se logo koristiti:
+
+- **Logotip od slova** (wordmark): samo ime u posebno oblikovanom pismu. Dobar kad je ime kratko i lako pamtljivo.
+- **Monogram**: inicijali, za duga imena ili imena od više riječi.
+- **Znak ili simbol**: slika bez teksta. Snažan kad je brend već poznat, rizičan za firmu koja tek kreće.
+- **Kombinirani logo**: znak i ime zajedno, uz mogućnost da se kasnije koriste i odvojeno. Najčešći izbor za male firme.
+- **Amblem**: ime unutar oblika, poput pečata. Dobro izgleda na ambalaži i odjeći, slabije u maloj veličini.
+
+## Dizajn logotipa i brendiranje: kojim redom?
+
+Prvo odluči kome se obraćaš i kako želiš djelovati, zatim radi logo, a tek onda ostatak identiteta. Obrnuti redoslijed znači da se boje i pisma kasnije prilagođavaju logu koji ne odgovara poslu.
+
+Za **obrt ili malu firmu** često je dovoljan logo s osnovnim bojama i pismom. Za **firmu koja raste**, s webom, ambalažom, vozilima i više ljudi koji izrađuju materijale, isplati se cijeli vizualni identitet s pravilima primjene, jer bez pravila svaka primjena izgleda malo drugačije.
+
+## Kako napisati brief za dizajnera?
+
+Brief ne mora biti dug. Dobar brief na jednoj stranici odgovara na šest pitanja:
 
 1. **Tko ste i što radite**, u dvije ili tri rečenice.
 2. **Tko su kupci**: dob, gdje vas susreću, što im je važno.
@@ -390,13 +546,15 @@ Brief ne mora biti dug. Dobar brief odgovara na ova pitanja:
 
 Primjeri logotipa koji vam se sviđaju korisni su, ali objasni *zašto* vam se sviđaju. Dizajneru to govori više od same slike.
 
-## Kako izgleda proces
+## Kako izgleda proces izrade loga?
 
-Uobičajeno: brief i razgovor, istraživanje, nekoliko početnih smjerova, odabir jednog, dorade, pa izrada finalnih datoteka i pravila korištenja. Prije početka dogovori **koliko je smjerova i koliko krugova izmjena uključeno**. Neograničene izmjene zvuče dobro, ali obično znače da zadatak nije jasno postavljen.
+Proces ide od briefa preko nekoliko početnih smjerova do finalnih datoteka. Uobičajeno: brief i razgovor, istraživanje, nekoliko početnih smjerova, odabir jednog, dorade, pa izrada finalnih datoteka i pravila korištenja. Prije početka dogovori **koliko je smjerova i koliko krugova izmjena uključeno**. Neograničene izmjene zvuče dobro, ali obično znače da zadatak nije jasno postavljen.
 
 Traži da vidiš logo **u primjeni**: na mobitelu, u maloj veličini, u jednoj boji, na tamnoj i svijetloj podlozi.
 
-## Što moraš dobiti na kraju
+## Što moraš dobiti od dizajnera kad je logo gotov?
+
+Sedam stvari: vektorske i rasterske datoteke, varijante, kodove boja, nazive fontova, pravila korištenja i pisani prijenos prava.
 
 - **Vektorske datoteke** (SVG, PDF ili AI/EPS) za tisak i natpise.
 - **Rasterske datoteke** (PNG s prozirnom pozadinom) za web i društvene mreže.
@@ -406,20 +564,42 @@ Traži da vidiš logo **u primjeni**: na mobitelu, u maloj veličini, u jednoj b
 - **Kratka pravila korištenja**: minimalna veličina, zaštitni prostor, što se ne smije.
 - **Prijenos imovinskih autorskih prava** u pisanom obliku, ako želiš logo koristiti bez ograničenja. Bez toga autor zadržava prava, što može biti problem kod registracije žiga ili prodaje firme.
 
-## O čemu ovisi cijena dizajna loga
+## Koliko košta dizajn loga i o čemu ovisi cijena?
 
-Cijena ovisi o iskustvu dizajnera, broju početnih smjerova i krugova izmjena, tome je li to samo logo ili cijeli vizualni identitet, broju primjena koje treba pripremiti (vizitke, predlošci za društvene mreže, ambalaža) i o prijenosu prava. Okvirne raspone za logo i vizualni identitet navodimo na stranici [dizajn loga i vizualnog identiteta](/usluge/dizajn-loga).
+Jednostavan logo s par revizija obično staje 80 € do 250 €, a kompletan vizualni identitet 300 € do 1.200 €. Cijena ovisi o iskustvu dizajnera, broju početnih smjerova i krugova izmjena, tome je li to samo logo ili cijeli vizualni identitet, broju primjena koje treba pripremiti (vizitke, predlošci za društvene mreže, ambalaža) i o prijenosu prava. Okvirne raspone za logo i vizualni identitet navodimo na stranici [dizajn loga i vizualnog identiteta](/usluge/dizajn-loga).
 
 Jeftin logo iz generatora ili gotovog predloška može poslužiti za početak, ali ga vjerojatno nećeš moći zaštititi, a ista slika možda se nalazi i kod nekog drugog.
 
-## Izrada vizuala nakon loga
+## Što dolazi nakon loga: izrada vizuala?
 
-Kad imaš identitet, slijede vizuali za društvene mreže, oglase i tisak. Ako su pravila jasna, izrada vizuala je brža i jeftinija, a sve objave izgledaju kao da dolaze od iste firme, čak i kad ih radi netko drugi.
+Nakon loga slijede vizuali za društvene mreže, oglase i tisak. Kad imaš identitet, slijede vizuali za društvene mreže, oglase i tisak. Ako su pravila jasna, izrada vizuala je brža i jeftinija, a sve objave izgledaju kao da dolaze od iste firme, čak i kad ih radi netko drugi.
 
-## Dizajneri na Cenneru
+## Gdje naručiti dizajn loga u Hrvatskoj?
 
 Na Cenneru možeš pregledati gotove pakete grafičkih dizajnera s fiksnom cijenom i rokom isporuke ili objaviti projekt i usporediti ponude. Dizajneri prolaze KYC provjeru identiteta, a plaćanje se oslobađa po isporuci. Ako želiš da posao preuzme Cenner tim, grafički dizajn (logo, vizualni identitet, grafike za društvene mreže i oglase, datoteke spremne za tisak) radimo od 300 €. Pogledaj [usluge Cenner tima](/services).
 `,
+    faq: [
+      {
+        q: 'Koliko košta dizajn loga u Hrvatskoj?',
+        a: 'Jednostavan logo s par revizija obično staje 80 € do 250 €, kompletan vizualni identitet 300 € do 1.200 €, a brending paket s brand guideom od 800 € naviše. Cenner tim grafički dizajn radi od 300 €.',
+      },
+      {
+        q: 'Koje datoteke moram dobiti uz logo?',
+        a: 'Vektorske datoteke (SVG, PDF ili AI/EPS), PNG s prozirnom pozadinom, punu, skraćenu, jednobojnu i inverznu verziju, kodove boja za ekran i tisak, nazive fontova i kratka pravila korištenja.',
+      },
+      {
+        q: 'Tko je vlasnik autorskih prava na logo?',
+        a: 'Autor, dok ti imovinska prava ne prenese pisanim ugovorom. Traži prijenos prava u pisanom obliku ako logo želiš koristiti bez ograničenja ili ga registrirati kao žig.',
+      },
+      {
+        q: 'Mogu li koristiti logo iz generatora ili predloška?',
+        a: 'Za sam početak može poslužiti, ali takav logo vjerojatno nećeš moći zaštititi, a ista slika možda se nalazi i kod nekog drugog.',
+      },
+      {
+        q: 'Što je izrada vizualnog identiteta?',
+        a: 'Izrada sustava oko loga: boje, tipografija, način korištenja fotografija i grafika te pravila primjene, tako da web, društvene mreže i tisak izgledaju kao da dolaze od iste firme.',
+      },
+    ],
   },
   {
     slug: 'kako-smo-izradili-ranwhat',
@@ -605,7 +785,249 @@ Detaljan vodič, s naredbama, nalazi se na [stenvakt.com](https://stenvakt.com/g
 Isto razmišljanje vrijedi za bilo koji sustav u koji pustiš automatiku: odluči što smije čitati, što smije mijenjati samo uz odobrenje, i kako ćeš poslije provjeriti što je napravila. Ako želiš aplikaciju ili web stranicu od tima koji svoje proizvode gradi na isti način, pogledaj [izradu web stranica](/usluge/izrada-web-stranica) ili [usluge Cenner tima](/services). Priče o samim alatima pročitaj u člancima [Kako smo izradili Stenvakt](/blog/kako-smo-izradili-stenvakt) i [Kako smo izradili ranwhat](/blog/kako-smo-izradili-ranwhat).
 `,
   },
+  {
+    slug: 'honorarni-posao-online',
+    title: 'Honorarni posao online: kad ti treba obrt, a kad ne',
+    seoTitle: 'Honorarni posao online: kad ti treba obrt, a kad ne',
+    description:
+      'Za povremeni honorarni posao online dovoljan je ugovor o djelu, za redovne klijente treba obrt. Koji se poslovi traže i kako prepoznati prevaru?',
+    excerpt:
+      'Koji se honorarni poslovi online stvarno traže, kako ih naplatiti (ugovor o djelu, studentski ugovor ili obrt) i po čemu prepoznati ponudu koja je prevara.',
+    keywords: [
+      'honorarni posao online',
+      'honorarni posao',
+      'honorarni poslovi online',
+      'posao od kuće',
+      'honorarni posao uz stalni posao',
+      'honorarni posao student',
+    ],
+    services: [],
+    publishedAt: '2026-11-16',
+    author: 'Cenner',
+    content: `Oglasi za honorarni posao online obećavaju zaradu od kuće, a pola ih traži da prvo nešto platiš, instaliraš ili "samo lajkaš". Druga polovica su pravi poslovi, ali rijetko piše kako ćeš ih naplatiti i što s porezom.
+
+Ovaj vodič razdvaja jedno od drugog: koji se honorarni poslovi online stvarno traže, kako se zakonito naplaćuju ovisno o tome tko si, i kako prepoznati prevaru prije nego što potrošiš vrijeme.
+
+## Što je honorarni posao online?
+
+Honorarni posao online je posao koji radiš na daljinu, za honorar umjesto plaće, a rezultat predaješ kao datoteku, poveznicu ili uslugu preko interneta. Radiš ga povremeno ili uz stalni posao, a klijent te plaća po projektu ili po satu.
+
+Od "posla od kuće" iz oglasa razlikuje ga jedna stvar: plaćaš se za konkretan rezultat koji klijent treba, a ne za kliktanje, preprodaju ili dovođenje novih ljudi.
+
+## Koji se honorarni poslovi online najčešće traže?
+
+Najviše se traže poslovi koji se mogu isporučiti bez dolaska na lokaciju: web stranice, dizajn, programiranje, marketing, pisanje i prijevodi. To su ujedno i kategorije za koje klijenti na Cenneru najčešće traže izvođače:
+
+- **Izrada web stranica**: predstavljajuće stranice za obrte i male firme, WordPress stranice, web shopovi. Pogledaj što klijenti očekuju na stranici [izrada web stranica](/usluge/izrada-web-stranica).
+- **Grafički dizajn**: logo, vizualni identitet, grafike za društvene mreže i oglase ([dizajn loga](/usluge/dizajn-loga)).
+- **Programiranje**: web aplikacije, integracije, automatizacije i skripte ([usluge programiranja](/usluge/programiranje)).
+- **Digitalni marketing**: Google i Meta oglasi, društvene mreže, e-mail marketing ([digitalni marketing](/usluge/digitalni-marketing)).
+- **Pisanje i prijevodi**: tekstovi za web stranice, objave, opisi proizvoda, prijevodi.
+
+Koliko klijenti za koju vrstu posla obično plaćaju, s rasponima po kategorijama, složili smo u vodiču [freelance poslovi u Hrvatskoj](/blog/freelance-poslovi-hrvatska).
+
+## Kako naplatiti honorarni posao online?
+
+Ovisi o tome koliko često radiš i za koga: za jedan posao dovoljan je ugovor, za redovne klijente treba ti obrt ili tvrtka.
+
+### Ako imaš stalni posao i radiš povremeno
+
+Za jednokratan posao za firmu najjednostavniji je **ugovor o djelu** ili **autorski ugovor** (za autorska djela, npr. tekst, dizajn, fotografiju). Firma ti isplaćuje honorar i pritom obračunava porez i doprinose, pa ti ne izdaješ račun. Prije nego što kreneš, provjeri ugovor o radu: radnik bez odobrenja poslodavca ne smije za svoj račun raditi u istoj djelatnosti kojom se bavi poslodavac.
+
+### Ako si student
+
+Student s pravom na studentski ugovor može raditi preko studentskog centra ili servisa, uz pravila koja oni objavljuju. To je dobar put za prve poslove kod firmi, ali ne i za vlastite klijente kojima trebaš izdati račun.
+
+### Ako ti je honorarni posao glavni izvor prihoda
+
+Kad radiš redovno, za više klijenata ili za klijente iz inozemstva, treba ti registrirana djelatnost: najčešće **paušalni obrt**, a kad posao naraste j.d.o.o. ili d.o.o. Tada sam izdaješ račune i sam plaćaš porez i doprinose. Što početnike iznenadi kod paušala, opisali smo u vodiču [freelance u Hrvatskoj](/blog/freelance-u-hrvatskoj).
+
+Iznose poreza, doprinosa i pragova uvijek provjeri na stranicama Porezne uprave ili kod knjigovođe, jer se mijenjaju.
+
+## Kako pronaći prvi honorarni posao online, korak po korak?
+
+Kreni od jedne usluge koju znaš napraviti dobro i složi je kao paket s cijenom i rokom:
+
+1. **Odaberi jednu uslugu.** "Logo i vizitka za obrt" lakše se prodaje od "radim dizajn".
+2. **Napravi dva ili tri primjera.** Ako nemaš klijentske radove, napravi projekt za sebe, prijatelja ili udrugu i pokaži ga.
+3. **Odredi cijenu s porezom.** Računaj koliko ti ostaje nakon poreza, doprinosa i vremena koje ne naplaćuješ.
+4. **Objavi ponudu ondje gdje klijenti već traže.** Freelance platforme, LinkedIn i lokalne firme koje trebaju baš tu uslugu.
+5. **Odgovaraj isti dan.** Brz i jasan odgovor često dobije posao prije jeftinije ponude.
+
+## Kako prepoznati prevaru s honorarnim poslom online?
+
+Prevaru najčešće prepoznaješ po tome što ti trebaš platiti, a ne klijent. Budi oprezan kad:
+
+- traže "ulaznu naknadu", tečaj, materijal ili opremu prije prvog posla;
+- posao je lajkanje, pisanje recenzija za proizvode koje nisi koristio ili "testiranje" aplikacija za nagradu;
+- netko ti nudi da novac primiš na svoj račun i proslijediš dalje;
+- komunikacija odmah ide na WhatsApp ili Telegram, bez imena firme i pisanog dogovora;
+- zarada je nerealno visoka za posao koji ne traži nikakvo znanje.
+
+Pravi klijent zna što treba, pristaje na pisani dogovor o opsegu i roku i ne traži od tebe novac.
+
+## Može li se honorarni posao online raditi preko Cennera?
+
+Može, ako imaš registriranu djelatnost: Cenner zaradu isplaćuje samo registriranim poreznim obveznicima (obrt, paušalni obrt ili tvrtka), jer bez toga ne možeš izdati račun. Studenti i oni koji rade samo preko ugovora o djelu zato zaradu preko Cennera ne mogu podići.
+
+Ako imaš obrt ili tvrtku, otvaranje profila je besplatno. Objaviš paket s opisom, fiksnom cijenom i rokom ili odgovaraš na projekte klijenata. Klijent plaća unaprijed, novac se drži na platformi i isplaćuje ti se kad je posao isporučen, pa ne moraš juriti uplate. Identitet se potvrđuje KYC provjerom, što klijentima daje razlog da izaberu baš tebe.
+
+## Tražiš nekoga za honorarni posao?
+
+Ako si firma ili obrt i trebaš nekoga za jedan posao, na [Marketplaceu](/marketplace) pregledaš gotove pakete ili objaviš projekt i usporediš ponude. Freelanceri po gradovima: [Zagreb](/freelanceri/zagreb), [Split](/freelanceri/split), [Rijeka](/freelanceri/rijeka), [Osijek](/freelanceri/osijek).
+`,
+    faq: [
+      {
+        q: 'Je li honorarni posao online legalan?',
+        a: 'Jest, ako je prijavljen: preko ugovora o djelu, autorskog ugovora, studentskog ugovora ili računa vlastitog obrta ili tvrtke. Neprijavljen rad nije zakonit, a klijent ti ne može ni izdati ni platiti račun.',
+      },
+      {
+        q: 'Trebam li obrt za honorarni posao online?',
+        a: 'Za jedan povremeni posao za firmu ne: dovoljan je ugovor o djelu ili autorski ugovor. Za redovan rad za više klijenata ili za klijente iz inozemstva treba ti obrt ili tvrtka.',
+      },
+      {
+        q: 'Mogu li raditi honorarni posao uz stalni posao?',
+        a: 'Možeš, ali provjeri ugovor o radu: bez odobrenja poslodavca ne smiješ za svoj račun raditi u istoj djelatnosti kojom se bavi poslodavac.',
+      },
+      {
+        q: 'Može li student raditi honorarni posao online?',
+        a: 'Može, preko studentskog ugovora kod firme koja ga zapošljava. Za vlastite klijente kojima treba račun i za isplatu preko platformi poput Cennera treba registrirana djelatnost.',
+      },
+      {
+        q: 'Kako prepoznati prevaru s honorarnim poslom?',
+        a: 'Prevara je gotovo uvijek kad ti trebaš platiti: ulaznu naknadu, tečaj, materijal ili opremu. Pravi klijent ne traži novac od tebe i pristaje na pisani dogovor.',
+      },
+    ],
+  },
+  {
+    slug: 'freelance-poslovi-hrvatska',
+    title: 'Freelance poslovi u Hrvatskoj: što se traži i koliko klijenti plaćaju',
+    seoTitle: 'Freelance poslovi Hrvatska: koliko klijenti plaćaju',
+    description:
+      'Najviše se traže web stranice, dizajn, programiranje i marketing. Evo raspona cijena za svaku vrstu posla i što koji grad najviše traži.',
+    excerpt:
+      'Koje freelance poslove klijenti u Hrvatskoj najčešće naručuju, koliko za njih obično plaćaju i kako doći do prvog posla, s razlikama po gradovima.',
+    keywords: [
+      'freelance poslovi hrvatska',
+      'freelance poslovi',
+      'freelancer poslovi',
+      'freelance posao',
+      'freelance cijene',
+      'najplaćeniji freelance poslovi',
+    ],
+    services: ['web-developeri', 'dizajn-loga'],
+    publishedAt: '2026-11-16',
+    author: 'Cenner',
+    content: `Otvoriš profil, staviš cijenu odokativno i onda ne znaš je li problem u cijeni, u profilu ili u tome što nudiš posao koji nitko ne traži. Najbrži izlaz je pogledati s druge strane: što klijenti u Hrvatskoj stvarno naručuju i koliko su spremni platiti.
+
+Rasponi u ovom vodiču su oni koje Cenner objavljuje klijentima na svojim stranicama usluga, pa ih klijent vidi i prije nego što dobije tvoju ponudu.
+
+## Koji se freelance poslovi najviše traže u Hrvatskoj?
+
+Najviše se traže izrada web stranica, grafički dizajn, programiranje i digitalni marketing, jer ih male firme i obrti trebaju, a rijetko imaju nekoga u kući. Unutar svake kategorije klijenti najčešće traže ovo:
+
+- **Web stranice**: predstavljajuća stranica od 5 do 8 podstranica za obrt ili malu firmu, WordPress stranica koju klijent sam uređuje, web shop, a u turizmu stranice s upitima i rezervacijama.
+- **Dizajn**: logo, cijeli vizualni identitet (boje, pisma, pravila primjene) i grafike za društvene mreže.
+- **Programiranje**: web aplikacije, integracije plaćanja i drugih sustava, automatizacije i održavanje postojećeg koda.
+- **Marketing**: vođenje Google i Meta oglasa, društvenih mreža i e-mail kampanja, uz mjesečni honorar.
+
+## Koliko klijenti plaćaju freelance poslove?
+
+Klijenti u Hrvatskoj za većinu freelance poslova plaćaju fiksnu cijenu po projektu, a za programiranje i marketing često i po satu ili mjesečno. Ovo su rasponi koje Cenner objavljuje na stranicama usluga:
+
+| Posao | Uobičajeni raspon |
+| --- | --- |
+| Predstavljajuća web stranica obrta ili male firme | 300 € do 800 € |
+| Korporativna stranica s više podstranica i CMS-om | 800 € do 2.500 € |
+| WordPress stranica s gotovom temom i prilagodbom | 250 € do 700 € |
+| Jednostavan logo s par revizija | 80 € do 250 € |
+| Kompletan vizualni identitet | 300 € do 1.200 € |
+| Satnica iskusnog web developera ili programera | 25 € do 70 € po satu |
+| Manji programerski projekt (integracija, automatizacija) | 500 € do 2.000 € |
+| Vođenje marketinških kampanja (honorar, bez budžeta za oglase) | 200 € do 800 € mjesečno |
+
+Što to znači za tebe: ako si na početku, ne moraš biti najjeftiniji, ali cijena izvan raspona traži dobar razlog u portfoliju. Ako si iskusan, gornji dio raspona opravdavaš živim radovima i ocjenama, ne opisom.
+
+## Koji su najplaćeniji freelance poslovi?
+
+Po rasponima iz tablice najviše se plaća programiranje: satnica ide do 70 €, a kompletne web ili mobilne aplikacije kreću od 3.000 € naviše. Slijede veće web stranice, web shopovi i cijeli vizualni identiteti. Najplaćeniji posao ipak nije onaj s najvećom satnicom, nego onaj za koji imaš dokaze: klijent plaća više kad vidi da si isti problem već riješio drugima.
+
+## Kakvi su freelance poslovi po gradovima?
+
+Posao se vodi online, ali klijenti iz pojedinih gradova traže različite stvari:
+
+- **[Zagreb](/freelanceri/zagreb)**: najjači u tech sektoru (web razvoj, mobilne aplikacije), kreativnim industrijama (UX/UI, branding) i digitalnom marketingu. Mnogi zagrebački freelanceri rade i za inozemne klijente.
+- **[Split](/freelanceri/split)**: puno posla vezanog uz turizam: booking stranice, marketing za hotele i privatni smještaj, višejezični SEO.
+- **[Rijeka](/freelanceri/rijeka)**: jako tehničko sveučilište, pa su jaki backend razvoj, embedded sustavi i industrijski softver.
+- **[Osijek](/freelanceri/osijek)**: aktivna IT zajednica i cijene koje su često konkurentnije od zagrebačkih.
+
+## Kako doći do prvog freelance posla?
+
+Najbrže tako da ponudiš jednu jasnu uslugu kao paket, s cijenom i rokom, ondje gdje klijenti već traže. Konkretno:
+
+1. **Izaberi kategoriju iz popisa gore** u kojoj imaš barem dva ili tri rada koja možeš pokazati.
+2. **Složi paket**: što je uključeno, rok isporuke, broj izmjena i cijena unutar raspona iz tablice.
+3. **Registriraj djelatnost** prije prvog računa. Za većinu je to paušalni obrt, a što te kod njega može iznenaditi, piše u vodiču [freelance u Hrvatskoj](/blog/freelance-u-hrvatskoj).
+4. **Odgovaraj na projekte** koje objavljuju klijenti, s kratkom ponudom napisanom baš za taj projekt.
+
+Ako freelance radiš povremeno uz stalni posao, pogledaj i vodič [honorarni posao online](/blog/honorarni-posao-online).
+
+## Kako izgledaju freelance poslovi na Cenneru?
+
+Na Cenneru freelanceri nude gotove pakete s opisom, fiksnom cijenom i rokom isporuke i odgovaraju na projekte koje objavljuju klijenti. Otvaranje profila je besplatno, identitet se potvrđuje KYC provjerom, a klijent plaća unaprijed: novac se drži na platformi i isplaćuje ti se kad je posao isporučen.
+
+Zaradu Cenner isplaćuje samo registriranim poreznim obveznicima (obrt, paušalni obrt ili tvrtka). Provizija je 15 % na besplatnom planu, 10 % na Pro (19 € mjesečno), 5 % na Ultra (59 € mjesečno) i 0 % na Enterprise (99 € mjesečno). Sve je na stranici [planova i cijena](/subscription).
+
+## Tražiš freelancera za posao?
+
+Ako si klijent, ista tablica ti pomaže da prepoznaš realnu ponudu. Na [Marketplaceu](/marketplace) pregledaš pakete ili objaviš projekt i usporediš ponude, a kako odabrati izvođača pročitaj u vodiču [kako odabrati web developera](/blog/kako-odabrati-web-developera).
+`,
+    faq: [
+      {
+        q: 'Koji se freelance poslovi najviše traže u Hrvatskoj?',
+        a: 'Izrada web stranica, grafički dizajn (logo i vizualni identitet), programiranje i digitalni marketing. Male firme i obrti ih trebaju, a rijetko imaju nekoga u kući.',
+      },
+      {
+        q: 'Koliko se plaća izrada web stranice kao freelance posao?',
+        a: 'Predstavljajuća stranica obrta ili male firme obično 300 € do 800 €, korporativna stranica s CMS-om 800 € do 2.500 €, a WordPress stranica s gotovom temom 250 € do 700 €.',
+      },
+      {
+        q: 'Koji je najplaćeniji freelance posao?',
+        a: 'Po rasponima koje Cenner objavljuje, programiranje: satnica iskusnog developera ide od 25 € do 70 €, a kompletne aplikacije kreću od 3.000 €.',
+      },
+      {
+        q: 'Mogu li raditi freelance poslove za klijente iz inozemstva?',
+        a: 'Možeš, ali trebaš registriranu djelatnost (najčešće paušalni obrt ili tvrtku) da bi izdavao račune.',
+      },
+      {
+        q: 'Treba li mi iskustvo za prvi freelance posao?',
+        a: 'Ne treba ti dugogodišnje iskustvo, ali trebaju ti dva ili tri rada koja možeš pokazati. Ako ih nemaš, napravi projekt za sebe ili udrugu.',
+      },
+    ],
+  },
 ];
+
+// Posts with a `faq` get it appended to their text as a "Česta pitanja" section, so every
+// renderer (prerender, pages/BlogPost.tsx, the .md twins) shows it; `faqJsonLd` gives the
+// matching FAQPage JSON-LD.
+const stripMd = (t) => t.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\*\*/g, '');
+for (const p of BLOG_POSTS) {
+  if (p.faq?.length) {
+    p.content = `${p.content.trimEnd()}\n\n## Česta pitanja\n\n${p.faq.map((f) => `### ${f.q}\n\n${f.a}`).join('\n\n')}\n`;
+  }
+}
+export const faqJsonLd = (post) =>
+  post?.faq?.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: post.faq.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: stripMd(f.a) },
+        })),
+      }
+    : null;
 
 /** Pinned posts first (1 is the very first), then newest first, as the blog index lists them. */
 export const sortedBlogPosts = () =>
