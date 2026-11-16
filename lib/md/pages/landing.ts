@@ -65,15 +65,24 @@ export const city: PageModule = {
         list([
           link('Izrada web stranica', '/usluge/izrada-web-stranica'),
           link('Dizajn loga i vizualnog identiteta', '/usluge/dizajn-loga'),
-          link('SEO optimizacija', '/usluge/seo-optimizacija'),
           link('Digitalni marketing', '/usluge/digitalni-marketing'),
+          link('Usluge programiranja', '/usluge/programiranje'),
           link('WordPress izrada', '/usluge/wordpress-izrada'),
           link('Web developeri', '/usluge/web-developeri'),
         ]),
-        h2('Kako Cenner radi?'),
+        h2(`Kako pronaći freelancera u ${c.loc}?`),
         `Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz ${c.gen} i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow. Plaćaš tek kad si zadovoljan.`,
+        c.faq?.length ? h2('Česta pitanja') : '',
+        ...(c.faq || []).flatMap((f: { q: string; a: string }) => [h3(f.q), inlineHtml(f.a)]),
         h2('Freelanceri u drugim gradovima'),
         list(cities.filter((o) => o.slug !== c.slug).map((o) => link(`Freelanceri ${o.name}`, `/freelanceri/${o.slug}`))),
+        h2('Vodiči za freelancere'),
+        list(
+          ['freelance-poslovi-hrvatska', 'honorarni-posao-online', 'freelance-u-hrvatskoj']
+            .map((slug) => sortedBlogPosts().find((p) => p.slug === slug))
+            .filter(Boolean)
+            .map((p) => link(p!.title, `/blog/${p!.slug}`)),
+        ),
         h2('Cenner alati'),
         list(TOOLS),
       ),

@@ -3029,9 +3029,9 @@ const Home: React.FC = () => {
     <div ref={page} className="relative bg-ink font-text text-ink">
       <style>{CSS}</style>
       <SEO
-        title="Izrada web stranica i freelance Hrvatska"
+        title="Freelance Hrvatska: freelanceri, plaćaš po isporuci"
         canonical="/"
-        description="Cenner: profesionalna izrada web stranica i web rješenja po pristupačnoj cijeni, plus provjereni freelanceri u Hrvatskoj za dizajn, marketing i razvoj."
+        description="Cenner je hrvatska freelance platforma: KYC provjereni freelanceri, a novac stiže freelanceru tek po isporuci. Tražiš freelance posao? Profil je besplatan."
         keywords="freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera"
         aiSummary={AI_SUMMARIES['/']}
       />

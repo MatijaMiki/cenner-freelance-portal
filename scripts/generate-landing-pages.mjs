@@ -203,6 +203,18 @@ ${faqHTML}<h2>Spreman za početak?</h2>
 ${guidesHTML}${TOOLS_HTML}`;
 }
 
+// The freelance cluster is Cenner's best-performing search topic (GSC 2026-10-17..11-13), so the
+// city pages point at its guides and the guides point back at the city pages.
+const FREELANCE_GUIDE_SLUGS = ['freelance-poslovi-hrvatska', 'honorarni-posao-online', 'freelance-u-hrvatskoj'];
+const FREELANCE_GUIDES_HTML = `<div class="related">
+  <h3>Vodiči za freelancere</h3>
+  <ul>${FREELANCE_GUIDE_SLUGS.map((slug) => sortedBlogPosts().find((p) => p.slug === slug))
+    .filter(Boolean)
+    .map((p) => `<li><a href="/blog/${p.slug}">${p.title}</a></li>`)
+    .join('\n')}</ul>
+</div>
+`;
+
 function cityBody(city) {
   const otherCities = cities
     .filter((c) => c.slug !== city.slug)
@@ -220,21 +232,21 @@ function cityBody(city) {
 <ul>
   <li><a href="/usluge/izrada-web-stranica">Izrada web stranica</a></li>
   <li><a href="/usluge/dizajn-loga">Dizajn loga i vizualnog identiteta</a></li>
-  <li><a href="/usluge/seo-optimizacija">SEO optimizacija</a></li>
   <li><a href="/usluge/digitalni-marketing">Digitalni marketing</a></li>
+  <li><a href="/usluge/programiranje">Usluge programiranja</a></li>
   <li><a href="/usluge/wordpress-izrada">WordPress izrada</a></li>
   <li><a href="/usluge/web-developeri">Web developeri</a></li>
 </ul>
-<h2>Kako Cenner radi?</h2>
+<h2>Kako pronaći freelancera u ${city.loc}?</h2>
 <p>Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz ${city.gen} i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow. Plaćaš tek kad si zadovoljan.</p>
 <p class="cta-row">
   <a href="/marketplace" class="cta">Započni sad</a>
 </p>
-<div class="related">
+${city.faq?.length ? `<h2>Česta pitanja</h2>\n${city.faq.map((f) => `<h3>${f.q}</h3>\n<p>${f.a}</p>`).join('\n')}\n` : ''}<div class="related">
   <h3>Freelanceri u drugim gradovima</h3>
   <ul>${otherCities}</ul>
 </div>
-${TOOLS_HTML}`;
+${FREELANCE_GUIDES_HTML}${TOOLS_HTML}`;
 }
 
 const stripTags = (html) => html.replace(/<[^>]+>/g, '');
@@ -279,6 +291,17 @@ function serviceJsonLd(svc, url) {
 }
 
 function cityJsonLd(city, url) {
+  const faq = city.faq?.length
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: city.faq.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: stripTags(f.a) },
+        })),
+      }]
+    : [];
   return [
     {
       '@context': 'https://schema.org',
@@ -304,6 +327,7 @@ function cityJsonLd(city, url) {
         { '@type': 'ListItem', position: 3, name: city.name, item: url },
       ],
     },
+    ...faq,
   ];
 }
 

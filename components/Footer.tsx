@@ -33,6 +33,10 @@ const SOCIAL = [
 const PLATFORM_LINKS = [
   { label: 'Marketplace',   path: '/marketplace' },
   { label: 'Services',      path: '/services' },
+  // The freelance cluster is the site's best search topic: link its guides from every page.
+  { label: 'Freelance jobs in Croatia', path: '/blog/freelance-poslovi-hrvatska' },
+  { label: 'Part-time work online',     path: '/blog/honorarni-posao-online' },
+  { label: 'Freelancers in Zagreb',     path: '/freelanceri/zagreb' },
 ];
 
 // Cenner's own apps, on their own subdomains (plain links: they are ours)

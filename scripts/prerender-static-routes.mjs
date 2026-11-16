@@ -31,7 +31,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { sortedBlogPosts } from '../content/blog/posts.mjs';
+import { sortedBlogPosts, faqJsonLd } from '../content/blog/posts.mjs';
 import { matchMdRoute, mdPathOf } from '../lib/md/routes.mjs';
 import { AI_SUMMARIES } from '../lib/md/summaries.mjs';
 
@@ -133,6 +133,7 @@ function blogPostJsonLd(post) {
         { '@type': 'ListItem', position: 3, name: post.title, item: url },
       ],
     },
+    ...(faqJsonLd(post) ? [faqJsonLd(post)] : []),
   ];
 }
 
@@ -263,9 +264,9 @@ const ROUTES = [
     // hydrated heads agree. api/render.js strips this canonical back out when it uses
     // the same file as its shell for an entity page.
     path: '/',
-    title: 'Izrada web stranica i freelance Hrvatska | Cenner',
+    title: 'Freelance Hrvatska: freelanceri, plaćaš po isporuci | Cenner',
     description:
-      'Cenner: profesionalna izrada web stranica i web rješenja po pristupačnoj cijeni, plus provjereni freelanceri u Hrvatskoj za dizajn, marketing i razvoj.',
+      'Cenner je hrvatska freelance platforma: KYC provjereni freelanceri, a novac stiže freelanceru tek po isporuci. Tražiš freelance posao? Profil je besplatan.',
   },
   {
     path: '/onboarding',

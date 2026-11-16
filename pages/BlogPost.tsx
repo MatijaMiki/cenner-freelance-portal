@@ -10,7 +10,7 @@ import AvatarImg from '../components/Avatar';
 import BlogCover from '../components/BlogCover';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
-import { BLOG_POSTS, findBlogPost } from '../content/blog/posts.mjs';
+import { BLOG_POSTS, findBlogPost, faqJsonLd } from '../content/blog/posts.mjs';
 
 interface BlogPostData {
   slug: string;
@@ -23,6 +23,9 @@ interface BlogPostData {
   content: string;
   coverImage?: string | null;
   publishedAt?: string | null;
+  /** Repo posts only: last edit date and the FAQ appended to the text. */
+  updatedAt?: string;
+  faq?: { q: string; a: string }[];
   author: string;
   authorAvatar?: string;
   viewCount?: number;
@@ -213,7 +216,7 @@ const BlogPost: React.FC = () => {
               description: post.excerpt || undefined,
               image: post.coverImage || undefined,
               datePublished: post.publishedAt || undefined,
-              dateModified: post.publishedAt || undefined,
+              dateModified: post.updatedAt || post.publishedAt || undefined,
               wordCount: post.content ? post.content.trim().split(/\s+/).length : undefined,
               articleSection: 'Freelance',
               keywords: post.keywords?.join(', ') || `freelance hrvatska, ${post.title.toLowerCase()}`,
@@ -236,6 +239,7 @@ const BlogPost: React.FC = () => {
                 { '@type': 'ListItem', position: 3, name: post.title, item: `https://cenner.hr${canonical}` },
               ],
             },
+            ...(faqJsonLd(post) ? [faqJsonLd(post)] : []),
           ]}
         />
       ) : (

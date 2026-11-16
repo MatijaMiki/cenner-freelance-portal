@@ -89,7 +89,7 @@ export const services = [
         a: 'Za jednostavnu stranicu koju želiš održavati sam, program poput Wixa može biti dovoljan. Ako trebaš vlastiti dizajn, posebne funkcije, brzinu ili bolju poziciju na Googleu, isplati se izrada po mjeri.',
       },
     ],
-    related: ['web-developeri', 'seo-optimizacija', 'wordpress-izrada'],
+    related: ['web-developeri', 'wordpress-izrada', 'dizajn-loga'],
   },
   {
     slug: 'dizajn-loga',
@@ -125,7 +125,7 @@ export const services = [
   {
     slug: 'seo-optimizacija',
     title: 'SEO Usluge: Usluge SEO Optimizacije u Hrvatskoj | Cenner',
-    keyword: 'seo usluge, usluge seo optimizacije, seo optimizacija, seo savjetovanje, seo stručnjak',
+    keyword: 'seo usluge, usluge seo optimizacije, seo savjetovanje',
     description:
       'SEO usluge u Hrvatskoj: tehnički audit, on-page, lokalni SEO, sadržaj i SEO savjetovanje. Provjereni SEO stručnjaci, više ponuda, zaštićeno plaćanje.',
     h1: 'SEO Usluge i SEO Optimizacija u Hrvatskoj',
@@ -147,10 +147,10 @@ export const services = [
         ],
       },
       {
-        h2: 'Lokalni SEO: Zagreb, Split, Rijeka, Osijek i manji gradovi',
+        h2: 'Lokalni SEO za tvrtke koje prodaju u jednom gradu',
         body: [
-          'Lokalna SEO optimizacija radi za tvrtke koje prodaju u jednom gradu ili regiji: <strong>Google Business profil</strong>, NAP podaci, lokalne ključne riječi (npr. "frizer Split", "odvjetnik Osijek"), recenzije i lokalni linkovi. Naši SEO freelanceri rade za klijente u Zagrebu, Splitu, Rijeci i Osijeku, ali i u manjim mjestima gdje je konkurencija znatno slabija, pa se rezultati vide brže.',
-          'Tražiš <strong>SEO optimizaciju u Zagrebu</strong> ili u Splitu? SEO se radi na daljinu, pa biraš stručnjaka po rezultatima, a ne po adresi. Uz optimizaciju same stranice dobivaš i <strong>SEO marketing</strong>: sadržaj, Google Business profil i mjesečno izvještavanje, uz cijenu koju dogovoriš unaprijed.',
+          'Lokalna SEO optimizacija radi za tvrtke koje prodaju u jednom gradu ili regiji: <strong>Google Business profil</strong>, NAP podaci, lokalne ključne riječi, recenzije i lokalni linkovi. U manjim mjestima konkurencija je obično slabija, pa se rezultati vide brže.',
+          'SEO se radi na daljinu, pa biraš stručnjaka po rezultatima, a ne po adresi. Uz optimizaciju same stranice možeš dogovoriti i sadržaj, Google Business profil i mjesečno izvještavanje, uz cijenu koju dogovoriš unaprijed.',
         ],
       },
       {
@@ -212,7 +212,7 @@ export const services = [
         ],
       },
     ],
-    related: ['seo-optimizacija', 'dizajn-loga', 'izrada-web-stranica'],
+    related: ['dizajn-loga', 'izrada-web-stranica', 'seo-optimizacija'],
   },
   {
     slug: 'wordpress-izrada',
@@ -249,41 +249,41 @@ export const services = [
         ],
       },
     ],
-    related: ['izrada-web-stranica', 'seo-optimizacija', 'dizajn-loga'],
+    related: ['izrada-web-stranica', 'web-developeri', 'dizajn-loga'],
   },
   {
     slug: 'web-developeri',
-    title: 'Usluge Profesionalnih Web Developera u Hrvatskoj | Cenner',
-    keyword: 'usluge profesionalnih web developera, najbolji web developeri u hrvatskoj, web developer hrvatska',
+    title: 'Najbolji web developeri u Hrvatskoj: 5 stvari za provjeru',
+    keyword: 'najbolji web developeri u hrvatskoj, usluge profesionalnih web developera, web developer hrvatska',
     description:
-      'Usluge profesionalnih web developera u Hrvatskoj: front-end, back-end, WordPress i web shopovi. Satnica od 25 €, plaćanje tek po isporuci.',
-    h1: 'Profesionalni Web Developeri u Hrvatskoj',
+      'Najboljeg web developera prepoznaješ po živim radovima, ocjenama i jasnoj ponudi. Evo 5 provjera prije nego što platiš i koliko developer stoji.',
+    h1: 'Najbolji Web Developeri u Hrvatskoj',
     intro:
-      'Trebaš web developera koji isporučuje na vrijeme i piše kod koji se može održavati? Cenner okuplja provjerene hrvatske web developere za front-end, back-end, WordPress i e-commerce projekte, uz osigurano plaćanje i više ponuda na jednom mjestu.',
+      'Najskuplji developer nije onaj s najvećom satnicom, nego onaj koji kasni mjesecima ili nestane s pola plaćenog projekta. Zato kod usluga profesionalnih web developera prvo provjeri pet stvari opisanih ispod. Na Cenneru su svi developeri prošli <strong>KYC provjeru identiteta</strong>, profili prikazuju ocjene i prethodne projekte, a za svoj projekt dobivaš <strong>više ponuda</strong>. Novac se drži u escrowu i developeru se isplaćuje tek kad si zadovoljan isporukom.',
     sections: [
       {
         h2: 'Koje usluge nude profesionalni web developeri?',
         body: [
-          'Naši web developeri pokrivaju cijeli razvoj web stranica: <strong>front-end</strong> (React, Next.js, Vue, Astro, responzivni UI), <strong>back-end</strong> (Node.js, PHP, Python, baze podataka i API-ji), <strong>WordPress i WooCommerce</strong>, <strong>web shopove i integracije plaćanja</strong>, <strong>performance i SEO tehničku optimizaciju</strong> te <strong>održavanje i nadogradnju postojećih stranica</strong>.',
+          'Profesionalni web developeri rade front-end, back-end, WordPress, web shopove i održavanje postojećih stranica. Naši web developeri pokrivaju cijeli razvoj web stranica: <strong>front-end</strong> (React, Next.js, Vue, Astro, responzivni UI), <strong>back-end</strong> (Node.js, PHP, Python, baze podataka i API-ji), <strong>WordPress i WooCommerce</strong>, <strong>web shopove i integracije plaćanja</strong>, <strong>performance i SEO tehničku optimizaciju</strong> te <strong>održavanje i nadogradnju postojećih stranica</strong>.',
         ],
       },
       {
         h2: 'Koliko košta web developer u Hrvatskoj?',
         body: [
-          'Satnica iskusnog web developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Fiksne cijene projekata: prezentacijska stranica od <strong>300 €</strong>, korporativna stranica s CMS-om od <strong>800 €</strong>, web shop ili aplikacija od <strong>2.000 €</strong> pa naviše.',
+          'Web developer u Hrvatskoj stoji od 25 € do 70 € po satu. Satnica iskusnog web developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Fiksne cijene projekata: prezentacijska stranica od <strong>300 €</strong>, korporativna stranica s CMS-om od <strong>800 €</strong>, web shop ili aplikacija od <strong>2.000 €</strong> pa naviše.',
           'Na Cenneru objaviš projekt, dobiješ <strong>više ponuda</strong> i sam biraš. Plaćanje je u escrowu i oslobađa se tek kad si zadovoljan isporukom.',
         ],
       },
       {
-        h2: 'Kako prepoznati najboljeg web developera?',
+        h2: 'Kako prepoznati najboljeg web developera u Hrvatskoj?',
         body: [
-          'Najbolji web developeri u Hrvatskoj razlikuju se po provjerljivim stvarima: <strong>portfolio sa živim stranicama</strong>, ocjene prijašnjih klijenata, jasan opseg i rok u ponudi, brzina učitavanja (Core Web Vitals) i spremnost da objasne tehničke odluke jednostavnim jezikom. Na Cenneru su svi developeri prošli <strong>KYC verifikaciju</strong>, a profili prikazuju ocjene, vrijeme isporuke i prethodne projekte.',
+          'Najbolji web developeri u Hrvatskoj prepoznaju se po pet stvari koje možeš provjeriti za pet minuta: <strong>1. portfolio sa živim stranicama</strong> koje možeš otvoriti, <strong>2. ocjene prijašnjih klijenata</strong>, <strong>3. jasan opseg i rok u ponudi</strong>, <strong>4. brzina učitavanja</strong> njihovih stranica (Core Web Vitals) i <strong>5. spremnost da tehničke odluke objasne jednostavnim jezikom</strong>. Na Cenneru su svi developeri prošli <strong>KYC verifikaciju</strong>, a profili prikazuju ocjene, vrijeme isporuke i prethodne projekte.',
         ],
       },
       {
-        h2: 'Freelance web developer ili agencija?',
+        h2: 'Je li bolji freelance web developer ili agencija?',
         body: [
-          'Za većinu malih i srednjih projekata freelance web developer daje <strong>jednaku kvalitetu uz 2 do 3 puta nižu cijenu</strong> jer nema fiksnih režija agencije. Agencija ima smisla kad ti paralelno treba dizajn, razvoj, copywriting i marketing pod jednim ugovorom, a i to često možeš složiti na Cenneru iz više freelancera.',
+          'Za većinu malih i srednjih projekata bolji je freelancer, a agencija kad ti treba cijeli tim pod jednim ugovorom. Za većinu malih i srednjih projekata freelance web developer daje <strong>jednaku kvalitetu uz 2 do 3 puta nižu cijenu</strong> jer nema fiksnih režija agencije. Agencija ima smisla kad ti paralelno treba dizajn, razvoj, copywriting i marketing pod jednim ugovorom, a i to često možeš složiti na Cenneru iz više freelancera.',
         ],
       },
       {
@@ -291,6 +291,20 @@ export const services = [
         body: [
           'Uz marketplace s nezavisnim developerima, Cenner tim i sam razvija web stranice, aplikacije i automatizacije po fiksnoj cijeni. Ako ne želiš uspoređivati ponude, <a href="/services">pogledaj što Cenner tim radi</a> i javi se izravno.',
         ],
+      },
+    ],
+    faq: [
+      {
+        q: 'Tko su najbolji web developeri u Hrvatskoj?',
+        a: 'Ne postoji jedna lista: najbolji je developer koji ima žive radove slične tvom projektu, dobre ocjene prijašnjih klijenata i jasnu ponudu s opsegom i rokom. Na Cenneru to sve vidiš na profilu prije nego što ikome platiš, a kako ih usporediti opisali smo u vodiču <a href="/blog/kako-odabrati-web-developera">kako odabrati web developera</a>.',
+      },
+      {
+        q: 'Koliko košta usluga profesionalnog web developera?',
+        a: 'Satnica iskusnog web developera u Hrvatskoj kreće se od 25 € do 70 € po satu. Prezentacijska stranica kreće od 300 €, korporativna stranica s CMS-om od 800 €, a web shop ili aplikacija od 2.000 €.',
+      },
+      {
+        q: 'Kako znam da je developer provjeren?',
+        a: 'Svi developeri na Cenneru prošli su KYC provjeru identiteta, a profil prikazuje ocjene, vrijeme isporuke i prethodne projekte. Plaćanje ide kroz platformu i oslobađa se tek po isporuci.',
       },
     ],
     related: ['izrada-web-stranica', 'wordpress-izrada', 'programiranje'],
@@ -338,7 +352,7 @@ export const services = [
         ],
       },
     ],
-    related: ['izrada-web-stranica', 'wordpress-izrada', 'seo-optimizacija'],
+    related: ['izrada-web-stranica', 'wordpress-izrada', 'web-developeri'],
   },
 ];
 
@@ -358,6 +372,20 @@ export const cities = [
       'Zagreb je freelance metropola Hrvatske. Više od 60% svih registriranih freelancera na Cenneru radi iz glavnog grada. Bez obzira tražiš li web developera, grafičkog dizajnera ili marketinškog stručnjaka, na jednom mjestu pregledavaš ponudu vrhunskih zagrebačkih kreatora.',
     extra:
       'Zagreb je posebno jak u <strong>tech sektoru</strong> (web razvoj, mobile aplikacije, AI/ML), <strong>kreativnim industrijama</strong> (UX/UI, branding, motion design) i <strong>digitalnom marketingu</strong>. Mnogi naši zagrebački freelanceri rade za inozemne klijente, što jamči visoku razinu kvalitete i komunikacijskih vještina.',
+    faq: [
+      {
+        q: "Kako pronaći freelancera u Zagrebu?",
+        a: "Na <a href=\"/marketplace\">Marketplaceu</a> pregledaš gotove pakete s fiksnom cijenom ili objaviš projekt i usporediš ponude. Novac se drži na platformi i freelanceru se isplaćuje tek kad je posao isporučen, a svaki freelancer prošao je KYC provjeru identiteta.",
+      },
+      {
+        q: "Koje freelancere u Zagrebu klijenti najčešće traže?",
+        a: "Najčešće web developere, UX/UI i brand dizajnere te stručnjake za digitalni marketing. Zagreb je najjači u tech sektoru i kreativnim industrijama.",
+      },
+      {
+        q: "Kako naći freelance posao u Zagrebu?",
+        a: "Otvori besplatan profil, objavi paket s jasnom cijenom i rokom i odgovaraj na projekte klijenata. Vodič <a href=\"/blog/freelance-poslovi-hrvatska\">freelance poslovi u Hrvatskoj</a> pokazuje što se traži i koliko klijenti plaćaju.",
+      },
+    ],
   },
   {
     slug: 'split',
@@ -373,6 +401,20 @@ export const cities = [
       'Split i Dalmacija imaju brzorastuću freelance scenu, posebno u području web razvoja, turizma, hospitalityja i digitalnog marketinga. Cenner te povezuje s provjerenim splitskim freelancerima za honorarni posao u svim ključnim industrijama.',
     extra:
       'Mnogi splitski freelanceri specijalizirani su za <strong>turistički sektor</strong>: izradu booking stranica, marketing za hotele i privatne smještaje, multilingual SEO. Drugi rade s globalnim klijentima u tech-u i dizajnu, koristeći prednost mediteranskog načina života.',
+    faq: [
+      {
+        q: "Kako pronaći freelancera u Splitu?",
+        a: "Na <a href=\"/marketplace\">Marketplaceu</a> pregledaš pakete splitskih i ostalih freelancera ili objaviš projekt i usporediš ponude. Novac se drži na platformi i freelanceru se isplaćuje tek kad je posao isporučen, a svaki freelancer prošao je KYC provjeru identiteta.",
+      },
+      {
+        q: "Tko radi booking stranice i marketing za apartmane u Splitu?",
+        a: "Dio splitskih freelancera specijaliziran je za turizam: booking stranice, marketing za hotele i privatni smještaj i višejezični SEO. Pogledaj i <a href=\"/usluge/izrada-web-stranica\">izradu web stranica</a>.",
+      },
+      {
+        q: "Može li freelancer iz drugog grada raditi za firmu iz Splita?",
+        a: "Može. Cijeli posao na Cenneru vodi se online, od ponude do plaćanja, pa biraš po portfoliju i ocjenama, a ne po adresi.",
+      },
+    ],
   },
   {
     slug: 'rijeka',
@@ -388,6 +430,20 @@ export const cities = [
       'Rijeka je važno sveučilišno i tech središte sjeverne Hrvatske s rastućom freelance zajednicom. Na Cenneru pronalaziš riječke web developere, dizajnere, marketinške stručnjake i copywritere s referencama iz hrvatskih i međunarodnih projekata.',
     extra:
       'Rijeka ima jako tehničko sveučilište što znači <strong>stalan priljev mladih, kvalificiranih developera i inženjera</strong>. Posebno snažna kategorija su backend razvoj, embedded sustavi i industrijski softver.',
+    faq: [
+      {
+        q: "Kako pronaći freelancera u Rijeci?",
+        a: "Na <a href=\"/marketplace\">Marketplaceu</a> pregledaš pakete ili objaviš projekt i usporediš ponude riječkih i ostalih freelancera. Novac se drži na platformi i freelanceru se isplaćuje tek kad je posao isporučen, a svaki freelancer prošao je KYC provjeru identiteta.",
+      },
+      {
+        q: "Za koje poslove su riječki freelanceri najjači?",
+        a: "Za backend razvoj, embedded sustave i industrijski softver, uz web izradu, dizajn i marketing. Rijeka ima jako tehničko sveučilište i stalan priljev mladih developera.",
+      },
+      {
+        q: "Kako početi raditi kao freelancer u Rijeci?",
+        a: "Registriraj djelatnost (najčešće paušalni obrt), otvori besplatan profil i objavi prvi paket. Korake opisuje vodič <a href=\"/blog/freelance-u-hrvatskoj\">freelance u Hrvatskoj</a>.",
+      },
+    ],
   },
   {
     slug: 'osijek',
@@ -403,5 +459,19 @@ export const cities = [
       'Osijek ima izuzetno aktivnu IT i kreativnu zajednicu, posebno povezanu s FERIT-om i Osječkim softverskim klubom. Na Cenneru pronalaziš osječke freelancere koji nude profesionalan rad po vrlo konkurentnim cijenama u odnosu na zagrebačko tržište.',
     extra:
       'Slavonski freelanceri poznati su po <strong>jakoj radnoj etici i fer cijenama</strong>. Mnogi rade i za inozemne klijente, što znači visoku razinu profesionalizma uz lokalnu dostupnost i razumijevanje hrvatskog tržišta.',
+    faq: [
+      {
+        q: "Kako pronaći freelancera u Osijeku?",
+        a: "Na <a href=\"/marketplace\">Marketplaceu</a> pregledaš pakete ili objaviš projekt i usporediš ponude osječkih i ostalih freelancera. Novac se drži na platformi i freelanceru se isplaćuje tek kad je posao isporučen, a svaki freelancer prošao je KYC provjeru identiteta.",
+      },
+      {
+        q: "Jesu li freelanceri u Osijeku jeftiniji nego u Zagrebu?",
+        a: "Osječki freelanceri često nude vrlo konkurentne cijene u odnosu na zagrebačko tržište, a mnogi rade i za inozemne klijente. Cijenu uvijek usporedi s opsegom u ponudi.",
+      },
+      {
+        q: "Kako naći honorarni posao online iz Osijeka?",
+        a: "Isto kao iz bilo kojeg grada: profil, paket i odgovori na projekte. Vodič <a href=\"/blog/honorarni-posao-online\">honorarni posao online</a> objašnjava kad ti treba obrt, a kad ne.",
+      },
+    ],
   },
 ];
