@@ -17,7 +17,11 @@
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PRIVATE_PATHS, SITE_URL } from '../lib/md/routes.mjs';
+import { PRIVATE_PATHS as ROOT_PRIVATE_PATHS, SITE_URL } from '../lib/md/routes.mjs';
+import { LANG_PREFIXES } from '../lib/langRoutes.mjs';
+
+// The same private pages under each language prefix (/en/profile, ...).
+const PRIVATE_PATHS = [...ROOT_PRIVATE_PATHS, ...Object.values(LANG_PREFIXES).flatMap((pre) => ROOT_PRIVATE_PATHS.map((p) => `${pre}${p}`))];
 
 const OUTPUT = join(dirname(fileURLToPath(import.meta.url)), '../public/robots.txt');
 

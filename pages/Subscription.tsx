@@ -176,10 +176,14 @@ const Subscription: React.FC = () => {
   return (
     <div className="font-text text-ink">
       <SEO
-        title="Pricing & Plans"
+        title="Cijene i planovi"
         canonical="/subscription"
         aiSummary={AI_SUMMARIES['/subscription']}
-        description="Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams."
+        description="Odaberite Cenner plan koji vam odgovara. Planovi Free, Pro i Ultra smanjuju proviziju i povećavaju vidljivost, a Enterprise je za timove."
+        en={{
+          title: 'Pricing & Plans',
+          description: 'Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams.',
+        }}
         jsonLd={[
           {
             '@context': 'https://schema.org',

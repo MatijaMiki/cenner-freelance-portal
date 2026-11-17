@@ -1,6 +1,7 @@
 
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { clearPendingScroll, pendingScroll } from '../lib/scrollRestore';
 
 /**
  * Scrolls to the top whenever the route changes (SPAs don't on their own), or, when the URL has a
@@ -13,6 +14,22 @@ const ScrollToTop = () => {
   const { pathname, hash, key } = useLocation();
 
   useEffect(() => {
+    // a language switch (i18n.tsx, lib/scrollRestore.ts): back to where the reader was, once the
+    // (lazy) page is tall enough again, for up to 1.5s
+    const y = pendingScroll();
+    if (y !== null) {
+      const until = performance.now() + 1500;
+      let raf = 0;
+      const restore = () => {
+        const room = document.documentElement.scrollHeight - window.innerHeight >= y;
+        if (room || performance.now() > until) {
+          clearPendingScroll();
+          window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+        } else raf = requestAnimationFrame(restore);
+      };
+      restore();
+      return () => cancelAnimationFrame(raf);
+    }
     if (!hash) {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       return;

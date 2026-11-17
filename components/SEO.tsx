@@ -1,6 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { matchMdRoute, mdPathOf } from '../lib/md/routes.mjs';
+import { alternatesFor, LANG_PREFIXES, OG_LOCALE } from '../lib/langRoutes.mjs';
+import { useLanguage } from '../i18n';
 
 interface SEOProps {
   title?: string;
@@ -14,6 +16,12 @@ interface SEOProps {
   keywords?: string;
   /** <meta name="ai-summary">; defaults to the description. Key pages take theirs from lib/md/summaries.mjs. */
   aiSummary?: string;
+  /**
+   * The English title/description/keywords, used under /en (lib/langRoutes.mjs). A page in
+   * TRANSLATED_PATHS must pass this; elsewhere the Croatian ones are kept, with the canonical on
+   * the Croatian URL.
+   */
+  en?: { title: string; description: string; keywords?: string };
 }
 
 const BASE_URL = 'https://cenner.hr';
@@ -34,13 +42,30 @@ const SEO: React.FC<SEOProps> = ({
   jsonLd,
   keywords,
   aiSummary,
+  en,
 }) => {
+  const { lang } = useLanguage();
+  // Under a language prefix (/en/...) the English copy, when the page has one.
+  const prefixed = lang in LANG_PREFIXES;
+  const english = prefixed && en ? en : undefined;
+  if (english) {
+    title = english.title;
+    description = english.description;
+    keywords = english.keywords;
+    aiSummary = english.description;
+  }
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME}: Freelance Platforma Hrvatska`;
-  const fullCanonical = canonical ? `${BASE_URL}${canonical}` : undefined;
-  // Only pages that really have a markdown version (lib/md/routes.mjs) advertise one.
-  const markdownHref = canonical && !noIndex && matchMdRoute(canonical) ? `${BASE_URL}${mdPathOf(canonical)}` : undefined;
+  // canonical is the page's root (Croatian) path; lib/langRoutes.mjs turns it into this language's
+  // URL and the hreflang set (a self canonical per language, x-default = the Croatian root).
+  const links = canonical ? alternatesFor(canonical, english ? lang : 'HR') : undefined;
+  const fullCanonical = links?.canonical;
+  // Only pages that really have a markdown version (lib/md/routes.mjs) advertise one. The markdown
+  // is the Croatian copy, so the English page doesn't point at it.
+  const markdownHref = canonical && !noIndex && !english && matchMdRoute(canonical) ? `${BASE_URL}${mdPathOf(canonical)}` : undefined;
   const summary = noIndex ? undefined : aiSummary || description;
-  const fullKeywords = keywords ? `${keywords}, ${BASE_KEYWORDS}` : BASE_KEYWORDS;
+  // The base set is Croatian search terms: only for the Croatian page.
+  const fullKeywords = english ? keywords : keywords ? `${keywords}, ${BASE_KEYWORDS}` : BASE_KEYWORDS;
+  if (english) ogLocale = (OG_LOCALE as Record<string, string>)[lang] || ogLocale;
 
   // Support both a single JSON-LD object and an array of schemas
   const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -61,7 +86,7 @@ const SEO: React.FC<SEOProps> = ({
     <Helmet>
       <title>{fullTitle}</title>
       {description && <meta name="description" content={description} />}
-      <meta name="keywords" content={fullKeywords} />
+      {fullKeywords && <meta name="keywords" content={fullKeywords} />}
       <meta name="author" content="Cenner" />
       <meta name="geo.region" content="HR" />
       <meta name="geo.placename" content="Croatia" />
@@ -72,9 +97,8 @@ const SEO: React.FC<SEOProps> = ({
       )}
       {fullCanonical && <link rel="canonical" href={fullCanonical} />}
 
-      {/* hreflang — Croatian primary market */}
-      {fullCanonical && <link rel="alternate" hrefLang="hr-HR" href={fullCanonical} />}
-      {fullCanonical && <link rel="alternate" hrefLang="x-default" href={fullCanonical} />}
+      {/* hreflang: Croatian at the root (also x-default), English under /en where translated */}
+      {links?.alternates.map(a => <link key={a.hreflang} rel="alternate" hrefLang={a.hreflang} href={a.href} />)}
 
       {/* For AI agents: a one-line summary and the page's markdown version */}
       {summary && <meta name="ai-summary" content={summary} />}

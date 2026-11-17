@@ -33,6 +33,11 @@ const About: React.FC = () => {
         canonical="/about"
         description="Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i automatizacije. Kontakt, adresa i podaci o tvrtki."
         keywords="o cenneru, cenner kontakt, freelance platforma hrvatska, cenner obrt"
+        en={{
+          title: 'About and contact',
+          description: 'Cenner is a Croatian freelance marketplace and an in-house studio for websites, apps and automation. Contact details, address and company information.',
+          keywords: 'about cenner, cenner contact, freelance marketplace croatia',
+        }}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Organization',

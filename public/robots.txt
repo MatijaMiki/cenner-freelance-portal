@@ -19,6 +19,18 @@ Disallow: /contracts
 Disallow: /reset-password
 Disallow: /invoices/
 Disallow: /admin
+Disallow: /en/profile
+Disallow: /en/dashboard
+Disallow: /en/orders
+Disallow: /en/messages
+Disallow: /en/checkout/
+Disallow: /en/checkout-subscription/
+Disallow: /en/creator-onboarding
+Disallow: /en/saved
+Disallow: /en/contracts
+Disallow: /en/reset-password
+Disallow: /en/invoices/
+Disallow: /en/admin
 
 # AI search and user-fetch crawlers: everything public, so Cenner can be cited.
 User-agent: OAI-SearchBot
@@ -40,6 +52,18 @@ Disallow: /contracts
 Disallow: /reset-password
 Disallow: /invoices/
 Disallow: /admin
+Disallow: /en/profile
+Disallow: /en/dashboard
+Disallow: /en/orders
+Disallow: /en/messages
+Disallow: /en/checkout/
+Disallow: /en/checkout-subscription/
+Disallow: /en/creator-onboarding
+Disallow: /en/saved
+Disallow: /en/contracts
+Disallow: /en/reset-password
+Disallow: /en/invoices/
+Disallow: /en/admin
 
 # AI training crawlers: everything public except freelancer profiles.
 User-agent: GPTBot
@@ -60,6 +84,18 @@ Disallow: /contracts
 Disallow: /reset-password
 Disallow: /invoices/
 Disallow: /admin
+Disallow: /en/profile
+Disallow: /en/dashboard
+Disallow: /en/orders
+Disallow: /en/messages
+Disallow: /en/checkout/
+Disallow: /en/checkout-subscription/
+Disallow: /en/creator-onboarding
+Disallow: /en/saved
+Disallow: /en/contracts
+Disallow: /en/reset-password
+Disallow: /en/invoices/
+Disallow: /en/admin
 Disallow: /freelancer/
 
 User-agent: Bytespider

@@ -3034,6 +3034,11 @@ const Home: React.FC = () => {
         description="Cenner je hrvatska freelance platforma: KYC provjereni freelanceri, a novac stiže freelanceru tek po isporuci. Tražiš freelance posao? Profil je besplatan."
         keywords="freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera"
         aiSummary={AI_SUMMARIES['/']}
+        en={{
+          title: 'Freelancers in Croatia, paid only on delivery',
+          description: 'Cenner is a Croatian freelance marketplace: identity-checked (KYC) freelancers, and the freelancer is paid only once the work is delivered. Looking for freelance work? Your profile is free.',
+          keywords: 'freelancers croatia, hire a freelancer, freelance marketplace croatia, web developer croatia',
+        }}
       />
       {wideHero ? <ZoomIn reduce={reduce} /> : <ZoomInPocket reduce={reduce} />}
       <Desktop people={people} />
