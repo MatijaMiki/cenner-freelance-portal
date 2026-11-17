@@ -19,6 +19,13 @@ const OG = `${BASE}/og-image.png`;
 const MARK = readFileSync(join(PUBLIC_DIR, 'favicon.svg'), 'utf8')
   .trim().replace('<svg ', '<svg width="36" height="36" aria-hidden="true" ');
 
+// The Google tag (gtag.js + Consent Mode + GA4 and Google Ads config) lives once, in index.html
+// between the google-tag markers. These static pages copy it byte for byte, so the CSP hash in
+// vercel.json covers both.
+const INDEX_HTML = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
+const GOOGLE_TAG = (INDEX_HTML.match(/<!-- google-tag:start[\s\S]*?-->\s*([\s\S]*?)\s*<!-- google-tag:end -->/) || [])[1];
+if (!GOOGLE_TAG || !GOOGLE_TAG.includes('gtag/js')) throw new Error('generate-landing-pages: google-tag block not found in index.html');
+
 // ---- shared template ----
 function pageHTML({
   url, title, description, keyword, h1, body, jsonLd,
@@ -50,6 +57,7 @@ function pageHTML({
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${description}">
 <meta name="twitter:image" content="${OG}">
+${GOOGLE_TAG}
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">

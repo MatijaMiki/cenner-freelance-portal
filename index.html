@@ -17,7 +17,8 @@
     <link rel="dns-prefetch" href="https://js.stripe.com" />
     <link rel="dns-prefetch" href="https://www.paypal.com" />
 
-    <!-- Google tag (gtag.js) — single GA4 property "Cenner" (G-MQ8LYQNEC5) -->
+    <!-- google-tag:start — single source of truth: scripts/generate-landing-pages.mjs copies this block verbatim into the static /usluge and /freelanceri pages. Edit here only, then run `npm run check:csp` (the inline script is allowed by hash in vercel.json). -->
+    <!-- Google tag (gtag.js) — GA4 property "Cenner" (G-MQ8LYQNEC5) + Google Ads (AW-18133659191) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ8LYQNEC5"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -54,7 +55,11 @@
         ? { page_location: location.href.replace(/([?&]token=)[^&#]*/g, '$1redacted') }
         : {};
       gtag('config', 'G-MQ8LYQNEC5', ceCfg);
+      // Google Ads account (auto-tagging, remarketing). Lead conversions come from the GA4
+      // generate_lead event imported into Ads, so no per-conversion send_to is needed here.
+      gtag('config', 'AW-18133659191', ceCfg);
     </script>
+    <!-- google-tag:end -->
 
     <title>Freelance Hrvatska: freelanceri, plaćaš po isporuci | Cenner</title>
     <meta name="description" content="Cenner je hrvatska freelance platforma: KYC provjereni freelanceri, a novac stiže freelanceru tek po isporuci. Tražiš freelance posao? Profil je besplatan." />
