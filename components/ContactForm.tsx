@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
 import { API } from '../lib/api';
 import { useT } from '../i18n';
+import { trackLead } from '../lib/track';
 
 // Cloudflare Turnstile, the same widget and site key as the sign-in form. No key = no widget.
 const TURNSTILE_SITE_KEY = (import.meta as any).env?.VITE_TURNSTILE_SITE_KEY as string | undefined;
@@ -71,6 +72,8 @@ const ContactForm: React.FC<{ subjects: string[]; pick?: { index: number; n: num
     try {
       await API.contact({ name: name.trim(), email: email.trim(), subject: subjects[idx] ?? subjects[0], message: message.trim(), ...(token ? { turnstileToken: token } : {}) });
       setStatus('sent');
+      // the Services quote request (#upit) is the lead the ads pay for; About's #kontakt is general contact
+      trackLead(idPrefix === 'upit' ? 'services_quote' : 'contact_form');
       setName(''); setEmail(''); setMessage('');
       resetCaptcha();
     } catch (err: any) {
