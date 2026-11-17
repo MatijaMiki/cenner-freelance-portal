@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useT } from '../i18n';
 import { hasRequiredConsent, openConsentModal } from '../lib/consent';
 import { API } from '../lib/api';
+import { trackSignUp } from '../lib/track';
 
 // Cloudflare Turnstile: sitekey via env. No key = widget hidden and no token sent
 // (backend skips verification while its TURNSTILE_SECRET_KEY is unset too).
@@ -193,6 +194,9 @@ const Auth: React.FC = () => {
         const referralCode = localStorage.getItem('cenner_ref') || undefined;
         // hasRequiredConsent() above guarantees the Terms were accepted; the API records it with the account.
         await register({ email, password, name: username, mobile: fullPhone, referralCode, turnstileToken: turnstileToken || undefined, acceptedTerms: true });
+        // The API answers the same for a new and an already-registered address, so this counts
+        // sign-up form completions, a little above real new accounts.
+        trackSignUp('email');
         // Registration no longer auto-logs-in (anti-enumeration). Switch to the sign-in
         // view and prompt the user to check their email — same message regardless of
         // whether the address was already registered.

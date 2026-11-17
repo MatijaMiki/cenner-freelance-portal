@@ -7,6 +7,7 @@ import { Tube } from '../components/Tube';
 import ContactForm from '../components/ContactForm';
 import { useT } from '../i18n';
 import { COMPANY } from '../lib/company';
+import { track } from '../lib/track';
 import { priceItem } from '../lib/cjenik.js';
 import AnchorPrice from '../components/AnchorPrice';
 
@@ -311,7 +312,7 @@ const Services: React.FC = () => {
             <p className={`${lead} mt-6 max-w-[38ch]`}>{t('Tell us what you need. You get a reply with a scope and a fixed price.')}</p>
             <p className="mt-6 text-[1rem]">
               {t('Or write to')}{' '}
-              <a href={`mailto:${COMPANY.email}`} className="font-bold underline underline-offset-2 hover:text-sky">{COMPANY.email}</a>
+              <a href={`mailto:${COMPANY.email}`} onClick={() => track('contact_click', { method: 'email', page: 'services' })} className="font-bold underline underline-offset-2 hover:text-sky">{COMPANY.email}</a>
             </p>
           </div>
           <div className="lg:col-span-7">
