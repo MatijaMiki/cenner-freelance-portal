@@ -25,6 +25,47 @@
 <meta name="twitter:title" content="Digitalni Marketing Freelance: Oglasi, SEO, Mreže | Cenner">
 <meta name="twitter:description" content="Digitalni marketing freelance: Google Ads, Meta oglasi, SEO i društvene mreže. Provjereni hrvatski stručnjaci, više ponuda i zaštićeno plaćanje.">
 <meta name="twitter:image" content="https://cenner.hr/og-image.png">
+<!-- Google tag (gtag.js) — GA4 property "Cenner" (G-MQ8LYQNEC5) + Google Ads (AW-18133659191) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ8LYQNEC5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      // Google Consent Mode v2 — required for EU/EEA users.
+      // Default everything to "denied"; cookieless pings will still fire so we
+      // get aggregated modeled data, but no real cookies are set until consent.
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500
+      });
+
+      // If user previously accepted on this device, lift the denial immediately
+      // (before any pings fire) so we don't lose tracking on returning visitors.
+      try {
+        var c = JSON.parse(localStorage.getItem('cenner_consent_v2') || '{}');
+        if (c && c.cookies === 'accepted') {
+          gtag('consent', 'update', {
+            ad_storage: 'granted',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted',
+            analytics_storage: 'granted'
+          });
+        }
+      } catch (e) {}
+
+      gtag('js', new Date());
+      // Reset and verify links carry a one-time token in ?token=; never send it to analytics.
+      var ceCfg = /[?&]token=/.test(location.search)
+        ? { page_location: location.href.replace(/([?&]token=)[^&#]*/g, '$1redacted') }
+        : {};
+      gtag('config', 'G-MQ8LYQNEC5', ceCfg);
+      // Google Ads account (auto-tagging, remarketing). Lead conversions come from the GA4
+      // generate_lead event imported into Ads, so no per-conversion send_to is needed here.
+      gtag('config', 'AW-18133659191', ceCfg);
+    </script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
