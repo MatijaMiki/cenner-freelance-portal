@@ -16,7 +16,15 @@ const LANGS = [
   { code: 'DE', label: 'Deutsch' },
   { code: 'IT', label: 'Italiano' },
   { code: 'FR', label: 'Français' },
+  { code: 'ES', label: 'Español' },
 ];
+
+/**
+ * Switching between Croatian and English moves to the other URL (/services <-> /en/services), which
+ * re-mounts the app's router and this modal with it. The open prompt is noted here, outside React,
+ * and the new instance opens straight back up with the same reason.
+ */
+let reopenAfterSwitch: Reason | null = null;
 
 type Reason = 'first-visit' | 'register' | 'manual';
 
@@ -48,6 +56,12 @@ const ConsentModal: React.FC = () => {
 
   // Auto-open on first visit if any consent is pending (and it wasn't skipped recently)
   useEffect(() => {
+    if (reopenAfterSwitch) {
+      setReason(reopenAfterSwitch);
+      reopenAfterSwitch = null;
+      setOpen(true);
+      return;
+    }
     if (shouldAutoPromptConsent()) {
       const t = setTimeout(() => setOpen(true), 700);
       return () => clearTimeout(t);
@@ -162,7 +176,7 @@ const ConsentModal: React.FC = () => {
                 {LANGS.map(l => (
                   <button
                     key={l.code}
-                    onClick={() => { setLang(l.code); setShowLangs(false); }}
+                    onClick={() => { reopenAfterSwitch = reason; setTimeout(() => { reopenAfterSwitch = null; }, 1000); setLang(l.code); setShowLangs(false); }}
                     className={`w-full text-left px-3 py-2 text-xs font-bold transition-colors ${
                       lang === l.code ? 'bg-ink text-white' : 'text-ink hover:bg-paper2'
                     }`}

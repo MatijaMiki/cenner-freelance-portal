@@ -8,6 +8,8 @@ import RedirectTo from './components/RedirectTo';
 import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
 import { NotifyProvider } from './contexts/NotifyContext';
+import { useLanguage } from './i18n';
+import { prefixOf } from './lib/langRoutes.mjs';
 
 const Home = lazy(() => import('./pages/Home'));
 // LOCAL COMPARISON ONLY: the saved pass-3 homepage. Remove before shipping.
@@ -49,6 +51,11 @@ const Referral = lazy(() => import('./pages/Referral'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const App: React.FC = () => {
+  // English lives under /en (lib/langRoutes.mjs). The router takes the prefix as its basename, so
+  // routes, <Link>s and navigate() keep using root paths and pick the prefix up by themselves.
+  // Keyed by it: switching language re-mounts the router on the new basename.
+  const { lang } = useLanguage();
+  const basename = prefixOf(lang);
   // Capture ?ref=CODE on any entry point and persist it for the signup flow.
   // Only overwrite an existing stored code when a new one is actually present.
   useEffect(() => {
@@ -63,7 +70,7 @@ const App: React.FC = () => {
       <NotifyProvider>
       <AuthProvider>
         <DataProvider>
-          <Router>
+          <Router basename={basename || undefined} key={basename || '/'}>
             <ScrollToTop />
             <Layout>
               <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050505' }} />}>

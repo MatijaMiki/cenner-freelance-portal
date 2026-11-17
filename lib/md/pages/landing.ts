@@ -71,7 +71,7 @@ export const city: PageModule = {
           link('Web developeri', '/usluge/web-developeri'),
         ]),
         h2(`Kako pronaći freelancera u ${c.loc}?`),
-        `Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz ${c.gen} i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow. Plaćaš tek kad si zadovoljan.`,
+        `Klikni "Pronađi freelancera" i pregledaj freelancere iz ${c.gen} i okolice: portfolije, ocjene i prethodne radove. Možeš i objaviti projekt pa usporediti ponude. Iznos se na kartici samo rezervira, a naplaćuje se i isplaćuje freelanceru tek kad prihvatiš isporuku.`,
         c.faq?.length ? h2('Česta pitanja') : '',
         ...(c.faq || []).flatMap((f: { q: string; a: string }) => [h3(f.q), inlineHtml(f.a)]),
         h2('Freelanceri u drugim gradovima'),

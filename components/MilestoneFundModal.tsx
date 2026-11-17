@@ -77,7 +77,7 @@ const PayForm: React.FC<{ amount: number; serviceFee: number; total: number; fee
       <div className="bg-leaf/10 border border-ink p-4 flex items-start gap-3">
         <ShieldCheck className="text-leaf shrink-0 mt-0.5" size={18} />
         <p className="text-slate text-xs leading-relaxed">
-          Funds are <span className="text-ink font-bold">held in escrow</span> by Stripe and only released to the freelancer once you approve the delivered work (or 72h after submission).
+          The amount is <span className="text-ink font-bold">authorised on your card</span> now, and only charged and released to the freelancer once you approve the delivered work (or 72h after submission).
         </p>
       </div>
 

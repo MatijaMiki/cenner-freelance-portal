@@ -1,5 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { DEFAULT_LANG, HTML_LANG, LANG_PREFIXES, localizedPath, splitLangPath } from './lib/langRoutes.mjs';
+import { keepScrollAcrossRemount } from './lib/scrollRestore';
 
 type LangCode = string;
 
@@ -157,7 +159,6 @@ const en: Record<string, string> = {
   'Project Success': 'Project Success',
   'Milestone delivery record': 'Milestone delivery record',
   'Capital Security': 'Capital Security',
-  'Encrypted escrow protection': 'Encrypted escrow protection',
   'Top Specializations': 'Top Specializations',
   'Browse our most sought-after categories indexed by our neural matching engine.': 'Browse our most sought-after categories indexed by our neural matching engine.',
   'View all categories': 'View all categories',
@@ -169,14 +170,13 @@ const en: Record<string, string> = {
   'A truly': 'A truly',
   'Global': 'Global',
   'Expert Network.': 'Expert Network.',
-  'Our specialists operate from 142 countries, providing a follow-the-sun workflow that ensures your project never sleeps. Every node in our network is verified for local compliance and global mastery.': 'Our specialists operate from 142 countries, providing a follow-the-sun workflow that ensures your project never sleeps. Every node in our network is verified for local compliance and global mastery.',
   '142+': '142+',
   'Countries Represented': 'Countries Represented',
   '24/7': '24/7',
   'Active Collaboration': 'Active Collaboration',
   'Ready to join the elite?': 'Ready to join the elite?',
   'Ready to get started?': 'Ready to get started?',
-  "Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.": "Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.",
+  "Whether you're a visionary founder or a technical master, Cenner is the home for your most ambitious projects.": "Whether you need a project built or you build them for a living, Cenner is where the work gets done.",
   'Start a Project': 'Start a Project',
   'Join the Network': 'Join the Network',
 
@@ -218,13 +218,13 @@ const en: Record<string, string> = {
   'Frequently Asked Questions': 'Frequently Asked Questions',
   'Everything about freelancing in Croatia and the EU in one place.': 'Everything about freelancing in Croatia and the EU in one place.',
   'faq.q1': 'What is Cenner and how does the freelance platform work?',
-  'faq.a1': 'Cenner is a leading freelance platform in Croatia and the EU that connects companies and entrepreneurs with verified freelancers. Clients browse services or post projects, freelancers apply or offer ready packages, and payment is handled securely through the platform with escrow protection.',
+  'faq.a1': "Cenner is a freelance marketplace for Croatia and the EU that connects companies and entrepreneurs with verified freelancers. Clients browse services or post projects, freelancers apply or offer ready-made packages, and payment runs through the platform: the freelancer is paid only once the client accepts the work (or automatically 72 hours after delivery if the client doesn't respond).",
   'faq.q2': 'How do I find a freelancer in Croatia for contract work?',
-  'faq.a2': 'On the Cenner platform you can browse verified freelancers from Croatia and the EU. Filter by category (web development, design, marketing, writing), budget and delivery time. Every freelancer goes through KYC verification which guarantees professionalism and safe collaboration.',
+  'faq.a2': "On Cenner you can browse verified freelancers from Croatia and the EU. Filter by category (web development, design, marketing, writing), budget and delivery time. Every freelancer goes through KYC identity verification, so you know who you are working with.",
   'faq.q3': 'Is Cenner available for freelancers from across the EU?',
-  'faq.a3': 'Yes, Cenner is available for freelancers and clients from across the European Union. The platform supports euro payments and complies with EU regulations. Freelancers from Croatia, Austria, Germany, Italy and other EU countries can register and start offering services immediately.',
+  'faq.a3': "Yes, Cenner is open to freelancers and clients from across the European Union, and payments are in euros. Freelancers from Croatia, Austria, Germany, Italy and other EU countries can sign up and, once their identity is verified, start offering services.",
   'faq.q4': 'What is contract work and how is it different from full employment?',
-  'faq.a4': 'Contract work (freelancing) means working on projects without a permanent employment contract. As a freelancer, you choose your own projects, hours and rates. Cenner provides secure contracts, escrow payment and protection for both sides, ideal for beginners and experienced freelancers alike.',
+  'faq.a4': "Contract work (freelancing) means working on projects without a permanent employment contract. As a freelancer, you choose your own projects, hours and rates. On Cenner the price is agreed upfront, and the freelancer is paid once the client accepts the work, which suits beginners and experienced freelancers alike.",
   'faq.q5': 'What types of services do freelancers offer on the Cenner platform?',
   'faq.a5': 'Cenner freelancers offer services in: web development and programming, graphic design and UI/UX, digital marketing and SEO, content writing, video production, and music and audio production. All services are available to clients in Croatia and across the EU.',
 
@@ -344,7 +344,6 @@ const en: Record<string, string> = {
   'Headquarters': 'Headquarters',
   'Call Support': 'Call Support',
   'Live Chat Available': 'Live Chat Available',
-  'Our support team is online 24/7 to assist with payment issues or dispute resolution.': 'Our support team is online 24/7 to assist with payment issues or dispute resolution.',
   'Your Name': 'Your Name',
   'Subject': 'Subject',
   'General Inquiry': 'General Inquiry',
@@ -659,6 +658,8 @@ const en: Record<string, string> = {
   'Price list': 'Price list',
   'service fee': 'service fee',
   'service fee, Enterprise sellers': 'service fee, Enterprise sellers',
+  "Join thousands of freelancers and clients on Cenner.": "Join the freelancers and clients on Cenner.",
+  "1:1": "1:1",
 };
 
 const hr: Record<string, string> = {
@@ -792,7 +793,7 @@ const hr: Record<string, string> = {
   'Cenner Services': 'Cenner usluge',
   'What is Cenner?': 'Što je Cenner?',
   'The site you are looking at is our work.': 'Stranica koju gledaš je naš rad.',
-  'Behind the marketplace is an in-house team that designs, builds and runs websites, shops and automations. This screen is a small working sample: open the windows, drag them around, press CENNER for every page.': 'Iza tržnice stoji interni tim koji dizajnira, izrađuje i održava web stranice, trgovine i automatizacije. Ovaj ekran je mali radni uzorak: otvaraj prozore, povlači ih, pritisni CENNER za sve stranice.',
+  'Behind the marketplace is an in-house team that designs, builds and runs websites, shops and automations. This screen is a small working sample: open the windows, drag them around, press CENNER for every page.': "Iza platforme stoji vlastiti tim koji dizajnira, izrađuje i održava web stranice, trgovine i automatizacije. Ovaj ekran je mali radni uzorak: otvaraj prozore, povlači ih, pritisni CENNER za sve stranice.",
   'Refer & Win': 'Preporuči i osvoji',
   'Win 12 months of': 'Osvoji 12 mjeseci',
   'free Enterprise.': 'besplatnog Enterprise plana.',
@@ -808,7 +809,6 @@ const hr: Record<string, string> = {
   'Project Success': 'Uspjeh projekata',
   'Milestone delivery record': 'Rekord isporuke',
   'Capital Security': 'Sigurnost kapitala',
-  'Encrypted escrow protection': 'Šifrirana zaštita escrow računa',
   'Top Specializations': 'Vrhunske specijalizacije',
   'Browse our most sought-after categories indexed by our neural matching engine.': 'Pregledajte najpopularnije kategorije indeksirane našim motorom za neuronsko usklađivanje.',
   'View all categories': 'Pogledaj sve kategorije',
@@ -820,7 +820,6 @@ const hr: Record<string, string> = {
   'A truly': 'Istinski',
   'Global': 'Globalna',
   'Expert Network.': 'Mreža stručnjaka.',
-  'Our specialists operate from 142 countries, providing a follow-the-sun workflow that ensures your project never sleeps. Every node in our network is verified for local compliance and global mastery.': 'Naši stručnjaci rade iz 142 države, osiguravajući workflow koji prati sunce i garantira da vaš projekt nikad ne stoji. Svaki čvor naše mreže verificiran je za lokalnu usklađenost i globalnu stručnost.',
   '142+': '142+',
   'Countries Represented': 'Zastupljenih država',
   '24/7': '24/7',
@@ -869,13 +868,13 @@ const hr: Record<string, string> = {
   'Frequently Asked Questions': 'Često postavljana pitanja',
   'Everything about freelancing in Croatia and the EU in one place.': 'Sve o freelancingu u Hrvatskoj i EU na jednom mjestu.',
   'faq.q1': 'Što je Cenner i kako funkcionira freelance platforma?',
-  'faq.a1': 'Cenner je vodeća freelance platforma u Hrvatskoj i EU koja povezuje tvrtke i poduzetnike s provjerenim freelancerima. Klijenti pretražuju usluge ili objavljuju projekte, freelanceri apliciraju ili nude gotove pakete, a plaćanje se odvija sigurno kroz platformu s escrow zaštitom.',
+  'faq.a1': "Cenner je freelance platforma za Hrvatsku i EU koja povezuje tvrtke i poduzetnike s provjerenim freelancerima. Klijenti pretražuju usluge ili objavljuju projekte, freelanceri apliciraju ili nude gotove pakete, a plaćanje ide kroz platformu: freelanceru se isplaćuje tek kad klijent prihvati posao (ili automatski 72 sata nakon predaje ako se klijent ne javi).",
   'faq.q2': 'Kako pronaći freelancera u Hrvatskoj za honorarni posao?',
-  'faq.a2': 'Na Cenner platformi možeš pregledati verificirane freelancere iz Hrvatske i EU. Filtriraj po kategoriji (web razvoj, dizajn, marketing, pisanje), proračunu i roku isporuke. Svaki freelancer prolazi KYC verifikaciju što garantira profesionalnost i sigurnost suradnje.',
+  'faq.a2': "Na Cenner platformi možeš pregledati verificirane freelancere iz Hrvatske i EU. Filtriraj po kategoriji (web razvoj, dizajn, marketing, pisanje), proračunu i roku isporuke. Svaki freelancer prolazi KYC provjeru identiteta, pa znaš s kim radiš.",
   'faq.q3': 'Je li Cenner dostupan za freelancere iz cijele EU?',
-  'faq.a3': 'Da, Cenner je dostupan za freelancere i klijente iz cijele Europske unije. Platforma podržava plaćanje u eurima i usklađena je s EU propisima. Freelanceri iz Hrvatske, Austrije, Njemačke, Italije i ostalih EU država mogu se odmah registrirati i početi nuditi usluge.',
+  'faq.a3': "Da, Cenner je otvoren za freelancere i klijente iz cijele Europske unije, a plaćanje je u eurima. Freelanceri iz Hrvatske, Austrije, Njemačke, Italije i ostalih EU država mogu se registrirati i, nakon provjere identiteta, početi nuditi usluge.",
   'faq.q4': 'Što je honorarni posao i kako se razlikuje od stalnog zaposlenja?',
-  'faq.a4': 'Honorarni posao (freelancing) znači rad na projektima bez stalnog ugovora o radu. Kao slobodni radnik sam odabireš projekte, radne sate i cijene. Cenner osigurava sigurne ugovore, escrow plaćanje i zaštitu obje strane, što je idealno za početnike i iskusne freelancere.',
+  'faq.a4': "Honorarni posao (freelancing) znači rad na projektima bez stalnog ugovora o radu. Kao slobodni radnik sam odabireš projekte, radne sate i cijene. Na Cenneru se cijena dogovara unaprijed, a freelanceru se isplaćuje kad klijent prihvati posao, što odgovara i početnicima i iskusnim freelancerima.",
   'faq.q5': 'Koje vrste usluga nude freelanceri na Cenner platformi?',
   'faq.a5': 'Cenner freelanceri nude usluge u kategorijama: web razvoj i programiranje, grafički dizajn i UI/UX, digitalni marketing i SEO, pisanje sadržaja, video produkcija te glazba i audio produkcija. Sve usluge dostupne su klijentima iz Hrvatske i cijele EU.',
 
@@ -908,7 +907,7 @@ const hr: Record<string, string> = {
   'Sign In Now': 'Prijavi se',
   'Create My Account': 'Stvori moj račun',
   'Or authorize with': 'Ili autoriziraj s',
-  'Coming soon': 'Uskoro',
+  'Coming soon': "Uskoro",
   'New to the platform?': 'Novi na platformi?',
   'Already a member?': 'Već ste član?',
   'Sign up': 'Registriraj se',
@@ -995,7 +994,6 @@ const hr: Record<string, string> = {
   'Headquarters': 'Sjedište',
   'Call Support': 'Pozovite podršku',
   'Live Chat Available': 'Dostupan live chat',
-  'Our support team is online 24/7 to assist with payment issues or dispute resolution.': 'Naš tim podrške dostupan je 24/7 za pomoć s problemima plaćanja ili rješavanjem sporova.',
   'Your Name': 'Vaše ime',
   'Subject': 'Predmet',
   'General Inquiry': 'Opći upit',
@@ -1317,6 +1315,86 @@ const hr: Record<string, string> = {
   'Price list': 'Cjenik',
   'service fee': 'naknada za uslugu',
   'service fee, Enterprise sellers': 'naknada za uslugu kod Enterprise prodavača',
+  "A Croatian freelance marketplace and studio: verified freelancers, and payment only on delivery.": "Hrvatska freelance platforma i studio: provjereni freelanceri, a plaćanje tek po isporuci.",
+  "Talent Density": "Gustoća freelancera",
+  "mapped": "na karti",
+  "Expand map": "Proširi kartu",
+  "No mapped freelancers yet": "Još nema freelancera na karti",
+  "Approximate city-level density. Exact locations are never shown.": "Približna gustoća po gradovima. Točne lokacije nikad se ne prikazuju.",
+  "freelancers across": "freelancera u",
+  "cities": "gradova",
+  "Press ESC to close": "Pritisnite ESC za zatvaranje",
+  "Nothing here yet. Be the first to post.": "Ovdje još nema ničega. Budite prvi koji će objaviti.",
+  "you keep": "zadržavate",
+  "Enterprise": "Enterprise",
+  "Post a Service": "Objavi uslugu",
+  "Filters": "Filteri",
+  "Sort": "Poredaj",
+  "No Freelancers Found": "Nema pronađenih freelancera",
+  "No Jobs Posted Yet": "Još nema objavljenih poslova",
+  "Trusted": "Pouzdan",
+  "Trusted freelancer": "Pouzdan freelancer",
+  "Marketplace mode": "Prikaz tržišta",
+  "Almost there. Check your email to continue, then sign in.": "Još malo. Provjerite e-mail za nastavak, zatim se prijavite.",
+  "Accept the Terms of Service, then press the Google button again.": "Prihvatite Uvjete korištenja, zatim ponovno pritisnite gumb Google.",
+  "Welcome back. Good to have you.": "Dobro došli natrag. Drago nam je što ste tu.",
+  "Join thousands of freelancers and clients on Cenner.": "Pridružite se freelancerima i klijentima na Cenneru.",
+  "Page Not Found": "Stranica nije pronađena",
+  "Page not found": "Stranica nije pronađena",
+  "The page you're looking for doesn't exist or has been moved.": "Stranica koju tražite ne postoji ili je premještena.",
+  "Go Home": "Na početnu",
+  "Go Back": "Natrag",
+  "Trusted freelancers on Cenner": "Pouzdani freelanceri na Cenneru",
+  "Browse all": "Pregledaj sve",
+  "Verification email sent. Check your inbox.": "Poslali smo e-mail za potvrdu. Provjerite sandučić.",
+  "Failed to send verification email.": "Slanje e-maila za potvrdu nije uspjelo.",
+  "Phone must be international format, e.g. +385991234567.": "Broj mora biti u međunarodnom obliku, npr. +385991234567.",
+  "Code sent. Enter it below to verify.": "Kôd je poslan. Upišite ga ispod za potvrdu.",
+  "Failed to send code.": "Slanje kôda nije uspjelo.",
+  "Enter the code we sent you.": "Upišite kôd koji smo vam poslali.",
+  "Phone verified.": "Broj je potvrđen.",
+  "Invalid or expired code.": "Kôd nije ispravan ili je istekao.",
+  "Resend": "Pošalji ponovno",
+  "No phone number on file": "Nema spremljenog broja telefona",
+  "Not added": "Nije dodano",
+  "Resend code": "Pošalji kôd ponovno",
+  "Send code": "Pošalji kôd",
+  "Add & verify": "Dodaj i potvrdi",
+  "Verification code": "Kôd za potvrdu",
+  "Verify": "Potvrdi",
+  "Payout Account": "Račun za isplatu",
+  "No saved listings yet.": "Još nemate spremljenih oglasa.",
+  "No sales yet.": "Još nema prodaja.",
+  "No purchases yet.": "Još nema kupnji.",
+  "Verification Under Review": "Provjera je u tijeku",
+  "Your documents have been submitted and are being reviewed. This can take up to 24 hours. Listings will unlock once approved.": "Vaši dokumenti su poslani i pregledavamo ih. To može potrajati do 24 sata. Oglasi se otključavaju nakon odobrenja.",
+  "Loading analytics…": "Učitavanje analitike…",
+  "Profile Views": "Pregledi profila",
+  "Saved By Clients": "Spremili klijenti",
+  "Contracts Won": "Dobiveni ugovori",
+  "total": "ukupno",
+  "Monthly Boosts": "Mjesečna isticanja",
+  "Upgrade to Pro or Ultra to unlock profile boosts.": "Prijeđite na Pro ili Ultra za isticanje profila.",
+  "used this month, resets on the 1st": "iskorišteno ovaj mjesec, poništava se 1. u mjesecu",
+  "View → Contract Rate": "Omjer pregled → ugovor",
+  "Percentage of views that led to a contract": "Postotak pregleda koji su završili ugovorom",
+  "Active subscription tier": "Aktivni plan pretplate",
+  "Top Listings by Views": "Najgledaniji oglasi",
+  "views": "pregleda",
+  "Unlock advanced analytics with Pro": "Otključajte naprednu analitiku s planom Pro",
+  "See conversion rate, top listings, and profile impressions.": "Pogledajte stopu konverzije, najbolje oglase i prikaze profila.",
+  "Analytics unavailable right now.": "Analitika trenutačno nije dostupna.",
+  "Edit Listing": "Uredi oglas",
+  "Selling": "Prodaja",
+  "Buying": "Kupnja",
+  "Listings": "Oglasi",
+  "Sales": "Prodaje",
+  "Earnings": "Zarada",
+  "Stats": "Statistika",
+  "Purchases": "Kupnje",
+  "Saved": "Spremljeno",
+  "Recent Activity": "Nedavna aktivnost",
+  "1:1": "1:1",
 };
 
 const dicts: Record<string, Record<string, string>> = { EN: en, HR: hr };
@@ -1337,18 +1415,58 @@ const LanguageContext = createContext<LanguageContextValue>({
   t: (key) => key,
 });
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [lang, setLangState] = useState<LangCode>(() => {
-    const stored = localStorage.getItem('cenner_lang');
-    if (stored) return stored;
-    // Default to Croatian since cenner.hr targets the Croatian market.
-    // English speakers can switch via the language toggle.
-    return 'HR';
-  });
+/** What the app shows when nothing in the URL says otherwise. */
+const readStored = (): LangCode | null => {
+  try { return localStorage.getItem('cenner_lang'); } catch { return null; }
+};
+const store = (code: LangCode) => {
+  try { localStorage.setItem('cenner_lang', code); } catch { /* private mode: the URL still carries it */ }
+};
 
+/**
+ * The language of a URL (lib/langRoutes.mjs): /en/... is English, the root is Croatian. Languages
+ * without a prefix of their own (DE, FR, ES, IT: no dictionary yet) keep the old behaviour on root
+ * URLs, i.e. the stored choice, so picking one in the menu still works.
+ */
+function langOfUrl(pathname: string, fallback: LangCode | null): LangCode {
+  const { lang } = splitLangPath(pathname);
+  if (lang) return lang;
+  if (fallback && fallback !== DEFAULT_LANG && !(fallback in LANG_PREFIXES) && fallback in HTML_LANG) return fallback;
+  return DEFAULT_LANG;
+}
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [lang, setLangState] = useState<LangCode>(() => langOfUrl(window.location.pathname, readStored()));
+
+  // The URL decides; localStorage just remembers the last language shown.
+  useEffect(() => {
+    store(lang);
+    // a language with no dictionary yet (DE, FR, ES, IT) shows the English text, so say so
+    document.documentElement.lang = lang in dicts ? (HTML_LANG as Record<string, string>)[lang] : 'en';
+  }, [lang]);
+
+  // Back/forward across a language prefix (/en/services -> /services) changes the language with it.
+  useEffect(() => {
+    const onPop = () => setLangState(cur => langOfUrl(window.location.pathname, cur));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  /**
+   * The language pickers call this: it moves to the same page under the new language's prefix
+   * (/services <-> /en/services), keeping query and #hash. App.tsx re-mounts the router with the
+   * new basename, so every <Link> in the app picks the prefix up by itself.
+   */
   const setLang = (code: LangCode) => {
+    const { pathname, search, hash } = window.location;
+    const { path } = splitLangPath(pathname);
+    const target = localizedPath(path, code);
+    if (target !== pathname) {
+      // the re-mounted page would start at its top: ScrollToTop puts the reader back instead
+      keepScrollAcrossRemount(window.scrollY);
+      window.history.pushState(null, '', `${target}${search}${hash}`);
+    }
     setLangState(code);
-    localStorage.setItem('cenner_lang', code);
   };
 
   const t = (key: string): string => translate(key, lang);

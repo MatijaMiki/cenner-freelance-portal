@@ -209,7 +209,7 @@ const Marketplace: React.FC = () => {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
       name: 'Cenner Marketplace: Freelance Usluge Hrvatska',
-      description: 'Pretraži stotine provjerenih freelance usluga u Hrvatskoj i EU. Web razvoj, dizajn, marketing, pisanje i više.',
+      description: 'Pretraži provjerene freelance usluge u Hrvatskoj i EU. Web razvoj, dizajn, marketing, pisanje i više.',
       url: 'https://cenner.hr/marketplace',
       inLanguage: ['hr', 'en'],
       about: {
@@ -250,6 +250,11 @@ const Marketplace: React.FC = () => {
         canonical="/marketplace"
         description="Pronađi verificirane freelancere u Hrvatskoj i EU na Cenner marketplaceu. Web razvoj, dizajn, marketing, pisanje i više. Honorarni posao na jednom mjestu."
         keywords="freelance marketplace hrvatska, freelanceri hrvatska, najam freelancera, web developer hrvatska, grafički dizajner hrvatska, digitalni marketing hrvatska, honorarni posao eu"
+        en={{
+          title: 'Marketplace: Freelancers in Croatia',
+          description: 'Find verified freelancers in Croatia and the EU on the Cenner marketplace: web development, design, marketing, writing and more, in one place.',
+          keywords: 'freelance marketplace croatia, freelancers croatia, hire a freelancer, web developer croatia, graphic designer croatia',
+        }}
         jsonLd={marketplaceJsonLd}
         aiSummary={AI_SUMMARIES['/marketplace']}
       />
@@ -291,7 +296,7 @@ const Marketplace: React.FC = () => {
                 <span>{t('Post a Service')}</span>
               </button>
             )}
-            <div role="group" aria-label="Marketplace mode" className="flex w-full items-stretch border-2 border-ink sm:w-auto">
+            <div role="group" aria-label={t('Marketplace mode')} className="flex w-full items-stretch border-2 border-ink sm:w-auto">
               <button
                 onClick={() => { setMode('freelancers'); setSelectedCategory('All'); }}
                 aria-pressed={mode === 'freelancers'}
@@ -424,7 +429,7 @@ const Marketplace: React.FC = () => {
                               <span className="text-slate">Free</span>
                             )}
                             {listing.freelancerTrusted && (
-                              <span title="Trusted freelancer">★ Trusted</span>
+                              <span title={t('Trusted freelancer')}>★ {t('Trusted')}</span>
                             )}
                             {listing.freelancerKycVerified && !listing.freelancerTrusted && (
                               <span title="KYC verified" className="text-leaf">✓ Verified</span>

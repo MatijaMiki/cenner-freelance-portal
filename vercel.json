@@ -72,6 +72,21 @@
       "source": "/earnings",
       "destination": "/profile?tab=earnings",
       "permanent": true
+    },
+    {
+      "source": "/en/contact",
+      "destination": "/en/about#kontakt",
+      "permanent": true
+    },
+    {
+      "source": "/en/projects",
+      "destination": "/en/services#radovi",
+      "permanent": true
+    },
+    {
+      "source": "/en/technology",
+      "destination": "/en/services#alati",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -105,6 +120,30 @@
       "destination": "/api/render?type=private"
     },
     {
+      "source": "/en/service/:id",
+      "destination": "/api/render?type=service&id=:id"
+    },
+    {
+      "source": "/en/freelancer/:id",
+      "destination": "/api/render?type=freelancer&id=:id"
+    },
+    {
+      "source": "/en/blog/:slug",
+      "destination": "/api/render?type=blog&id=:slug"
+    },
+    {
+      "source": "/en/(profile|creator-onboarding|banned|orders|messages|contracts|reset-password|verify-email|unsubscribe|order-success|referral|auth|v3)",
+      "destination": "/api/render?type=private"
+    },
+    {
+      "source": "/en/(admin|vodic)/:path*",
+      "destination": "/api/render?type=private"
+    },
+    {
+      "source": "/en/(messages|contracts|checkout|checkout-subscription)/:id",
+      "destination": "/api/render?type=private"
+    },
+    {
       "source": "/:path*",
       "destination": "/api/render?type=notfound"
     }
@@ -120,6 +159,14 @@
     },
     {
       "source": "/vodic/:path*",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/en/auth",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/en/vodic/:path*",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     },
     {

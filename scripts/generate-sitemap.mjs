@@ -13,6 +13,7 @@ import { writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { BLOG_POSTS } from '../content/blog/posts.mjs';
+import { alternatesFor, isTranslated, LANG_PREFIXES, localizedPath } from '../lib/langRoutes.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BASE_URL = 'https://cenner.hr';
@@ -53,15 +54,17 @@ const LANDING_ROUTES = [
   { path: '/freelanceri/osijek',         priority: '0.85', changefreq: 'weekly' },
 ];
 
-function urlEntry({ loc, lastmod = TODAY, changefreq = 'monthly', priority = '0.5' }) {
+// hreflang alternates: Croatian only, unless the page has a translation (lib/langRoutes.mjs),
+// in which case every language version lists the full set, x-default being the Croatian root.
+function urlEntry({ loc, lastmod = TODAY, changefreq = 'monthly', priority = '0.5', alternates }) {
+  const alts = alternates || [{ hreflang: 'hr-HR', href: loc }, { hreflang: 'x-default', href: loc }];
   return `
   <url>
     <loc>${loc}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
-    <xhtml:link rel="alternate" hreflang="hr-HR"     href="${loc}" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${loc}" />
+${alts.map((a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`).join('\n')}
   </url>`;
 }
 
@@ -81,9 +84,14 @@ async function fetchJson(url) {
 async function main() {
   const entries = [];
 
-  // Static routes
+  // Static routes, plus their /en versions where the page is translated
   for (const r of STATIC_ROUTES) {
-    entries.push(urlEntry({ loc: `${BASE_URL}${r.path}`, changefreq: r.changefreq, priority: r.priority }));
+    const { alternates } = alternatesFor(r.path, 'HR');
+    entries.push(urlEntry({ loc: `${BASE_URL}${r.path}`, changefreq: r.changefreq, priority: r.priority, alternates }));
+    if (!isTranslated(r.path)) continue;
+    for (const lang of Object.keys(LANG_PREFIXES)) {
+      entries.push(urlEntry({ loc: `${BASE_URL}${localizedPath(r.path, lang)}`, changefreq: r.changefreq, priority: r.priority, alternates }));
+    }
   }
 
   // Static SEO landing pages

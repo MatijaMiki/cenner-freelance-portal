@@ -484,7 +484,7 @@ const Auth: React.FC = () => {
             <button
               disabled={loading}
               className={`${social} cursor-not-allowed opacity-50`}
-              title="Coming soon"
+              title={t('Coming soon')}
             >
               <Facebook size={16} className="text-[#1877F2]" aria-hidden="true" />
               <span className="hidden sm:inline">Facebook</span>
@@ -492,7 +492,7 @@ const Auth: React.FC = () => {
             <button
               disabled={loading}
               className={`${social} cursor-not-allowed opacity-50`}
-              title="Coming soon"
+              title={t('Coming soon')}
             >
               <Github size={16} aria-hidden="true" />
               <span className="hidden sm:inline">Github</span>

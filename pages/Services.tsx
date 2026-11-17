@@ -130,6 +130,11 @@ const Services: React.FC = () => {
         canonical="/services"
         description="Cenner izrađuje web stranice, WordPress, SaaS i CRM sustave, n8n automatizacije, grafički dizajn i oglase te postavlja servere i hosting. Fiksna cijena, izravna komunikacija."
         keywords="izrada web stranica, wordpress izrada, izrada aplikacija, crm sustav, n8n automatizacija, grafički dizajn, postavljanje servera, zagreb"
+        en={{
+          title: 'Websites, apps and automation, built in Croatia',
+          description: 'Cenner builds websites, WordPress sites, SaaS and CRM systems, n8n automations, graphic design and ads, and sets up servers and hosting. Fixed price, direct communication.',
+          keywords: 'web development croatia, website design zagreb, wordpress development, web app development, crm development, n8n automation',
+        }}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'ProfessionalService',

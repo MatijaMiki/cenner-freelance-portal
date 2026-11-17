@@ -34,6 +34,7 @@ import remarkGfm from 'remark-gfm';
 import { sortedBlogPosts, faqJsonLd } from '../content/blog/posts.mjs';
 import { matchMdRoute, mdPathOf } from '../lib/md/routes.mjs';
 import { AI_SUMMARIES } from '../lib/md/summaries.mjs';
+import { alternatesFor, isTranslated, localizedPath, HTML_LANG, OG_LOCALE } from '../lib/langRoutes.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
@@ -166,9 +167,9 @@ const ROUTES = [
   },
   {
     path: '/subscription',
-    title: 'Pricing & Plans | Cenner',
+    title: 'Cijene i planovi | Cenner',
     description:
-      'Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams.',
+      'Odaberite Cenner plan koji vam odgovara. Planovi Free, Pro i Ultra smanjuju proviziju i povećavaju vidljivost, a Enterprise je za timove.',
   },
   {
     path: '/ranwhat',
@@ -289,6 +290,78 @@ const ROUTES = [
   ...blogPostRoutes(),
 ];
 
+// ---- English (/en, lib/langRoutes.mjs) ----
+// Every route above also gets a shell under /en. The pages in TRANSLATED_PATHS have an English
+// title and description here, mirroring the `en` prop each page passes to components/SEO.tsx;
+// the others keep their Croatian head and their canonical on the Croatian URL.
+const EN_META = {
+  '/': {
+    title: 'Freelancers in Croatia, paid only on delivery | Cenner',
+    description:
+      'Cenner is a Croatian freelance marketplace: identity-checked (KYC) freelancers, and the freelancer is paid only once the work is delivered. Looking for freelance work? Your profile is free.',
+  },
+  '/services': {
+    title: 'Websites, apps and automation, built in Croatia | Cenner',
+    description:
+      'Cenner builds websites, WordPress sites, SaaS and CRM systems, n8n automations, graphic design and ads, and sets up servers and hosting. Fixed price, direct communication.',
+  },
+  '/about': {
+    title: 'About and contact | Cenner',
+    description:
+      'Cenner is a Croatian freelance marketplace and an in-house studio for websites, apps and automation. Contact details, address and company information.',
+  },
+  '/marketplace': {
+    title: 'Marketplace: Freelancers in Croatia | Cenner',
+    description:
+      'Find verified freelancers in Croatia and the EU on the Cenner marketplace: web development, design, marketing, writing and more, in one place.',
+  },
+  '/subscription': {
+    title: 'Pricing & Plans | Cenner',
+    description:
+      'Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams.',
+  },
+};
+
+/** The first-byte text of an English page without a body of its own: what it is and where to go. */
+function englishBody(title, description) {
+  const link = 'color:#5d6470;margin-right:16px;';
+  return `<main style="max-width:1100px;margin:0 auto;padding:80px 24px;color:#0b0c0e;font-family:Inter,sans-serif;">
+        <h1 style="font-size:48px;font-weight:800;line-height:1.05;margin:0 0 24px;">${escapeText(title.replace(/ \| Cenner$/, ''))}</h1>
+        <p style="font-size:18px;line-height:1.6;color:#5d6470;max-width:720px;margin:0 0 40px;">${escapeText(description)}</p>
+        <p style="margin-top:48px;">
+          <a href="/en/marketplace" style="display:inline-block;background:#002ca5;color:#fff;padding:14px 28px;text-decoration:none;font-weight:700;">Browse the marketplace</a>
+          &nbsp;
+          <a href="/en/services" style="display:inline-block;border:2px solid #0b0c0e;color:#0b0c0e;padding:14px 28px;text-decoration:none;font-weight:700;">See our services</a>
+        </p>
+        <nav aria-label="Main navigation" style="margin-top:64px;font-size:14px;color:#5d6470;">
+          <a href="/en/marketplace" style="${link}">Marketplace</a>
+          <a href="/en/services" style="${link}">Services</a>
+          <a href="/en/about" style="${link}">About</a>
+          <a href="/en/about#kontakt" style="${link}">Contact</a>
+          <a href="/en/subscription" style="${link}">Pricing</a>
+          <a href="/" style="color:#5d6470;" hreflang="hr">Hrvatski</a>
+        </nav>
+      </main>`;
+}
+
+/** A route as its /en shell: English head where translated, else the Croatian one pointing home. */
+function englishRoute(route) {
+  const meta = EN_META[route.path];
+  if (isTranslated(route.path) && !meta) {
+    throw new Error(`prerender: ${route.path} is in TRANSLATED_PATHS but has no EN_META entry`);
+  }
+  const title = meta ? meta.title : route.title;
+  const description = meta ? meta.description : route.description;
+  return {
+    ...route,
+    lang: 'EN',
+    title,
+    description,
+    // blog posts, ranwhat and Stenvakt keep their own page text; the rest get an English one
+    body: route.body || englishBody(title, description),
+  };
+}
+
 /** Replace an existing tag if present, otherwise leave the HTML untouched. */
 function replaceTag(html, pattern, replacement, label, route) {
   if (!pattern.test(html)) {
@@ -301,7 +374,10 @@ function replaceTag(html, pattern, replacement, label, route) {
 }
 
 function buildRouteHtml(shell, route) {
-  const url = `${BASE}${route.path}`;
+  const lang = route.lang || 'HR';
+  // canonical + hreflang from lib/langRoutes.mjs, the same set components/SEO.tsx renders
+  const { canonical: url, alternates } = alternatesFor(route.path, lang === 'EN' && isTranslated(route.path) ? 'EN' : 'HR');
+  const english = lang === 'EN' && isTranslated(route.path);
   const title = escapeText(route.title);
   const titleAttr = escapeAttr(route.title);
   const descAttr = escapeAttr(route.description);
@@ -359,19 +435,26 @@ function buildRouteHtml(shell, route) {
   const head = [
     robots,
     `<link rel="canonical" href="${url}" />`,
-    `<link rel="alternate" hreflang="hr-HR" href="${url}" />`,
-    `<link rel="alternate" hreflang="x-default" href="${url}" />`,
+    ...alternates.map((a) => `<link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`),
     `<meta property="og:url" content="${url}" />`,
-    // For AI agents, matching components/SEO.tsx: a one-line summary and the markdown version.
+    // For AI agents, matching components/SEO.tsx: a one-line summary and the markdown version
+    // (the markdown is the Croatian copy, so the English page doesn't advertise it).
     ...(route.noIndex
       ? []
-      : [`<meta name="ai-summary" content="${escapeAttr(AI_SUMMARIES[route.path] || route.description)}" />`]),
-    ...(!route.noIndex && matchMdRoute(route.path)
+      : [`<meta name="ai-summary" content="${escapeAttr((!english && AI_SUMMARIES[route.path]) || route.description)}" />`]),
+    ...(!route.noIndex && !english && matchMdRoute(route.path)
       ? [`<link rel="alternate" type="text/markdown" href="${BASE}${mdPathOf(route.path)}" />`]
       : []),
   ].join('\n    ');
 
   html = replaceTag(html, /<meta name="robots" content="[\s\S]*?"\s*\/>/, head, 'robots meta', route.path);
+
+  if (lang !== 'HR') {
+    html = replaceTag(html, /<html lang="[^"]*"/, `<html lang="${HTML_LANG[lang]}"`, '<html lang>', route.path);
+    if (english) {
+      html = replaceTag(html, /<meta property="og:locale" content="[^"]*"\s*\/>/, `<meta property="og:locale" content="${OG_LOCALE[lang]}" />`, 'og:locale', route.path);
+    }
+  }
 
   if (route.ogType) {
     html = replaceTag(html, /<meta property="og:type" content="[\s\S]*?"\s*\/>/, `<meta property="og:type" content="${route.ogType}" />`, 'og:type', route.path);
@@ -407,6 +490,15 @@ async function main() {
   // so that stays true if anyone later moves the read inside the loop.
   const ordered = [...ROUTES].sort((a, b) => (a.path === '/' ? 1 : 0) - (b.path === '/' ? 1 : 0));
 
+  // English shells first (dist/en/...): they never touch dist/index.html.
+  for (const route of ROUTES.map(englishRoute)) {
+    const enPath = localizedPath(route.path, 'EN');
+    const outDir = join(DIST, enPath.replace(/^\//, ''));
+    await mkdir(outDir, { recursive: true });
+    await writeFile(join(outDir, 'index.html'), buildRouteHtml(shell, route), 'utf8');
+    console.log(`  prerendered ${enPath}${route.noIndex ? '  (noindex)' : isTranslated(route.path) ? '' : '  (canonical: Croatian)'}`);
+  }
+
   for (const route of ordered) {
     const outDir = join(DIST, route.path.replace(/^\//, ''));
     await mkdir(outDir, { recursive: true });
@@ -414,7 +506,7 @@ async function main() {
     console.log(`  prerendered ${route.path}${route.noIndex ? '  (noindex)' : ''}`);
   }
 
-  console.log(`prerender: wrote ${ROUTES.length} route shells with self-referencing canonicals`);
+  console.log(`prerender: wrote ${ROUTES.length} route shells (+ ${ROUTES.length} under /en) with self-referencing canonicals`);
 }
 
 main().catch((err) => {

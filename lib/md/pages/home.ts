@@ -27,7 +27,7 @@ export const render: PageModule['render'] = () => ({
       `**${t('In-House Team')}**: ${t('No Outsourcing')}`,
     ]),
     h2(`${t('One')} ${t('in-house')} ${t('team. Start to finish.')}`),
-    list([`${t('100%')} ${t('In-House Delivery')}`, `${t('24/7')} ${t('Direct Support')}`]),
+    list([`${t('100%')} ${t('In-House Delivery')}`, `${t('1:1')} ${t('Direct Support')}`]),
     h2(t('The site you are looking at is our work.')),
     t('Behind the marketplace is an in-house team that designs, builds and runs websites, shops and automations. This screen is a small working sample: open the windows, drag them around, press CENNER for every page.'),
     list(['Web Development', 'Graphic Design', 'SEO', 'Automations'].map(t)),

@@ -42,7 +42,7 @@ export const services = [
         h2: 'Zašto angažirati freelancera umjesto agencije?',
         body: [
           'Agencija u Hrvatskoj za istu web stranicu naplaćuje <strong>2x do 3x više</strong> jer pokriva fiksne režije (uredi, account manageri, marketing). Freelancer ti dolazi izravno: niža cijena, brža komunikacija, jednako kvalitetan rezultat.',
-          'Na Cenneru su svi freelanceri prošli <strong>KYC verifikaciju</strong>, a plaćanje ide kroz osigurani escrow sustav. Plaćaš tek kad si zadovoljan rezultatom.',
+          'Na Cenneru su svi freelanceri prošli <strong>KYC verifikaciju</strong>. Iznos se na kartici samo rezervira, a naplaćuje se i isplaćuje freelanceru tek kad prihvatiš isporuku.',
         ],
       },
       {
@@ -61,7 +61,7 @@ export const services = [
       {
         h2: 'Kako pronaći pravog web developera?',
         body: [
-          'Klikni na "Pronađi freelancera" ispod, opiši svoj projekt u par rečenica, i naš AI matching će ti predložiti 3–5 najprikladnijih kandidata u roku od minute. Pregledaj njihove portfolije, ocjene i prethodne projekte, pa odaberi najboljeg.',
+          'Klikni na "Pronađi freelancera" ispod, pregledaj ponude po kategoriji i odaberi freelancera po portfoliju, ocjenama i prethodnim projektima. Možeš i objaviti projekt pa usporediti ponude koje stignu.',
         ],
       },
       {
@@ -259,7 +259,7 @@ export const services = [
       'Najboljeg web developera prepoznaješ po živim radovima, ocjenama i jasnoj ponudi. Evo 5 provjera prije nego što platiš i koliko developer stoji.',
     h1: 'Najbolji Web Developeri u Hrvatskoj',
     intro:
-      'Najskuplji developer nije onaj s najvećom satnicom, nego onaj koji kasni mjesecima ili nestane s pola plaćenog projekta. Zato kod usluga profesionalnih web developera prvo provjeri pet stvari opisanih ispod. Na Cenneru su svi developeri prošli <strong>KYC provjeru identiteta</strong>, profili prikazuju ocjene i prethodne projekte, a za svoj projekt dobivaš <strong>više ponuda</strong>. Novac se drži u escrowu i developeru se isplaćuje tek kad si zadovoljan isporukom.',
+      'Najskuplji developer nije onaj s najvećom satnicom, nego onaj koji kasni mjesecima ili nestane s pola plaćenog projekta. Zato kod usluga profesionalnih web developera prvo provjeri pet stvari opisanih ispod. Na Cenneru su svi developeri prošli <strong>KYC provjeru identiteta</strong>, profili prikazuju ocjene i prethodne projekte, a za svoj projekt dobivaš <strong>više ponuda</strong>. Iznos se na kartici samo rezervira, a developeru se isplaćuje tek kad prihvatiš isporuku.',
     sections: [
       {
         h2: 'Koje usluge nude profesionalni web developeri?',
@@ -271,7 +271,7 @@ export const services = [
         h2: 'Koliko košta web developer u Hrvatskoj?',
         body: [
           'Web developer u Hrvatskoj stoji od 25 € do 70 € po satu. Satnica iskusnog web developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Fiksne cijene projekata: prezentacijska stranica od <strong>300 €</strong>, korporativna stranica s CMS-om od <strong>800 €</strong>, web shop ili aplikacija od <strong>2.000 €</strong> pa naviše.',
-          'Na Cenneru objaviš projekt, dobiješ <strong>više ponuda</strong> i sam biraš. Plaćanje je u escrowu i oslobađa se tek kad si zadovoljan isporukom.',
+          'Na Cenneru objaviš projekt, dobiješ <strong>više ponuda</strong> i sam biraš. Iznos se na kartici samo rezervira, a naplaćuje se i isplaćuje freelanceru tek kad prihvatiš isporuku.',
         ],
       },
       {
@@ -314,7 +314,7 @@ export const services = [
     title: 'Usluge Programiranja: Programeri po Projektu od 500 € | Cenner',
     keyword: 'usluge programiranja',
     description:
-      'Usluge programiranja od 500 €: freelance programeri za web, mobilne aplikacije i API integracije. Više ponuda, escrow plaćanje, bez agencijskih marži.',
+      'Usluge programiranja od 500 €: freelance programeri za web, mobilne aplikacije i API integracije. Više ponuda, plaćanje tek po prihvaćenoj isporuci, bez agencijskih marži.',
     h1: 'Usluge Programiranja: Freelance Developeri',
     intro:
       'Od web aplikacija i API integracija do mobilnih aplikacija i automatizacije, Cenner te povezuje s provjerenim hrvatskim programerima koji rade s modernim tehnologijama. Profesionalno programiranje po transparentnim cijenama, bez skupih agencijskih marži.',
@@ -329,7 +329,7 @@ export const services = [
         h2: 'Koliko koštaju usluge programiranja u Hrvatskoj?',
         body: [
           'Satnica iskusnog freelance developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Manji projekti (landing aplikacija, integracija, automatizacija) kreću od <strong>500 € do 2.000 €</strong>. Kompletne web ili mobilne aplikacije idu od <strong>3.000 € pa naviše</strong>, ovisno o opsegu.',
-          'Na Cenneru dobivaš <strong>više ponuda</strong> od različitih programera i biraš onu koja odgovara tvom proračunu. Plaćanje ide kroz osigurani escrow sustav. Plaćaš tek kad je posao isporučen.',
+          'Na Cenneru dobivaš <strong>više ponuda</strong> od različitih programera i biraš onu koja odgovara tvom proračunu. Iznos se na kartici samo rezervira, a naplaćuje se i isplaćuje freelanceru tek kad prihvatiš isporuku.',
         ],
       },
       {
@@ -342,7 +342,7 @@ export const services = [
       {
         h2: 'Kako pronaći pravog programera?',
         body: [
-          'Klikni na "Pronađi freelancera", opiši svoj projekt i tehnički zahtjev u par rečenica, a naš AI matching predlaže 3–5 najprikladnijih developera u roku od minute. Pregledaj portfolije i reference, zatraži ponudu i kreni.',
+          'Klikni na "Pronađi freelancera", pregledaj developere po kategoriji, portfoliju i referencama, ili objavi projekt sa svojim tehničkim zahtjevom i usporedi ponude koje stignu. Zatraži ponudu i kreni.',
         ],
       },
       {
@@ -424,7 +424,7 @@ export const cities = [
     acc: 'Rijeku',   // Što čini ...
     title: 'Freelanceri Rijeka: Honorarni Posao u Rijeci | Cenner',
     description:
-      'Pronađi freelancere u Rijeci i Primorsko-goranskoj županiji. Web izrada, dizajn, marketing, copywriting. Cenner je vodeća freelance platforma u Hrvatskoj.',
+      'Pronađi freelancere u Rijeci i Primorsko-goranskoj županiji. Web izrada, dizajn, marketing, copywriting. Provjereni freelanceri, plaćanje tek po isporuci.',
     h1: 'Freelanceri u Rijeci',
     intro:
       'Rijeka je važno sveučilišno i tech središte sjeverne Hrvatske s rastućom freelance zajednicom. Na Cenneru pronalaziš riječke web developere, dizajnere, marketinške stručnjake i copywritere s referencama iz hrvatskih i međunarodnih projekata.',
