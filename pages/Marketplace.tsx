@@ -209,7 +209,7 @@ const Marketplace: React.FC = () => {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
       name: 'Cenner Marketplace: Freelance Usluge Hrvatska',
-      description: 'Pretraži stotine provjerenih freelance usluga u Hrvatskoj i EU. Web razvoj, dizajn, marketing, pisanje i više.',
+      description: 'Pretraži provjerene freelance usluge u Hrvatskoj i EU. Web razvoj, dizajn, marketing, pisanje i više.',
       url: 'https://cenner.hr/marketplace',
       inLanguage: ['hr', 'en'],
       about: {

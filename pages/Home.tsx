@@ -1948,7 +1948,7 @@ const Desktop: React.FC<{ people: any[] }> = ({ people }) => {
             <h2 className="font-display text-[1.5rem] font-black leading-[1] tracking-[-0.03em]">{t('One')} {t('in-house')} {t('team. Start to finish.')}</h2>
             <div className={`mt-4 flex flex-wrap gap-x-6 gap-y-3 ${wide ? 'flex-nowrap' : ''}`}>
               <div><p className="font-display text-[2.75rem] font-black leading-none">{t('100%')}</p><p className="text-[14px]">{t('In-House Delivery')}</p></div>
-              <div><p className="font-display text-[2.75rem] font-black leading-none text-sky">{t('24/7')}</p><p className="text-[14px]">{t('Direct Support')}</p></div>
+              <div><p className="font-display text-[2.75rem] font-black leading-none text-sky">{t('1:1')}</p><p className="text-[14px]">{t('Direct Support')}</p></div>
             </div>
           </div>
         </div>

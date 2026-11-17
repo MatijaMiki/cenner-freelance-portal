@@ -238,7 +238,7 @@ function cityBody(city) {
   <li><a href="/usluge/web-developeri">Web developeri</a></li>
 </ul>
 <h2>Kako pronaći freelancera u ${city.loc}?</h2>
-<p>Klikni "Pronađi freelancera", opiši svoj projekt u par rečenica, i naš AI ti predlaže najprikladnije kandidate iz ${city.gen} i okolice. Pregledaj njihove portfolije, ocjene i prethodne radove. Plaćanje je osigurano kroz escrow. Plaćaš tek kad si zadovoljan.</p>
+<p>Klikni "Pronađi freelancera" i pregledaj freelancere iz ${city.gen} i okolice: portfolije, ocjene i prethodne radove. Možeš i objaviti projekt pa usporediti ponude. Iznos se na kartici samo rezervira, a naplaćuje se i isplaćuje freelanceru tek kad prihvatiš isporuku.</p>
 <p class="cta-row">
   <a href="/marketplace" class="cta">Započni sad</a>
 </p>
