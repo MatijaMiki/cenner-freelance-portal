@@ -42,7 +42,7 @@ export const services = [
         h2: 'Zašto angažirati freelancera umjesto agencije?',
         body: [
           'Agencija u Hrvatskoj za istu web stranicu naplaćuje <strong>2x do 3x više</strong> jer pokriva fiksne režije (uredi, account manageri, marketing). Freelancer ti dolazi izravno: niža cijena, brža komunikacija, jednako kvalitetan rezultat.',
-          'Na Cenneru su svi freelanceri prošli <strong>KYC verifikaciju</strong>. Iznos se na kartici samo rezervira, a naplaćuje se i isplaćuje freelanceru tek kad prihvatiš isporuku.',
+          'Na Cenneru su svi freelanceri prošli <strong>KYC verifikaciju</strong>. Plaćaš pri narudžbi, a freelancer dobiva novac tek kad prihvatiš isporuku.',
         ],
       },
       {
@@ -259,7 +259,7 @@ export const services = [
       'Najboljeg web developera prepoznaješ po živim radovima, ocjenama i jasnoj ponudi. Evo 5 provjera prije nego što platiš i koliko developer stoji.',
     h1: 'Najbolji Web Developeri u Hrvatskoj',
     intro:
-      'Najskuplji developer nije onaj s najvećom satnicom, nego onaj koji kasni mjesecima ili nestane s pola plaćenog projekta. Zato kod usluga profesionalnih web developera prvo provjeri pet stvari opisanih ispod. Na Cenneru su svi developeri prošli <strong>KYC provjeru identiteta</strong>, profili prikazuju ocjene i prethodne projekte, a za svoj projekt dobivaš <strong>više ponuda</strong>. Iznos se na kartici samo rezervira, a developeru se isplaćuje tek kad prihvatiš isporuku.',
+      'Najskuplji developer nije onaj s najvećom satnicom, nego onaj koji kasni mjesecima ili nestane s pola plaćenog projekta. Zato kod usluga profesionalnih web developera prvo provjeri pet stvari opisanih ispod. Na Cenneru su svi developeri prošli <strong>KYC provjeru identiteta</strong>, profili prikazuju ocjene i prethodne projekte, a za svoj projekt dobivaš <strong>više ponuda</strong>. Plaćaš pri narudžbi, a developer dobiva novac tek kad prihvatiš isporuku.',
     sections: [
       {
         h2: 'Koje usluge nude profesionalni web developeri?',
@@ -271,7 +271,7 @@ export const services = [
         h2: 'Koliko košta web developer u Hrvatskoj?',
         body: [
           'Web developer u Hrvatskoj stoji od 25 € do 70 € po satu. Satnica iskusnog web developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Fiksne cijene projekata: prezentacijska stranica od <strong>300 €</strong>, korporativna stranica s CMS-om od <strong>800 €</strong>, web shop ili aplikacija od <strong>2.000 €</strong> pa naviše.',
-          'Na Cenneru objaviš projekt, dobiješ <strong>više ponuda</strong> i sam biraš. Iznos se na kartici samo rezervira, a naplaćuje se i isplaćuje freelanceru tek kad prihvatiš isporuku.',
+          'Na Cenneru objaviš projekt, dobiješ <strong>više ponuda</strong> i sam biraš. Plaćaš pri narudžbi, a freelancer dobiva novac tek kad prihvatiš isporuku.',
         ],
       },
       {
@@ -329,7 +329,7 @@ export const services = [
         h2: 'Koliko koštaju usluge programiranja u Hrvatskoj?',
         body: [
           'Satnica iskusnog freelance developera u Hrvatskoj kreće se od <strong>25 € do 70 € po satu</strong>, ovisno o tehnologiji i seniornosti. Manji projekti (landing aplikacija, integracija, automatizacija) kreću od <strong>500 € do 2.000 €</strong>. Kompletne web ili mobilne aplikacije idu od <strong>3.000 € pa naviše</strong>, ovisno o opsegu.',
-          'Na Cenneru dobivaš <strong>više ponuda</strong> od različitih programera i biraš onu koja odgovara tvom proračunu. Iznos se na kartici samo rezervira, a naplaćuje se i isplaćuje freelanceru tek kad prihvatiš isporuku.',
+          'Na Cenneru dobivaš <strong>više ponuda</strong> od različitih programera i biraš onu koja odgovara tvom proračunu. Plaćaš pri narudžbi, a freelancer dobiva novac tek kad prihvatiš isporuku.',
         ],
       },
       {
