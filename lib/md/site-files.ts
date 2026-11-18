@@ -18,7 +18,7 @@ export const SITE = {
   description:
     "Cenner (cenner.hr) is a Croatian freelance marketplace and an in-house web studio, based in Zagreb. Businesses find identity-verified Croatian freelancers for websites, design, marketing and programming, buy fixed-price packages, and the freelancer is paid only after the work is delivered. Cenner's own team also builds websites, WordPress sites, web apps, CRM systems and automations at a fixed price.",
   descriptionHr:
-    'Cenner je hrvatska freelance platforma (freelance Hrvatska, honorarni posao, izrada web stranica) i vlastiti studio za web stranice, aplikacije i automatizacije.',
+    'Cenner je hrvatska freelance platforma (freelance Hrvatska, honorarni posao, izrada web stranica) i vlastiti studio za web stranice, aplikacije i AI integracije.',
   email: COMPANY.email,
   supportEmail: COMPANY.supportEmail,
 };
@@ -29,8 +29,8 @@ function keyFacts(): string {
   return [
     `Founded ${COMPANY.founded} in ${COMPANY.city}, Croatia, by ${COMPANY.owner} (${COMPANY.legalName}, MB ${COMPANY.mb}, ${companyAddress}).`,
     `Freelancer plans: Free, Pro ${eur(priceItem('plan-pro').price)}/month, Ultra ${eur(priceItem('plan-ultra').price)}/month, Enterprise ${eur(priceItem('plan-enterprise').price)}/month; Cenner's commission per delivered project is ${pct('commission-free')}, ${pct('commission-pro')}, ${pct('commission-ultra')} and ${pct('commission-enterprise')} respectively. Buyers pay a ${pct('buyer-fee')} service fee.`,
-    `Studio starting prices: websites from ${eur(priceItem('studio-web-stranice').price)}, WordPress from ${eur(priceItem('studio-wordpress').price)}, graphic design from ${eur(priceItem('studio-dizajn').price)}.`,
-    `Every freelancer passes KYC identity verification; payments run through Stripe and are released after delivery. Site language: Croatian.`,
+    `Studio prices: a simple website from ${eur(priceItem('studio-web-stranice').price)}, a larger website or web app from ${eur(priceItem('studio-web-aplikacija').price)}, a custom-designed website from ${eur(priceItem('studio-web-dizajn').price)}, WordPress from ${eur(priceItem('studio-wordpress').price)}, a WooCommerce shop from ${eur(priceItem('studio-woocommerce').price)}, website maintenance from ${eur(priceItem('studio-odrzavanje').price)} a month, a one-off SEO and AI-visibility check ${eur(priceItem('studio-seo-provjera').price)}, a SaaS or CRM full build from ${eur(priceItem('studio-saas').price)}, mobile and desktop apps from ${eur(priceItem('studio-aplikacije').price)} per platform (iOS, Android, Mac, Windows, Linux; several platforms are quoted together), graphic design from ${eur(priceItem('studio-dizajn').price)}. AI integrations, advertising, ongoing SEO and servers are quoted on request.`,
+    `Every freelancer passes KYC identity verification; payments run through Stripe and are released after delivery. Site languages: Croatian at the root, English under /en.`,
     `Contact: ${SITE.email}, support ${SITE.supportEmail}.`,
   ].join(' ');
 }

@@ -161,9 +161,9 @@ const ROUTES = [
   },
   {
     path: '/services',
-    title: 'Izrada web stranica, aplikacija i automatizacija | Cenner',
+    title: 'Izrada web stranica, aplikacija i CRM sustava | Cenner',
     description:
-      'Cenner izrađuje web stranice, WordPress, SaaS i CRM sustave, n8n automatizacije, grafički dizajn i oglase te postavlja servere i hosting. Fiksna cijena, izravna komunikacija.',
+      'Cenner izrađuje web stranice i WooCommerce trgovine, SaaS i CRM sustave, mobilne i desktop aplikacije, AI integracije, oglase i SEO te postavlja servere. Fiksna cijena, izravna komunikacija.',
   },
   {
     path: '/subscription',
@@ -238,7 +238,7 @@ const ROUTES = [
     path: '/about',
     title: 'O nama i kontakt | Cenner',
     description:
-      'Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i automatizacije. Kontakt, adresa i podaci o tvrtki.',
+      'Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i AI integracije. Kontakt, adresa i podaci o tvrtki.',
   },
   {
     path: '/auth',
@@ -301,14 +301,14 @@ const EN_META = {
       'Cenner is a Croatian freelance marketplace: identity-checked (KYC) freelancers, and the freelancer is paid only once the work is delivered. Looking for freelance work? Your profile is free.',
   },
   '/services': {
-    title: 'Websites, apps and automation, built in Croatia | Cenner',
+    title: 'Websites, apps and CRM systems, built in Croatia | Cenner',
     description:
-      'Cenner builds websites, WordPress sites, SaaS and CRM systems, n8n automations, graphic design and ads, and sets up servers and hosting. Fixed price, direct communication.',
+      'Cenner builds websites and WooCommerce shops, SaaS and CRM systems, mobile and desktop apps, AI integrations, ads and SEO, and sets up servers. Fixed price, direct communication.',
   },
   '/about': {
     title: 'About and contact | Cenner',
     description:
-      'Cenner is a Croatian freelance marketplace and an in-house studio for websites, apps and automation. Contact details, address and company information.',
+      'Cenner is a Croatian freelance marketplace and an in-house studio for websites, apps and AI integrations. Contact details, address and company information.',
   },
   '/marketplace': {
     title: 'Marketplace: Freelancers in Croatia | Cenner',

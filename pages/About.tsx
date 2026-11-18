@@ -31,11 +31,11 @@ const About: React.FC = () => {
       <SEO
         title="O nama i kontakt"
         canonical="/about"
-        description="Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i automatizacije. Kontakt, adresa i podaci o tvrtki."
+        description="Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i AI integracije. Kontakt, adresa i podaci o tvrtki."
         keywords="o cenneru, cenner kontakt, freelance platforma hrvatska, cenner obrt"
         en={{
           title: 'About and contact',
-          description: 'Cenner is a Croatian freelance marketplace and an in-house studio for websites, apps and automation. Contact details, address and company information.',
+          description: 'Cenner is a Croatian freelance marketplace and an in-house studio for websites, apps and AI integrations. Contact details, address and company information.',
           keywords: 'about cenner, cenner contact, freelance marketplace croatia',
         }}
         jsonLd={{
@@ -86,7 +86,7 @@ const About: React.FC = () => {
           </article>
           <article className="flex flex-col border-2 border-ink bg-white p-7 md:p-10">
             <h2 className="font-display text-[clamp(1.75rem,1.2rem+2vw,3rem)] font-extrabold leading-tight tracking-[-0.03em]">{t('The studio')}</h2>
-            <p className={`${lead} mt-4`}>{t('Websites, SaaS, CRM systems, automations, design, ads and servers, built in-house by Matija Mikulinec, who runs Cenner.')}</p>
+            <p className={`${lead} mt-4`}>{t('Websites, SaaS and CRM systems, mobile and desktop apps, AI integrations, design, ads and servers, built in-house by Matija Mikulinec, who runs Cenner.')}</p>
             <Link to="/services" className="mt-auto inline-flex items-center gap-2 pt-8 font-display text-[15px] font-bold hover:text-sky">
               {t('See services and work')} <ArrowRight size={17} />
             </Link>
