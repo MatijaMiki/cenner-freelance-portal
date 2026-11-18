@@ -4,9 +4,9 @@
  * drift. Text is English; i18n.tsx has the Croatian.
  *
  * Prices: a card shows a price only when the price list in force (lib/cjenik.js) has
- * `studio-<id>`, with its anchor ("Cijena na …") beside it, as the anchor-price rules require
- * (NN 101/26). Every other card says "On request". To price a card, add the item to a NEW
- * price-list version there; never put a number here.
+ * `studio-<id>`, with its bazna cijena beside it, as the rules require (NN 132/2026). Every other
+ * card says "On request". To price a card, add the item to ~/sidrene-cijene/prices.json on the
+ * Mac mini and run the updater; never put a number here.
  */
 import { currentList } from './cjenik.js';
 

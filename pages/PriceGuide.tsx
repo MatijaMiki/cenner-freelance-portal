@@ -166,7 +166,7 @@ const PriceGuide: React.FC = () => {
           <p className="mb-2">
             <strong>Cenner tim:</strong> ako ne želiš uspoređivati ponude, izrađujemo web stranice po fiksnoj cijeni: web stranice po mjeri od {priceItem('studio-web-stranice')?.price} €, WordPress stranice od {priceItem('studio-wordpress')?.price} €.
           </p>
-          {/* Cenner's own prices carry their dodatna cijena (NN 101/26), the same as on /services. */}
+          {/* Cenner's own prices carry their bazna cijena (NN 132/2026), the same as on /services. */}
           <AnchorPrice ids={[['studio-web-stranice', 'Web stranica po mjeri'], ['studio-wordpress', 'WordPress stranica']]} className="mb-5 text-[0.9rem] text-slate" />
           <div className="guide-no-print flex flex-wrap gap-3">
             <Link to="/marketplace" className="inline-flex items-center gap-2 bg-sky px-5 py-3 font-display text-[15px] font-bold text-white transition-colors hover:bg-ink">

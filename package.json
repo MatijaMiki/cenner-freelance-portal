@@ -5,10 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-cjenik.mjs && node scripts/generate-landing-pages.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && vite build && node scripts/prerender-static-routes.mjs && node scripts/build-md.mjs",
+    "build": "node scripts/generate-landing-pages.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && vite build && node scripts/prerender-static-routes.mjs && node scripts/build-md.mjs",
     "build:no-sitemap": "vite build",
     "landing": "node scripts/generate-landing-pages.mjs",
-    "cjenik": "node scripts/generate-cjenik.mjs",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "prerender": "node scripts/prerender-static-routes.mjs",
     "preview": "vite preview",

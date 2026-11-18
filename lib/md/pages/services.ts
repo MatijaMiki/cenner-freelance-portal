@@ -5,7 +5,7 @@
  */
 import { COMPANY } from '../../company';
 import { STUDIO_SERVICES as SERVICES, STUDIO_TOOLS as TOOLS, studioPrice } from '../../studioServices';
-import { anchorDate, eurAmount, formatPrice } from '../../../components/AnchorPrice';
+import { baseLabel, eurAmount, formatPrice } from '../../../components/AnchorPrice';
 import { blocks, h2, h3, link, list, t, type PageModule } from '../format';
 
 /** In the order the page shows them (sorted by colour, warm to cool). */
@@ -40,13 +40,13 @@ const WHY = [
   { title: 'We Handle Hosting Too', desc: 'Servers, domains and the launch are part of the job, not an extra.' },
 ];
 
-/** "Počevši od: €750 (Cijena na 18.10.2026.: od €800)", "Cijena: €250 (…)", or "Cijena: Na upit". */
+/** "Počevši od: €750 (Bazna cijena (10. 9. 2026.): od €800)", "Cijena: €250 (…)", or "Cijena: Na upit". */
 function price(id: string, note?: string): string {
   const it = studioPrice(id);
   if (!it) return `${t('Price')}: ${t('On request')}`;
   const label = it.unit === 'fixed' ? t('Price') : t('Starting at');
   const amount = `${eurAmount(it.price)}${it.unit === 'from-month' ? ` / ${t('mo')}` : ''}${note ? ` ${t(note)}` : ''}`;
-  return `${label}: ${amount} (${t('Price on')} ${anchorDate(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)})`;
+  return `${label}: ${amount} (${baseLabel(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)})`;
 }
 
 export const render: PageModule['render'] = () => ({

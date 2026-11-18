@@ -1,0 +1,16 @@
+naziv_usluge;maloprodajna_cijena;jedinica;posebni_oblik_prodaje;naziv_posebnog_oblika_prodaje;dodatna_cijena;datum_dodatne_cijene
+Cenner Free plan;0,00;EUR mjesečno;NE;;0,00;10.9.2026.
+Cenner Pro plan;19,00;EUR mjesečno;NE;;19,00;10.9.2026.
+Cenner Ultra plan;59,00;EUR mjesečno;NE;;59,00;10.9.2026.
+Cenner Enterprise plan;99,00;EUR mjesečno;NE;;99,00;10.9.2026.
+Provizija platforme, Free plan;15,00;% iznosa narudžbe;NE;;15,00;10.9.2026.
+Provizija platforme, Pro plan;10,00;% iznosa narudžbe;NE;;10,00;10.9.2026.
+Provizija platforme, Ultra plan;5,00;% iznosa narudžbe;NE;;5,00;10.9.2026.
+Provizija platforme, Enterprise plan;0,00;% iznosa narudžbe;NE;;0,00;10.9.2026.
+Naknada za uslugu (kupac);5,00;% iznosa narudžbe;NE;;5,00;10.9.2026.
+Naknada za uslugu (kupac), prodavač na Enterprise planu;0,00;% iznosa narudžbe;NE;;0,00;10.9.2026.
+Izrada web stranice;800,00;EUR, početna cijena;NE;;800,00;18.10.2026.
+Izrada WordPress stranice;500,00;EUR, početna cijena;NE;;500,00;18.10.2026.
+Grafički dizajn;300,00;EUR, početna cijena;NE;;300,00;18.10.2026.
+ranwhat Plus, mjesečna pretplata;12,00;EUR mjesečno;NE;;12,00;4.10.2026.
+ranwhat Plus, godišnja pretplata;120,00;EUR godišnje;NE;;120,00;4.10.2026.
