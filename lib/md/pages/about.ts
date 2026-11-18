@@ -5,7 +5,7 @@ import { blocks, h2, link, list, t, table, type PageModule } from '../format';
 export const render: PageModule['render'] = () => ({
   title: t('About Cenner'),
   summary:
-    'Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i automatizacije. Kontakt, adresa i podaci o tvrtki.',
+    'Cenner je hrvatska freelance platforma i vlastiti studio za web stranice, aplikacije i AI integracije. Kontakt, adresa i podaci o tvrtki.',
   path: '/about',
   body: blocks(
     t('Cenner is a Croatian freelance marketplace and a small in-house studio. On the marketplace, businesses hire verified freelancers with the price agreed upfront and the money held until the work is delivered. In the studio, we build websites, apps and automations ourselves.'),
@@ -13,7 +13,7 @@ export const render: PageModule['render'] = () => ({
     t('Verified freelancers for web, design, marketing and development. Every identity is checked, the price is agreed upfront, and the payment waits until the work is delivered.'),
     link(t('Browse the marketplace'), '/marketplace'),
     h2(t('The studio')),
-    t('Websites, SaaS, CRM systems, automations, design, ads and servers, built in-house by Matija Mikulinec, who runs Cenner.'),
+    t('Websites, SaaS and CRM systems, mobile and desktop apps, AI integrations, design, ads and servers, built in-house by Matija Mikulinec, who runs Cenner.'),
     link(t('See services and work'), '/services'),
     h2(t('Contact')),
     list([
