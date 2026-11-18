@@ -5,11 +5,11 @@ import SEO from '../components/SEO';
 import ProjectDots from '../components/ProjectDots';
 import { Tube } from '../components/Tube';
 import ContactForm from '../components/ContactForm';
-import { useT } from '../i18n';
+import { useLanguage } from '../i18n';
 import { COMPANY } from '../lib/company';
 import { track } from '../lib/track';
 import { STUDIO_SERVICES as SERVICES, STUDIO_TOOLS as TOOLS, studioPrice } from '../lib/studioServices';
-import AnchorPrice from '../components/AnchorPrice';
+import AnchorPrice, { eurAmount } from '../components/AnchorPrice';
 
 /*
  * The cards (what we build) and the tools live in lib/studioServices.ts, shared with the .md twin.
@@ -86,7 +86,7 @@ const WHY = [
 
 
 const Services: React.FC = () => {
-  const t = useT();
+  const { lang, t } = useLanguage();
   const subjects = [...SERVICES.map(s => `${t('Quote request')}: ${t(s.title)}`), t('Something else')];
   const [pick, setPick] = useState<{ index: number; n: number } | undefined>(undefined);
 
@@ -118,7 +118,7 @@ const Services: React.FC = () => {
           address: { '@type': 'PostalAddress', streetAddress: COMPANY.street, postalCode: COMPANY.postcode, addressLocality: COMPANY.city, addressCountry: COMPANY.countryCode },
           areaServed: 'HR',
           makesOffer: SERVICES.map(s => {
-            const from = studioPrice(s.id)?.price;
+            const from = studioPrice(s.id)?.price;  // a starting or fixed price
             return {
               '@type': 'Offer',
               itemOffered: { '@type': 'Service', name: s.title },
@@ -161,7 +161,7 @@ const Services: React.FC = () => {
             <ProjectDots palette={['#eff0f3', '#5b86e8', '#8fb0f5', '#a9c0f7', '#7aa0f0']} className="hidden h-32 w-72 shrink-0 md:block lg:h-40 lg:w-[28rem] [mask-image:radial-gradient(closest-side,#000_55%,transparent)] [-webkit-mask-image:radial-gradient(closest-side,#000_55%,transparent)]" />
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4 md:mt-14">
-            {SERVICES.map((s, si) => { const from = studioPrice(s.id)?.price; return (
+            {SERVICES.map((s, si) => { const it = studioPrice(s.id); return (
               <article key={s.id} id={s.id} className="group relative flex scroll-mt-28 flex-col border-2 border-ink bg-white p-6 transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#0b0c0e] focus-within:-translate-x-1 focus-within:-translate-y-1 focus-within:shadow-[6px_6px_0_0_#002ca5]">
                 {s.fullPackage && (
                   <p className="mb-3 self-start border-2 border-ink px-2 py-0.5 font-display text-[12px] font-bold uppercase tracking-wide">{t('Full package')}</p>
@@ -190,9 +190,13 @@ const Services: React.FC = () => {
                 )}
                 <div className="mt-auto flex items-end justify-between gap-4 pt-6">
                   <div>
-                    <p className="text-[0.85rem] text-slate">{from ? t('Starting at') : t('Price')}</p>
-                    <p className="font-display text-[1.375rem] font-extrabold">{from ? `€${from}` : t('On request')}</p>
-                    {from && <AnchorPrice ids={[`studio-${s.id}`]} className="mt-1 text-slate" />}
+                    <p className="text-[0.85rem] text-slate">{it && it.unit !== 'fixed' ? t('Starting at') : t('Price')}</p>
+                    <p className="font-display text-[1.375rem] font-extrabold">
+                      {it ? eurAmount(it.price, lang) : t('On request')}
+                      {it?.unit === 'from-month' && <span className="text-[1rem]"> / {t('mo')}</span>}
+                      {it && s.priceNote && <span className="text-[1rem]"> {t(s.priceNote)}</span>}
+                    </p>
+                    {it && <AnchorPrice ids={[`studio-${s.id}`]} className="mt-1 text-slate" />}
                   </div>
                   {/* The whole card is the target: this link stretches over it (::after), so keyboard and screen readers still get a real link. */}
                   <a

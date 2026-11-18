@@ -62,8 +62,8 @@ const Cjenik: React.FC = () => {
                 {list.items.map(it => (
                   <tr key={it.id} className="border-b border-ink/15 last:border-0">
                     <td className="px-4 py-3">{lang === 'HR' ? it.name : it.nameEn}</td>
-                    <td className="px-4 py-3 font-bold text-ink">{formatPrice(it.price, it.unit, t)}</td>
-                    <td className="px-4 py-3">{t('Price on')} {anchorDate(it.anchor.date, lang)}: {formatPrice(it.anchor.price, it.unit, t)}</td>
+                    <td className="px-4 py-3 font-bold text-ink">{formatPrice(it.price, it.unit, t, lang)}</td>
+                    <td className="px-4 py-3">{t('Price on')} {anchorDate(it.anchor.date, lang)}: {formatPrice(it.anchor.price, it.unit, t, lang)}</td>
                   </tr>
                 ))}
               </tbody>
