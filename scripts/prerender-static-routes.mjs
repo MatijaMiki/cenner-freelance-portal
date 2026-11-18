@@ -285,7 +285,7 @@ const ROUTES = [
     path: '/cjenik',
     title: 'Cjenik | Cenner',
     description:
-      'Cjenik usluga koje naplaćuje Cenner (planovi, naknade, izrada web stranica, ranwhat) s cijenom na referentni datum, te strojno čitljivi cjenik u .csv obliku.',
+      'Cjenik usluga koje naplaćuje Cenner (planovi, naknade, izrada web stranica, ranwhat, Stenvakt) s baznom cijenom uz svaku cijenu, te strojno čitljivi cjenik u .csv obliku.',
   },
   ...blogPostRoutes(),
 ];

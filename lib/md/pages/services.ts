@@ -5,7 +5,7 @@
  */
 import { COMPANY } from '../../company';
 import { priceItem } from '../../cjenik.js';
-import { anchorDate, formatPrice } from '../../../components/AnchorPrice';
+import { baseLabel, formatPrice } from '../../../components/AnchorPrice';
 import { blocks, h2, h3, link, list, t, type PageModule } from '../format';
 
 const SERVICES: { id: string; title: string; desc: string; points: string[]; priced?: boolean }[] = [
@@ -68,11 +68,11 @@ const WHY = [
   { title: 'We Handle Hosting Too', desc: 'Servers, domains and the launch are part of the job, not an extra.' },
 ];
 
-/** "Počevši od: od €800 (Cijena na 18.10.2026.: od €800)", or "Cijena: Na upit". */
+/** "Počevši od: od €800 (Bazna cijena (18. 10. 2026.): od €800)", or "Cijena: Na upit". */
 function price(id: string, priced?: boolean): string {
   if (!priced) return `${t('Price')}: ${t('On request')}`;
   const it = priceItem(`studio-${id}`);
-  return `${t('Starting at')}: €${it.price} (${t('Price on')} ${anchorDate(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)})`;
+  return `${t('Starting at')}: €${it.price} (${baseLabel(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)})`;
 }
 
 export const render: PageModule['render'] = () => ({

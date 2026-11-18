@@ -5,7 +5,7 @@
  */
 import { PLANS, type PlanId } from '../../plans';
 import { priceItem } from '../../cjenik.js';
-import { anchorDate, formatPrice } from '../../../components/AnchorPrice';
+import { baseLabel, formatPrice } from '../../../components/AnchorPrice';
 import { blocks, h2, h3, t, table, type PageModule } from '../format';
 import { AI_SUMMARIES } from '../summaries.mjs';
 
@@ -67,7 +67,7 @@ const WHY = [
 /** "Cijena na 10.9.2026.: €19 / mj." for one price-list item. */
 const anchor = (id: string): string => {
   const it = priceItem(id);
-  return `${t('Price on')} ${anchorDate(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)}`;
+  return `${baseLabel(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)}`;
 };
 
 const ALL: { id: string; name: string }[] = [
