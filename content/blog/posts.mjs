@@ -12,6 +12,20 @@
 //
 // Plain .mjs so the Node build scripts can import it without a TypeScript step.
 
+import { priceItem, hrDate } from '../../lib/cjenik.js';
+
+// Cenner's own prices come from the price list (lib/cjenik.js, generated from prices.json), with the
+// bazna cijena beside each one as NN 132/2026 asks, so a post can't show a stale or bare price.
+const eur = (n) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} €`;
+const per = { month: ' mjesečno', year: ' godišnje', 'from-month': ' mjesečno' };
+const C = (id) => {
+  const it = priceItem(id);
+  const u = per[it.unit] || '';
+  return `${eur(it.price)}${u} (bazna cijena ${hrDate(it.anchor.date)}: ${eur(it.anchor.price)}${u})`;
+};
+// for a price already inside brackets: "19 € mjesečno; bazna cijena 10. 9. 2026.: 19 € mjesečno"
+const P = (id) => C(id).replace(' (', '; ').slice(0, -1);
+
 export const BLOG_POSTS = [
   {
     slug: 'izrada-web-stranice-za-firmu-i-obrt',
@@ -140,7 +154,7 @@ Na Cenneru imaš dva puta: sam biraš freelancera na marketplaceu ili posao preu
 
 **Marketplace s freelancerima.** Pregledaš gotove pakete web developera s fiksnom cijenom i rokom ili objaviš projekt i usporediš ponude. Freelanceri prolaze KYC provjeru identiteta, a plaćanje ide kroz platformu: novac se drži dok posao nije isporučen, a veći projekti mogu se podijeliti na etape koje se plaćaju jedna po jedna.
 
-**Cenner tim.** Ako ne želiš uspoređivati ponude, Cenner i sam izrađuje web stranice po fiksnoj cijeni: web stranice po mjeri od 800 €, WordPress stranice od 500 €. Prvo razgovaramo o tome što trebaš, zatim dobiješ jasan opseg, rok i cijenu, gradimo u fazama koje vidiš, a hosting i objava dio su posla. Više na stranici [usluga Cenner tima](/services).
+**Cenner tim.** Ako ne želiš uspoređivati ponude, Cenner i sam izrađuje web stranice po fiksnoj cijeni: jednostavne web stranice od ${C('studio-web-stranice')}, WordPress stranice od ${C('studio-wordpress')}, a web stranice s dizajnom po mjeri od ${C('studio-web-dizajn')}. Prvo razgovaramo o tome što trebaš, zatim dobiješ jasan opseg, rok i cijenu, gradimo u fazama koje vidiš, a hosting i objava dio su posla. Više na stranici [usluga Cenner tima](/services).
 
 ### Kratki popis za kraj
 
@@ -153,7 +167,7 @@ Na Cenneru imaš dva puta: sam biraš freelancera na marketplaceu ili posao preu
     faq: [
       {
         q: 'Koliko košta izrada poslovne web stranice za obrt ili malu firmu?',
-        a: 'Jednostavna predstavljajuća stranica obrta ili male firme obično staje 300 € do 800 €, a korporativna stranica s više podstranica i CMS-om 800 € do 2.500 €. Cenner tim radi web stranice po mjeri od 800 € i WordPress stranice od 500 €.',
+        a: `Jednostavna predstavljajuća stranica obrta ili male firme obično staje 300 € do 800 €, a korporativna stranica s više podstranica i CMS-om 800 € do 2.500 €. Cenner tim radi jednostavne web stranice od ${C('studio-web-stranice')} i WordPress stranice od ${C('studio-wordpress')}.`,
       },
       {
         q: 'Koliko traje izrada web stranice za obrt?',
@@ -443,7 +457,7 @@ Pravilo je jednostavno: ti nikad ne plaćaš da bi dobio posao.
 
 Cenner je hrvatska freelance platforma na kojoj freelanceri nude gotove pakete (opis, fiksna cijena, rok isporuke) i odgovaraju na projekte koje objavljuju klijenti. Identitet se potvrđuje KYC provjerom, a plaćanje ide kroz platformu: klijent plaća unaprijed, novac se drži dok posao nije isporučen, a veći ugovori mogu se podijeliti na etape.
 
-Otvaranje profila je besplatno. Na besplatnom planu provizija je 15 %, Pro (19 € mjesečno) spušta je na 10 %, Ultra (59 € mjesečno) na 5 %, a Enterprise (99 € mjesečno) na 0 %. Klijent pri plaćanju plaća naknadu od 5 %, osim kod Enterprise prodavatelja. Sve je na stranici [planova i cijena](/subscription).
+Otvaranje profila je besplatno. Na besplatnom planu provizija je 15 %, Pro (${P('plan-pro')}) spušta je na 10 %, Ultra (${P('plan-ultra')}) na 5 %, a Enterprise (${P('plan-enterprise')}) na 0 %. Klijent pri plaćanju plaća naknadu od 5 %, osim kod Enterprise prodavatelja. Sve je na stranici [planova i cijena](/subscription).
 
 U studenom stiže i **job matching**: poslovi rangirani prema tvojim vještinama, oglasima i profilu, tako da prvo vidiš projekte za koje imaš najviše šanse.
 
@@ -476,7 +490,7 @@ Ako si klijent, na [Marketplaceu](/marketplace) pregledaš gotove pakete s fiksn
       },
       {
         q: 'Koliko Cenner uzima od freelancera?',
-        a: 'Na besplatnom planu provizija je 15 %, na Pro planu (19 € mjesečno) 10 %, na Ultra (59 € mjesečno) 5 %, a na Enterprise (99 € mjesečno) 0 %. Otvaranje profila je besplatno.',
+        a: `Na besplatnom planu provizija je 15 %, na Pro planu (${P('plan-pro')}) 10 %, na Ultra (${P('plan-ultra')}) 5 %, a na Enterprise (${P('plan-enterprise')}) 0 %. Otvaranje profila je besplatno.`,
       },
     ],
   },
@@ -576,12 +590,12 @@ Nakon loga slijede vizuali za društvene mreže, oglase i tisak. Kad imaš ident
 
 ## Gdje naručiti dizajn loga u Hrvatskoj?
 
-Na Cenneru možeš pregledati gotove pakete grafičkih dizajnera s fiksnom cijenom i rokom isporuke ili objaviti projekt i usporediti ponude. Dizajneri prolaze KYC provjeru identiteta, a plaćanje se oslobađa po isporuci. Ako želiš da posao preuzme Cenner tim, grafički dizajn (logo, vizualni identitet, grafike za društvene mreže i oglase, datoteke spremne za tisak) radimo od 300 €. Pogledaj [usluge Cenner tima](/services).
+Na Cenneru možeš pregledati gotove pakete grafičkih dizajnera s fiksnom cijenom i rokom isporuke ili objaviti projekt i usporediti ponude. Dizajneri prolaze KYC provjeru identiteta, a plaćanje se oslobađa po isporuci. Ako želiš da posao preuzme Cenner tim, grafički dizajn (logo, vizualni identitet, grafike za društvene mreže i oglase, datoteke spremne za tisak) radimo od ${C('studio-dizajn')}. Pogledaj [usluge Cenner tima](/services).
 `,
     faq: [
       {
         q: 'Koliko košta dizajn loga u Hrvatskoj?',
-        a: 'Jednostavan logo s par revizija obično staje 80 € do 250 €, kompletan vizualni identitet 300 € do 1.200 €, a brending paket s brand guideom od 800 € naviše. Cenner tim grafički dizajn radi od 300 €.',
+        a: `Jednostavan logo s par revizija obično staje 80 € do 250 €, kompletan vizualni identitet 300 € do 1.200 €, a brending paket s brand guideom od 800 € naviše. Cenner tim grafički dizajn radi od ${C('studio-dizajn')}.`,
       },
       {
         q: 'Koje datoteke moram dobiti uz logo?',
@@ -976,7 +990,7 @@ Ako freelance radiš povremeno uz stalni posao, pogledaj i vodič [honorarni pos
 
 Na Cenneru freelanceri nude gotove pakete s opisom, fiksnom cijenom i rokom isporuke i odgovaraju na projekte koje objavljuju klijenti. Otvaranje profila je besplatno, identitet se potvrđuje KYC provjerom, a klijent plaća unaprijed: novac se drži na platformi i isplaćuje ti se kad je posao isporučen.
 
-Zaradu Cenner isplaćuje samo registriranim poreznim obveznicima (obrt, paušalni obrt ili tvrtka). Provizija je 15 % na besplatnom planu, 10 % na Pro (19 € mjesečno), 5 % na Ultra (59 € mjesečno) i 0 % na Enterprise (99 € mjesečno). Sve je na stranici [planova i cijena](/subscription).
+Zaradu Cenner isplaćuje samo registriranim poreznim obveznicima (obrt, paušalni obrt ili tvrtka). Provizija je 15 % na besplatnom planu, 10 % na Pro (${P('plan-pro')}), 5 % na Ultra (${P('plan-ultra')}) i 0 % na Enterprise (${P('plan-enterprise')}). Sve je na stranici [planova i cijena](/subscription).
 
 ## Tražiš freelancera za posao?
 
