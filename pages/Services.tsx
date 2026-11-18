@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
 import SEO from '../components/SEO';
 import ProjectDots from '../components/ProjectDots';
 import { Tube } from '../components/Tube';
@@ -89,6 +89,18 @@ const Services: React.FC = () => {
   const { lang, t } = useLanguage();
   const subjects = [...SERVICES.map(s => `${t('Quote request')}: ${t(s.title)}`), t('Something else')];
   const [pick, setPick] = useState<{ index: number; n: number } | undefined>(undefined);
+  // Cards opened to show "What's included". Opening one is a GA4 select_content event (lib/track.ts),
+  // so the owner can see which services people look into; the card order is fixed by hand from that.
+  const [opened, setOpened] = useState<Set<string>>(() => new Set());
+  const toggleIncluded = (id: string) => {
+    const next = new Set(opened);
+    if (next.has(id)) next.delete(id);
+    else {
+      next.add(id);
+      track('select_content', { content_type: 'service', item_id: `studio-${id}` });
+    }
+    setOpened(next);
+  };
 
   // (the Tube's clip-path clips any outline, so focus shows inside the shape)
   const btn = 'inline-flex items-center gap-2.5 bg-sky px-7 py-4 font-display text-[15px] font-bold text-white transition-colors hover:bg-ink focus-visible:bg-ink focus-visible:outline-none focus-visible:underline focus-visible:underline-offset-4';
@@ -176,6 +188,29 @@ const Services: React.FC = () => {
                     </li>
                   ))}
                 </ul>
+                {s.included && (
+                  // above the card's stretched quote link (z-10), like the example links below
+                  <div className="relative z-10 mt-4">
+                    <button
+                      type="button"
+                      aria-expanded={opened.has(s.id)}
+                      aria-controls={`${s.id}-included`}
+                      onClick={() => toggleIncluded(s.id)}
+                      className="inline-flex items-center gap-1.5 font-display text-[0.95rem] font-bold underline underline-offset-4 hover:text-sky focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky"
+                    >
+                      {t("What's included")}
+                      <ChevronDown aria-hidden="true" size={16} strokeWidth={2.5} className={`transition-transform ${opened.has(s.id) ? 'rotate-180' : ''}`} />
+                    </button>
+                    <ul id={`${s.id}-included`} hidden={!opened.has(s.id)} className="mt-3 space-y-1.5 border-t-2 border-ink pt-3 text-[0.95rem]">
+                      {s.included.map(item => (
+                        <li key={item} className="flex gap-2.5">
+                          <span aria-hidden="true" className="mt-[0.55em] h-1.5 w-1.5 shrink-0 bg-sky" />
+                          {t(item)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 {s.examples && (
                   // above the card's stretched link (z-10), so the project links stay clickable
                   <p className="relative z-10 mt-4 text-[0.9rem] text-slate">
@@ -201,7 +236,11 @@ const Services: React.FC = () => {
                   {/* The whole card is the target: this link stretches over it (::after), so keyboard and screen readers still get a real link. */}
                   <a
                     href="#upit"
-                    onClick={() => setPick({ index: si, n: Date.now() })}
+                    onClick={() => {
+                      setPick({ index: si, n: Date.now() });
+                      // which service people ask about (the form's generate_lead stays as it is)
+                      track('select_content', { content_type: 'service_quote', item_id: `studio-${s.id}` });
+                    }}
                     className="after:absolute after:inset-0 focus-visible:outline-none"
                   >
                     <span className="sr-only">{t('Request a Quote')}: {t(s.title)}</span>

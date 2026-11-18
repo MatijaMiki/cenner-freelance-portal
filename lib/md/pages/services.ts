@@ -62,6 +62,7 @@ export const render: PageModule['render'] = () => ({
         h3(t(s.title)),
         s.fullPackage ? `**${t('Full package')}.** ${t(s.desc)}` : t(s.desc),
         list(s.points.map(t)),
+        s.included && `**${t("What's included")}:**\n\n${list(s.included.map(t))}`,
         s.examples && `${t('For example')}: ${s.examples.map((ex) => t(ex.label)).join(', ')}.`,
         price(s.id, s.priceNote),
       ),
