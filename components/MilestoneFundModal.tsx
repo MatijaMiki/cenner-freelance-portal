@@ -77,7 +77,7 @@ const PayForm: React.FC<{ amount: number; serviceFee: number; total: number; fee
       <div className="bg-leaf/10 border border-ink p-4 flex items-start gap-3">
         <ShieldCheck className="text-leaf shrink-0 mt-0.5" size={18} />
         <p className="text-slate text-xs leading-relaxed">
-          The amount is <span className="text-ink font-bold">authorised on your card</span> now, and only charged and released to the freelancer once you approve the delivered work (or 72h after submission).
+          You pay now, and <span className="text-ink font-bold">the freelancer only receives the money</span> once you approve the delivered work (or 72h after submission).
         </p>
       </div>
 

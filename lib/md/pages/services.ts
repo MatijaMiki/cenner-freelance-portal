@@ -1,39 +1,12 @@
 /**
- * /services (the studio hub) as markdown. Keep in step with pages/Services.tsx: SERVICES, PROJECTS,
- * STEPS, TOOLS and WHY below are that page's lists, in its order (projects as the page sorts them,
- * by colour). Prices come from the price list.
+ * /services (the studio hub) as markdown. The service cards and tools come from lib/studioServices.ts,
+ * like the page's; keep PROJECTS, STEPS and WHY below in step with pages/Services.tsx (projects as
+ * the page sorts them, by colour). Prices come from the price list.
  */
 import { COMPANY } from '../../company';
-import { priceItem } from '../../cjenik.js';
-import { baseLabel, formatPrice } from '../../../components/AnchorPrice';
+import { STUDIO_SERVICES as SERVICES, STUDIO_TOOLS as TOOLS, studioPrice } from '../../studioServices';
+import { baseLabel, eurAmount, formatPrice } from '../../../components/AnchorPrice';
 import { blocks, h2, h3, link, list, t, type PageModule } from '../format';
-
-const SERVICES: { id: string; title: string; desc: string; points: string[]; priced?: boolean }[] = [
-  { id: 'web-stranice', title: 'Websites', priced: true,
-    desc: 'Custom websites built from scratch: fast, responsive and easy to find on Google.',
-    points: ['Design and development', 'Works on every screen', 'Basic SEO set up'] },
-  { id: 'wordpress', title: 'WordPress', priced: true,
-    desc: 'WordPress sites and WooCommerce shops you can update yourself, with training included.',
-    points: ['Custom themes and plugins', 'WooCommerce shops', 'Training for your team'] },
-  { id: 'saas', title: 'SaaS and web apps',
-    desc: 'Web applications with accounts, payments and an admin side, from the first version to launch.',
-    points: ['Accounts and roles', 'Stripe payments and subscriptions', 'Admin dashboards'] },
-  { id: 'crm', title: 'CRM systems',
-    desc: 'A CRM shaped around how you actually work: clients, deals, invoices and reports in one place.',
-    points: ['Client and deal tracking', 'Invoices and reports', 'Connected to your tools'] },
-  { id: 'automatizacija', title: 'Automation and AI',
-    desc: 'n8n workflows and AI that take repetitive work off your team: forms, emails, spreadsheets, CRMs and APIs, connected.',
-    points: ['n8n workflows', 'AI in your product or tools', 'Documentation and training'] },
-  { id: 'dizajn', title: 'Graphic design', priced: true,
-    desc: 'Logos, brand identity and marketing material, ready for screen and print.',
-    points: ['Logo and brand identity', 'Social and ad graphics', 'Print-ready files'] },
-  { id: 'oglasavanje', title: 'Advertising',
-    desc: 'Ad campaigns set up, run and measured, so you know what each euro brings back.',
-    points: ['Google and social ads', 'Tracking and conversions', 'Monthly reports'] },
-  { id: 'serveri', title: 'Servers, network and hosting',
-    desc: 'Servers set up, networks managed, sites deployed and kept running: domains, SSL, email and backups.',
-    points: ['Server setup and upkeep', 'Network management', 'Website setup and launch'] },
-];
 
 /** In the order the page shows them (sorted by colour, warm to cool). */
 const PROJECTS: { title: string; url: string; internal?: string; internalLabel?: string; badges?: string[]; category: string; desc: string }[] = [
@@ -60,7 +33,6 @@ const STEPS = [
   { title: 'Delivery & Support', desc: 'Everything is handed over cleanly, and we stay available after launch.' },
 ];
 
-const TOOLS = ['HTML', 'CSS', 'JavaScript', 'React', 'Vite', 'WordPress', 'WooCommerce', 'n8n', 'AI integration', 'Stripe', 'Linux servers', 'nginx', 'DNS and SSL', 'Affinity'];
 
 const WHY = [
   { title: 'Direct Communication', desc: 'You talk to the person doing the work, not an account manager.' },
@@ -68,22 +40,33 @@ const WHY = [
   { title: 'We Handle Hosting Too', desc: 'Servers, domains and the launch are part of the job, not an extra.' },
 ];
 
-/** "Počevši od: od €800 (Bazna cijena (18. 10. 2026.): od €800)", or "Cijena: Na upit". */
-function price(id: string, priced?: boolean): string {
-  if (!priced) return `${t('Price')}: ${t('On request')}`;
-  const it = priceItem(`studio-${id}`);
-  return `${t('Starting at')}: €${it.price} (${baseLabel(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)})`;
+/** "Počevši od: €750 (Bazna cijena (10. 9. 2026.): od €800)", "Cijena: €250 (…)", or "Cijena: Na upit". */
+function price(id: string, note?: string): string {
+  const it = studioPrice(id);
+  if (!it) return `${t('Price')}: ${t('On request')}`;
+  const label = it.unit === 'fixed' ? t('Price') : t('Starting at');
+  const amount = `${eurAmount(it.price)}${it.unit === 'from-month' ? ` / ${t('mo')}` : ''}${note ? ` ${t(note)}` : ''}`;
+  return `${label}: ${amount} (${baseLabel(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)})`;
 }
 
 export const render: PageModule['render'] = () => ({
   title: t('Built by Cenner.'),
   summary:
-    'Cenner izrađuje web stranice, WordPress, SaaS i CRM sustave, n8n automatizacije, grafički dizajn i oglase te postavlja servere i hosting. Fiksna cijena, izravna komunikacija.',
+    'Cenner izrađuje web stranice i WooCommerce trgovine, SaaS i CRM sustave, mobilne i desktop aplikacije, AI integracije, oglase i SEO te postavlja servere. Fiksna cijena, izravna komunikacija.',
   path: '/services',
   body: blocks(
-    t('Websites, apps, automations and the servers they run on, built in-house. You talk directly to the person building it, and the price is agreed before work starts.'),
+    t('Websites, web and mobile apps, desktop software, AI integrations and the servers they run on, built in-house. You talk directly to the person building it, and the price is agreed before work starts.'),
     h2(t('What we build')),
-    ...SERVICES.map((s) => blocks(h3(t(s.title)), t(s.desc), list(s.points.map(t)), price(s.id, s.priced))),
+    ...SERVICES.map((s) =>
+      blocks(
+        h3(t(s.title)),
+        s.fullPackage ? `**${t('Full package')}.** ${t(s.desc)}` : t(s.desc),
+        list(s.points.map(t)),
+        s.included && `**${t("What's included")}:**\n\n${list(s.included.map(t))}`,
+        s.examples && `${t('For example')}: ${s.examples.map((ex) => t(ex.label)).join(', ')}.`,
+        price(s.id, s.priceNote),
+      ),
+    ),
     h2(t('Previous Projects')),
     t('Sites and products we have built and run. Visit them live.'),
     ...PROJECTS.map((p) =>

@@ -1,51 +1,24 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
 import SEO from '../components/SEO';
 import ProjectDots from '../components/ProjectDots';
 import { Tube } from '../components/Tube';
 import ContactForm from '../components/ContactForm';
-import { useT } from '../i18n';
+import { useLanguage } from '../i18n';
 import { COMPANY } from '../lib/company';
 import { track } from '../lib/track';
-import { priceItem } from '../lib/cjenik.js';
-import AnchorPrice from '../components/AnchorPrice';
+import { STUDIO_SERVICES as SERVICES, STUDIO_TOOLS as TOOLS, studioPrice } from '../lib/studioServices';
+import AnchorPrice, { eurAmount } from '../components/AnchorPrice';
 
 /*
+ * The cards (what we build) and the tools live in lib/studioServices.ts, shared with the .md twin.
+ *
  * Cenner's own work, one page (it was three: Services, Technology and Previous Projects). What
  * we build (#usluge), the work it has gone into (#radovi, each project keeps its own anchor), how
  * a project runs (#proces), the tools (#alati) and the quote request (#upit). In the homepage's
  * look: paper, ink, one display face, the grass field.
  */
-
-type Service = { id: string; title: string; desc: string; points: string[]; from?: number };
-
-const SERVICES: Service[] = [
-  { id: 'web-stranice', title: 'Websites', from: priceItem('studio-web-stranice').price,
-    desc: 'Custom websites built from scratch: fast, responsive and easy to find on Google.',
-    points: ['Design and development', 'Works on every screen', 'Basic SEO set up'] },
-  { id: 'wordpress', title: 'WordPress', from: priceItem('studio-wordpress').price,
-    desc: 'WordPress sites and WooCommerce shops you can update yourself, with training included.',
-    points: ['Custom themes and plugins', 'WooCommerce shops', 'Training for your team'] },
-  { id: 'saas', title: 'SaaS and web apps',
-    desc: 'Web applications with accounts, payments and an admin side, from the first version to launch.',
-    points: ['Accounts and roles', 'Stripe payments and subscriptions', 'Admin dashboards'] },
-  { id: 'crm', title: 'CRM systems',
-    desc: 'A CRM shaped around how you actually work: clients, deals, invoices and reports in one place.',
-    points: ['Client and deal tracking', 'Invoices and reports', 'Connected to your tools'] },
-  { id: 'automatizacija', title: 'Automation and AI',
-    desc: 'n8n workflows and AI that take repetitive work off your team: forms, emails, spreadsheets, CRMs and APIs, connected.',
-    points: ['n8n workflows', 'AI in your product or tools', 'Documentation and training'] },
-  { id: 'dizajn', title: 'Graphic design', from: priceItem('studio-dizajn').price,
-    desc: 'Logos, brand identity and marketing material, ready for screen and print.',
-    points: ['Logo and brand identity', 'Social and ad graphics', 'Print-ready files'] },
-  { id: 'oglasavanje', title: 'Advertising',
-    desc: 'Ad campaigns set up, run and measured, so you know what each euro brings back.',
-    points: ['Google and social ads', 'Tracking and conversions', 'Monthly reports'] },
-  { id: 'serveri', title: 'Servers, network and hosting',
-    desc: 'Servers set up, networks managed, sites deployed and kept running: domains, SSL, email and backups.',
-    points: ['Server setup and upkeep', 'Network management', 'Website setup and launch'] },
-];
 
 /** bg and fg are the project's own colours, taken from its site: its signature colour as the
  *  ground, and its own dark or light for the type. palette is its darkest colour and four more
@@ -97,7 +70,6 @@ function hue(hex: string) {
 const BY_COLOUR = [...PROJECTS].sort((a, b) => hue(a.bg) - hue(b.bg));
 
 
-const TOOLS = ['HTML', 'CSS', 'JavaScript', 'React', 'Vite', 'WordPress', 'WooCommerce', 'n8n', 'AI integration', 'Stripe', 'Linux servers', 'nginx', 'DNS and SSL', 'Affinity'];
 
 const STEPS = [
   { title: 'Discovery Call', desc: 'We talk through what you need, your timeline and your budget. No obligation.' },
@@ -114,9 +86,21 @@ const WHY = [
 
 
 const Services: React.FC = () => {
-  const t = useT();
+  const { lang, t } = useLanguage();
   const subjects = [...SERVICES.map(s => `${t('Quote request')}: ${t(s.title)}`), t('Something else')];
   const [pick, setPick] = useState<{ index: number; n: number } | undefined>(undefined);
+  // Cards opened to show "What's included". Opening one is a GA4 select_content event (lib/track.ts),
+  // so the owner can see which services people look into; the card order is fixed by hand from that.
+  const [opened, setOpened] = useState<Set<string>>(() => new Set());
+  const toggleIncluded = (id: string) => {
+    const next = new Set(opened);
+    if (next.has(id)) next.delete(id);
+    else {
+      next.add(id);
+      track('select_content', { content_type: 'service', item_id: `studio-${id}` });
+    }
+    setOpened(next);
+  };
 
   // (the Tube's clip-path clips any outline, so focus shows inside the shape)
   const btn = 'inline-flex items-center gap-2.5 bg-sky px-7 py-4 font-display text-[15px] font-bold text-white transition-colors hover:bg-ink focus-visible:bg-ink focus-visible:outline-none focus-visible:underline focus-visible:underline-offset-4';
@@ -126,14 +110,14 @@ const Services: React.FC = () => {
   return (
     <div className="font-text text-ink">
       <SEO
-        title="Izrada web stranica, aplikacija i automatizacija"
+        title="Izrada web stranica, aplikacija i CRM sustava"
         canonical="/services"
-        description="Cenner izrađuje web stranice, WordPress, SaaS i CRM sustave, n8n automatizacije, grafički dizajn i oglase te postavlja servere i hosting. Fiksna cijena, izravna komunikacija."
-        keywords="izrada web stranica, wordpress izrada, izrada aplikacija, crm sustav, n8n automatizacija, grafički dizajn, postavljanje servera, zagreb"
+        description="Cenner izrađuje web stranice i WooCommerce trgovine, SaaS i CRM sustave, mobilne i desktop aplikacije, AI integracije, oglase i SEO te postavlja servere. Fiksna cijena, izravna komunikacija."
+        keywords="izrada web stranica, woocommerce trgovina, izrada aplikacija, izrada mobilne aplikacije, crm sustav, ai integracija, seo, postavljanje servera, zagreb"
         en={{
-          title: 'Websites, apps and automation, built in Croatia',
-          description: 'Cenner builds websites, WordPress sites, SaaS and CRM systems, n8n automations, graphic design and ads, and sets up servers and hosting. Fixed price, direct communication.',
-          keywords: 'web development croatia, website design zagreb, wordpress development, web app development, crm development, n8n automation',
+          title: 'Websites, apps and CRM systems, built in Croatia',
+          description: 'Cenner builds websites and WooCommerce shops, SaaS and CRM systems, mobile and desktop apps, AI integrations, ads and SEO, and sets up servers. Fixed price, direct communication.',
+          keywords: 'web development croatia, website design zagreb, woocommerce development, saas development, crm development, mobile app development, desktop app development, ai integration',
         }}
         jsonLd={{
           '@context': 'https://schema.org',
@@ -145,11 +129,14 @@ const Services: React.FC = () => {
           telephone: COMPANY.phone,
           address: { '@type': 'PostalAddress', streetAddress: COMPANY.street, postalCode: COMPANY.postcode, addressLocality: COMPANY.city, addressCountry: COMPANY.countryCode },
           areaServed: 'HR',
-          makesOffer: SERVICES.map(s => ({
-            '@type': 'Offer',
-            itemOffered: { '@type': 'Service', name: s.title },
-            ...(s.from ? { priceSpecification: { '@type': 'PriceSpecification', minPrice: s.from, priceCurrency: 'EUR' } } : {}),
-          })),
+          makesOffer: SERVICES.map(s => {
+            const from = studioPrice(s.id)?.price;  // a starting or fixed price
+            return {
+              '@type': 'Offer',
+              itemOffered: { '@type': 'Service', name: s.title },
+              ...(from ? { priceSpecification: { '@type': 'PriceSpecification', minPrice: from, priceCurrency: 'EUR' } } : {}),
+            };
+          }),
         }}
       />
 
@@ -161,7 +148,7 @@ const Services: React.FC = () => {
           </h1>
           <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:items-end">
             <p className="max-w-[46ch] text-[clamp(1.25rem,1.1rem+0.7vw,1.625rem)] leading-snug lg:col-span-7">
-              {t('Websites, apps, automations and the servers they run on, built in-house. You talk directly to the person building it, and the price is agreed before work starts.')}
+              {t('Websites, web and mobile apps, desktop software, AI integrations and the servers they run on, built in-house. You talk directly to the person building it, and the price is agreed before work starts.')}
             </p>
             <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:col-span-5 lg:justify-end">
               <a href="#upit" className={btn}>
@@ -186,8 +173,11 @@ const Services: React.FC = () => {
             <ProjectDots palette={['#eff0f3', '#5b86e8', '#8fb0f5', '#a9c0f7', '#7aa0f0']} className="hidden h-32 w-72 shrink-0 md:block lg:h-40 lg:w-[28rem] [mask-image:radial-gradient(closest-side,#000_55%,transparent)] [-webkit-mask-image:radial-gradient(closest-side,#000_55%,transparent)]" />
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4 md:mt-14">
-            {SERVICES.map((s, si) => (
+            {SERVICES.map((s, si) => { const it = studioPrice(s.id); return (
               <article key={s.id} id={s.id} className="group relative flex scroll-mt-28 flex-col border-2 border-ink bg-white p-6 transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#0b0c0e] focus-within:-translate-x-1 focus-within:-translate-y-1 focus-within:shadow-[6px_6px_0_0_#002ca5]">
+                {s.fullPackage && (
+                  <p className="mb-3 self-start border-2 border-ink px-2 py-0.5 font-display text-[12px] font-bold uppercase tracking-wide">{t('Full package')}</p>
+                )}
                 <h3 className="font-display text-[1.5rem] font-extrabold leading-tight tracking-[-0.02em] transition-colors group-hover:text-sky">{t(s.title)}</h3>
                 <p className="mt-3 text-[1rem] leading-relaxed">{t(s.desc)}</p>
                 <ul className="mt-4 space-y-1.5 text-[0.95rem]">
@@ -198,16 +188,59 @@ const Services: React.FC = () => {
                     </li>
                   ))}
                 </ul>
+                {s.included && (
+                  // above the card's stretched quote link (z-10), like the example links below
+                  <div className="relative z-10 mt-4">
+                    <button
+                      type="button"
+                      aria-expanded={opened.has(s.id)}
+                      aria-controls={`${s.id}-included`}
+                      onClick={() => toggleIncluded(s.id)}
+                      className="inline-flex items-center gap-1.5 font-display text-[0.95rem] font-bold underline underline-offset-4 hover:text-sky focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky"
+                    >
+                      {t("What's included")}
+                      <ChevronDown aria-hidden="true" size={16} strokeWidth={2.5} className={`transition-transform ${opened.has(s.id) ? 'rotate-180' : ''}`} />
+                    </button>
+                    <ul id={`${s.id}-included`} hidden={!opened.has(s.id)} className="mt-3 space-y-1.5 border-t-2 border-ink pt-3 text-[0.95rem]">
+                      {s.included.map(item => (
+                        <li key={item} className="flex gap-2.5">
+                          <span aria-hidden="true" className="mt-[0.55em] h-1.5 w-1.5 shrink-0 bg-sky" />
+                          {t(item)}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {s.examples && (
+                  // above the card's stretched link (z-10), so the project links stay clickable
+                  <p className="relative z-10 mt-4 text-[0.9rem] text-slate">
+                    {t('For example')}:{' '}
+                    {s.examples.map((ex, i) => (
+                      <React.Fragment key={ex.label}>
+                        {i > 0 && ', '}
+                        {ex.href ? <a href={ex.href} className="font-bold text-ink underline underline-offset-2 hover:text-sky">{t(ex.label)}</a> : t(ex.label)}
+                      </React.Fragment>
+                    ))}
+                  </p>
+                )}
                 <div className="mt-auto flex items-end justify-between gap-4 pt-6">
                   <div>
-                    <p className="text-[0.85rem] text-slate">{s.from ? t('Starting at') : t('Price')}</p>
-                    <p className="font-display text-[1.375rem] font-extrabold">{s.from ? `€${s.from}` : t('On request')}</p>
-                    {s.from && <AnchorPrice ids={[`studio-${s.id}`]} className="mt-1 text-slate" />}
+                    <p className="text-[0.85rem] text-slate">{it && it.unit !== 'fixed' ? t('Starting at') : t('Price')}</p>
+                    <p className="font-display text-[1.375rem] font-extrabold">
+                      {it ? eurAmount(it.price, lang) : t('On request')}
+                      {it?.unit === 'from-month' && <span className="text-[1rem]"> / {t('mo')}</span>}
+                      {it && s.priceNote && <span className="text-[1rem]"> {t(s.priceNote)}</span>}
+                    </p>
+                    {it && <AnchorPrice ids={[`studio-${s.id}`]} className="mt-1 text-slate" />}
                   </div>
                   {/* The whole card is the target: this link stretches over it (::after), so keyboard and screen readers still get a real link. */}
                   <a
                     href="#upit"
-                    onClick={() => setPick({ index: si, n: Date.now() })}
+                    onClick={() => {
+                      setPick({ index: si, n: Date.now() });
+                      // which service people ask about (the form's generate_lead stays as it is)
+                      track('select_content', { content_type: 'service_quote', item_id: `studio-${s.id}` });
+                    }}
                     className="after:absolute after:inset-0 focus-visible:outline-none"
                   >
                     <span className="sr-only">{t('Request a Quote')}: {t(s.title)}</span>
@@ -215,7 +248,7 @@ const Services: React.FC = () => {
                   </a>
                 </div>
               </article>
-            ))}
+            ); })}
           </div>
         </div>
       </section>

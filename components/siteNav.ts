@@ -30,7 +30,7 @@ export function useSiteNav() {
   ];
   // the plain links, in nav order
   const links: NavItem[] = [
-    { label: t('Services'), path: '/services', icon: Briefcase, desc: t('Websites, apps and automations, built in-house') },
+    { label: t('Services'), path: '/services', icon: Briefcase, desc: t('Websites, apps, CRM and AI, built in-house') },
     { label: t('Pricing'), path: '/subscription', icon: Tag, desc: t('Plans and fees') },
     { label: t('Blog'), path: '/blog', icon: BookOpen },
     { label: t('Community'), path: '/community', icon: Users },
