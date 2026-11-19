@@ -98,4 +98,12 @@ export function studioPrice(id: string) {
   return currentList().items.find(i => i.id === `studio-${id}`) || null;
 }
 
-export const STUDIO_TOOLS = ['HTML', 'CSS', 'JavaScript', 'React', 'Vite', 'WordPress', 'WooCommerce', 'Stripe', 'MCP', 'n8n', 'Linux servers', 'Coolify', 'nginx', 'DNS and SSL', 'GA4 and Google Ads', 'Affinity'];
+/** The "Tools we work with" tags, grouped: web; apps and backend; AI; infrastructure; marketing and
+ *  design. Only what Cenner's own projects use (no mobile frameworks until something is built with one). */
+export const STUDIO_TOOLS = [
+  'HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'Vite', 'WordPress', 'WooCommerce',
+  'Node.js', 'Express', 'Prisma', 'Python', 'Swift', 'Electron', 'Tauri', 'Stripe',
+  'MCP', 'n8n',
+  'Linux servers', 'Docker', 'Coolify', 'nginx', 'Cloudflare', 'Vercel', 'DNS and SSL',
+  'GA4 and Google Ads', 'Affinity',
+];
