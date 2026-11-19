@@ -4,6 +4,8 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import SEO from '../components/SEO';
+import { trackPurchase } from '../lib/track';
+import { PLANS, planOf } from '../lib/plans';
 
 const API_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 
@@ -37,6 +39,22 @@ const OrderSuccess: React.FC = () => {
       .then(me => { if (me) updateUser(me); })
       .catch(() => {});
   }, [isSubscription, updateUser]);
+
+  // Tell GA4 (and through it Google Ads) about the sale, once. A subscription is worth its first month; a service
+  // order its amount. Stripe adds payment_intent and redirect_status to the return address of a card payment.
+  useEffect(() => {
+    if (searchParams.get('redirect_status') && searchParams.get('redirect_status') !== 'succeeded') return;
+    if (isSubscription) {
+      const id = planOf(planParam);
+      if (id === 'FREE') return;
+      const day = new Date().toISOString().slice(0, 10);
+      trackPurchase({ id: `sub-${id.toLowerCase()}-${day}`, value: PLANS[id].pricePerMonth, kind: 'subscription', item: `plan-${id.toLowerCase()}` });
+    } else {
+      const value = Number(state.amount ?? amountParam);
+      const id = state.paymentId || searchParams.get('payment_intent') || '';
+      if (id) trackPurchase({ id, value, kind: 'service', item: 'service-order' });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const headline = isSubscription ? 'Subscription Active!' : 'Order Confirmed!';
   const subtitle = isSubscription

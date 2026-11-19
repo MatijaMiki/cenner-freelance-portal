@@ -5,7 +5,8 @@
 //
 // Never pass personal data (email, name, phone, message text) as a parameter.
 
-type Params = Record<string, string | number | boolean | undefined>;
+type Item = Record<string, string | number>;
+type Params = Record<string, string | number | boolean | undefined | Item[]>;
 
 export const track = (event: string, params: Params = {}): void => {
   try {
@@ -22,3 +23,20 @@ export const trackLead = (lead_source: string, extra: Params = {}): void =>
 
 /** A new account was created. */
 export const trackSignUp = (method: 'email' | 'google'): void => track('sign_up', { method });
+
+/**
+ * Money came in: a plan subscription or a paid service order (pages/OrderSuccess.tsx, where Stripe sends the
+ * person back). Sent once per payment even if the page is reloaded, so Google Ads' Purchase conversion counts
+ * each sale once. Mark `purchase` as a key event in GA4 for the import.
+ */
+export const trackPurchase = (p: { id: string; value: number; kind: 'subscription' | 'service'; item: string }): void => {
+  if (!(p.value > 0)) return;
+  const key = `cenner-purchase-sent:${p.id}`;
+  try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); } catch { /* private mode: send anyway */ }
+  track('purchase', {
+    transaction_id: p.id,
+    value: p.value,
+    currency: 'EUR',
+    items: [{ item_id: p.item, item_name: p.item, item_category: p.kind, price: p.value, quantity: 1 }],
+  });
+};
