@@ -60,8 +60,8 @@ const PROJECTS: Project[] = [
     palette: ['#0c1015', '#f2977c', '#f3d48a', '#8fe3b4', '#f4f5f7'] },
   { id: 'reelstoclaude', title: 'reelstoclaude', url: 'https://cenner.hr/reelstoclaude', badges: ['In active development', 'A Cenner project'], category: 'Our product · Developer tool',
     desc: 'A small open-source Mac tool: send an Instagram reel about a Claude skill or a GitHub repo to a spare account, and your Mac works out what it shows, asks you in the DM and installs it when you reply yes.',
-    bg: '#d92b21', fg: '#ffffff',
-    palette: ['#0a0a0a', '#d92b21', '#ffffff', '#f2f2f2', '#6b6b6b'] },
+    bg: '#2f6df6', fg: '#ffffff',
+    palette: ['#0a0a0a', '#1a2fd0', '#2f7cf6', '#22c3c9', '#4be3d0'] },
 ];
 
 /** Hue of a #rrggbb colour, 0–360. */
@@ -73,8 +73,8 @@ function hue(hex: string) {
   return (h * 60 + 360) % 360;
 }
 
-/** The work runs as a spectrum: each project's colour, warm to cool (reelstoclaude's red, ranwhat's coral,
- *  Selected's gold, Čistimo's green, Shorten's, Statsnest's and Cenner's blues, Cenner Links' pink), and on into the ink of the section after it. */
+/** The work runs as a spectrum: each project's colour, warm to cool (ranwhat's coral, Selected's gold,
+ *  Čistimo's green, the blues of Shorten, Statsnest, reelstoclaude and Cenner, Cenner Links' pink), and on into the ink of the section after it. */
 const BY_COLOUR = [...PROJECTS].sort((a, b) => hue(a.bg) - hue(b.bg));
 
 
