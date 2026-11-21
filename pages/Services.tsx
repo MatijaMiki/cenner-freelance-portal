@@ -54,6 +54,14 @@ const PROJECTS: Project[] = [
     desc: 'A link-in-bio builder for creators: one page with all your links, your own look, and a share link ready in minutes.',
     bg: '#f472b6', fg: '#141414',
     palette: ['#141414', '#4ade80', '#6ee89a', '#f0f0ff', '#f472b6'] },
+  { id: 'statsnest', title: 'Statsnest', url: 'https://statsnest.app', badges: ['In active development', 'A Cenner project'], category: 'Our product · Business dashboard',
+    desc: 'A dashboard that puts traffic, ads, revenue, reviews, support and your code on one screen. You connect your own sources with your own keys. Our own product, built and run at Cenner.',
+    bg: '#0c1015', fg: '#f4f5f7',
+    palette: ['#0c1015', '#f2977c', '#f3d48a', '#8fe3b4', '#f4f5f7'] },
+  { id: 'reelstoclaude', title: 'reelstoclaude', url: 'https://cenner.hr/reelstoclaude', badges: ['In active development', 'A Cenner project'], category: 'Our product · Developer tool',
+    desc: 'A small open-source Mac tool: send an Instagram reel about a Claude skill or a GitHub repo to a spare account, and your Mac works out what it shows, asks you in the DM and installs it when you reply yes.',
+    bg: '#d92b21', fg: '#ffffff',
+    palette: ['#0a0a0a', '#d92b21', '#ffffff', '#f2f2f2', '#6b6b6b'] },
 ];
 
 /** Hue of a #rrggbb colour, 0–360. */
@@ -65,8 +73,8 @@ function hue(hex: string) {
   return (h * 60 + 360) % 360;
 }
 
-/** The work runs as a spectrum: each project's colour, warm to cool (ranwhat's coral, Selected's
- *  gold, Čistimo's green, Shorten's and Cenner's blues, Cenner Links' pink), and on into the ink of the section after it. */
+/** The work runs as a spectrum: each project's colour, warm to cool (reelstoclaude's red, ranwhat's coral,
+ *  Selected's gold, Čistimo's green, Shorten's, Statsnest's and Cenner's blues, Cenner Links' pink), and on into the ink of the section after it. */
 const BY_COLOUR = [...PROJECTS].sort((a, b) => hue(a.bg) - hue(b.bg));
 
 

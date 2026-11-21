@@ -24,6 +24,10 @@ const PROJECTS: { title: string; url: string; internal?: string; internalLabel?:
     desc: 'This marketplace: freelancer listings, protected payments, identity checks and subscriptions, and the design of this site. Built and run in-house.' },
   { title: 'Cenner Links', url: 'https://links.cenner.hr', category: 'Our product · Link in bio',
     desc: 'A link-in-bio builder for creators: one page with all your links, your own look, and a share link ready in minutes.' },
+  { title: 'Statsnest', url: 'https://statsnest.app', category: 'Our product · Business dashboard',
+    desc: 'A dashboard that puts traffic, ads, revenue, reviews, support and your code on one screen. You connect your own sources with your own keys. Our own product, built and run at Cenner.' },
+  { title: 'reelstoclaude', url: 'https://cenner.hr/reelstoclaude', category: 'Our product · Developer tool',
+    desc: 'A small open-source Mac tool: send an Instagram reel about a Claude skill or a GitHub repo to a spare account, and your Mac works out what it shows, asks you in the DM and installs it when you reply yes.' },
 ];
 
 const STEPS = [
