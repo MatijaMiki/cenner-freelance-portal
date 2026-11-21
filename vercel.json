@@ -24,6 +24,11 @@
       "permanent": true
     },
     {
+      "source": "/cjenik/:file(webshop_.*\\.csv)",
+      "destination": "/cjenik/arhiva/:file",
+      "permanent": true
+    },
+    {
       "source": "/match",
       "destination": "/marketplace#ai-matching",
       "permanent": true
