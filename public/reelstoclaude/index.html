@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0c0e">
 <title>reelstoclaude: DM a reel, your Mac installs what it shows</title>
 <meta name="description" content="Send a reel about a Claude skill, a GitHub repo or a security issue to a spare Instagram account. Your Mac watches it, asks you in the DM, and installs it when you reply yes.">
 <link rel="canonical" href="https://cenner.hr/reelstoclaude">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cenner.hr/reelstoclaude">
-<meta property="og:title" content="reelstoclaude: DM a reel, your Mac installs what it shows">
+<meta property="og:title" content="reelstoclaude: DM Claude a reel, and it installs it">
 <meta property="og:description" content="Send a reel about a Claude skill or a GitHub repo to a spare Instagram account. Your Mac asks you in the DM and installs it when you reply yes.">
 <meta property="og:image" content="https://cenner.hr/reelstoclaude/preview.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -16,25 +17,24 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=chillax@400,500,600&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&text=CENNER&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js')</script>
 <style>
+@font-face { font-family: 'Press Start 2P'; src: url(/reelstoclaude/fonts/press-start-2p.woff2) format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
 /* Animatable colour stops, so a fill can fade from one gradient to another. */
 @property --g1 { syntax: '<color>'; inherits: false; initial-value: #0a0a0a; }
 @property --g2 { syntax: '<color>'; inherits: false; initial-value: #1f1f1f; }
 @property --g3 { syntax: '<color>'; inherits: false; initial-value: #5e5e5e; }
 :root {
   --warm: linear-gradient(to top right, #1a2fd0 0%, #2f7cf6 55%, #22c3c9 100%);
-  --dark: linear-gradient(to bottom left, #0a0a0a 0%, #1f1f1f 50%, #5e5e5e 100%);
+  --dark: linear-gradient(to bottom left, #24262b 0%, #33363d 50%, #6f747d 100%);
   --fresh: linear-gradient(to top right, #3fd98b 0%, #c8f560 100%);
   --sun: linear-gradient(to top right, #ffd23f 0%, #fff06a 100%);
-  --bg: #ffffff; --surface: #f2f2f2; --ink: #0a0a0a; --muted: #6b6b6b; --accent: #2f6df6; --accent-ink: #ffffff;
+  --bg: #0b0c0e; --surface: #191b1f; --ink: #f4f5f7; --on-light: #0a0a0a; --muted: #9aa0a6; --accent: #2f6df6; --accent-ink: #ffffff;
   --step-small: 0.9375rem;
   --step-body: 1.125rem;
   --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
   --step-head: clamp(2.25rem, 1rem + 3.4vw, 4.25rem);
-  --step-display: clamp(2.75rem, 6.4vw, 6.25rem);
+  --step-display: clamp(2.25rem, 4.55vw, 5rem);
   --m: clamp(16px, 2.2vw, 32px);
   --gap: clamp(96px, 14vw, 200px);
   /* the motif: a message bubble. Three round corners, one tight one where the tail sits. */
@@ -43,7 +43,7 @@
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 * { box-sizing: border-box; margin: 0; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; color-scheme: dark; }
 body { background: var(--bg); color: var(--ink); font: 400 var(--step-body)/1.5 Chillax, ui-rounded, system-ui, sans-serif; overflow-x: hidden; }
 h1, h2 { font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
 h2 { font-size: var(--step-head); }
@@ -51,31 +51,33 @@ h3 { font-size: var(--step-lead); font-weight: 500; line-height: 1.15; letter-sp
 a { color: inherit; }
 p { max-width: 62ch; }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-::selection { background: #c8f560; color: var(--ink); }
+::selection { background: #c8f560; color: var(--on-light); }
 .wrap { padding-inline: var(--m); }
 section { padding-top: var(--gap); }
-.btn { display: inline-block; font: inherit; font-weight: 500; text-decoration: none; cursor: pointer; border: 0; padding: 0.8em 1.25em; background: linear-gradient(to top right, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); --g1: #0a0a0a; --g2: #1f1f1f; --g3: #5e5e5e; color: #fff; border-radius: var(--bubble); transition: transform 0.18s var(--ease), --g1 0.35s, --g2 0.35s, --g3 0.35s; }
-.btn:hover { --g1: #1a2fd0; --g2: #2f7cf6; --g3: #22c3c9; transform: translateY(-2px); }
+.btn { display: inline-block; font: inherit; font-weight: 500; text-decoration: none; cursor: pointer; border: 0; padding: 0.8em 1.25em; background: linear-gradient(to top right, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); --g1: #ffffff; --g2: #f4f5f7; --g3: #dfe3e8; color: var(--on-light); border-radius: var(--bubble); transition: transform 0.18s var(--ease), color 0.35s, --g1 0.35s, --g2 0.35s, --g3 0.35s; }
+.btn:hover { --g1: #1a2fd0; --g2: #2f7cf6; --g3: #22c3c9; color: #fff; transform: translateY(-2px); }
 .btn:active { transform: translateY(1px) scale(0.98); }
 
 /* ---------- hero ---------- */
-.hero { position: relative; min-height: 100svh; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
-.nav { position: relative; z-index: 3; display: flex; justify-content: space-between; align-items: center; padding: 20px var(--m); }
+.hero { position: relative; min-height: 100svh; overflow: hidden; display: grid; grid-template-rows: 1fr; padding-top: 76px; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; padding: 20px var(--m); background: rgba(11, 12, 14, 0); transition: background-color 0.3s var(--ease), padding 0.3s var(--ease); }
+.nav.stuck { background: var(--bg); padding-block: 12px; }
+section { scroll-margin-top: 40px; }
 .mark { font-weight: 600; font-size: 1.75rem; letter-spacing: -0.03em; text-decoration: none; }
 .nav ul { display: flex; gap: clamp(16px, 2.4vw, 36px); list-style: none; padding: 0 0 0 16px; color: #fff; font-weight: 500; }
 .nav ul a { text-decoration: none; padding: 6px 0; display: inline-block; transition: transform 0.18s var(--ease); }
 .nav ul a:hover { transform: translateY(-2px); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
-.shape { position: absolute; z-index: 1; width: 120svh; height: 100svh; left: calc(78vw - 60svh); top: -12svh; overflow: hidden; background: linear-gradient(to bottom left, #0a0a0a 0%, #0a0a0a 12%, #2a2a2a 48%, #747474 100%); border-radius: 17svh 17svh 17svh 3svh; }
+.shape { position: absolute; z-index: 1; width: 120svh; height: 100svh; left: calc(84vw - 60svh); top: -12svh; overflow: hidden; background: linear-gradient(to bottom left, #15171a 0%, #1b1d21 14%, #30333a 50%, #7b808a 100%); border-radius: 17svh 17svh 17svh 3svh; }
 .shape svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .blob { transform-box: fill-box; transform-origin: 50% 50%; }
-.hero-copy { position: relative; z-index: 2; align-self: center; padding: 0 var(--m) 6svh 8vw; width: min(52vw, 760px); }
+.hero-copy { position: relative; z-index: 2; align-self: center; padding: 0 var(--m) 6svh 7vw; width: min(54vw, 860px); }
 .hero h1 { font-size: var(--step-display); }
 .hero-copy p { font-size: var(--step-body); margin: 1.6em 0 2em; max-width: 34ch; }
 .msg { padding: 0.7em 0.95em; max-width: 86%; }
-.msg.in { background: #fff; color: var(--ink); border-radius: var(--bubble); align-self: flex-start; }
+.msg.in { background: #fff; color: var(--on-light); border-radius: var(--bubble); align-self: flex-start; }
 .msg.out { background: var(--dark); color: #fff; border-radius: var(--bubble-out); align-self: flex-end; }
 .msg b { font-weight: 500; }
-.dm { position: absolute; z-index: 2; left: calc(78vw - 60svh + 7svh); top: 10svh; width: min(372px, 30vw); background: #fff; color: #000; border-radius: 28px; overflow: hidden; font: 400 14px/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+.dm { position: absolute; z-index: 2; left: calc(84vw - 60svh + 7svh); top: 10svh; width: min(372px, 30vw); background: #fff; color: #000; border-radius: 28px; overflow: hidden; font: 400 14px/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 .dm-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
 .dm-head b { display: block; font-weight: 600; font-size: 15px; line-height: 1.2; }
 .dm-head small { display: block; font-size: 12px; color: #737373; }
@@ -89,7 +91,7 @@ section { padding-top: var(--gap); }
 .dm-stage { display: grid; }
 .dm-body { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 3px; padding: 4px 12px 10px; opacity: 0; visibility: hidden; transition: opacity 0.25s var(--ease), visibility 0s 0.25s; }
 .dm-body.on { opacity: 1; visibility: visible; transition: opacity 0.3s var(--ease) 0.1s; }
-.dm-tabs { position: absolute; z-index: 2; left: calc(78vw - 60svh + 7svh + min(372px, 30vw) + 24px); top: 12svh; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.dm-tabs { position: absolute; z-index: 2; left: calc(84vw - 60svh + 7svh + min(372px, 30vw) + 24px); top: 12svh; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .dm-tabs span { color: #fff; font-size: var(--step-small); margin-bottom: 4px; padding: 0.3em 0.8em; border-radius: var(--bubble); background: rgba(10, 10, 10, 0.82); }
 .dm-tabs button { font: inherit; font-size: var(--step-small); font-weight: 500; border: 0; cursor: pointer; padding: 0.55em 1em; border-radius: var(--bubble); background: rgba(10, 10, 10, 0.82); color: #fff; transition: background-color 0.25s var(--ease), color 0.25s var(--ease), transform 0.18s var(--ease); }
 .dm-tabs button:hover { transform: translateX(4px); }
@@ -114,13 +116,16 @@ section { padding-top: var(--gap); }
 @media (max-height: 780px) { .dm-tabs { top: 9svh; } .dm { top: 7svh; } .dm .late { display: none; } .share-media { height: 9svh; min-height: 64px; } }
 
 /* ---------- how it works: one bar ---------- */
-.bar { display: flex; gap: 6px; height: 22svh; min-height: 150px; margin-top: 64px; }
+.how-text { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 56px; margin-top: 36px; font-size: var(--step-lead); line-height: 1.4; }
+.how-text p { max-width: 36ch; }
+.how-sub { margin-top: 72px; }
+.bar { display: flex; gap: 6px; height: 22svh; min-height: 150px; margin-top: 24px; }
 .seg { flex: var(--g) 1 0; min-width: 12%; padding: 20px; font-size: var(--step-body); border-radius: 28px 28px 28px 6px; }
 .seg strong { display: block; font-size: var(--step-lead); font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; }
-.seg:nth-child(1) { background: var(--sun); }
+.seg:nth-child(1) { background: var(--sun); color: var(--on-light); }
 .seg:nth-child(2) { background: var(--dark); color: #fff; }
 .seg:nth-child(3) { background: var(--warm); color: var(--accent-ink); }
-.seg:nth-child(4) { background: var(--fresh); color: var(--ink); }
+.seg:nth-child(4) { background: var(--fresh); color: var(--on-light); }
 .under { display: flex; gap: 6px; margin-top: 18px; list-style: none; padding: 0; }
 .under li { flex: var(--g) 1 0; min-width: 12%; padding-right: 12px; }
 .under li span { display: block; max-width: 24ch; }
@@ -134,8 +139,8 @@ section { padding-top: var(--gap); }
 .tile p { font-size: 1rem; line-height: 1.35; position: relative; z-index: 1; max-width: 36ch; margin-top: 0.15em; }
 .tile.red { background: var(--warm); color: var(--accent-ink); }
 .tile.black { background: var(--dark); color: #fff; }
-.tile.t-b { background: var(--fresh); }
-.tile.t-c { background: var(--sun); color: var(--ink); }
+.tile.t-b { background: var(--fresh); color: var(--on-light); }
+.tile.t-c { background: var(--sun); color: var(--on-light); }
 .tile.t-g { background: var(--dark); }
 .t-a { grid-column: 1 / 7; grid-row: 1 / 5; } .t-h { grid-column: 7 / 13; grid-row: 1 / 3; justify-content: flex-start; background: none; padding-left: 12px; }
 .t-b { grid-column: 7 / 10; grid-row: 3 / 5; } .t-c { grid-column: 10 / 13; grid-row: 3 / 5; }
@@ -148,12 +153,12 @@ section { padding-top: var(--gap); }
 .t-a .zoom .in { background: #fff; margin-right: 1.4em; }
 .t-b .zoom { right: 6cqw; top: 0.12em; font-size: min(23cqw, 84px); font-weight: 600; line-height: 1; text-align: right; }
 .t-c .zoom { left: 5cqw; top: 6cqw; font-size: clamp(13px, 7.6cqw, 30px); }
-.t-c .zoom .msg { background: #fff; color: var(--ink); }
+.t-c .zoom .msg { background: #fff; color: var(--on-light); }
 .t-d .zoom { left: 6cqw; top: 7cqw; font-size: min(11.5cqw, 44px); }
-.t-d .zoom mark { display: block; background: var(--sun); color: var(--ink); padding: 0.15em 0.4em; border-radius: var(--bubble); width: max-content; margin-top: 0.25em; }
+.t-d .zoom mark { display: block; background: var(--sun); color: var(--on-light); padding: 0.15em 0.4em; border-radius: var(--bubble); width: max-content; margin-top: 0.25em; }
 .t-e .zoom { right: 7cqw; top: 8cqw; display: flex; font-size: min(15.5cqw, 58px); }
 .disc { width: 1.9em; height: 1.9em; border-radius: 50%; display: grid; place-items: center; margin-left: -0.45em; font-weight: 600; }
-.disc:nth-child(1) { background: var(--warm); color: #fff; } .disc:nth-child(2) { background: var(--fresh); color: var(--ink); } .disc:nth-child(3) { background: var(--sun); color: var(--ink); }
+.disc:nth-child(1) { background: var(--warm); color: #fff; } .disc:nth-child(2) { background: var(--fresh); color: var(--on-light); } .disc:nth-child(3) { background: var(--sun); color: var(--on-light); }
 .t-f .zoom { right: 4cqw; top: 0.02em; font-size: min(14cqw, 100px); font-weight: 600; line-height: 1; color: #2f6df6; }
 .t-g .zoom { right: 4cqw; top: 0.08em; font-size: min(14cqw, 100px); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
 
@@ -163,19 +168,35 @@ section { padding-top: var(--gap); }
 .try input { width: 7.6em; max-width: 100%; background: var(--surface); color: var(--ink); border-radius: 0.28em 0.28em 0.28em 0.07em; }
 .try input::placeholder { color: var(--muted); }
 .try h2 button { background: linear-gradient(to top right, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); --g1: #1a2fd0; --g2: #2f7cf6; --g3: #22c3c9; color: #fff; cursor: pointer; border-radius: 0.28em 0.28em 0.07em 0.28em; transition: transform 0.18s var(--ease), --g1 0.35s, --g2 0.35s, --g3 0.35s; }
-.try h2 button:hover { --g1: #0a0a0a; --g2: #1f1f1f; --g3: #5e5e5e; transform: translateY(-3px); }
+.try h2 button:hover { --g1: #ffffff; --g2: #f4f5f7; --g3: #dfe3e8; color: var(--on-light); transform: translateY(-3px); }
 .try h2 button:active { transform: translateY(1px) scale(0.98); }
 .try-out { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; margin-top: 40px; align-items: start; }
 .try-out .hint { grid-column: 1 / 6; }
 
 .try-out .answer { grid-column: 6 / 12; display: flex; flex-direction: column; gap: 8px; font-size: var(--step-lead); line-height: 1.3; }
 .answer .msg { max-width: 100%; white-space: pre-line; }
-.answer .msg.in { background: var(--surface); }
+.answer .msg.in { background: var(--surface); color: var(--ink); }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; list-style: none; padding: 0; }
 .chips button { font: inherit; font-size: var(--step-small); border: 0; cursor: pointer; background: var(--surface); color: var(--ink); padding: 0.45em 0.9em; border-radius: var(--bubble); transition: transform 0.18s var(--ease), background-color 0.18s, color 0.18s; }
-.chips button:hover { background: var(--ink); color: #fff; transform: translateY(-2px); }
+.chips button:hover { background: var(--ink); color: var(--on-light); transform: translateY(-2px); }
 
-/* ---------- install ---------- */
+/* ---------- set it up ---------- */
+.setup-head { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; align-items: end; }
+.setup-head h2 { grid-column: 1 / 7; }
+.setup-head p { grid-column: 7 / 13; font-size: var(--step-lead); line-height: 1.35; }
+.steps { list-style: none; padding: 0; margin-top: 44px; counter-reset: step; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.steps li { min-width: 0; counter-increment: step; background: var(--surface); border-radius: 28px 28px 28px 6px; padding: clamp(20px, 2.4vw, 32px); }
+.steps li::before { content: counter(step); display: grid; place-items: center; width: 2.3em; height: 2.3em; margin-bottom: 16px; border-radius: 50%; font-weight: 600; background: var(--warm); color: #fff; }
+.steps li:nth-child(3n+2)::before { background: var(--fresh); color: var(--on-light); }
+.steps li:nth-child(3n)::before { background: var(--sun); color: var(--on-light); }
+.steps h3 { font-size: var(--step-lead); }
+.steps p { margin-top: 0.45em; max-width: 52ch; }
+.steps pre { margin-top: 16px; padding: 14px 18px; background: var(--bg); border-radius: 16px 16px 16px 4px; line-height: 1.75; }
+.setup code, .steps p code { font: 0.9em ui-monospace, SFMono-Regular, Menlo, monospace; }
+.steps p code, .setup .after code { background: var(--bg); padding: 0.1em 0.4em; border-radius: 0.4em; }
+.setup .after code { background: var(--surface); }
+.setup .after { margin-top: 28px; max-width: 76ch; color: var(--muted); }
+/* ---------- install (old) ---------- */
 .install { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; align-items: start; }
 .install .side { grid-column: 1 / 6; }
 .install .side p { margin-top: 1.4em; }
@@ -192,8 +213,8 @@ pre .c { color: #9a9a9a; }
 /* ---------- limits: accordion of filled tiles ---------- */
 .faq { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; align-items: start; }
 .faq h2 { grid-column: 1 / 6; }
-.faq .list { grid-column: 6 / 13; display: flex; flex-direction: column; gap: 8px; }
-details { background: linear-gradient(to top right, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); --g1: #f2f2f2; --g2: #f2f2f2; --g3: #f2f2f2; border-radius: 28px 28px 28px 6px; transition: --g1 0.4s var(--ease), --g2 0.4s var(--ease), --g3 0.4s var(--ease), color 0.4s var(--ease); }
+.faq .list { grid-column: 6 / 13; display: flex; flex-direction: column; gap: 8px; align-content: flex-start; }
+details { background: linear-gradient(to top right, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); --g1: #191b1f; --g2: #191b1f; --g3: #191b1f; border-radius: 28px 28px 28px 6px; transition: --g1 0.4s var(--ease), --g2 0.4s var(--ease), --g3 0.4s var(--ease), color 0.4s var(--ease); }
 summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 72px; padding: 14px 24px; font-size: var(--step-body); font-weight: 500; line-height: 1.2; }
 summary::-webkit-details-marker { display: none; }
 summary i { position: relative; flex: none; width: 16px; height: 16px; }
@@ -201,16 +222,16 @@ summary i::before, summary i::after { content: ""; position: absolute; left: 0; 
 summary i::after { transform: rotate(90deg); }
 details[open] { --g1: #1a2fd0; --g2: #2f7cf6; --g3: #22c3c9; color: #fff; }
 details[open] summary i::after { transform: rotate(0deg); }
-.faq details:nth-child(3n+2)[open] { --g1: #3fd98b; --g2: #86e876; --g3: #c8f560; color: var(--ink); }
-.faq details:nth-child(3n)[open] { --g1: #ffd23f; --g2: #ffe054; --g3: #fff06a; color: var(--ink); }
-.faq details.closing:nth-child(n) { --g1: #f2f2f2; --g2: #f2f2f2; --g3: #f2f2f2; color: var(--ink); }
+.faq details:nth-child(3n+2)[open] { --g1: #3fd98b; --g2: #86e876; --g3: #c8f560; color: var(--on-light); }
+.faq details:nth-child(3n)[open] { --g1: #ffd23f; --g2: #ffe054; --g3: #fff06a; color: var(--on-light); }
+.faq details.closing:nth-child(n) { --g1: #191b1f; --g2: #191b1f; --g3: #191b1f; color: var(--ink); }
 details.closing summary i::after { transform: rotate(90deg); }
 details p { padding: 0 24px 24px; max-width: 58ch; }
-details:not([open]):hover { --g1: #e4e4e4; --g2: #e4e4e4; --g3: #e4e4e4; }
+details:not([open]):hover { --g1: #24262b; --g2: #24262b; --g3: #24262b; }
 details[open] :focus-visible { outline-color: #fff; }
 
 /* ---------- footer: the mark, built large ---------- */
-footer { margin-top: var(--gap); background: linear-gradient(to top right, #0a0a0a 0%, #161616 60%, #4a4a4a 100%); color: #fff; padding: var(--m) var(--m) 28px; overflow: hidden; }
+footer { margin-top: var(--gap); background: linear-gradient(to top right, #15171a 0%, #1b1d21 60%, #44474e 100%); color: #fff; padding: var(--m) var(--m) 28px; overflow: hidden; }
 .wordmark { max-width: none; font-weight: 600; font-size: clamp(2.5rem, 15.4vw, 19rem); line-height: 0.95; letter-spacing: -0.045em; white-space: nowrap; padding-top: 0.08em; }
 .foot { display: flex; flex-wrap: wrap; gap: 16px 48px; justify-content: space-between; margin-top: 28px; font-size: 0.9375rem; }
 .foot ul { display: flex; flex-wrap: wrap; gap: 8px 28px; list-style: none; padding: 0; }
@@ -255,10 +276,10 @@ footer :focus-visible { outline-color: #fff; }
 /* ---------- phone ---------- */
 @media (max-width: 900px) {
   .nav ul { color: var(--ink); background: none; } .nav li:not(:last-child) { display: none; }
-  .hero { min-height: 0; display: block; }
+  .hero { min-height: 0; display: block; padding-top: 64px; }
   .stage { position: relative; display: flex; flex-direction: column; gap: 14px; margin-top: 34px; padding: 26px 22px 40px; }
   .hero-copy { width: auto; padding: 9svh 16px 0; }
-  .hero h1 { font-size: min(11.5vw, 5rem); }
+  .hero h1 { font-size: min(9.2vw, 4.5rem); }
   .hero-copy p { margin: 1em 0 1.2em; }
   .shape { left: 0; right: 0; top: 0; bottom: 0; width: auto; height: auto; border-radius: 12vw 12vw 0 0; }
   .dm-tabs { position: relative; order: -1; left: auto; top: auto; flex-direction: row; flex-wrap: wrap; gap: 6px; }
@@ -280,13 +301,15 @@ footer :focus-visible { outline-color: #fff; }
   .tile { padding: 14px; }
   .try h2 { font-size: min(10vw, 4rem); } .try input { width: 100%; display: block; margin: 0.12em 0; }
   .try-out, .install, .faq { display: block; }
+  .how-text, .steps { grid-template-columns: 1fr; }
+  .setup-head { display: block; } .setup-head p { margin-top: 14px; }
   .try-out .answer { margin-top: 20px; font-size: 1.125rem; }
   .install .code { margin-top: 32px; }
   .faq h2 { margin-bottom: 24px; }
   summary { min-height: 64px; padding: 12px 20px; } details p { padding: 0 20px 20px; }
   pre .c { display: none; }
   }
-@media (min-width: 901px) { .seg small { display: none; } }
+@media (min-width: 901px) { .seg small { display: none; } .hero h1 { white-space: nowrap; } }
 </style>
 </head>
 <body>
@@ -301,7 +324,7 @@ footer :focus-visible { outline-color: #fff; }
     </ul>
   </nav>
   <div class="hero-copy">
-    <h1 style="--i:0">DM a reel.<br>It installs.</h1>
+    <h1 style="--i:0">DM Claude a reel,<br>and it installs it.</h1>
     <p style="--i:1">Send a reel about a Claude skill, a GitHub repo or a security issue to a spare Instagram account. Your Mac watches it, asks you in the DM, and installs it when you reply yes.</p>
     <a class="btn" style="--i:2" href="#install">Install on your Mac</a>
   </div>
@@ -365,7 +388,12 @@ footer :focus-visible { outline-color: #fff; }
 
 <main>
 <section class="wrap" id="how">
-  <h2 class="rise">About a minute</h2>
+  <h2 class="rise">How it works</h2>
+  <div class="how-text">
+    <p class="rise">A small helper runs on your Mac. It keeps Instagram’s Messages page open in a hidden browser tab, signed in to a spare account that only you message. There is no server and no Instagram developer app.</p>
+    <p class="rise" style="--i:1">Share a reel with that account and the helper downloads it, reads the caption, a few frames and the speech, and asks Claude Code on your Mac what the reel points at. It finds the real source, checks the files and messages you back. Nothing is installed until you reply yes.</p>
+  </div>
+  <h3 class="rise how-sub">About a minute from your DM to “done”</h3>
   <div class="bar" data-ui role="img" aria-label="Where the minute goes: 4 seconds to notice the message, 10 to watch the reel, 25 to find the source, 2 to install">
     <div class="seg grow" style="--g:4;--i:0"><strong>4 seconds</strong><small>First it notices your DM. The Messages page stays open on your Mac.</small></div>
     <div class="seg grow" style="--g:10;--i:1"><strong>10 seconds</strong><small>Then it watches the reel: the caption, a few frames and the speech.</small></div>
@@ -445,27 +473,26 @@ Still open: 2. firecrawl, 3. playwright-mcp.</div>
   </div>
 </section>
 
-<section class="wrap install" id="install">
-  <div class="side">
-    <h2 class="rise">Install on a Mac</h2>
-    <p class="rise" style="--i:1">Setup checks what is missing and installs it with Homebrew. You sign in to the spare account yourself, in a normal browser window with its own empty profile.</p>
-    <ul class="rise" style="--i:2">
-      <li>macOS with Homebrew and Node 20 or newer</li>
-      <li>Claude Code, signed in</li>
-      <li>Brave, Chrome or Edge</li>
-      <li>A spare Instagram account you can afford to lose</li>
-    </ul>
+<section class="wrap setup" id="install">
+  <div class="setup-head">
+    <h2 class="rise">Set it up</h2>
+    <p class="rise" style="--i:1">About ten minutes, once. Every command is typed in Terminal.</p>
   </div>
-  <div class="code rise" style="--i:1">
-<pre><code>git clone https://github.com/MatijaMiki/reelstoclaude ~/.reelstoclaude
-cd ~/.reelstoclaude &amp;&amp; npm install &amp;&amp; npm link
-
-reelstoclaude setup                 <span class="c"># ffmpeg, yt-dlp, whisper, speech model</span>
-reelstoclaude login                 <span class="c"># sign in to the spare account</span>
-reelstoclaude owner your_username   <span class="c"># the only account it listens to</span>
-reelstoclaude start                 <span class="c"># background helper on</span></code></pre>
-    <p>Then DM the spare account a reel from your own account. “reelstoclaude stop” turns it off, “reelstoclaude usage” shows what each reel used.</p>
-  </div>
+  <ol class="steps">
+    <li class="rise" style="--i:0"><h3>Get the basics</h3><p>You need a Mac with Homebrew, Node 20 or newer, and Brave, Chrome or Edge. Claude Code must be installed and signed in: run <code>claude</code> once, then type <code>/login</code>.</p><pre><code>brew install node
+npm install -g @anthropic-ai/claude-code
+claude</code></pre></li>
+    <li class="rise" style="--i:1"><h3>Make a spare Instagram account</h3><p>Create a second account in the Instagram app. Do not use your main one: driving an account from a browser is against Instagram’s terms, and it can get locked.</p></li>
+    <li class="rise" style="--i:0"><h3>Download reelstoclaude</h3><p>This puts it in a folder in your home directory and adds the <code>reelstoclaude</code> command.</p><pre><code>git clone https://github.com/MatijaMiki/reelstoclaude ~/.reelstoclaude
+cd ~/.reelstoclaude &amp;&amp; npm install &amp;&amp; npm link</code></pre></li>
+    <li class="rise" style="--i:1"><h3>Run setup</h3><p>It installs ffmpeg, yt-dlp and whisper with Homebrew, downloads the speech model (about 148 MB) and ends with a checklist of what is ready.</p><pre><code>reelstoclaude setup</code></pre></li>
+    <li class="rise" style="--i:0"><h3>Sign in to the spare account</h3><p>A separate browser window opens with its own empty profile. Sign in to the spare account there. You type the password; reelstoclaude never sees it.</p><pre><code>reelstoclaude login</code></pre></li>
+    <li class="rise" style="--i:1"><h3>Start the chat</h3><p>From your own account, send the spare account any message. In that same window, open Messages, find it under Requests and accept it. Then quit that browser with Cmd+Q. Requests are ignored later, so this is needed once.</p></li>
+    <li class="rise" style="--i:0"><h3>Say which account is yours</h3><p>Give your own Instagram username. It is the only account reelstoclaude listens to. Then check that it can see your chat.</p><pre><code>reelstoclaude owner your_username
+reelstoclaude probe</code></pre></li>
+    <li class="rise" style="--i:1"><h3>Turn it on</h3><p>The helper now runs in the background and starts again when you log in. Share a reel with the spare account: “Got it, watching the reel…” should arrive within seconds.</p><pre><code>reelstoclaude start</code></pre></li>
+  </ol>
+  <p class="rise after">Later: <code>reelstoclaude stop</code> turns it off, <code>status</code> shows what is running, <code>usage</code> shows what each reel used and <code>doctor</code> re-runs the checklist. To remove it, stop it and delete <code>~/.reelstoclaude</code> and <code>~/Library/Application Support/reelstoclaude</code>.</p>
 </section>
 
 <section class="wrap faq" id="limits">
@@ -655,6 +682,30 @@ for (const d of questions) {
   addEventListener('resize', () => { size(); wake(); });
   draw(0);
 })();
+
+// The navigation gets a solid ground once the page has scrolled.
+const nav = document.querySelector('.nav');
+const onScroll = () => nav.classList.toggle('stuck', scrollY > 24);
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+// The questions block reserves room for its tallest answer, so opening or closing one never moves the page below it.
+const faqList = document.querySelector('.faq .list');
+function reserveFaq() {
+  const gap = parseFloat(getComputedStyle(faqList).rowGap) || 0;
+  let closed = 0, tallest = 0;
+  for (const d of questions) {
+    const wasOpen = d.open, sum = d.querySelector('summary');
+    d.getAnimations().forEach(a => a.cancel());
+    d.open = true;
+    tallest = Math.max(tallest, d.offsetHeight - sum.offsetHeight);
+    d.open = wasOpen;
+    closed += sum.offsetHeight;
+  }
+  faqList.style.minHeight = Math.ceil(closed + gap * (questions.length - 1) + tallest) + 'px';
+}
+reserveFaq();
+document.fonts && document.fonts.ready.then(reserveFaq);
+let faqTimer; addEventListener('resize', () => { clearTimeout(faqTimer); faqTimer = setTimeout(reserveFaq, 150); });
 
 // Entrances: each part of a section rises once, as it enters.
 const io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); } }, { rootMargin: '0px 0px -8% 0px' });
