@@ -543,7 +543,7 @@ Still open: 2. firecrawl, 3. playwright-mcp.</div>
       <li><a href="#install">Early access</a></li>
       <li><a href="#limits">Limits</a></li>
     </ul>
-    <p>Not affiliated with Instagram, Meta or Anthropic.</p>
+    <p>Not affiliated with Instagram, Meta or Anthropic. Visits are counted without cookies.</p>
   </div>
 </footer>
 
@@ -755,6 +755,16 @@ wl.addEventListener('submit', async e => {
     joinNote.textContent = 'Could not save that right now. Please try again in a minute.';
   }
 });
+
+// Counts the visit without cookies: the server keeps a hash that changes every day, never the address.
+if (location.protocol === 'https:' && !navigator.webdriver) {
+  let from = '';
+  try { from = document.referrer ? new URL(document.referrer).hostname : ''; } catch (err) {}
+  fetch('https://api.cenner.hr/api/v1/portal/page-visit', {
+    method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ page: 'reelstoclaude', referrer: from === location.hostname ? '' : from, source: new URLSearchParams(location.search).get('utm_source') || '' }),
+  }).catch(() => {});
+}
 
 // Entrances: each part of a section rises once, as it enters.
 const io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); } }, { rootMargin: '0px 0px -8% 0px' });
