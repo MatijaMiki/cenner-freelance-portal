@@ -59,7 +59,7 @@ const PROJECTS: Project[] = [
     bg: '#0c1015', fg: '#f4f5f7',
     palette: ['#0c1015', '#f2977c', '#f3d48a', '#8fe3b4', '#f4f5f7'] },
   { id: 'reelstoclaude', title: 'reelstoclaude', url: 'https://cenner.hr/reelstoclaude', badges: ['In active development', 'A Cenner project'], category: 'Our product · Developer tool',
-    desc: 'A small open-source Mac tool: send an Instagram reel about a Claude skill or a GitHub repo to a spare account, and your Mac works out what it shows, asks you in the DM and installs it when you reply yes.',
+    desc: 'A small Mac tool: send an Instagram reel about a Claude skill or a GitHub repo to a spare account, and your Mac works out what it shows, asks you in the DM and installs it when you reply yes.',
     bg: '#2f6df6', fg: '#ffffff',
     palette: ['#0a0a0a', '#2f7cf6', '#22c3c9', '#c8f560', '#ffd23f'] },
 ];
