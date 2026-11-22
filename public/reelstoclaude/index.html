@@ -4,19 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b0c0e">
-<title>reelstoclaude: DM a reel, your Mac installs what it shows</title>
-<meta name="description" content="Send a reel about a Claude skill, a GitHub repo or a security issue to a spare Instagram account. Your Mac watches it, asks you in the DM, and installs it when you reply yes.">
+<title>reelstoclaude: DM Claude Code a reel, it installs the skill</title>
+<meta name="description" content="Send an Instagram reel about a Claude Code skill or GitHub repo to a spare account. A Mac CLI works out what it shows and installs it when you reply yes. Join the waitlist.">
 <link rel="canonical" href="https://cenner.hr/reelstoclaude">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="reelstoclaude">
 <meta property="og:url" content="https://cenner.hr/reelstoclaude">
-<meta property="og:title" content="reelstoclaude: DM Claude a reel, and it installs it">
-<meta property="og:description" content="Send a reel about a Claude skill or a GitHub repo to a spare Instagram account. Your Mac asks you in the DM and installs it when you reply yes.">
+<meta property="og:title" content="reelstoclaude: DM Claude Code a reel, it installs the skill">
+<meta property="og:description" content="Send an Instagram reel about a Claude Code skill or GitHub repo to a spare account. A Mac CLI works out what it shows and installs it when you reply yes. Join the waitlist.">
 <meta property="og:image" content="https://cenner.hr/reelstoclaude/preview.jpg">
+<meta property="og:image:width" content="1440">
+<meta property="og:image:height" content="900">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="reelstoclaude: DM Claude Code a reel, it installs the skill">
+<meta name="twitter:description" content="Send an Instagram reel about a Claude Code skill or GitHub repo to a spare account. A Mac CLI works out what it shows and installs it when you reply yes. Join the waitlist.">
+<meta name="twitter:image" content="https://cenner.hr/reelstoclaude/preview.jpg">
 <link rel="icon" href="/reelstoclaude/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=chillax@400,500,600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareApplication", "@id": "https://cenner.hr/reelstoclaude#software", "name": "reelstoclaude", "description": "Send an Instagram reel about a Claude Code skill or GitHub repo to a spare account. A Mac CLI works out what it shows and installs it when you reply yes. Join the waitlist.", "url": "https://cenner.hr/reelstoclaude", "applicationCategory": "DeveloperApplication", "operatingSystem": "macOS", "softwareRequirements": "Homebrew, Node.js 20 or newer, Claude Code, a Chromium-family browser", "image": "https://cenner.hr/reelstoclaude/preview.jpg", "author": {"@type": "Organization", "name": "Cenner", "url": "https://cenner.hr"}}, {"@type": "FAQPage", "@id": "https://cenner.hr/reelstoclaude#questions", "mainEntity": [{"@type": "Question", "name": "Does Instagram allow this?", "acceptedAnswer": {"@type": "Answer", "text": "No. reelstoclaude drives a normal account in a browser, which is against Instagram’s terms, and that account can get locked. Use a spare one. If Instagram asks to confirm you are human, reelstoclaude stops and shows a Mac notification. It never tries to get past the check."}}, {"@type": "Question", "name": "Does it run code from a reel?", "acceptedAnswer": {"@type": "Answer", "text": "No. A skill is copied in as files and a repo is downloaded; nothing from either is run. Before you say yes, the reply tells you how many scripts a skill contains."}}, {"@type": "Question", "name": "Who can send it reels?", "acceptedAnswer": {"@type": "Answer", "text": "Only you. It reads one chat, the one with your own account, and ignores message requests, follow requests and every other chat."}}, {"@type": "Question", "name": "What leaves my Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Speech is turned into text on your Mac. The caption, the transcript and a few frames go to Claude through your own Claude Code sign-in. There is no reelstoclaude server."}}, {"@type": "Question", "name": "What does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "Early access is free. Each reel uses a little of your Claude plan: about two cents of API-equivalent usage on Haiku in our tests, less for a funny reel. Waiting for messages uses none. A paid plan may come later; no price is set."}}, {"@type": "Question", "name": "How heavy is it?", "acceptedAnswer": {"@type": "Answer", "text": "It keeps one hidden browser tab open on the Messages page so it can answer within seconds. On our Mac that is about 1 GB of memory."}}, {"@type": "Question", "name": "Windows or Linux?", "acceptedAnswer": {"@type": "Answer", "text": "Not yet. It is built for macOS: Homebrew for the tools and a login item for the background helper."}}]}]}</script>
 <script>document.documentElement.classList.add('js')</script>
 <style>
 @font-face { font-family: 'Press Start 2P'; src: url(/reelstoclaude/fonts/press-start-2p.woff2) format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
@@ -165,7 +173,7 @@ section { scroll-margin-top: 40px; }
 /* ---------- try a reply: the live thing ---------- */
 .try h2 { font-size: var(--step-head); line-height: 1.25; }
 .try input, .try h2 button { font: inherit; letter-spacing: inherit; border: 0; height: 1.12em; line-height: 1; vertical-align: baseline; padding: 0 0.3em; }
-.try input { width: 7.6em; max-width: 100%; background: var(--surface); color: var(--ink); border-radius: 0.28em 0.28em 0.28em 0.07em; }
+.try input { width: 10.4em; max-width: 100%; background: var(--surface); color: var(--ink); border-radius: 0.28em 0.28em 0.28em 0.07em; }
 .try input::placeholder { color: var(--muted); }
 .try h2 button { background: linear-gradient(to top right, var(--g1) 0%, var(--g2) 55%, var(--g3) 100%); --g1: #1a2fd0; --g2: #2f7cf6; --g3: #22c3c9; color: #fff; cursor: pointer; border-radius: 0.28em 0.28em 0.07em 0.28em; transition: transform 0.18s var(--ease), --g1 0.35s, --g2 0.35s, --g3 0.35s; }
 .try h2 button:hover { --g1: #ffffff; --g2: #f4f5f7; --g3: #dfe3e8; color: var(--on-light); transform: translateY(-3px); }
@@ -180,6 +188,23 @@ section { scroll-margin-top: 40px; }
 .chips button { font: inherit; font-size: var(--step-small); border: 0; cursor: pointer; background: var(--surface); color: var(--ink); padding: 0.45em 0.9em; border-radius: var(--bubble); transition: transform 0.18s var(--ease), background-color 0.18s, color 0.18s; }
 .chips button:hover { background: var(--ink); color: var(--on-light); transform: translateY(-2px); }
 
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* ---------- early access ---------- */
+.join { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 44px; }
+.join input { flex: 1 1 320px; max-width: 560px; min-width: 0; font: inherit; font-size: var(--step-lead); padding: 0.7em 1em; border: 0; background: var(--surface); color: var(--ink); border-radius: var(--bubble); }
+.join input::placeholder { color: var(--muted); }
+.join .btn { font-size: var(--step-lead); }
+.join .btn:disabled { opacity: 0.6; cursor: default; transform: none; }
+.join-note { flex-basis: 100%; color: var(--muted); transition: color 0.3s var(--ease); }
+.join.done .join-note { color: #c8f560; }
+.join.bad .join-note { color: #ffd23f; }
+.needs { list-style: none; padding: 0; margin-top: 56px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.needs li { min-width: 0; background: var(--surface); border-radius: 28px 28px 28px 6px; padding: clamp(20px, 2vw, 28px); }
+.needs li::before { content: ""; display: block; width: 1.5em; height: 1.1em; margin-bottom: 18px; background: var(--warm); border-radius: 0.5em 0.5em 0.5em 0.1em; }
+.needs li:nth-child(2)::before { background: var(--fresh); }
+.needs li:nth-child(3)::before { background: var(--sun); }
+.needs h3 { font-size: var(--step-lead); }
+.needs p { margin-top: 0.45em; }
 /* ---------- set it up ---------- */
 .setup-head { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; align-items: end; }
 .setup-head h2 { grid-column: 1 / 7; }
@@ -191,8 +216,8 @@ section { scroll-margin-top: 40px; }
 .steps li:nth-child(3n)::before { background: var(--sun); color: var(--on-light); }
 .steps h3 { font-size: var(--step-lead); }
 .steps p { margin-top: 0.45em; max-width: 52ch; }
-.steps pre { margin-top: 16px; padding: 14px 18px; background: var(--bg); border-radius: 16px 16px 16px 4px; line-height: 1.75; }
-.setup code, .steps p code { font: 0.9em ui-monospace, SFMono-Regular, Menlo, monospace; }
+.steps pre { margin-top: 16px; padding: 16px 20px; background: var(--bg); border-radius: 16px 16px 16px 4px; font-size: 1.0625rem; line-height: 1.8; }
+.setup code, .steps p code { font: 0.95em ui-monospace, SFMono-Regular, Menlo, monospace; }
 .steps p code, .setup .after code { background: var(--bg); padding: 0.1em 0.4em; border-radius: 0.4em; }
 .setup .after code { background: var(--surface); }
 .setup .after { margin-top: 28px; max-width: 76ch; color: var(--muted); }
@@ -299,9 +324,11 @@ footer :focus-visible { outline-color: #fff; }
   .t-f, .t-g { grid-column: 1 / 3; grid-row: auto / span 2; }
   .t-b, .t-c, .t-d, .t-e { grid-column: auto; grid-row: auto / span 3; }
   .tile { padding: 14px; }
-  .try h2 { font-size: min(10vw, 4rem); } .try input { width: 100%; display: block; margin: 0.12em 0; }
+  .try h2 { font-size: min(10vw, 4rem); } .try input { width: 100% !important; display: block; margin: 0.12em 0; }
   .try-out, .install, .faq { display: block; }
   .how-text, .steps { grid-template-columns: 1fr; }
+  .needs { grid-template-columns: 1fr 1fr; }
+  .steps pre { font-size: 0.9375rem; }
   .setup-head { display: block; } .setup-head p { margin-top: 14px; }
   .try-out .answer { margin-top: 20px; font-size: 1.125rem; }
   .install .code { margin-top: 32px; }
@@ -320,13 +347,13 @@ footer :focus-visible { outline-color: #fff; }
     <ul>
       <li><a href="#how">How it works</a></li>
       <li><a href="#limits">Limits</a></li>
-      <li><a href="#install">Install</a></li>
+      <li><a href="#install">Early access</a></li>
     </ul>
   </nav>
   <div class="hero-copy">
     <h1 style="--i:0">DM Claude a reel,<br>and it installs it.</h1>
-    <p style="--i:1">Send a reel about a Claude skill, a GitHub repo or a security issue to a spare Instagram account. Your Mac watches it, asks you in the DM, and installs it when you reply yes.</p>
-    <a class="btn" style="--i:2" href="#install">Install on your Mac</a>
+    <p style="--i:1">Send an Instagram reel about a Claude Code skill, a GitHub repo or a security issue to a spare account. Your Mac watches it, asks you in the DM, and installs it when you reply yes.</p>
+    <a class="btn" style="--i:2" href="#install">Get early access</a>
   </div>
   <div class="stage">
   <div class="shape" aria-hidden="true">
@@ -413,7 +440,7 @@ footer :focus-visible { outline-color: #fff; }
     <div class="tile t-h rise" style="--i:1"><h2>What it handles</h2></div>
     <article data-ui class="tile red t-a rise">
       <div class="zoom" aria-hidden="true"><span class="msg out">yes</span><span class="msg in" style="color:#0a0a0a">Done on MacBook.</span></div>
-      <h3>Claude skills</h3>
+      <h3>Claude Code skills</h3>
       <p>Copied into ~/.claude/skills when you say yes. Nothing from the skill is run.</p>
     </article>
     <article data-ui class="tile t-b rise" style="--i:2">
@@ -473,36 +500,33 @@ Still open: 2. firecrawl, 3. playwright-mcp.</div>
   </div>
 </section>
 
-<section class="wrap setup" id="install">
+<section class="wrap access" id="install">
   <div class="setup-head">
-    <h2 class="rise">Set it up</h2>
-    <p class="rise" style="--i:1">About ten minutes, once. Every command is typed in Terminal.</p>
+    <h2 class="rise">Get early access</h2>
+    <p class="rise" style="--i:1">reelstoclaude is in private testing. Leave your email and you get the download and the setup guide when it opens.</p>
   </div>
-  <ol class="steps">
-    <li class="rise" style="--i:0"><h3>Get the basics</h3><p>You need a Mac with Homebrew, Node 20 or newer, and Brave, Chrome or Edge. Claude Code must be installed and signed in: run <code>claude</code> once, then type <code>/login</code>.</p><pre><code>brew install node
-npm install -g @anthropic-ai/claude-code
-claude</code></pre></li>
-    <li class="rise" style="--i:1"><h3>Make a spare Instagram account</h3><p>Create a second account in the Instagram app. Do not use your main one: driving an account from a browser is against Instagram’s terms, and it can get locked.</p></li>
-    <li class="rise" style="--i:0"><h3>Download reelstoclaude</h3><p>This puts it in a folder in your home directory and adds the <code>reelstoclaude</code> command.</p><pre><code>git clone https://github.com/MatijaMiki/reelstoclaude ~/.reelstoclaude
-cd ~/.reelstoclaude &amp;&amp; npm install &amp;&amp; npm link</code></pre></li>
-    <li class="rise" style="--i:1"><h3>Run setup</h3><p>It installs ffmpeg, yt-dlp and whisper with Homebrew, downloads the speech model (about 148 MB) and ends with a checklist of what is ready.</p><pre><code>reelstoclaude setup</code></pre></li>
-    <li class="rise" style="--i:0"><h3>Sign in to the spare account</h3><p>A separate browser window opens with its own empty profile. Sign in to the spare account there. You type the password; reelstoclaude never sees it.</p><pre><code>reelstoclaude login</code></pre></li>
-    <li class="rise" style="--i:1"><h3>Start the chat</h3><p>From your own account, send the spare account any message. In that same window, open Messages, find it under Requests and accept it. Then quit that browser with Cmd+Q. Requests are ignored later, so this is needed once.</p></li>
-    <li class="rise" style="--i:0"><h3>Say which account is yours</h3><p>Give your own Instagram username. It is the only account reelstoclaude listens to. Then check that it can see your chat.</p><pre><code>reelstoclaude owner your_username
-reelstoclaude probe</code></pre></li>
-    <li class="rise" style="--i:1"><h3>Turn it on</h3><p>The helper now runs in the background and starts again when you log in. Share a reel with the spare account: “Got it, watching the reel…” should arrive within seconds.</p><pre><code>reelstoclaude start</code></pre></li>
-  </ol>
-  <p class="rise after">Later: <code>reelstoclaude stop</code> turns it off, <code>status</code> shows what is running, <code>usage</code> shows what each reel used and <code>doctor</code> re-runs the checklist. To remove it, stop it and delete <code>~/.reelstoclaude</code> and <code>~/Library/Application Support/reelstoclaude</code>.</p>
+  <form id="waitlist" class="join rise" novalidate>
+    <label class="sr" for="email">Your email</label>
+    <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+    <button type="submit" class="btn">Join the waitlist</button>
+    <p class="join-note" id="join-note" aria-live="polite">One email when it is ready. You can unsubscribe from it.</p>
+  </form>
+  <ul class="needs">
+    <li class="rise"><h3>A Mac</h3><p>macOS with Homebrew and Node 20 or newer. Windows and Linux are not supported yet.</p></li>
+    <li class="rise" style="--i:1"><h3>Claude Code</h3><p>Installed and signed in. Each reel uses a little of your own Claude plan.</p></li>
+    <li class="rise" style="--i:2"><h3>A spare Instagram account</h3><p>Not your main one. Driving an account from a browser is against Instagram’s terms, and it can get locked.</p></li>
+    <li class="rise" style="--i:3"><h3>Ten minutes</h3><p>Setup is eight short steps in Terminal: install, sign in to the spare account, say which account is yours, turn it on.</p></li>
+  </ul>
 </section>
 
 <section class="wrap faq" id="limits">
-  <h2 class="rise">Read this first</h2>
+  <h2 class="rise">Questions before you install</h2>
   <div class="list">
     <details class="rise" open><summary>Does Instagram allow this?<i></i></summary><p>No. reelstoclaude drives a normal account in a browser, which is against Instagram’s terms, and that account can get locked. Use a spare one. If Instagram asks to confirm you are human, reelstoclaude stops and shows a Mac notification. It never tries to get past the check.</p></details>
     <details class="rise" style="--i:1"><summary>Does it run code from a reel?<i></i></summary><p>No. A skill is copied in as files and a repo is downloaded; nothing from either is run. Before you say yes, the reply tells you how many scripts a skill contains.</p></details>
     <details class="rise" style="--i:2"><summary>Who can send it reels?<i></i></summary><p>Only you. It reads one chat, the one with your own account, and ignores message requests, follow requests and every other chat.</p></details>
     <details class="rise" style="--i:3"><summary>What leaves my Mac?<i></i></summary><p>Speech is turned into text on your Mac. The caption, the transcript and a few frames go to Claude through your own Claude Code sign-in. There is no reelstoclaude server.</p></details>
-    <details class="rise" style="--i:4"><summary>What does it cost?<i></i></summary><p>The tool is free. Each reel uses a little of your Claude plan: about two cents of API-equivalent usage on Haiku in our tests, less for a funny reel. Waiting for messages uses none.</p></details>
+    <details class="rise" style="--i:4"><summary>What does it cost?<i></i></summary><p>Early access is free. Each reel uses a little of your Claude plan: about two cents of API-equivalent usage on Haiku in our tests, less for a funny reel. Waiting for messages uses none. A paid plan may come later; no price is set.</p></details>
     <details class="rise" style="--i:5"><summary>How heavy is it?<i></i></summary><p>It keeps one hidden browser tab open on the Messages page so it can answer within seconds. On our Mac that is about 1 GB of memory.</p></details>
     <details class="rise" style="--i:6"><summary>Windows or Linux?<i></i></summary><p>Not yet. It is built for macOS: Homebrew for the tools and a login item for the background helper.</p></details>
   </div>
@@ -516,9 +540,8 @@ reelstoclaude probe</code></pre></li>
     <ul>
       <li><a href="#how">How it works</a></li>
       <li><a href="#try">Try a reply</a></li>
-      <li><a href="#install">Install</a></li>
+      <li><a href="#install">Early access</a></li>
       <li><a href="#limits">Limits</a></li>
-      <li><a href="https://github.com/MatijaMiki/reelstoclaude">Source on GitHub</a></li>
     </ul>
     <p>Not affiliated with Instagram, Meta or Anthropic.</p>
   </div>
@@ -563,13 +586,19 @@ function botReply(text) {
   return `${a.yes.length ? 'Done on MacBook.' : 'OK.'}\n${lines.join('\n')}${left.length ? `\nStill open: ${listing(left)}.` : ''}`;
 }
 const form = document.getElementById('reply'), say = document.getElementById('say'), answer = document.getElementById('answer');
+// The box is as wide as its text.
+const sizer = document.createElement('span');
+sizer.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;white-space:pre';
+say.parentElement.append(sizer);
+const fitBox = () => { sizer.textContent = say.value || say.placeholder; say.style.width = `calc(${Math.ceil(sizer.getBoundingClientRect().width)}px + 0.75em)`; };
+say.addEventListener('input', fitBox); fitBox(); document.fonts && document.fonts.ready.then(fitBox); addEventListener('resize', fitBox);
 function send(text) {
   text = text.trim(); if (!text) return;
   answer.textContent = '';
   for (const [cls, body] of [['out', text], ['in', botReply(text)]]) { const d = document.createElement('div'); d.className = 'msg ' + cls; d.textContent = body; answer.append(d); }
 }
 form.addEventListener('submit', e => { e.preventDefault(); send(say.value); });
-for (const b of document.querySelectorAll('.chips button')) b.addEventListener('click', () => { say.value = b.textContent; send(b.textContent); });
+for (const b of document.querySelectorAll('.chips button')) b.addEventListener('click', () => { say.value = b.textContent; fitBox(); send(b.textContent); });
 
 // Example chats: hovering, focusing or tapping a name swaps the conversation.
 const dm = document.querySelector('.dm');
@@ -706,6 +735,26 @@ function reserveFaq() {
 reserveFaq();
 document.fonts && document.fonts.ready.then(reserveFaq);
 let faqTimer; addEventListener('resize', () => { clearTimeout(faqTimer); faqTimer = setTimeout(reserveFaq, 150); });
+
+// Waitlist: saves the email to the Cenner backend's launch list.
+const wl = document.getElementById('waitlist'), joinNote = document.getElementById('join-note');
+wl.addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = wl.email.value.trim(), btn = wl.querySelector('button');
+  wl.classList.remove('done', 'bad');
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { wl.classList.add('bad'); joinNote.textContent = 'That email does not look right.'; wl.email.focus(); return; }
+  btn.disabled = true; joinNote.textContent = 'Saving…';
+  try {
+    const r = await fetch('https://api.cenner.hr/api/v1/portal/notify-launch', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email, feature: 'reelstoclaude' }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.success) throw new Error(j.error || String(r.status));
+    wl.classList.add('done');
+    joinNote.textContent = j.alreadySignedUp ? 'You are already on the list. We will email you when it opens.' : 'You are on the list. We will email you when it opens.';
+  } catch (err) {
+    wl.classList.add('bad'); btn.disabled = false;
+    joinNote.textContent = 'Could not save that right now. Please try again in a minute.';
+  }
+});
 
 // Entrances: each part of a section rises once, as it enters.
 const io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); } }, { rootMargin: '0px 0px -8% 0px' });
