@@ -287,6 +287,15 @@ const ROUTES = [
     description:
       'Cjenik usluga koje naplaćuje Cenner (planovi, naknade, izrada web stranica, ranwhat, Stenvakt) s baznom cijenom uz svaku cijenu, te strojno čitljivi cjenik u .csv obliku.',
   },
+  {
+    // The Google Ads landing page (pages/WebStraniceOffer.tsx). Without a shell here the path falls
+    // through to api/render's 404, and Google Ads disapproves a landing page that answers 404.
+    path: '/izrada-web-stranica',
+    noIndex: true, // ads only; /usluge/izrada-web-stranica is the page that ranks
+    title: 'Izrada web stranica · cijene od 500 € | Cenner',
+    description:
+      'Izrada web stranica po fiksnoj cijeni: WordPress, jednostavne stranice, web trgovine i dizajn po mjeri. Zatražite ponudu, odgovaramo s opsegom i cijenom.',
+  },
   ...blogPostRoutes(),
 ];
 
