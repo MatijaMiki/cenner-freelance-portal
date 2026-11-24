@@ -159,9 +159,10 @@ const ODRZAVANJE: AdLandingConfig = {
     { ...W.statsnest, what: 'Aplikacija na vlastitom serveru' },
   ],
   faq: [
+    // Yes (owner, 2026-11-24). Say only that we take them on, never that we already look after others' sites.
+    { q: 'Održavate li stranice koje niste vi izradili?', a: 'Da. Svejedno je tko je stranicu izradio. Prvo je pregledamo i kažemo što treba, a cijenu dobijete prije početka.' },
     { q: 'Koliko košta mjesečno?', a: 'Kreće {price:studio-odrzavanje}, ovisno o veličini stranice. Točan iznos piše u ponudi, prije početka.' },
-    { q: 'Što ako ažuriranje pokvari stranicu?', a: 'Popravak je dio održavanja, a redovite sigurnosne kopije znače da se stranica uvijek može vratiti.' },
-    { q: 'Mogu li tražiti izmjene sadržaja?', a: 'Da. Sitne izmjene sadržaja, poput teksta, slika ili cijena, dio su održavanja.' },
+    { q: 'Što ako ažuriranje pokvari stranicu?', a: 'Popravak je dio održavanja, a redovite sigurnosne kopije znače da se stranica uvijek može vratiti. Sitne izmjene sadržaja, poput teksta, slika ili cijena, također su uključene.' },
     { q: 'A brzina i Google?', a: 'Za to je jednokratna provjera SEO-a i AI vidljivosti ({price:studio-seo-provjera}): dobijete pisani popis popravaka, najvažnije prvo.' },
   ],
   closing: 'Pošaljite adresu stranice. Javimo se s cijenom.',
