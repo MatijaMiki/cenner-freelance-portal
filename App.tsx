@@ -35,7 +35,11 @@ const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Cookies = lazy(() => import('./pages/Cookies'));
 const Cjenik = lazy(() => import('./pages/Cjenik'));
 const PriceGuide = lazy(() => import('./pages/PriceGuide'));
-const WebStraniceOffer = lazy(() => import('./pages/WebStraniceOffer'));
+// Google Ads landing pages (pages/AdPages.tsx), one file, one chunk
+const AdWebStranice = lazy(() => import('./pages/AdPages').then(m => ({ default: m.WebStranice })));
+const AdWebShop = lazy(() => import('./pages/AdPages').then(m => ({ default: m.WebShop })));
+const AdAplikacije = lazy(() => import('./pages/AdPages').then(m => ({ default: m.Aplikacije })));
+const AdOdrzavanje = lazy(() => import('./pages/AdPages').then(m => ({ default: m.Odrzavanje })));
 const FreelancerProfile = lazy(() => import('./pages/FreelancerProfile'));
 const Orders = lazy(() => import('./pages/Orders'));
 const Inbox = lazy(() => import('./pages/Inbox'));
@@ -102,7 +106,10 @@ const App: React.FC = () => {
                   <Route path="/cookies" element={<Cookies />} />
                   <Route path="/cjenik" element={<Cjenik />} />
                   <Route path="/vodic/cijena-web-stranice" element={<PriceGuide />} />
-                  <Route path="/izrada-web-stranica" element={<WebStraniceOffer />} />
+                  <Route path="/izrada-web-stranica" element={<AdWebStranice />} />
+                  <Route path="/izrada-web-shopa" element={<AdWebShop />} />
+                  <Route path="/izrada-aplikacija" element={<AdAplikacije />} />
+                  <Route path="/odrzavanje-web-stranica" element={<AdOdrzavanje />} />
                   <Route path="/freelancer/:id" element={<FreelancerProfile />} />
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/messages" element={<Inbox />} />

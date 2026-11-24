@@ -288,13 +288,34 @@ const ROUTES = [
       'Cjenik usluga koje naplaćuje Cenner (planovi, naknade, izrada web stranica, ranwhat, Stenvakt) s baznom cijenom uz svaku cijenu, te strojno čitljivi cjenik u .csv obliku.',
   },
   {
-    // The Google Ads landing page (pages/WebStraniceOffer.tsx). Without a shell here the path falls
+    // The Google Ads landing pages (pages/AdPages.tsx). Without a shell here the path falls
     // through to api/render's 404, and Google Ads disapproves a landing page that answers 404.
     path: '/izrada-web-stranica',
     noIndex: true, // ads only; /usluge/izrada-web-stranica is the page that ranks
     title: 'Izrada web stranica · cijene od 500 € | Cenner',
     description:
       'Izrada web stranica po fiksnoj cijeni: WordPress, jednostavne stranice, web trgovine i dizajn po mjeri. Zatražite ponudu, odgovaramo s opsegom i cijenom.',
+  },
+  {
+    path: '/izrada-web-shopa', // Google Ads landing page (pages/AdPages.tsx)
+    noIndex: true,
+    title: 'Izrada web shopa · WooCommerce od 900 € | Cenner',
+    description:
+      'Izrada web shopa po fiksnoj cijeni: WooCommerce trgovina s plaćanjem karticom, dostavom i obukom. Zatražite ponudu, odgovaramo s opsegom i cijenom.',
+  },
+  {
+    path: '/izrada-aplikacija', // Google Ads landing page (pages/AdPages.tsx)
+    noIndex: true,
+    title: 'Izrada aplikacija · web, mobilne i desktop | Cenner',
+    description:
+      'Izrada web, mobilnih i desktop aplikacija te CRM sustava po fiksnoj cijeni. Od prve verzije do objave. Zatražite ponudu, odgovaramo s opsegom i cijenom.',
+  },
+  {
+    path: '/odrzavanje-web-stranica', // Google Ads landing page (pages/AdPages.tsx)
+    noIndex: true,
+    title: 'Održavanje web stranica · od 50 € mjesečno | Cenner',
+    description:
+      'Održavanje web stranica i WordPressa: ažuriranja, sigurnosne kopije, sigurnosne provjere i sitne izmjene, od 50 € mjesečno. Zatražite ponudu.',
   },
   ...blogPostRoutes(),
 ];
