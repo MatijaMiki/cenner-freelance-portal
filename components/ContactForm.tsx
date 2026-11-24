@@ -12,8 +12,8 @@ const TURNSTILE_SITE_KEY = (import.meta as any).env?.VITE_TURNSTILE_SITE_KEY as 
  * homepage's look: paper fields with ink borders. `subjects` are the choices offered; `subject`
  * sets the chosen one from outside (a service's "Request a quote" picks its own).
  */
-const ContactForm: React.FC<{ subjects: string[]; pick?: { index: number; n: number }; idPrefix: string; messagePlaceholder?: string }> = ({
-  subjects, pick, idPrefix, messagePlaceholder,
+const ContactForm: React.FC<{ subjects: string[]; pick?: { index: number; n: number }; idPrefix: string; messagePlaceholder?: string; leadSource?: string }> = ({
+  subjects, pick, idPrefix, messagePlaceholder, leadSource,
 }) => {
   const t = useT();
   const [name, setName] = useState('');
@@ -73,7 +73,8 @@ const ContactForm: React.FC<{ subjects: string[]; pick?: { index: number; n: num
       await API.contact({ name: name.trim(), email: email.trim(), subject: subjects[idx] ?? subjects[0], message: message.trim(), ...(token ? { turnstileToken: token } : {}) });
       setStatus('sent');
       // the Services quote request (#upit) is the lead the ads pay for; About's #kontakt is general contact
-      trackLead(idPrefix === 'upit' ? 'services_quote' : 'contact_form');
+      // (an ad landing page passes its own leadSource, so GA4 shows which page the lead came from)
+      trackLead(leadSource || (idPrefix === 'upit' ? 'services_quote' : 'contact_form'));
       setName(''); setEmail(''); setMessage('');
       resetCaptcha();
     } catch (err: any) {
