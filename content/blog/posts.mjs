@@ -320,7 +320,7 @@ To su rasponi, ne cjenik: tvoja cijena ovisi o stvarima iz sljedećeg odjeljka. 
 
 ## Lokalni SEO: trebaš li stručnjaka iz svog grada?
 
-Ne nužno. SEO se radi na daljinu, pa za SEO optimizaciju u Zagrebu, Splitu, Sisku ili Poreču ne trebaš nekoga iz istog grada, nego nekoga tko zna raditi lokalni SEO: Google Business profil, točne i ujednačene podatke o firmi (naziv, adresa, telefon), recenzije, lokalne ključne riječi i stranice po lokacijama kad imaju smisla. U manjim mjestima konkurencija je obično slabija, pa se pomaci mogu vidjeti brže.
+Ne nužno. SEO se radi na daljinu, pa za SEO optimizaciju u Zagrebu, Splitu, Sisku ili Poreču ne trebaš nekoga iz istog grada, nego nekoga tko zna raditi lokalni SEO: Google Business profil, točne i ujednačene podatke o firmi (naziv, adresa, telefon), recenzije, lokalne ključne riječi i stranice po lokacijama kad imaju smisla. U manjim mjestima konkurencija je obično slabija, pa se pomaci mogu vidjeti brže. Kako to izgleda po regijama opisali smo za [Zagreb](/usluge/seo-optimizacija-zagreb), [Split i Dalmaciju](/usluge/seo-optimizacija-split-dalmacija), [Istru](/usluge/seo-optimizacija-istra), [Rijeku i Kvarner](/usluge/seo-optimizacija-rijeka-kvarner), [Osijek i Slavoniju](/usluge/seo-optimizacija-osijek-slavonija) te [Sisak, Bjelovar i Koprivnicu](/usluge/seo-optimizacija-sredisnja-hrvatska).
 
 ## Kako odabrati SEO stručnjaka, konzultanta ili agenciju
 
