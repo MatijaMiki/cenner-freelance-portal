@@ -13,13 +13,11 @@ import { useT } from '../i18n';
 // icons: the pixel set (components/PixelIcon), drawn on the same grid as the pixel lettering
 export interface NavItem { label: string; path: string; icon: PixelIcon; desc?: string }
 
+// Croatian (the default, at the root) and English (/en) only: the other languages had no
+// translation and only ever showed the English text.
 export const LANGUAGES = [
-  { code: 'EN', flag: '🇬🇧', name: 'English' },
   { code: 'HR', flag: '🇭🇷', name: 'Hrvatski' },
-  { code: 'DE', flag: '🇩🇪', name: 'Deutsch' },
-  { code: 'FR', flag: '🇫🇷', name: 'Français' },
-  { code: 'ES', flag: '🇪🇸', name: 'Español' },
-  { code: 'IT', flag: '🇮🇹', name: 'Italiano' },
+  { code: 'EN', flag: '🇬🇧', name: 'English' },
 ];
 
 export function useSiteNav() {

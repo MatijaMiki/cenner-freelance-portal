@@ -3,7 +3,9 @@
  * it out the same way: title, summary, canonical, date, body, related links. Links always leave
  * here absolute and point at the HTML page, never at its .md twin.
  */
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { SITE_URL } from './routes.mjs';
+import { isTranslated, localizedPath } from '../langRoutes.mjs';
 import { translate } from '../../i18n';
 
 export interface MdLink {
@@ -43,13 +45,29 @@ export interface PageModule {
   list?: () => MdEntry[] | Promise<MdEntry[]>;
 }
 
-/** The page copy the visitor sees on cenner.hr (Croatian is the site's default language). */
-export const t = (key: string): string => translate(key, 'HR');
+/**
+ * The language a markdown page is rendered in: Croatian by default, English for /en URLs of the
+ * pages lib/langRoutes.mjs lists as translated. Held per request (AsyncLocalStorage), because one
+ * function instance can serve several requests at once.
+ */
+const langStore = new AsyncLocalStorage<'HR' | 'EN'>();
+export const mdLang = (): 'HR' | 'EN' => langStore.getStore() || 'HR';
+export const withLang = <T>(lang: 'HR' | 'EN', fn: () => T): T => langStore.run(lang, fn);
+
+/** The page copy the visitor sees on cenner.hr, in the language of the page being rendered. */
+export const t = (key: string): string => translate(key, mdLang());
 
 /** "/about" -> "https://cenner.hr/about"; absolute, mailto: and tel: pass through. */
 export function abs(href: string): string {
   if (/^(https?:|mailto:|tel:)/i.test(href)) return href;
-  if (href.startsWith('/')) return `${SITE_URL}${href}`;
+  if (href.startsWith('/')) {
+    // In an English page, links to pages that have an English version stay in English.
+    if (mdLang() === 'EN') {
+      const [pathPart, rest = ''] = href.split(/(?=[#?])/);
+      if (isTranslated(pathPart)) return `${SITE_URL}${localizedPath(pathPart, 'EN')}${rest}`;
+    }
+    return `${SITE_URL}${href}`;
+  }
   return `${SITE_URL}/${href.replace(/^\.?\//, '')}`;
 }
 

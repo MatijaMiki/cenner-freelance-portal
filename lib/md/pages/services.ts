@@ -6,7 +6,7 @@
 import { COMPANY } from '../../company';
 import { STUDIO_SERVICES as SERVICES, STUDIO_TOOLS as TOOLS, studioPrice } from '../../studioServices';
 import { baseLabel, eurAmount, formatPrice } from '../../../components/AnchorPrice';
-import { blocks, h2, h3, link, list, t, type PageModule } from '../format';
+import { blocks, h2, h3, link, list, mdLang, t, type PageModule } from '../format';
 
 /** In the order the page shows them (sorted by colour, warm to cool). */
 const PROJECTS: { title: string; url: string; internal?: string; internalLabel?: string; badges?: string[]; category: string; desc: string }[] = [
@@ -50,7 +50,7 @@ function price(id: string, note?: string): string {
   if (!it) return `${t('Price')}: ${t('On request')}`;
   const label = it.unit === 'fixed' ? t('Price') : t('Starting at');
   const amount = `${eurAmount(it.price)}${it.unit === 'from-month' ? ` / ${t('mo')}` : ''}${note ? ` ${t(note)}` : ''}`;
-  return `${label}: ${amount} (${baseLabel(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)})`;
+  return `${label}: ${amount} (${baseLabel(it.anchor.date, mdLang())}: ${formatPrice(it.anchor.price, it.unit, t)})`;
 }
 
 export const render: PageModule['render'] = () => ({

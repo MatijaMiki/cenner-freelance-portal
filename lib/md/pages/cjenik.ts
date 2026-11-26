@@ -1,7 +1,7 @@
 /** /cjenik (Cenner's own price list) as markdown. Keep in step with pages/Cjenik.tsx. */
 import { currentList, hrDate } from '../../cjenik.js';
 import { baseLabel, formatPrice } from '../../../components/AnchorPrice';
-import { blocks, day, h2, h3, link, list, t, table, type PageModule } from '../format';
+import { blocks, day, h2, h3, link, list, mdLang, t, table, type PageModule } from '../format';
 
 export const render: PageModule['render'] = () => {
   const current = currentList();
@@ -22,7 +22,7 @@ export const render: PageModule['render'] = () => {
         current.items.map((it) => [
           it.name,
           formatPrice(it.price, it.unit, t) + (it.special ? ' (posebni oblik prodaje)' : ''),
-          `${baseLabel(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)}`,
+          `${baseLabel(it.anchor.date, mdLang())}: ${formatPrice(it.anchor.price, it.unit, t)}`,
         ]),
       ),
       'Provizija se odbija od isplate freelanceru; naknadu za uslugu plaća kupac pri plaćanju. Cijene usluga koje nude freelanceri na Cenneru određuju sami freelanceri i nisu dio ovog cjenika.',

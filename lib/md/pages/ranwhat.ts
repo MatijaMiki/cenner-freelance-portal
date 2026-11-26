@@ -2,7 +2,7 @@
 import { COMPANY, companyAddress } from '../../company';
 import { priceItem } from '../../cjenik.js';
 import { baseLabel, formatPrice } from '../../../components/AnchorPrice';
-import { blocks, h2, h3, link, list, t, type PageModule } from '../format';
+import { blocks, h2, h3, link, list, mdLang, t, type PageModule } from '../format';
 
 const RW = 'https://ranwhat.com';
 
@@ -12,7 +12,7 @@ const PLUS_YEAR = priceItem('ranwhat-plus-year').price;
 /** The "bazna cijena" line AnchorPrice shows under a price ("Bazna cijena (4. 10. 2026.): €12 / mj. · €120 / god."). */
 function anchorLine(ids: string[]): string {
   const items = ids.map((id) => priceItem(id));
-  return `${baseLabel(items[0].anchor.date, 'HR')}: ${items.map((it) => formatPrice(it.anchor.price, it.unit, t)).join(' · ')}`;
+  return `${baseLabel(items[0].anchor.date, mdLang())}: ${items.map((it) => formatPrice(it.anchor.price, it.unit, t)).join(' · ')}`;
 }
 
 const PLANS: { name: string; price: string; body: string; anchor?: string[] }[] = [

@@ -8,7 +8,9 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { matchMdRoute, SITE_URL } from './routes.mjs';
 import { RENDERERS, renderMarkdownPath } from './registry';
-import { abs, notFoundPage, renderPage } from './format';
+import { abs, notFoundPage, renderPage, withLang } from './format';
+import { isTranslated, localizedPath, splitLangPath } from '../langRoutes.mjs';
+import { AI_SUMMARIES_EN } from './summaries.mjs';
 import { send, type CacheKind } from './http';
 import { aiTxt, catalogJson, llmsFullTxt, llmsTxt } from './site-files';
 
@@ -32,9 +34,13 @@ export async function handle(req: IncomingMessage, res: ServerResponse): Promise
   }
 
   const raw = url.searchParams.get('path') || '/';
-  const path = ('/' + raw.replace(/^\/+/, '')).replace(/\/index$/, '/') || '/';
+  const fullPath = ('/' + raw.replace(/^\/+/, '')).replace(/\/index$/, '/') || '/';
   const negotiated = url.searchParams.get('neg') === '1';
-  const hit = matchMdRoute(path);
+  // /en/services is /services in English. Only pages with a real translation have an English
+  // markdown version (lib/langRoutes.mjs TRANSLATED_PATHS); the rest 404 under /en.
+  const { lang: urlLang, path } = splitLangPath(fullPath);
+  const lang = urlLang === 'EN' ? 'EN' : 'HR';
+  const hit = urlLang && (urlLang !== 'EN' || !isTranslated(path)) ? null : matchMdRoute(path);
 
   const notFound = () =>
     send(req, res, { status: 404, body: notFoundPage(path), type: 'text/markdown', cache: 'notfound', negotiated });
@@ -42,12 +48,17 @@ export async function handle(req: IncomingMessage, res: ServerResponse): Promise
   if (!hit) return notFound();
 
   try {
-    const page = await renderMarkdownPath(path);
+    const page = await withLang(lang, () => renderMarkdownPath(path));
     if (!page) return notFound();
+    if (lang === 'EN') {
+      page.path = localizedPath(page.path, 'EN');
+      const en = (AI_SUMMARIES_EN as Record<string, string>)[path];
+      if (en) page.summary = en;
+    }
     const cache: CacheKind = hit.route.path.includes(':') || API_BACKED.has(hit.route.id) ? 'dynamic' : 'static';
     return send(req, res, {
       status: 200,
-      body: renderPage(page),
+      body: withLang(lang, () => renderPage(page)),
       type: 'text/markdown',
       cache,
       canonical: abs(page.path),

@@ -13,7 +13,7 @@ import { writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { BLOG_POSTS } from '../content/blog/posts.mjs';
-import { alternatesFor, isTranslated, LANG_PREFIXES, localizedPath } from '../lib/langRoutes.mjs';
+import { alternatesFor, isTranslated, LANG_PREFIXES, localizedPath, splitLangPath } from '../lib/langRoutes.mjs';
 import { matchMdRoute } from '../lib/md/routes.mjs';
 import { AGENT_SITEMAP_PATH } from '../lib/agentSearch.mjs';
 
@@ -158,7 +158,10 @@ function writeAgentSitemap(entries) {
     const loc = /<loc>([^<]+)<\/loc>/.exec(e)?.[1];
     if (!loc) continue;
     const path = new URL(loc).pathname;
-    if (!matchMdRoute(path) || /^\/(service|freelancer)\//.test(path)) continue;
+    // English versions (/en, /en/services...) have markdown twins too, rendered in English.
+    const { lang, path: base } = splitLangPath(path);
+    const hasMd = lang ? lang === 'EN' && isTranslated(base) : Boolean(matchMdRoute(path));
+    if (!hasMd || /^\/(service|freelancer)\//.test(base)) continue;
     const lastmod = /<lastmod>([^<]+)<\/lastmod>/.exec(e)?.[1] || TODAY;
     const priority = /<priority>([^<]+)<\/priority>/.exec(e)?.[1] || '0.5';
     const md = `${BASE_URL}${path === '/' ? '/index' : path.replace(/\/+$/, '')}.md`;
