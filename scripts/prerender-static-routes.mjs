@@ -35,6 +35,7 @@ import { sortedBlogPosts, faqJsonLd } from '../content/blog/posts.mjs';
 import { matchMdRoute, mdPathOf } from '../lib/md/routes.mjs';
 import { AI_SUMMARIES } from '../lib/md/summaries.mjs';
 import { alternatesFor, isTranslated, localizedPath, HTML_LANG, OG_LOCALE } from '../lib/langRoutes.mjs';
+import { pxToRem } from '../lib/viewportScale.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
@@ -54,13 +55,13 @@ const escapeText = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace
 const BLOG_INDEX_DESCRIPTION =
   'Vodiči za klijente i freelancere u Hrvatskoj: izrada web stranica, odabir web developera, cijene SEO optimizacije, dizajn loga i kako početi s freelanceom.';
 
-const BLOG_CSS = `<style>
+const BLOG_CSS = pxToRem(`<style>
 .cb{max-width:760px;font-size:19px;line-height:1.7;color:#1d2026}
 .cb h2{font-size:32px;font-weight:800;line-height:1.1;margin:56px 0 16px;padding-top:20px;border-top:2px solid #0b0c0e;color:#0b0c0e}
 .cb h3{font-size:24px;font-weight:800;margin:40px 0 12px;color:#0b0c0e}
 .cb p{margin:0 0 20px}.cb ul,.cb ol{margin:0 0 20px;padding-left:24px}.cb li{margin:0 0 8px}
 .cb a{color:#002ca5}.cb strong{color:#0b0c0e}
-</style>`;
+</style>`);
 
 const fmtDateHr = (iso) =>
   new Date(`${iso}T12:00:00Z`).toLocaleDateString('hr-HR', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
