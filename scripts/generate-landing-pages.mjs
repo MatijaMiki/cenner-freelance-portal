@@ -284,7 +284,9 @@ function serviceJsonLd(svc, url) {
         name: 'Cenner',
         url: BASE,
       },
-      areaServed: { '@type': 'Country', name: 'Croatia' },
+      areaServed: svc.area
+        ? { '@type': 'AdministrativeArea', name: svc.area, containedInPlace: { '@type': 'Country', name: 'Croatia' } }
+        : { '@type': 'Country', name: 'Croatia' },
       url,
     },
     {

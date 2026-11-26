@@ -5,6 +5,8 @@
 //
 // Plain .mjs so the Node build script can import it without a TypeScript step.
 
+import { seoRegions } from './seo-regions.mjs';
+
 // ---- service landing pages ----
 export const services = [
   {
@@ -151,6 +153,12 @@ export const services = [
         body: [
           'Lokalna SEO optimizacija radi za tvrtke koje prodaju u jednom gradu ili regiji: <strong>Google Business profil</strong>, NAP podaci, lokalne ključne riječi, recenzije i lokalni linkovi. U manjim mjestima konkurencija je obično slabija, pa se rezultati vide brže.',
           'SEO se radi na daljinu, pa biraš stručnjaka po rezultatima, a ne po adresi. Uz optimizaciju same stranice možeš dogovoriti i sadržaj, Google Business profil i mjesečno izvještavanje, uz cijenu koju dogovoriš unaprijed.',
+        ],
+      },
+      {
+        h2: 'SEO optimizacija po regijama',
+        body: [
+          'Lokalni SEO izgleda drukčije u Zagrebu nego u Istri ili Slavoniji. Za svoju regiju pogledaj: <a href="/usluge/seo-optimizacija-zagreb">SEO optimizacija Zagreb</a> (uz Sesvete, Veliku Goricu, Samobor i Zaprešić), <a href="/usluge/seo-optimizacija-split-dalmacija">Split i Dalmacija</a> (Kaštela, Trogir, Makarska, Šibenik, Zadar, Dubrovnik), <a href="/usluge/seo-optimizacija-istra">Istra</a> (Pula, Poreč, Rovinj, Umag), <a href="/usluge/seo-optimizacija-rijeka-kvarner">Rijeka i Kvarner</a>, <a href="/usluge/seo-optimizacija-osijek-slavonija">Osijek i Slavonija</a> te <a href="/usluge/seo-optimizacija-sredisnja-hrvatska">Sisak, Bjelovar, Koprivnica i Daruvar</a>.',
         ],
       },
       {
@@ -354,6 +362,8 @@ export const services = [
     ],
     related: ['izrada-web-stranica', 'wordpress-izrada', 'web-developeri'],
   },
+  // Regional SEO pages (content/landing/seo-regions.mjs).
+  ...seoRegions,
 ];
 
 // ---- city landing pages ----
