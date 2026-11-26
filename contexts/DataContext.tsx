@@ -31,14 +31,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([API.getListings(), API.getJobs(), API.getCommunityPosts()])
-      .then(([l, j, p]) => {
-        setListings(l);
-        setJobs(j);
-        setCommunityPosts(p);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    // Loaded independently: one failing feed (e.g. a 429) must not blank the other two.
+    Promise.allSettled([
+      API.getListings().then(setListings),
+      API.getJobs().then(setJobs),
+      API.getCommunityPosts().then(setCommunityPosts),
+    ]).finally(() => setLoading(false));
   }, []);
 
   // Live listing updates via socket — no auth needed, public channel
