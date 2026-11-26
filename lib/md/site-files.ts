@@ -75,6 +75,7 @@ export async function llmsTxt(): Promise<string> {
   parts.push(
     `## Machine-readable\n\n` +
       [
+        `- [Search](${SITE_URL}/.well-known/search?q={query}): search listings, freelancers and pages in one request (GET ?q=, or QUERY with a text body); Markdown results, live listings first`,
         `- [Full content](${SITE_URL}/llms-full.txt): every page above in one file`,
         `- [Markdown catalog](${SITE_URL}/api/md/_catalog): every markdown route as JSON`,
         `- [Sitemap](${SITE_URL}/sitemap.xml)`,

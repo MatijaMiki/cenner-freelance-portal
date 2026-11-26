@@ -10,6 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { sortedBlogPosts } from '../content/blog/posts.mjs';
 import { services, cities } from '../content/landing/pages.mjs';
+import { AGENT_META } from '../lib/agentSearch.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = join(__dirname, '..', 'public');
@@ -46,6 +47,7 @@ function pageHTML({
 <link rel="alternate" hreflang="x-default" href="${url}">
 <meta name="ai-summary" content="${description}">
 <link rel="alternate" type="text/markdown" href="${url}.md">
+${AGENT_META.join('\n')}
 <meta property="og:type" content="website">
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${title}">

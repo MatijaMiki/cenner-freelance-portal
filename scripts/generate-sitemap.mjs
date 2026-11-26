@@ -14,11 +14,14 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { BLOG_POSTS } from '../content/blog/posts.mjs';
 import { alternatesFor, isTranslated, LANG_PREFIXES, localizedPath } from '../lib/langRoutes.mjs';
+import { matchMdRoute } from '../lib/md/routes.mjs';
+import { AGENT_SITEMAP_PATH } from '../lib/agentSearch.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BASE_URL = 'https://cenner.hr';
 const API_BASE = 'https://api.cenner.hr';
 const OUTPUT   = join(__dirname, '../public/sitemap.xml');
+const AGENT_OUTPUT = join(__dirname, `../public${AGENT_SITEMAP_PATH}`);
 const TODAY    = new Date().toISOString().split('T')[0];
 
 const STATIC_ROUTES = [
@@ -139,6 +142,31 @@ async function main() {
 
   writeFileSync(OUTPUT, xml, 'utf8');
   console.log(`[sitemap] Written ${entries.length} URLs → ${OUTPUT}`);
+
+  writeAgentSitemap(entries);
+}
+
+/**
+ * public/agent-sitemap.xml: the Markdown twin of every sitemap page that has one, for the Cloudflare
+ * AI Search index behind /.well-known/search (lib/agentSearch.mjs). The HTML pages are an SPA shell
+ * to a crawler; the .md twins carry the real text. Not listed in robots.txt: search engines should
+ * keep indexing the HTML pages. Listings and profiles stay out: the search endpoint reads them live.
+ */
+function writeAgentSitemap(entries) {
+  const rows = [];
+  for (const e of entries) {
+    const loc = /<loc>([^<]+)<\/loc>/.exec(e)?.[1];
+    if (!loc) continue;
+    const path = new URL(loc).pathname;
+    if (!matchMdRoute(path) || /^\/(service|freelancer)\//.test(path)) continue;
+    const lastmod = /<lastmod>([^<]+)<\/lastmod>/.exec(e)?.[1] || TODAY;
+    const priority = /<priority>([^<]+)<\/priority>/.exec(e)?.[1] || '0.5';
+    const md = `${BASE_URL}${path === '/' ? '/index' : path.replace(/\/+$/, '')}.md`;
+    rows.push(`  <url>\n    <loc>${md}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <priority>${priority}</priority>\n  </url>`);
+  }
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rows.join('\n')}\n</urlset>\n`;
+  writeFileSync(AGENT_OUTPUT, xml, 'utf8');
+  console.log(`[sitemap] Written ${rows.length} markdown URLs → ${AGENT_OUTPUT}`);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
