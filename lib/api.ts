@@ -228,6 +228,10 @@ export const API = {
   // Public reads
   listPublicBlogPosts: () => requestPublic<any[]>('/blog'),
   getPublicBlogPost: (slug: string) => requestPublic<any>(`/blog/${encodeURIComponent(slug)}`),
+  // Signed-out reads of a publicly listed freelancer (same visibility as the sitemap).
+  getPublicFreelancer: (id: string) => requestPublic<any>(`/freelancers/${encodeURIComponent(id)}`),
+  getPublicPortfolio: (id: string) => requestPublic<any[]>(`/freelancers/${encodeURIComponent(id)}/portfolio`),
+  getPublicReviews: (id: string) => requestPublic<any[]>(`/freelancers/${encodeURIComponent(id)}/reviews`),
   // Admin (auth + ADMIN role)
   listAdminBlogPosts: () => request<any[]>('/blog'),
   getAdminBlogPost: (id: string) => request<any>(`/blog/${id}`),
