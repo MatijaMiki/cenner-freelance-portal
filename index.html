@@ -70,6 +70,11 @@
          Per-page canonical/hreflang/og:url are set at runtime by components/SEO.tsx (react-helmet). -->
     <meta name="keywords" content="freelance hrvatska, honorarni posao, izrada web stranica, freelance platforma, najam freelancera, freelancer zagreb" />
     <meta name="author" content="Cenner" />
+    <!-- Search for agents: keep in step with AGENT_META in lib/agentSearch.mjs -->
+    <meta name="agent:instructions" content="Use this search API to find freelancers, services and content across cenner.hr with keywords or natural-language queries, in Croatian or English, instead of crawling individual pages. Results are returned in Markdown; open listings come from the live marketplace." />
+    <meta name="agent:endpoint" content="https://cenner.hr/.well-known/search?q={query}" />
+    <meta name="agent:method" content="GET" />
+    <meta name="agent:documentation" content="https://developers.cloudflare.com/ai-search/how-to/search-for-agents/" />
     <meta name="geo.region" content="HR" />
     <meta name="geo.placename" content="Croatia" />
     <meta name="geo.position" content="45.8150;15.9819" />

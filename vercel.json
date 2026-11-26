@@ -95,6 +95,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/.well-known/search",
+      "destination": "/api/search"
+    },
     { "source": "/llms.txt", "destination": "/api/md?file=llms" },
     { "source": "/llms-full.txt", "destination": "/api/md?file=llms-full" },
     { "source": "/ai.txt", "destination": "/api/md?file=ai" },
