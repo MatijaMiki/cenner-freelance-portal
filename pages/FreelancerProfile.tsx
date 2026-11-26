@@ -9,6 +9,7 @@ import {
 import AvatarImg from '../components/Avatar';
 import { API } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { useData } from '../contexts/DataContext';
 import SEO from '../components/SEO';
 
 // ── Create Contract Modal ─────────────────────────────────────────────────────
@@ -236,6 +237,7 @@ const StarRating: React.FC<{ rating: number; size?: number }> = ({ rating, size 
 const FreelancerProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user, loading: authLoading } = useAuth();
+  const { listings } = useData();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [portfolio, setPortfolio] = useState<any[]>([]);
@@ -243,6 +245,7 @@ const FreelancerProfile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showContractModal, setShowContractModal] = useState(false);
+  const services = id ? listings.filter(l => l.freelancerId === id) : [];
   const [messagingLoading, setMessagingLoading] = useState(false);
 
   useEffect(() => {
@@ -451,6 +454,46 @@ const FreelancerProfile: React.FC = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left: Portfolio + Reviews */}
           <div className="lg:col-span-2 space-y-10">
+            {/* Services: this freelancer's listings (already loaded app-wide, public) */}
+            {services.length > 0 && (
+              <div>
+                <h2 className="mb-6 border-t-2 border-ink pt-4 font-display text-[13px] font-extrabold uppercase tracking-[0.12em]">
+                  Services <span className="font-normal text-slate">({services.length})</span>
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {services.map(l => (
+                    <Link
+                      key={l.id}
+                      to={`/service/${l.id}`}
+                      className="group flex flex-col overflow-hidden border-2 border-ink bg-white transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#0b0c0e]"
+                    >
+                      {l.imageUrl && (
+                        <div className="h-40 overflow-hidden border-b-2 border-ink">
+                          <img
+                            src={l.imageUrl}
+                            alt={l.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                      )}
+                      <div className="flex flex-1 flex-col p-5">
+                        <h3 className="mb-3 font-display text-[1rem] font-bold leading-snug">{l.title}</h3>
+                        <div className="mt-auto flex items-end justify-between gap-3">
+                          <p className="font-display text-[1.25rem] font-extrabold leading-none">€{l.price}</p>
+                          {l.deliveryTime && (
+                            <span className="inline-flex items-center gap-1 text-[12px] text-slate">
+                              <Clock size={12} /> {l.deliveryTime}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Portfolio */}
             {portfolio.length > 0 ? (
               <div>
@@ -485,7 +528,7 @@ const FreelancerProfile: React.FC = () => {
                   ))}
                 </div>
               </div>
-            ) : (
+            ) : services.length === 0 && (
               <div className="border-2 border-dashed border-ink/40 bg-white p-10 text-center">
                 <Briefcase size={28} className="mx-auto mb-3 text-slate" />
                 <p className="font-display text-sm font-bold text-slate">No portfolio items yet</p>
