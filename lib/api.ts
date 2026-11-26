@@ -1,3 +1,4 @@
+import { squareCircularAvatar } from './squareAvatar';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://api.cenner.hr/api/v1/portal';
 const CRM_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
@@ -131,7 +132,7 @@ export const API = {
 
   uploadProfileAvatar: async (file: File): Promise<string> => {
     const formData = new FormData();
-    formData.append('avatar', file);
+    formData.append('avatar', await squareCircularAvatar(file));
     const res = await fetch(`${API_BASE}/profile/avatar`, {
       method: 'POST',
       credentials: 'include',

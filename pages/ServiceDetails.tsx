@@ -232,10 +232,12 @@ const ServiceDetails: React.FC = () => {
         <div className="lg:col-span-2 space-y-12">
           <section>
             <div className="flex items-center space-x-4 mb-8">
-              <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="h-10 w-10 rounded-none border-2 border-ink" />
+              <Link to={`/freelancer/${listing.freelancerId}`} aria-label={`${listing.freelancerName} profile`} className="shrink-0 transition-opacity hover:opacity-80">
+                <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={56} className="h-14 w-14 rounded-none border-2 border-ink" />
+              </Link>
               <div>
                 <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                  <span className="font-display font-bold">{listing.freelancerName}</span>
+                  <Link to={`/freelancer/${listing.freelancerId}`} className="font-display font-bold underline-offset-4 hover:underline">{listing.freelancerName}</Link>
                   {listing.freelancerTier && listing.freelancerTier !== 'free' && (
                     <span className={`px-2 py-0.5 font-display text-[11px] font-bold uppercase text-white ${
                       listing.freelancerTier === 'ultra' || listing.freelancerTier === 'enterprise'
@@ -439,11 +441,18 @@ const ServiceDetails: React.FC = () => {
           <section>
             <h3 className="mb-6 border-t-2 border-ink pt-5 font-display text-[1.75rem] font-extrabold tracking-[-0.02em]">About the Freelancer</h3>
             <div className="flex flex-col gap-8 border-2 border-ink bg-white p-8 md:flex-row">
-              <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={40} className="h-10 w-10 rounded-none border-2 border-ink" />
+              <Link to={`/freelancer/${listing.freelancerId}`} aria-label={`${listing.freelancerName} profile`} className="shrink-0 self-start transition-opacity hover:opacity-80">
+                <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={96} className="h-24 w-24 rounded-none border-2 border-ink" />
+              </Link>
               <div className="flex-grow">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                   <div>
-                    <h4 className="font-display text-xl font-extrabold">{listing.freelancerName}</h4>
+                    <h4 className="font-display text-xl font-extrabold">
+                      <Link to={`/freelancer/${listing.freelancerId}`} className="underline-offset-4 hover:underline">{listing.freelancerName}</Link>
+                    </h4>
+                    <Link to={`/freelancer/${listing.freelancerId}`} className="mt-1 inline-block font-display text-[13px] font-bold text-sky underline underline-offset-4 hover:text-ink">
+                      View profile
+                    </Link>
                   </div>
                   <button
                     onClick={handleContactClick}
