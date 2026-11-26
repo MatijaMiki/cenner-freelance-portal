@@ -59,6 +59,7 @@ const COMPANY_LINKS = [
 
 const RESOURCE_LINKS = [
   { label: 'Blog',           path: '/blog' },
+  { label: 'How payment works', path: '/sigurno-placanje' },
   { label: 'Community',      path: '/community' },
   { label: 'Privacy Policy', path: '/privacy' },
   { label: 'Terms of Use',   path: '/terms' },

@@ -91,6 +91,16 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://cenner.hr/sigurno-placanje.md</loc>
+    <lastmod>2026-11-26</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cenner.hr/en/sigurno-placanje.md</loc>
+    <lastmod>2026-11-26</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://cenner.hr/usluge/izrada-web-stranica.md</loc>
     <lastmod>2026-11-26</lastmod>
     <priority>0.9</priority>

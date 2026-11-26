@@ -282,6 +282,12 @@ const ROUTES = [
       'Learn how Cenner uses cookies and similar technologies to improve your experience on our platform.',
   },
   {
+    path: '/sigurno-placanje',
+    title: 'Kako funkcionira plaćanje: je li moj novac siguran? | Cenner',
+    description:
+      'Na Cenneru novac ne ide freelanceru kad platite: Cenner ga čuva dok posao nije gotov. Povrat prije isporuke, 72 sata za pregled faze, spor koji rješava naš tim.',
+  },
+  {
     path: '/cjenik',
     title: 'Cjenik | Cenner',
     description:
@@ -349,6 +355,11 @@ const EN_META = {
     title: 'Pricing & Plans | Cenner',
     description:
       'Choose the Cenner plan that fits your needs. Free, Pro, and Ultra plans lower your commission and boost your visibility, with Enterprise for teams.',
+  },
+  '/sigurno-placanje': {
+    title: 'How payment works: is my money safe? | Cenner',
+    description:
+      "On Cenner your money doesn't go to the freelancer when you pay: Cenner holds it until the work is done. Refund before delivery, 72 hours to review a milestone, disputes decided by our team.",
   },
 };
 

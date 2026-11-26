@@ -15,6 +15,7 @@ import * as home from './pages/home';
 import * as landing from './pages/landing';
 import * as marketplace from './pages/marketplace';
 import * as onboarding from './pages/onboarding';
+import * as payment from './pages/payment';
 import * as privacy from './pages/privacy';
 import * as ranwhat from './pages/ranwhat';
 import * as services from './pages/services';
@@ -29,6 +30,7 @@ export const RENDERERS: Record<string, PageModule> = {
   subscription,
   about,
   cjenik,
+  payment,
   ranwhat,
   stenvakt,
   community,
