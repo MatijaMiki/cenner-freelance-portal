@@ -419,7 +419,7 @@ const ServiceDetails: React.FC = () => {
                   className="w-full resize-none border-2 border-ink bg-white px-4 py-3 leading-relaxed focus:border-sky focus:outline-none"
                 />
               ) : (
-                <p className="max-w-[60ch] text-[1.0625rem] leading-[1.7] text-ink/90">{listing.description}</p>
+                <p className="text-[1.0625rem] leading-[1.7] text-ink/90 hyphens-auto sm:text-justify">{listing.description}</p>
               )}
             </div>
           </section>
