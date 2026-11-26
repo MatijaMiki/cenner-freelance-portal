@@ -78,63 +78,66 @@
 <meta name="theme-color" content="#eef0f3">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Service","name":"SEO optimizacija Osijek i Slavonija","description":"SEO optimizacija u Osijeku, Vukovaru, Đakovu, Valpovu, Našicama, Slatini, Požegi i okolici. Manja konkurencija znači brže rezultate; što raditi i koliko košta.","provider":{"@type":"Organization","name":"Cenner","url":"https://cenner.hr"},"areaServed":{"@type":"AdministrativeArea","name":"Slavonija","containedInPlace":{"@type":"Country","name":"Croatia"}},"url":"https://cenner.hr/usluge/seo-optimizacija-osijek-slavonija"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Naslovna","item":"https://cenner.hr"},{"@type":"ListItem","position":2,"name":"Usluge","item":"https://cenner.hr/services"},{"@type":"ListItem","position":3,"name":"SEO optimizacija Osijek i Slavonija","item":"https://cenner.hr/usluge/seo-optimizacija-osijek-slavonija"}]},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Koliko košta SEO optimizacija u Osijeku i Slavoniji?","acceptedAnswer":{"@type":"Answer","text":"Jednokratni audit okvirno od 200 € do 600 €, mjesečni paket za malu stranicu od 300 € do 800 €. Točnu cijenu za tvoju stranicu dobiješ kad objaviš projekt na Cenneru i usporediš ponude. Rasponi su objašnjeni u vodiču o cijeni SEO-a."}},{"@type":"Question","name":"Treba li mi SEO stručnjak iz Osijeka ili Slavonije?","acceptedAnswer":{"@type":"Answer","text":"Ne nužno. SEO se radi na daljinu, a važnije je da stručnjak zna raditi lokalni SEO: Google Business profil, recenzije, lokalne ključne riječi i stranice po uslugama. Lokalno poznavanje tržišta je plus, ne uvjet."}},{"@type":"Question","name":"Kada se vide prvi rezultati?","acceptedAnswer":{"@type":"Answer","text":"Popravci poput brzine, naslova i Google Business profila mogu se vidjeti za 2 do 4 tjedna. Stabilne pozicije za tražene pojmove obično traže 3 do 6 mjeseci rada."}}]}]</script>
 <style>
+@media (min-width:768px){html{font-size:clamp(.75rem,1.25vh,1rem)}}
+@media (min-width:768px) and (pointer:coarse){html{font-size:clamp(.875rem,1.25vh,1rem)}}
+
   *{box-sizing:border-box}
   :root{--paper:#eef0f3;--paper2:#e2e5ea;--ink:#0b0c0e;--slate:#5d6470;--sky:#002ca5}
   body{margin:0;font-family:'Libre Franklin',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:var(--sky);text-decoration:underline;text-underline-offset:3px}
+  a{color:var(--sky);text-decoration:underline;text-underline-offset:0.1875rem}
   a:hover{color:var(--ink)}
-  a:focus-visible,button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+  a:focus-visible,button:focus-visible{outline:0.1875rem solid var(--sky);outline-offset:0.1875rem}
   .bar{position:sticky;top:0;z-index:10;background:var(--paper)}
-  .bar-in{max-width:1400px;margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .logo{display:flex;align-items:center;gap:14px;color:var(--ink);text-decoration:none}
+  .bar-in{max-width:87.5rem;margin:0 auto;padding:0 1.5rem;height:4.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .logo{display:flex;align-items:center;gap:0.875rem;color:var(--ink);text-decoration:none}
   .logo:hover{color:var(--ink)}
   .logo svg{flex:none;display:block}
   /* the wordmark in the pixel face on the same green strip as the site's nav logo, fading out to the right */
-  .logo span{font-family:'Press Start 2P',monospace;font-size:15px;line-height:1;padding:10px 34px 10px 8px;margin-left:-6px;-webkit-text-stroke:.8px currentColor;
+  .logo span{font-family:'Press Start 2P',monospace;font-size:0.9375rem;line-height:1;padding:0.625rem 2.125rem 0.625rem 0.5rem;margin-left:-0.375rem;-webkit-text-stroke:.8px currentColor;
     background:linear-gradient(90deg,rgba(34,197,94,.9),rgba(74,222,128,.9) 55%,rgba(74,222,128,0) 90%)}
-  .bar nav{display:flex;align-items:center;gap:4px}
-  .bar nav a{color:#0b0c0eb0;text-decoration:none;font-size:14px;font-weight:700;padding:6px 10px;border:2px solid transparent;white-space:nowrap;transition:transform .1s,box-shadow .1s,background-color .1s}
-  .bar nav a:hover,.bar nav a:focus-visible{color:var(--ink);border-color:var(--ink);background:#fff;box-shadow:3px 3px 0 0 var(--ink);transform:translate(-1px,-1px)}
-  .bar nav a.login{background:var(--sky);color:#fff;border-color:var(--ink);padding:10px 18px;margin-left:8px}
+  .bar nav{display:flex;align-items:center;gap:0.25rem}
+  .bar nav a{color:#0b0c0eb0;text-decoration:none;font-size:0.875rem;font-weight:700;padding:0.375rem 0.625rem;border:2px solid transparent;white-space:nowrap;transition:transform .1s,box-shadow .1s,background-color .1s}
+  .bar nav a:hover,.bar nav a:focus-visible{color:var(--ink);border-color:var(--ink);background:#fff;box-shadow:0.1875rem 0.1875rem 0 0 var(--ink);transform:translate(-1px,-1px)}
+  .bar nav a.login{background:var(--sky);color:#fff;border-color:var(--ink);padding:0.625rem 1.125rem;margin-left:0.5rem}
   .bar nav a.login:hover,.bar nav a.login:focus-visible{background:var(--sky);color:#fff}
-  main{max-width:1400px;margin:0 auto;padding:48px 24px 96px}
-  h1{font-size:clamp(2rem,9vw,6.5rem);hyphens:auto;-webkit-hyphens:auto;font-weight:800;line-height:0.94;margin:0 0 32px;letter-spacing:-0.035em;text-transform:uppercase;max-width:16ch;overflow-wrap:break-word}
+  main{max-width:87.5rem;margin:0 auto;padding:3rem 1.5rem 6rem}
+  h1{font-size:clamp(2rem,9vw,6.5rem);hyphens:auto;-webkit-hyphens:auto;font-weight:800;line-height:0.94;margin:0 0 2rem;letter-spacing:-0.035em;text-transform:uppercase;max-width:16ch;overflow-wrap:break-word}
   main>*:not(h1):not(.related):not(.cta-row){max-width:46rem}
-  h2{font-size:clamp(1.625rem,1.2rem+1.6vw,2.5rem);font-weight:800;line-height:1.05;margin:56px 0 16px;padding-top:20px;border-top:2px solid var(--ink);letter-spacing:-0.025em}
-  p{font-size:18px;color:#1d2126;margin:0 0 16px}
-  main>h3{font-size:20px;font-weight:800;line-height:1.25;margin:28px 0 8px;letter-spacing:-0.01em}
+  h2{font-size:clamp(1.625rem,1.2rem+1.6vw,2.5rem);font-weight:800;line-height:1.05;margin:3.5rem 0 1rem;padding-top:1.25rem;border-top:2px solid var(--ink);letter-spacing:-0.025em}
+  p{font-size:1.125rem;color:#1d2126;margin:0 0 1rem}
+  main>h3{font-size:1.25rem;font-weight:800;line-height:1.25;margin:1.75rem 0 0.5rem;letter-spacing:-0.01em}
   strong{color:var(--ink);font-weight:700}
-  .lead{font-size:clamp(1.25rem,1.1rem+0.7vw,1.625rem);line-height:1.4;color:var(--ink);margin-bottom:32px}
-  .cta-row{margin:0 0 8px}
-  .cta{display:inline-block;background:var(--sky);color:#fff;padding:16px 28px;border:2px solid var(--sky);font-weight:700;font-size:16px;margin:8px 12px 8px 0;text-decoration:none;transition:background .15s,color .15s,border-color .15s}
+  .lead{font-size:clamp(1.25rem,1.1rem+0.7vw,1.625rem);line-height:1.4;color:var(--ink);margin-bottom:2rem}
+  .cta-row{margin:0 0 0.5rem}
+  .cta{display:inline-block;background:var(--sky);color:#fff;padding:1rem 1.75rem;border:2px solid var(--sky);font-weight:700;font-size:1rem;margin:0.5rem 0.75rem 0.5rem 0;text-decoration:none;transition:background .15s,color .15s,border-color .15s}
   .cta:hover{background:var(--ink);border-color:var(--ink);color:#fff}
   .cta-secondary{background:transparent;color:var(--ink);border-color:var(--ink)}
   .cta-secondary:hover{background:var(--ink);color:#fff}
-  main>ul{list-style:none;padding:0;margin:0 0 16px}
-  main>ul li{border-top:1px solid #0b0c0e33;padding:12px 0;font-weight:700;font-size:18px}
+  main>ul{list-style:none;padding:0;margin:0 0 1rem}
+  main>ul li{border-top:1px solid #0b0c0e33;padding:0.75rem 0;font-weight:700;font-size:1.125rem}
   main>ul li:last-child{border-bottom:1px solid #0b0c0e33}
-  .related{max-width:none;margin-top:72px;padding-top:24px;border-top:2px solid var(--ink)}
-  .related h3{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--slate);margin:0 0 16px}
-  .related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .related{max-width:none;margin-top:4.5rem;padding-top:1.5rem;border-top:2px solid var(--ink)}
+  .related h3{font-size:0.8125rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--slate);margin:0 0 1rem}
+  .related ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1rem}
   .related li{background:#fff;border:2px solid var(--ink);transition:transform .15s,box-shadow .15s}
-  .related li:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 0 var(--ink)}
-  .related li a{display:block;padding:16px 18px;color:var(--ink);font-weight:700;text-decoration:none}
+  .related li:hover{transform:translate(-0.1875rem,-0.1875rem);box-shadow:0.375rem 0.375rem 0 0 var(--ink)}
+  .related li a{display:block;padding:1rem 1.125rem;color:var(--ink);font-weight:700;text-decoration:none}
   .related li a:hover{color:var(--sky)}
-  .related li small{display:block;margin-top:4px;font-weight:400;font-size:14px;color:var(--slate)}
-  footer{background:var(--ink);color:#ffffffb3;padding:40px 24px;font-size:14px}
-  .foot{max-width:1400px;margin:0 auto}
-  footer a{color:#fff;text-decoration:none;display:inline-block;margin:0 20px 8px 0;font-weight:500}
+  .related li small{display:block;margin-top:0.25rem;font-weight:400;font-size:0.875rem;color:var(--slate)}
+  footer{background:var(--ink);color:#ffffffb3;padding:2.5rem 1.5rem;font-size:0.875rem}
+  .foot{max-width:87.5rem;margin:0 auto}
+  footer a{color:#fff;text-decoration:none;display:inline-block;margin:0 1.25rem 0.5rem 0;font-weight:500}
   footer a:hover{text-decoration:underline;color:#fff}
-  footer a:focus-visible{outline:3px solid #fff;outline-offset:3px;text-decoration:underline}
-  .copy{margin-top:16px}
+  footer a:focus-visible{outline:0.1875rem solid #fff;outline-offset:0.1875rem;text-decoration:underline}
+  .copy{margin-top:1rem}
   @media (max-width:760px){
     .bar nav a:not(.login){display:none}
-    .bar-in{padding:0 16px}
-    .logo span{padding-right:18px}
-    .bar nav a.login{padding:10px 14px;margin-left:0}
+    .bar-in{padding:0 1rem}
+    .logo span{padding-right:1.125rem}
+    .bar nav a.login{padding:0.625rem 0.875rem;margin-left:0}
     .bar nav a.login .long{display:none}
     h1{max-width:none}
-    p{font-size:17px}
+    p{font-size:1.0625rem}
   }
 </style>
 </head>

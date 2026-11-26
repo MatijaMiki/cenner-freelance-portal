@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { sortedBlogPosts } from '../content/blog/posts.mjs';
 import { services, cities } from '../content/landing/pages.mjs';
 import { AGENT_META } from '../lib/agentSearch.mjs';
+import { ROOT_SCALE_CSS, pxToRem } from '../lib/viewportScale.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = join(__dirname, '..', 'public');
@@ -31,7 +32,7 @@ if (!GOOGLE_TAG || !GOOGLE_TAG.includes('gtag/js')) throw new Error('generate-la
 function pageHTML({
   url, title, description, keyword, h1, body, jsonLd,
 }) {
-  return `<!DOCTYPE html>
+  return scaleStyles(`<!DOCTYPE html>
 <html lang="hr">
 <head>
 <meta charset="UTF-8">
@@ -159,7 +160,13 @@ ${body}
 </footer>
 </body>
 </html>
-`;
+`);
+}
+
+// Same desktop/tablet scale as the app (lib/viewportScale.mjs): px become rem and the root size
+// follows the window height from 768px up; phones keep 16px.
+function scaleStyles(html) {
+  return html.replace(/<style>([\s\S]*?)<\/style>/, (_, css) => `<style>\n${ROOT_SCALE_CSS}\n${pxToRem(css)}</style>`);
 }
 
 // Cross-links to Cenner's own products on their subdomains (never the vercel.app hosts).
