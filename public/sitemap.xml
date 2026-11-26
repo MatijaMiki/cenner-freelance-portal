@@ -164,6 +164,24 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/cjenik" />
   </url>
   <url>
+    <loc>https://cenner.hr/sigurno-placanje</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="hr-HR" href="https://cenner.hr/sigurno-placanje" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cenner.hr/en/sigurno-placanje" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/sigurno-placanje" />
+  </url>
+  <url>
+    <loc>https://cenner.hr/en/sigurno-placanje</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="hr-HR" href="https://cenner.hr/sigurno-placanje" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cenner.hr/en/sigurno-placanje" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cenner.hr/sigurno-placanje" />
+  </url>
+  <url>
     <loc>https://cenner.hr/usluge/izrada-web-stranica</loc>
     <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>

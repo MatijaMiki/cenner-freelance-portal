@@ -34,6 +34,7 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Cookies = lazy(() => import('./pages/Cookies'));
 const Cjenik = lazy(() => import('./pages/Cjenik'));
+const SafePayment = lazy(() => import('./pages/SafePayment'));
 const PriceGuide = lazy(() => import('./pages/PriceGuide'));
 // Google Ads landing pages (pages/AdPages.tsx), one file, one chunk
 const AdWebStranice = lazy(() => import('./pages/AdPages').then(m => ({ default: m.WebStranice })));
@@ -105,6 +106,7 @@ const App: React.FC = () => {
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/cookies" element={<Cookies />} />
                   <Route path="/cjenik" element={<Cjenik />} />
+                  <Route path="/sigurno-placanje" element={<SafePayment />} />
                   <Route path="/vodic/cijena-web-stranice" element={<PriceGuide />} />
                   <Route path="/izrada-web-stranica" element={<AdWebStranice />} />
                   <Route path="/izrada-web-shopa" element={<AdWebShop />} />
