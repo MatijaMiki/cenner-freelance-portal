@@ -29,6 +29,11 @@ const SafePayment: React.FC = () => {
           description: en.metaDescription,
           keywords: 'safe payment, escrow, is my money safe, refund, freelance payment, cenner payment',
         }}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: page.faq.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+        }}
       />
 
       <section className="relative overflow-hidden px-4 pb-14 pt-10 md:px-8 md:pb-20 md:pt-16">
@@ -59,6 +64,20 @@ const SafePayment: React.FC = () => {
               </ul>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="pitanja-title" className="px-4 pt-16 md:px-8 md:pt-24">
+        <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-12">
+          <h2 id="pitanja-title" className="font-display text-[clamp(2rem,1.3rem+3vw,4rem)] font-extrabold leading-[0.95] tracking-[-0.04em] lg:col-span-4">{page.faqHeading}</h2>
+          <dl className="divide-y-2 divide-ink border-y-2 border-ink lg:col-span-8">
+            {page.faq.map(({ q, a }) => (
+              <div key={q} className="py-6">
+                <dt className="font-display text-[clamp(1.25rem,1.1rem+0.6vw,1.625rem)] font-bold leading-snug">{q}</dt>
+                <dd className="mt-2 max-w-[72ch] text-[clamp(1.0625rem,1rem+0.25vw,1.1875rem)] leading-[1.55]">{a}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
