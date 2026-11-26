@@ -8,15 +8,9 @@
   --transition-speed: 0.3s;
 }
 
-/* Desktop/tablet scale: every px in this sheet is turned into rem at build time, and from 768px
-   up the root size follows the window height (12px on a 1080p monitor, 16px from 1280px tall).
-   Phones keep 16px. Same rule as ROOT_SCALE_CSS in lib/viewportScale.mjs. */
-@media (min-width: 768px) {
-  html { font-size: clamp(.75rem, 1.25vh, 1rem); }
-}
-@media (min-width: 768px) and (pointer: coarse) {
-  html { font-size: clamp(.875rem, 1.25vh, 1rem); }
-}
+/* Desktop/tablet scale: every px in this sheet is turned into rem at build time, and the root
+   size per screen class (1080p monitor, Retina laptop, 1440p, tablet...) is prepended by
+   postcss.config.js from ROOT_SCALE_CSS in lib/viewportScale.mjs. Phones keep 16px. */
 
 @keyframes notifySlideIn {
   0%   { opacity: 0; transform: translateX(16px) scale(0.97); }
