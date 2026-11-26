@@ -235,7 +235,7 @@ const StarRating: React.FC<{ rating: number; size?: number }> = ({ rating, size 
 
 const FreelancerProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [portfolio, setPortfolio] = useState<any[]>([]);
@@ -246,21 +246,30 @@ const FreelancerProfile: React.FC = () => {
   const [messagingLoading, setMessagingLoading] = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || authLoading) return;
     setLoading(true);
-    Promise.all([
+    setError(null);
+    // Signed-out visitors (e.g. from Google) can't use the /portal routes, so they read the
+    // public ones. A signed-in reader whose portal call fails (expired session) falls back too.
+    const loadPublic = () => Promise.all([
+      API.getPublicFreelancer(id),
+      API.getPublicPortfolio(id).catch(() => []),
+      API.getPublicReviews(id).catch(() => []),
+    ]);
+    const loadPortal = () => Promise.all([
       API.getProfile(id),
-      API.getPortfolio(id),
+      API.getPortfolio(id).catch(() => []),
       API.getUserReviews(id).catch(() => []),
-    ])
+    ]);
+    (user ? loadPortal().catch(loadPublic) : loadPublic())
       .then(([prof, port, revs]) => {
         setProfile(prof);
         setPortfolio(port || []);
         setReviews(revs || []);
       })
-      .catch(err => setError(err.message || 'Could not load profile.'))
+      .catch(() => setError('This freelancer profile does not exist or is not public.'))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, user?.id, authLoading]);
 
   const handleMessage = async () => {
     if (!user) { navigate('/auth'); return; }
