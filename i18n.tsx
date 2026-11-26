@@ -1551,7 +1551,9 @@ const store = (code: LangCode) => {
 function langOfUrl(pathname: string, fallback: LangCode | null): LangCode {
   const { lang } = splitLangPath(pathname);
   if (lang) return lang;
-  if (fallback && fallback !== DEFAULT_LANG && !(fallback in LANG_PREFIXES) && fallback in HTML_LANG) return fallback;
+  // Only Croatian and English are offered now, and both live in the URL. A DE/FR/ES/IT choice
+  // remembered from before shows the default (Croatian) instead of untranslated English text.
+  void fallback;
   return DEFAULT_LANG;
 }
 

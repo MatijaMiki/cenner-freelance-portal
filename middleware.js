@@ -11,6 +11,7 @@
  * request gets the same answer whoever sends it.
  */
 import { matchMdRoute } from './lib/md/routes.mjs';
+import { isTranslated, splitLangPath } from './lib/langRoutes.mjs';
 
 export const config = {
   matcher: ['/((?!api/|assets/|_next/|\\.well-known/).*)'],
@@ -69,6 +70,7 @@ export default function middleware(request) {
 
   const accept = (request.headers.get('accept') || '').toLowerCase();
   if (!accept.includes('text/markdown') || !prefersMarkdown(accept)) return next();
-  if (!matchMdRoute(pathname)) return next();
+  const { lang, path } = splitLangPath(pathname);
+  if (lang ? !(lang === 'EN' && isTranslated(path)) : !matchMdRoute(pathname)) return next();
   return rewrite(url, pathname, true);
 }

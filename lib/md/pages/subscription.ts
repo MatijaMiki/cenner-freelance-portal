@@ -6,7 +6,7 @@
 import { PLANS, type PlanId } from '../../plans';
 import { priceItem } from '../../cjenik.js';
 import { baseLabel, formatPrice } from '../../../components/AnchorPrice';
-import { blocks, h2, h3, t, table, type PageModule } from '../format';
+import { blocks, h2, h3, mdLang, t, table, type PageModule } from '../format';
 import { AI_SUMMARIES } from '../summaries.mjs';
 
 const { FREE, PRO, ULTRA, ENTERPRISE } = PLANS;
@@ -67,7 +67,7 @@ const WHY = [
 /** "Bazna cijena (10. 9. 2026.): €19 / mj." for one price-list item. */
 const anchor = (id: string): string => {
   const it = priceItem(id);
-  return `${baseLabel(it.anchor.date, 'HR')}: ${formatPrice(it.anchor.price, it.unit, t)}`;
+  return `${baseLabel(it.anchor.date, mdLang())}: ${formatPrice(it.anchor.price, it.unit, t)}`;
 };
 
 const ALL: { id: string; name: string }[] = [

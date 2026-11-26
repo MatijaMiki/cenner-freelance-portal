@@ -10,13 +10,10 @@ import {
   type ConsentState,
 } from '../lib/consent';
 
+// Same two languages as the site's picker (components/siteNav.ts LANGUAGES).
 const LANGS = [
   { code: 'HR', label: 'Hrvatski' },
   { code: 'EN', label: 'English' },
-  { code: 'DE', label: 'Deutsch' },
-  { code: 'IT', label: 'Italiano' },
-  { code: 'FR', label: 'Français' },
-  { code: 'ES', label: 'Español' },
 ];
 
 /**
