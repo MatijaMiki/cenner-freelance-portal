@@ -7,7 +7,7 @@ import {
   FileText, Plus, Trash2, X, ChevronRight, BadgeCheck,
 } from 'lucide-react';
 import AvatarImg from '../components/Avatar';
-import { API } from '../lib/api';
+import { API, assetUrl } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext';
 import SEO from '../components/SEO';
@@ -366,7 +366,7 @@ const FreelancerProfile: React.FC = () => {
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Avatar */}
             <div className="relative shrink-0">
-              <AvatarImg src={profile.avatar} name={profile.name} size={112} className="rounded-none border-2 border-ink" />
+              <AvatarImg src={profile.avatar} name={profile.name} size={176} className="h-32 w-32 rounded-none border-2 border-ink md:h-44 md:w-44" />
               {isVerified && (
                 <div className="absolute bottom-0.5 right-0.5 flex h-9 w-9 translate-x-1/2 translate-y-1/2 items-center justify-center" title="Identity Verified">
                   <BadgeCheck size={36} className="text-ink" fill="#4ade80" strokeWidth={1.75} />
@@ -412,7 +412,7 @@ const FreelancerProfile: React.FC = () => {
               )}
 
               {profile.bio && (
-                <p className="mb-6 max-w-xl leading-relaxed text-ink/90">{profile.bio}</p>
+                <p className="mb-6 max-w-3xl text-[1.0625rem] leading-relaxed text-ink/90">{profile.bio}</p>
               )}
               {profile.skills && profile.skills.length > 0 && (
                 <div className="flex flex-wrap gap-2">
@@ -423,9 +423,10 @@ const FreelancerProfile: React.FC = () => {
               )}
             </div>
 
-            {/* CTA buttons — hidden if viewing own profile */}
+            {/* Right column: CTAs (not on your own profile) + at-a-glance facts */}
+            <div className="flex w-full flex-col gap-3 md:w-64 md:shrink-0">
             {!isSelf && (
-              <div className="flex flex-col gap-3 shrink-0">
+              <div className="flex flex-col gap-3">
                 <button
                   onClick={handleMessage}
                   disabled={messagingLoading}
@@ -448,6 +449,20 @@ const FreelancerProfile: React.FC = () => {
                 )}
               </div>
             )}
+              <dl className="grid grid-cols-2 border-2 border-ink">
+                {[
+                  { label: 'Services', value: String(services.length) },
+                  { label: 'From', value: services.length ? `€${Math.min(...services.map(s => Number(s.price) || 0))}` : '—' },
+                  { label: 'Portfolio', value: String(portfolio.length) },
+                  { label: 'Reviews', value: String(reviews.length) },
+                ].map((f, i) => (
+                  <div key={f.label} className={`p-4 ${i % 2 === 0 ? 'border-r-2 border-ink' : ''} ${i < 2 ? 'border-b-2 border-ink' : ''}`}>
+                    <dt className="font-display text-[11px] font-bold uppercase tracking-[0.12em] text-slate">{f.label}</dt>
+                    <dd className="mt-1 font-display text-[1.5rem] font-extrabold leading-none">{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </div>
         </div>
 
@@ -504,8 +519,9 @@ const FreelancerProfile: React.FC = () => {
                       {(item.imageUrl || item.fileType?.startsWith('image/')) && (
                         <div className="h-40 overflow-hidden border-b-2 border-ink">
                           <img
-                            src={item.imageUrl}
+                            src={assetUrl(item.imageUrl || item.fileUrl)}
                             alt={item.title}
+                            loading="lazy"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>
@@ -513,9 +529,9 @@ const FreelancerProfile: React.FC = () => {
                       <div className="p-5">
                         <h3 className="mb-1 font-display text-[1rem] font-bold">{item.title}</h3>
                         {item.description && <p className="text-[13px] text-slate">{item.description}</p>}
-                        {item.fileUrl && /^https?:\/\//i.test(item.fileUrl) && (
+                        {item.fileUrl && !item.fileType?.startsWith('image/') && (
                           <a
-                            href={item.fileUrl}
+                            href={assetUrl(item.fileUrl)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-3 inline-flex items-center gap-1 font-display text-[13px] font-bold text-sky underline underline-offset-4 hover:text-ink"
