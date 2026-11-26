@@ -34,6 +34,25 @@ export function paymentPage(lang) {
         'Na Cenneru novac ne ide freelanceru kad platite: Cenner ga čuva dok posao nije gotov. Povrat prije isporuke, 72 sata za pregled faze, spor koji rješava naš tim.',
       title: 'Kako funkcionira plaćanje',
       lead: 'Kad platite, novac ne ide freelanceru. Cenner ga čuva dok posao nije gotov.',
+      faqHeading: 'Česta pitanja o plaćanju',
+      faq: [
+        {
+          q: 'Je li moj novac siguran?',
+          a: 'Da. Novac ne ide freelanceru kad platite, nego ostaje kod Cennera dok ne prihvatite posao. Ako nešto pođe po zlu, novac je još kod nas.',
+        },
+        {
+          q: 'Mogu li dobiti povrat novca?',
+          a: `Da. Gotovu uslugu možete otkazati prije isporuke i dobiti cijeli iznos natrag. Kod ugovora s fazama otvorite spor u roku od 72 sata, a naš tim odluči o povratu. U ostalim slučajevima javite se na ${SUPPORT_EMAIL}.`,
+        },
+        {
+          q: 'Kada freelancer dobiva novac?',
+          a: 'Kad prihvatite posao. Ako se ne javite, automatski: 72 sata nakon predaje faze ugovora, odnosno 3 dana nakon roka isporuke gotove usluge.',
+        },
+        {
+          q: 'Što ako posao nije dobar?',
+          a: `Kod ugovora s fazama otvorite spor, novac ostaje kod nas, a član našeg tima pregleda obje strane. Kod gotove usluge javite se na ${SUPPORT_EMAIL} prije automatske isplate.`,
+        },
+      ],
       sections: [
         {
           id: 'placanje',
@@ -87,6 +106,25 @@ export function paymentPage(lang) {
       "On Cenner your money doesn't go to the freelancer when you pay: Cenner holds it until the work is done. Refund before delivery, 72 hours to review a milestone, disputes decided by our team.",
     title: 'How payment works',
     lead: "When you pay, the money doesn't go to the freelancer. Cenner holds it until the work is done.",
+    faqHeading: 'Common questions about payment',
+    faq: [
+      {
+        q: 'Is my money safe?',
+        a: "Yes. The money doesn't go to the freelancer when you pay; it stays with Cenner until you accept the work. If something goes wrong, the money is still with us.",
+      },
+      {
+        q: 'Can I get a refund?',
+        a: `Yes. You can cancel a ready-made service before delivery and get a full refund. On a contract with milestones, raise a dispute within 72 hours and our team decides on the refund. Otherwise, write to ${SUPPORT_EMAIL}.`,
+      },
+      {
+        q: 'When does the freelancer get paid?',
+        a: "When you accept the work. If you don't respond, automatically: 72 hours after a contract milestone is submitted, or 3 days after a ready-made service's delivery time.",
+      },
+      {
+        q: "What if the work isn't right?",
+        a: `On a contract with milestones, raise a dispute: the money stays with us and a member of our team reviews both sides. On a ready-made service, write to ${SUPPORT_EMAIL} before the automatic release.`,
+      },
+    ],
     sections: [
       {
         id: 'placanje',
