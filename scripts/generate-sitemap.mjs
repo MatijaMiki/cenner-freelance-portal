@@ -23,6 +23,7 @@ const API_BASE = 'https://api.cenner.hr';
 const OUTPUT   = join(__dirname, '../public/sitemap.xml');
 const AGENT_OUTPUT = join(__dirname, `../public${AGENT_SITEMAP_PATH}`);
 const TODAY    = new Date().toISOString().split('T')[0];
+const BUILD_TIME = new Date().toISOString();
 
 const STATIC_ROUTES = [
   { path: '/',             priority: '1.0', changefreq: 'weekly'  },
@@ -169,7 +170,9 @@ function writeAgentSitemap(entries) {
     const { lang, path: base } = splitLangPath(path);
     const hasMd = lang ? lang === 'EN' && isTranslated(base) : Boolean(matchMdRoute(path));
     if (!hasMd || /^\/(service|freelancer)\//.test(base)) continue;
-    const lastmod = /<lastmod>([^<]+)<\/lastmod>/.exec(e)?.[1] || TODAY;
+    // The build's exact time, not the day: the index re-reads a page only when <lastmod> is later
+    // than its last sync, so a same-day edit dated by day alone would never reach agent search.
+    const lastmod = BUILD_TIME;
     const priority = /<priority>([^<]+)<\/priority>/.exec(e)?.[1] || '0.5';
     const md = `${BASE_URL}${path === '/' ? '/index' : path.replace(/\/+$/, '')}.md`;
     rows.push(`  <url>\n    <loc>${md}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <priority>${priority}</priority>\n  </url>`);
