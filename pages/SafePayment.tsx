@@ -49,7 +49,7 @@ const SafePayment: React.FC = () => {
               className={`scroll-mt-24 border-2 border-ink bg-white p-7 md:p-10 ${i === page.sections.length - 1 && page.sections.length % 2 === 1 ? 'md:col-span-2' : ''}`}
             >
               <h2 className="font-display text-[clamp(1.5rem,1.1rem+1.6vw,2.5rem)] font-extrabold leading-tight tracking-[-0.03em]">{s.heading}</h2>
-              <ul className="mt-5 space-y-3 text-[clamp(1.0625rem,1rem+0.25vw,1.1875rem)] leading-[1.55]">
+              <ul className="mt-5 max-w-[72ch] space-y-3 text-[clamp(1.0625rem,1rem+0.25vw,1.1875rem)] leading-[1.55]">
                 {s.items.map((item) => (
                   <li key={item} className="flex gap-3">
                     <span aria-hidden="true" className="mt-[0.62em] h-1.5 w-1.5 shrink-0 bg-ink" />
