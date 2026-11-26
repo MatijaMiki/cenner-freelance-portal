@@ -133,7 +133,16 @@ function fieldScore(text, terms) {
   return hits;
 }
 
+/**
+ * A listing only counts when the query names what it is: a hit in its title, category or inclusions
+ * (directly or through a synonym). A shared word in a long description ("work", "safe") is not enough.
+ */
+function isAbout(l, expanded) {
+  return fieldScore([l.title, l.category, (l.includes || []).join(' ')].join(' '), expanded) > 0;
+}
+
 function scoreListing(l, original, expanded) {
+  if (!isAbout(l, expanded)) return 0;
   const extra = expanded.filter((t) => !original.includes(t));
   const fields = [
     [l.title, 3],
@@ -172,12 +181,13 @@ async function searchMarketplace(q) {
   if (listingsRes.status === 'rejected' && postsRes.status === 'rejected') throw listingsRes.reason;
 
   const all = listingsRes.status === 'fulfilled' && Array.isArray(listingsRes.value.data) ? listingsRes.value.data : [];
-  const listings = all
+  const scored = all
     .map((l) => ({ l, s: scoreListing(l, original, expanded) }))
     .filter((x) => x.s > 0)
-    .sort((a, b) => b.s - a.s)
-    .slice(0, MAX_LISTINGS)
-    .map((x) => x.l);
+    .sort((a, b) => b.s - a.s);
+  // Keep the close matches only: a weak tail behind a strong hit is noise for the agent.
+  const floor = scored.length ? scored[0].s * 0.35 : 0;
+  const listings = scored.filter((x) => x.s >= floor).slice(0, MAX_LISTINGS).map((x) => x.l);
 
   const allPosts = postsRes.status === 'fulfilled' && Array.isArray(postsRes.value.data) ? postsRes.value.data : [];
   const posts = allPosts
