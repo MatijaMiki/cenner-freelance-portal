@@ -4,6 +4,11 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://api.cenner.hr/api
 const CRM_BASE = import.meta.env.VITE_CRM_API_BASE || 'https://api.cenner.hr';
 const PUBLIC_BASE = API_BASE.replace(/\/portal$/, '/public');
 
+// Uploaded files (portfolio, older avatars) are stored as server paths like /uploads/portfolio/x.jpg.
+// They are served by the API, not by cenner.hr, so a bare path must be resolved against the API.
+export const assetUrl = (u?: string | null): string =>
+  !u ? '' : /^(https?:|data:|blob:)/i.test(u) ? u : `${CRM_BASE}${u.startsWith('/') ? '' : '/'}${u}`;
+
 // Thrown when the server responds with a 403 + banned:true payload.
 // The router watches for this and sends the user to /banned.
 export class BannedError extends Error {

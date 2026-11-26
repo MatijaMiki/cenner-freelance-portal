@@ -233,7 +233,7 @@ const ServiceDetails: React.FC = () => {
           <section>
             <div className="flex items-center space-x-4 mb-8">
               <Link to={`/freelancer/${listing.freelancerId}`} aria-label={`${listing.freelancerName} profile`} className="shrink-0 transition-opacity hover:opacity-80">
-                <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={56} className="h-14 w-14 rounded-none border-2 border-ink" />
+                <AvatarImg src={listing.freelancerAvatar} name={listing.freelancerName} size={72} className="h-[72px] w-[72px] rounded-none border-2 border-ink" />
               </Link>
               <div>
                 <div className="flex items-center space-x-2 flex-wrap gap-y-1">
