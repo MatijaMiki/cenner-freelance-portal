@@ -89,7 +89,7 @@ ${GOOGLE_TAG}
   .bar nav a.login{background:var(--sky);color:#fff;border-color:var(--ink);padding:10px 18px;margin-left:8px}
   .bar nav a.login:hover,.bar nav a.login:focus-visible{background:var(--sky);color:#fff}
   main{max-width:1400px;margin:0 auto;padding:48px 24px 96px}
-  h1{font-size:clamp(2rem,9vw,6.5rem);hyphens:auto;-webkit-hyphens:auto;font-weight:800;line-height:0.94;margin:0 0 32px;letter-spacing:-0.035em;text-transform:uppercase;max-width:16ch;overflow-wrap:break-word}
+  h1{font-size:clamp(2rem,9vw,6.5rem);hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:10 4 4;-webkit-hyphenate-limit-before:4;-webkit-hyphenate-limit-after:4;font-weight:800;line-height:0.94;margin:0 0 32px;letter-spacing:-0.035em;text-transform:uppercase;max-width:16ch;overflow-wrap:break-word}
   main>*:not(h1):not(.related):not(.cta-row){max-width:46rem}
   h2{font-size:clamp(1.625rem,1.2rem+1.6vw,2.5rem);font-weight:800;line-height:1.05;margin:56px 0 16px;padding-top:20px;border-top:2px solid var(--ink);letter-spacing:-0.025em}
   p{font-size:18px;color:#1d2126;margin:0 0 16px}
