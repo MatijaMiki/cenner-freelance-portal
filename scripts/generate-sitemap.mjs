@@ -49,6 +49,11 @@ const STATIC_ROUTES = [
 const LANDING_ROUTES = [
   { path: '/usluge/izrada-web-stranica', priority: '0.9', changefreq: 'weekly' },
   { path: '/usluge/seo-optimizacija',    priority: '0.9', changefreq: 'weekly' },
+  { path: '/usluge/seo-konzultant', priority: '0.8', changefreq: 'monthly' },
+  { path: '/usluge/izrada-web-shopa', priority: '0.8', changefreq: 'monthly' },
+  { path: '/usluge/izrada-mobilnih-aplikacija', priority: '0.8', changefreq: 'monthly' },
+  { path: '/usluge/web-stranice-za-nekretnine', priority: '0.8', changefreq: 'monthly' },
+  { path: '/usluge/web-stranice-za-proizvodace', priority: '0.8', changefreq: 'monthly' },
   { path: '/usluge/digitalni-marketing', priority: '0.9', changefreq: 'weekly' },
   { path: '/usluge/wordpress-izrada',    priority: '0.9', changefreq: 'weekly' },
   { path: '/usluge/dizajn-loga',         priority: '0.9', changefreq: 'weekly' },

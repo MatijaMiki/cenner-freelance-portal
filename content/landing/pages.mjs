@@ -6,6 +6,7 @@
 // Plain .mjs so the Node build script can import it without a TypeScript step.
 
 import { seoRegions } from './seo-regions.mjs';
+import { gapPages } from './gap-pages.mjs';
 
 // ---- service landing pages ----
 export const services = [
@@ -23,7 +24,7 @@ export const services = [
         h2: 'Izrada web stranica za male firme i obrtnike',
         body: [
           'Mala firma ili obrt rijetko treba kompliciran sustav. Najčešće je dovoljna <strong>responzivna web stranica od 5 do 8 podstranica</strong>: početna, usluge, o nama, reference i kontakt, uz osnovnu SEO postavku i Google Business profil. Takva izrada web stranice obično staje u <strong>300 € do 800 €</strong> i gotova je za 1 do 3 tjedna.',
-          'Za ugostitelje, agencije za nekretnine, obrtnike i servise freelanceri na Cenneru rade i stranice s <strong>upitnicima, rezervacijama i prikazom ponude</strong> (npr. oglasi za nekretnine), a po potrebi i web shop s online plaćanjem.',
+          'Za ugostitelje, agencije za nekretnine, obrtnike i servise freelanceri na Cenneru rade i stranice s <strong>upitnicima, rezervacijama i prikazom ponude</strong> (npr. oglasi za nekretnine), a po potrebi i <a href="/usluge/izrada-web-shopa">web shop s online plaćanjem</a>. Za agencije i proizvođače imamo i posebne vodiče: <a href="/usluge/web-stranice-za-nekretnine">web stranice za nekretnine</a> i <a href="/usluge/web-stranice-za-proizvodace">web stranice za proizvođače i B2B</a>.',
         ],
       },
       {
@@ -61,6 +62,12 @@ export const services = [
         ],
       },
       {
+        h2: 'Redizajn postojeće web stranice',
+        body: [
+          'Ako stranica već postoji, ali je spora, zastarjela ili ne donosi upite, <strong>redizajn</strong> je često jeftiniji od izrade iz nule: sadržaj, domena i dio strukture ostaju. Važno je da developer pri redizajnu <strong>zadrži adrese stranica ili postavi preusmjeravanja (301)</strong>, inače se gube pozicije na Googleu koje si već imao.',
+        ],
+      },
+      {
         h2: 'Kako pronaći pravog web developera?',
         body: [
           'Klikni na "Pronađi freelancera" ispod, pregledaj ponude po kategoriji i odaberi freelancera po portfoliju, ocjenama i prethodnim projektima. Možeš i objaviti projekt pa usporediti ponude koje stignu.',
@@ -85,6 +92,18 @@ export const services = [
       {
         q: 'Koliko traje izrada web stranice?',
         a: 'Predstavljajuća stranica male firme ili obrta obično je gotova za 1 do 3 tjedna. Web shopovi i stranice s posebnim funkcijama traju dulje, ovisno o opsegu.',
+      },
+      {
+        q: 'Tko je vlasnik domene?',
+        a: 'Onaj na koga je domena registrirana. Zato je registriraj na svoju firmu ili obrt, ili traži od developera da to napravi u tvoje ime, i zadrži pristup računu kod registrara. Postojeća domena se može zadržati: developer samo usmjeri njezine DNS zapise na novu stranicu.',
+      },
+      {
+        q: 'Što web stranica mora imati zbog GDPR-a?',
+        a: 'Politiku privatnosti koja kaže koje podatke prikupljaš i zašto, a ako koristiš analitiku ili oglasne kolačiće, i obavijest o kolačićima s mogućnošću pristanka. Obrasci za upit trebaju tražiti samo podatke koji ti stvarno trebaju.',
+      },
+      {
+        q: 'Može li se izrada web stranice platiti u ratama?',
+        a: 'Na Cenneru možeš dogovoriti ugovor s fazama, na primjer dizajn, izrada i objava. Svaka faza se uplaćuje prije početka rada na njoj, a novac čuvamo dok fazu ne prihvatiš. Za poticaje za digitalizaciju provjeri aktualne natječaje, primjerice na strukturnifondovi.hr.',
       },
       {
         q: 'Je li bolje koristiti program za izradu web stranica ili angažirati developera?',
@@ -113,6 +132,12 @@ export const services = [
         h2: 'Što ulazi u kvalitetan vizualni identitet?',
         body: [
           'Profesionalan brending uključuje: <strong>logo u svim formatima</strong> (vektor, raster, transparentna i monokromatska verzija), <strong>brand guide</strong> s pravilima korištenja, <strong>paletu boja s HEX i CMYK kodovima</strong>, <strong>tipografski sustav</strong>, te <strong>mockup-ove primjene</strong> na vizitkama, web stranici, društvenim mrežama i print materijalima.',
+        ],
+      },
+      {
+        h2: 'Što je brandbook i treba li ti?',
+        body: [
+          '<strong>Brandbook</strong> (brand guide) je dokument s pravilima korištenja vizualnog identiteta: koje verzije loga postoje i kada se koja koristi, minimalna veličina i razmak oko loga, boje s HEX, RGB i CMYK kodovima, fontovi i primjeri dobre i loše primjene. Treba ti čim logo koristi više ljudi ili dobavljača, na primjer tiskara, web developer i netko tko vodi društvene mreže, kako bi svi radili isto.',
         ],
       },
       {
@@ -145,7 +170,7 @@ export const services = [
       {
         h2: 'SEO savjetovanje: kad ti ne treba cijeli paket',
         body: [
-          'Ako imaš developera ili nekoga u firmi tko će provesti izmjene, često je dovoljno <strong>SEO savjetovanje</strong>: stručnjak pregleda stranicu i Search Console, odgovori na pitanja tvog tima i složi redoslijed što popraviti prvo. Takvu konzultaciju objaviš kao manji projekt s jasnim opsegom, a plaćanje se oslobađa kad je posao isporučen.',
+          'Ako imaš developera ili nekoga u firmi tko će provesti izmjene, često je dovoljno <strong>SEO savjetovanje</strong>: stručnjak pregleda stranicu i Search Console, odgovori na pitanja tvog tima i složi redoslijed što popraviti prvo. Takvu konzultaciju objaviš kao manji projekt s jasnim opsegom, a plaćanje se oslobađa kad je posao isporučen. Što pokriva i kako se pripremiti, pročitaj na stranici <a href="/usluge/seo-konzultant">SEO konzultant</a>.',
         ],
       },
       {
@@ -209,7 +234,7 @@ export const services = [
       {
         h2: 'Koliko izdvojiti za digitalni marketing?',
         body: [
-          'Za male tvrtke i obrte, mjesečni proračun za oglase trebao bi biti minimalno <strong>500 € do 1.500 €</strong> da bi se vidjeli rezultati. Honorar freelancera za upravljanje kampanjama dodatno kreće od <strong>200 € do 800 € mjesečno</strong>, ovisno o opsegu.',
+          'Za male tvrtke i obrte, mjesečni proračun za oglase trebao bi biti minimalno <strong>500 € do 1.500 €</strong> da bi se vidjeli rezultati. Honorar freelancera za upravljanje kampanjama dodatno kreće od <strong>200 € do 800 € mjesečno</strong>, ovisno o opsegu. Sadržajni marketing (blog članci, objave, newsletter) najčešće se naplaćuje po komadu ili kao mjesečni paket s dogovorenim brojem objava, pa u projektu navedi koliko sadržaja mjesečno trebaš.',
           'Pravilo: <strong>20% proračuna na honorar, 80% na sam media spend.</strong> Ako agencija traži obrnuto, bježi.',
         ],
       },
@@ -242,6 +267,12 @@ export const services = [
         h2: 'Što naši WordPress developeri rade?',
         body: [
           'Naši freelanceri pokrivaju cijeli WordPress stack: <strong>custom teme</strong> (PHP, ACF, Gutenberg blokovi), <strong>WooCommerce</strong> i e-commerce, <strong>plugin razvoj</strong>, <strong>migracije i performance optimizacija</strong>, <strong>sigurnosnu reviziju</strong>, te <strong>kontinuirano održavanje</strong>.',
+        ],
+      },
+      {
+        h2: 'SEO optimizacija WordPress stranice',
+        body: [
+          'WordPress je dobra osnova za SEO, ali ne radi sam. Developer treba postaviti <strong>SEO plugin</strong> (Yoast ili Rank Math) za naslove, opise i sitemap, <strong>čiste adrese stranica</strong>, brzinu (keširanje, optimizirane slike, što manje teških plugina) i <strong>strukturirane podatke</strong>. Za sadržaj i ključne riječi pogledaj <a href="/usluge/seo-optimizacija">SEO usluge</a> ili <a href="/usluge/seo-konzultant">SEO konzultanta</a>.',
         ],
       },
       {
@@ -364,6 +395,7 @@ export const services = [
   },
   // Regional SEO pages (content/landing/seo-regions.mjs).
   ...seoRegions,
+  ...gapPages,
 ];
 
 // ---- city landing pages ----
