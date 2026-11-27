@@ -12,7 +12,7 @@ const TermsOfService: React.FC = () => {
           <Scale size={32} />
         </div>
         <h1 className="mb-6 font-display text-[clamp(2.5rem,7vw,6rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.035em] text-ink">Terms of Service</h1>
-        <p className="text-slate text-[1.0625rem]">Effective Date: October 12, 2023</p>
+        <p className="text-slate text-[1.0625rem]">Effective Date: October 12, 2023. Updated November 27, 2026.</p>
       </div>
 
       <div className="max-w-[46rem] space-y-12 text-[1.0625rem] leading-[1.7] text-ink/90">
@@ -41,8 +41,15 @@ const TermsOfService: React.FC = () => {
           </p>
         </section>
 
+        <section>
+          <h2 className="mb-5 border-t-2 border-ink pt-5 font-display text-[clamp(1.5rem,1.2rem+1.2vw,2.25rem)] font-extrabold leading-tight tracking-[-0.02em] text-ink">4. Subscriptions</h2>
+          <p>
+            Cenner's paid plans (Pro, Ultra and Enterprise) and Cenner Links subscriptions are sold to you by Stripe as merchant of record, through its Managed Payments service. Checkout, receipts and invoices come from Link, Stripe's checkout; your bank statement shows LINK.COM*; and Stripe works out, collects and pays any VAT for your country. You can change or cancel a subscription at any time from the billing portal in your profile. Link's support can help with a payment; anything about the plan itself comes to us. Payments for marketplace orders and contracts are not affected: they work as described in section 3.
+          </p>
+        </section>
+
         <section className="border-2 border-ink bg-white p-8">
-          <h2 className="mb-5 font-display text-[clamp(1.5rem,1.2rem+1.2vw,2.25rem)] font-extrabold leading-tight tracking-[-0.02em] text-ink">4. Keeping Activity On-Platform</h2>
+          <h2 className="mb-5 font-display text-[clamp(1.5rem,1.2rem+1.2vw,2.25rem)] font-extrabold leading-tight tracking-[-0.02em] text-ink">5. Keeping Activity On-Platform</h2>
           <p className="mb-4">
             Cenner operates as an intermediary marketplace. The fees we charge fund the escrow, payment protection, and dispute resolution described above. To keep these protections available to everyone, you agree that while you are engaged with, or within twelve (12) months of first being introduced to, another user through Cenner, you will not:
           </p>
@@ -63,7 +70,7 @@ const TermsOfService: React.FC = () => {
         </section>
 
         <section>
-          <h2 className="mb-5 border-t-2 border-ink pt-5 font-display text-[clamp(1.5rem,1.2rem+1.2vw,2.25rem)] font-extrabold leading-tight tracking-[-0.02em] text-ink">5. Intellectual Property</h2>
+          <h2 className="mb-5 border-t-2 border-ink pt-5 font-display text-[clamp(1.5rem,1.2rem+1.2vw,2.25rem)] font-extrabold leading-tight tracking-[-0.02em] text-ink">6. Intellectual Property</h2>
           <p>
             The Service and its original content (excluding content provided by users), features, and functionality are and will remain the exclusive property of Cenner, obrt za računalno programiranje i ostale usluge, vl. Matija Mikulinec (OIB 23152585818, Mikulinci 8, 10010 Zagreb), and its licensors.
           </p>
